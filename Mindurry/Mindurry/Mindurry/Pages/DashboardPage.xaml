@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mindurry.Pages.DashboardPage"
+             xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
+			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Style="{StaticResource HeaderStyle}" Text="TABLEAU DE BOARD"/>
+            <StackLayout Style="{StaticResource SubheaderStackStyle}" Orientation="Horizontal" Grid.Row="1">
+                <Label Text="Date de début" Style="{StaticResource SubHeaderLabelStyle}"/>
+                <win:CalendarDatePicker Width="200" Date="{Binding StartDate}"/>
+                <Label Text="Date de fin" Margin="20,0,0,0" Style="{StaticResource SubHeaderLabelStyle}"/>
+                <win:CalendarDatePicker Width="200" Date="{Binding EndDate}"/>
+                <Label Text="{Binding Test}"/>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

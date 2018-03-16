@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FreshMvvm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,9 @@ namespace Mindurry
 		{
 			InitializeComponent();
 
-			MainPage = new Mindurry.MainPage();
+            var page = FreshPageModelResolver.ResolvePageModel<ViewModels.DashboardPageModel>();
+            var basicNavContainer = new FreshNavigationContainer(page);
+            MainPage = basicNavContainer;
 		}
 
 		protected override void OnStart ()
