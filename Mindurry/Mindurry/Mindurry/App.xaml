@@ -7,6 +7,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <Color x:Key="GrayPanel">#F8F8F7</Color>
+            <Color x:Key="GrayPanelText">#656565</Color>
             <Style TargetType="Label">
                 <Setter Property="FontFamily" Value="SegoeUI"/>
             </Style>

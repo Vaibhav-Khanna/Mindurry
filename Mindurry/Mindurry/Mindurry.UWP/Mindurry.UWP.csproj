@@ -92,6 +92,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Effects\AccentColorEffect.cs" />
     <Compile Include="Effects\FontLightEffect.cs" />
     <Compile Include="Effects\SemiBold.cs" />
     <Compile Include="MainPage.xaml.cs">
