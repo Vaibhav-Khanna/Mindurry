@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Mindurry.Pages.DashboardPage"
+             xmlns:effect="clr-namespace:Mindurry.Effects"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
 			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
     <ContentPage.Content>
@@ -10,14 +11,77 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label Style="{StaticResource HeaderStyle}" Text="TABLEAU DE BOARD"/>
+            <Label Text="TABLEAU DE BOARD" Style="{StaticResource HeaderStyle}"/>
             <StackLayout Style="{StaticResource SubheaderStackStyle}" Orientation="Horizontal" Grid.Row="1">
                 <Label Text="Date de début" Style="{StaticResource SubHeaderLabelStyle}"/>
                 <win:CalendarDatePicker Width="200" Date="{Binding StartDate}"/>
                 <Label Text="Date de fin" Margin="20,0,0,0" Style="{StaticResource SubHeaderLabelStyle}"/>
                 <win:CalendarDatePicker Width="200" Date="{Binding EndDate}"/>
-                <Label Text="{Binding Test}"/>
+            </StackLayout>
+            <Label Text="Nombre de leads" HorizontalOptions="Center" Margin="10" Grid.Row="3" FontSize="24">
+                <Label.Effects>
+                    <effect:SemiBoldEffect/>
+                </Label.Effects>
+            </Label>
+            <BoxView Margin="20,0,0,0" HeightRequest="2" Color="#96918B" HorizontalOptions="FillAndExpand" Grid.Row="4"/>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="50" Grid.Row="5" Padding="30">
+                <StackLayout.Resources>
+                    <ResourceDictionary>
+                        <Style TargetType="Button">
+                            <Setter Property="BackgroundColor" Value="Transparent"/>
+                            <Setter Property="TextColor" Value="#4A4A48"/>
+                            <Setter Property="BorderColor" Value="#58D63A"/>
+                            <Setter Property="InputTransparent" Value="True"/>
+                            <Setter Property="HeightRequest" Value="160"/>
+                            <Setter Property="WidthRequest" Value="160"/>
+                            <Setter Property="BorderRadius" Value="80"/>
+                            <Setter Property="BorderWidth" Value="10"/>
+                            <Setter Property="FontSize" Value="50"/>
+                            <Setter Property="FontAttributes" Value="Bold"/>
+                        </Style>
+                        <Style TargetType="Label">
+                            <Setter Property="HorizontalOptions" Value="Center"/>
+                            <Setter Property="FontSize" Value="21"/>
+                            <Setter Property="TextColor" Value="#4A4A48"/>
+                        </Style>
+                    </ResourceDictionary>
+                </StackLayout.Resources>
+                <StackLayout Orientation="Vertical">
+                    <Button Text="45"/>
+                    <Label Text="Semaines">
+                        <Label.Effects>
+                            <effect:SemiBoldEffect/>
+                        </Label.Effects>
+                    </Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical">
+                    <Button Text="145"/>
+                    <Label Text="Mois">
+                        <Label.Effects>
+                            <effect:SemiBoldEffect/>
+                        </Label.Effects>
+                    </Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical">
+                    <Button Text="332"/>
+                    <Label Text="Trimestre">
+                        <Label.Effects>
+                            <effect:SemiBoldEffect/>
+                        </Label.Effects>
+                    </Label>
+                </StackLayout>
+                <StackLayout Orientation="Vertical">
+                    <Button Text="2003"/>
+                    <Label Text="Année">
+                        <Label.Effects>
+                            <effect:SemiBoldEffect/>
+                        </Label.Effects>
+                    </Label>
+                </StackLayout>
             </StackLayout>
         </Grid>
     </ContentPage.Content>

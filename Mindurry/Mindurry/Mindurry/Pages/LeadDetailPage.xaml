@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mindurry.Pages.LeadDetailPage"
+             xmlns:effect="clr-namespace:Mindurry.Effects"
+             xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
+			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="400"/>
+            </Grid.ColumnDefinitions>
+
+            <StackLayout BackgroundColor="{StaticResource GrayPanel}" Padding="20,30" Grid.Column="1" Spacing="20">
+                <Label Text="Informations" FontSize="22"/>
+                <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E8E6E3"/>
+                <Label Text="Commercial: Arold Martino" FontSize="20">
+                    <Label.Effects>
+                        <effect:FontLightEffect/>
+                    </Label.Effects>
+                </Label>
+                <Label Text="Source du lead: Immo.com" FontSize="20">
+                    <Label.Effects>
+                        <effect:FontLightEffect/>
+                    </Label.Effects>                    
+                </Label>
+                <Picker WidthRequest="300"/>
+                <Label Text="Type">
+                    <Label.Effects>
+                        <effect:SemiBoldEffect/>
+                    </Label.Effects>
+                </Label>
+                <Picker WidthRequest="300"/>
+                <StackLayout Orientation="Horizontal" Spacing="30">
+                    <Label Text="Archiver ce lead" FontSize="16" FontAttributes="Bold" VerticalOptions="Center">
+                        <Label.Effects>
+                            <effect:SemiBoldEffect/>
+                        </Label.Effects>
+                    </Label>
+                    <Switch/>
+                </StackLayout>
+                <Label Text="Intéressér par" FontSize="16">
+                    <Label.Effects>
+                        <effect:SemiBoldEffect/>
+                    </Label.Effects>
+                </Label>
+                
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

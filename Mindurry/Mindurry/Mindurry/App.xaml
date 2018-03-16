@@ -6,8 +6,12 @@
 			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
     <Application.Resources>
         <ResourceDictionary>
+            <Color x:Key="GrayPanel">#F8F8F7</Color>
+            <Style TargetType="Label">
+                <Setter Property="FontFamily" Value="SegoeUI"/>
+            </Style>
             <Style x:Key="HeaderStyle" TargetType="Label">
-                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="FontSize" Value="28"/>
                 <Setter Property="Margin" Value="30"/>
             </Style>
             <Style x:Key="SubHeaderLabelStyle" TargetType="Label">
