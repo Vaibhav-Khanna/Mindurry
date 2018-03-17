@@ -7,13 +7,32 @@
     <Application.Resources>
         <ResourceDictionary>
             <Color x:Key="GrayPanel">#F8F8F7</Color>
+            <Color x:Key="SubheaderPanel">#F5F4F3</Color>
+            <Color x:Key="GrayDivider">#D9D9D9</Color>
+            <Color x:Key="GrayPanelEdge">#9B9B9B</Color>
             <Color x:Key="GrayPanelText">#656565</Color>
+            <Color x:Key="BlueAccent">#1FACFF</Color>
+            <Color x:Key="RedAccent">#EC1414</Color>
             <Style TargetType="Label">
                 <Setter Property="FontFamily" Value="SegoeUI"/>
             </Style>
             <Style x:Key="HeaderStyle" TargetType="Label">
                 <Setter Property="FontSize" Value="28"/>
                 <Setter Property="Margin" Value="30"/>
+            </Style>
+            <Style x:Key="SubHeader" TargetType="Label">
+                <Setter Property="FontSize" Value="18"/>
+            </Style>
+            <Style x:Key="TextIconStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+            </Style>
+            <Style x:Key="BlueLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontFamily" Value="SegoeUI"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="TextColor" Value="{StaticResource BlueAccent}"/>
             </Style>
             <Style x:Key="SubHeaderLabelStyle" TargetType="Label">
                 <Setter Property="VerticalOptions" Value="Center"/>
@@ -22,6 +41,13 @@
                 <Setter Property="BackgroundColor" Value="#F5F4F3"/>
                 <Setter Property="Padding" Value="30,10"/>
                 <Setter Property="Spacing" Value="20"/>
+            </Style>
+            <Style x:Key="IconButton" TargetType="Button">
+                <Setter Property="FontSize" Value="20"/>
+                <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="BorderWidth" Value="0"/>
+                <Setter Property="TextColor" Value="Black"/>
             </Style>
         </ResourceDictionary>
     </Application.Resources>

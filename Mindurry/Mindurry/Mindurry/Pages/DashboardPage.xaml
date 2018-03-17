@@ -15,7 +15,11 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label Text="TABLEAU DE BOARD" Style="{StaticResource HeaderStyle}"/>
+            <Label Text="TABLEAU DE BOARD" Style="{StaticResource HeaderStyle}">
+                <Label.Effects>
+                    <effect:FontLightEffect/>
+                </Label.Effects>
+            </Label>
             <StackLayout Style="{StaticResource SubheaderStackStyle}" Orientation="Horizontal" Grid.Row="1">
                 <Label Text="Date de début" Style="{StaticResource SubHeaderLabelStyle}"/>
                 <win:CalendarDatePicker Width="200" Date="{Binding StartDate}"/>

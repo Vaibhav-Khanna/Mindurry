@@ -10,7 +10,11 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Label Text="LEADS" Style="{StaticResource HeaderStyle}"/>
+            <Label Text="LEADS" Style="{StaticResource HeaderStyle}">
+                <Label.Effects>
+                    <effect:FontLightEffect/>
+                </Label.Effects>
+            </Label>
 
             <ListView Grid.Row="1" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                 <ListView.Header>

@@ -14,7 +14,10 @@ namespace Mindurry.UWP.Effects
     {
         protected override void OnAttached()
         {
-            ((Windows.UI.Xaml.Controls.Control)Control).Foreground = (Windows.UI.Xaml.Media.Brush) Control.Resources["SystemControlHighlightAccentBrush"];
+            if (Control is Windows.UI.Xaml.Controls.Control)
+                ((Windows.UI.Xaml.Controls.Control)Control).Foreground = (Windows.UI.Xaml.Media.Brush) Control.Resources["SystemControlHighlightAccentBrush"];
+            else if (Control is Windows.UI.Xaml.Controls.TextBlock)
+                ((Windows.UI.Xaml.Controls.TextBlock)Control).Foreground = (Windows.UI.Xaml.Media.Brush)Control.Resources["SystemControlHighlightAccentBrush"];
         }
 
         protected override void OnDetached()

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Mindurry.Pages.LeadDetailPage"
              xmlns:effect="clr-namespace:Mindurry.Effects"
+             xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
 			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
     <ContentPage.Content>
@@ -12,7 +13,112 @@
                 <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
 
-                <StackLayout BackgroundColor="{StaticResource GrayPanel}" Padding="20,30" Spacing="20" Grid.Column="1">
+            <ScrollView>
+                <StackLayout>
+
+                    <StackLayout Padding="30" Orientation="Vertical">
+                        <StackLayout.Resources>
+                            <ResourceDictionary>
+                                <Style TargetType="StackLayout">
+                                    <Setter Property="Orientation" Value="Horizontal"/>
+                                    <Setter Property="Spacing" Value="20"/>
+                                </Style>
+                            </ResourceDictionary>
+                        </StackLayout.Resources>
+                        <StackLayout>
+                            <Label Text="{Binding Item.Name}" FontSize="28" VerticalOptions="Center"/>
+                            <Grid VerticalOptions="Center">
+                                <Grid HeightRequest="20" HorizontalOptions="Fill" BackgroundColor="{StaticResource BlueAccent}" VerticalOptions="Center"/>
+                                <Label Text="Lead" TextColor="White" FontSize="14" VerticalOptions="Center" Margin="10,0"/>
+                            </Grid>
+
+                        </StackLayout>
+
+                        <StackLayout>
+                            <Label Text="" Style="{StaticResource TextIconStyle}"/>
+                            <Label Text="{Binding Item.Email}" Style="{StaticResource BlueLabel}"/>
+                        </StackLayout>
+
+                        <StackLayout>
+                            <Label Text="" Style="{StaticResource TextIconStyle}"/>
+                            <Label Text="{Binding Item.Telephone}" Style="{StaticResource BlueLabel}"/>
+                        </StackLayout>
+
+                        <StackLayout>
+                            <Label Text="" Style="{StaticResource TextIconStyle}"/>
+                            <Label Text="{Binding Item.Address}" Style="{StaticResource BlueLabel}"/>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
+
+                    <StackLayout Orientation="Vertical" Padding="30">
+                        <Label Text="Rappel à venir" FontSize="18" Margin="0,0,0,10"/>
+                        <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid HorizontalOptions="End" Margin="0,30">
+                                <win:CheckBox/>
+                            </Grid>
+
+                            <StackLayout Orientation="Vertical" Padding="0,30" Grid.Column="1">
+                                <Label Text="Envoyer le plan appartement" FontSize="20"/>
+                                <Grid BackgroundColor="#F5A623" Padding="10,5" WidthRequest="200" HorizontalOptions="Start">
+                                    <Label Text="⚠ Aujourd'hui" FontAttributes="Bold" FontSize="18" TextColor="White"/>
+                                </Grid>
+                            </StackLayout>
+
+                            <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center"/>
+                            <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center"/>
+                        </Grid>
+
+                        <Grid BackgroundColor="{StaticResource GrayPanel}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackLayout Orientation="Horizontal" Padding="0,30" Grid.Column="1" Spacing="20">
+                                <Grid BackgroundColor="#334A90E2" Padding="10,5" WidthRequest="200" HorizontalOptions="Start">
+                                    <Label Text="Jeudi 8 Mars"  Style="{StaticResource BlueLabel}"/>
+                                </Grid>
+                                <Label Text="Demande de rendez-vous" FontSize="18" VerticalOptions="Center"/>
+
+                            </StackLayout>
+
+                            <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center"/>
+                            <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center"/>
+                        </Grid>
+
+                        <Button Text="Envoyer une séquence" TextColor="White" BackgroundColor="#9B9B9B" WidthRequest="250" HeightRequest="40" BorderWidth="0" HorizontalOptions="End"
+                                Margin="0,20,0,20"/>
+
+                        <Label Text="Ajouter une note" FontSize="18" Margin="0,0,0,10"/>
+                        <Editor HorizontalOptions="Fill" HeightRequest="200" Margin="0,10"/>
+
+                        <StackLayout HorizontalOptions="End" Orientation="Horizontal">
+                            <Label Text="🛈" VerticalOptions="End" FontSize="24"/>
+                            <win:CalendarDatePicker Header="Ajouter un rappel" Width="300"/>
+                            <Button Text="Valider" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="200" HeightRequest="40" VerticalOptions="End"/>
+                        </StackLayout>
+
+                        <Label Text="Flux d'activité" FontSize="18" Margin="0,20,0,10"/>
+                        <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
+                    </StackLayout>
+                    
+                </StackLayout>
+            </ScrollView>
+
+            <ScrollView Grid.Column="1">
+                <StackLayout BackgroundColor="{StaticResource GrayPanel}" Padding="20,30" Spacing="20">
                     <Label Text="Informations" FontSize="22"/>
                     <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E8E6E3"/>
                     <Label Text="Commercial: Arold Martino" FontSize="20">
@@ -47,7 +153,7 @@
                     </Label>
 
                     <StackLayout Spacing="5">
-                        <StackLayout Orientation="Horizontal" Spacing="20">
+                        <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
                             <StackLayout.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding ArrowOneCommand}"/>
                             </StackLayout.GestureRecognizers>
@@ -55,56 +161,57 @@
                             <Label Text="{Binding ArrowOne}"  FontSize="10" VerticalOptions="Center" TextColor="{StaticResource GrayPanelText}" FontFamily="Segoe MDL2 Assets"/>
                         </StackLayout>
 
-                    <StackLayout IsVisible="{Binding IsFirstListVisible}">
-                        <ListView ItemsSource="{Binding ResidencesChecks}" VerticalOptions="Start">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Checked}"/>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                        <StackLayout IsVisible="{Binding IsFirstListVisible}">
+                            <repeater:RepeaterView ItemsSource="{Binding ResidencesChecks}" VerticalOptions="Start">
+                                <repeater:RepeaterView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Checked}"/>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </repeater:RepeaterView.ItemTemplate>
+                            </repeater:RepeaterView>
 
-                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllResidencesCommand}">
-                            <Button.Effects>
-                                <effect:AccentColorEffect/>
-                            </Button.Effects>
-                        </Button>
+                            <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllResidencesCommand}">
+                                <Button.Effects>
+                                    <effect:AccentColorEffect/>
+                                </Button.Effects>
+                            </Button>
+                        </StackLayout>
+
+                    </StackLayout>
+
+                    <StackLayout Spacing="15">
+                        <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ArrowTwoCommand}"/>
+                            </StackLayout.GestureRecognizers>
+                            <Label Text="Types" TextColor="{StaticResource GrayPanelText}"/>
+                            <Label Text="{Binding ArrowTwo}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
+                        </StackLayout>
+
+                        <StackLayout IsVisible="{Binding IsSecondListVisible}" Spacing="15">
+                            <repeater:RepeaterView ItemsSource="{Binding TypesChecks}" VerticalOptions="Start">
+                                <repeater:RepeaterView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ViewCell>
+                                            <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Checked}"/>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </repeater:RepeaterView.ItemTemplate>
+                            </repeater:RepeaterView>
+
+                            <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllTypesCommand}">
+                                <Button.Effects>
+                                    <effect:AccentColorEffect/>
+                                </Button.Effects>
+                            </Button>
+                        </StackLayout>
+
                     </StackLayout>
 
                 </StackLayout>
-
-                <StackLayout Spacing="15">
-                    <StackLayout Orientation="Horizontal" Spacing="20">
-                        <StackLayout.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding ArrowTwoCommand}"/>
-                        </StackLayout.GestureRecognizers>
-                        <Label Text="Types" TextColor="{StaticResource GrayPanelText}"/>
-                        <Label Text="{Binding ArrowTwo}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
-                    </StackLayout>
-
-                    <StackLayout IsVisible="{Binding IsSecondListVisible}" Spacing="15">
-                        <ListView ItemsSource="{Binding TypesChecks}" VerticalOptions="Start">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ViewCell>
-                                        <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Checked}"/>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-
-                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllTypesCommand}">
-                            <Button.Effects>
-                                <effect:AccentColorEffect/>
-                            </Button.Effects>
-                        </Button>
-                    </StackLayout>
-
-                </StackLayout>
-
-            </StackLayout>
+            </ScrollView>
 
         </Grid>
     </ContentPage.Content>

@@ -94,6 +94,7 @@
     </Compile>
     <Compile Include="Effects\AccentColorEffect.cs" />
     <Compile Include="Effects\FontLightEffect.cs" />
+    <Compile Include="Effects\LightBorderEffect.cs" />
     <Compile Include="Effects\SemiBold.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -107,6 +108,8 @@
     <None Include="Mindurry.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="logo.png" />
+    <Content Include="microsoft.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-100.png" />
     <Content Include="Assets\LockScreenLogo.scale-125.png" />
