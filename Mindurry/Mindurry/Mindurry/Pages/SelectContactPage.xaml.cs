@@ -9,9 +9,9 @@ using Xamarin.Forms.Xaml;
 
 namespace Mindurry.Pages
 {
-	public partial class ResidencesPage : ContentPage
+	public partial class SelectContactPage : ContentPage
 	{
-		public ResidencesPage ()
+		public SelectContactPage ()
 		{
 			InitializeComponent ();
             NavigationPage.SetHasNavigationBar(this, false);

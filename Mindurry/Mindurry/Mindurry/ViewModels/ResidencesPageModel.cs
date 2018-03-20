@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Linq;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace Mindurry.ViewModels
 {
@@ -13,14 +15,42 @@ namespace Mindurry.ViewModels
     {
         public IEnumerable<IGrouping<string, Residence>> GroupedItems { get; set; }
 
+        public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
+        public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
+        public ObservableCollection<CheckBoxItem> ExpositionChecks { get; set; }
+
         public Residence SelectedItem
         {
             get => null;
+            set
+            { }
         }
 
         public bool IsShareButtonVisible { get; set; } = false;
+        public bool IsFirstListVisible { get; set; } = true;
+        public bool IsSecondListVisible { get; set; } = true;
+        public bool IsThirdListVisible { get; set; } = true;
         public bool IsFilterOn { get; set; } = false;
 
+        public string ArrowOne
+        {
+            get => IsFirstListVisible ? "" : "";
+        }
+
+        public string ArrowTwo
+        {
+            get => IsSecondListVisible ? "" : "";
+        }
+
+        public string ArrowThree
+        {
+            get => IsThirdListVisible ? "" : "";
+        }
+
+        public ICommand ShowFilterCommand { get; set; }
+        public ICommand ArrowOneCommand { get; set; }
+        public ICommand ArrowTwoCommand { get; set; }
+        public ICommand ArrowThreeCommand { get; set; }
 
         public override void Init(object initData)
         {
@@ -184,6 +214,74 @@ namespace Mindurry.ViewModels
 
             var items = new ObservableCollection<Residence> { item1, item2, item21, item22, item3, item31, item32, item33, item34, item4, item41, item42 };
             GroupedItems = items.GroupBy(x => x.Parent);
+
+            var check1 = new CheckBoxItem { Content = "Herrian" };
+            var check2 = new CheckBoxItem { Content = "Herri Ondo", IsChecked = true };
+            var check3 = new CheckBoxItem { Content = "Villa Aguiléra" };
+
+            ResidencesChecks = new ObservableCollection<CheckBoxItem> { check1, check2, check3 };
+
+            var check4 = new CheckBoxItem { Content = "Studio" };
+            var check5 = new CheckBoxItem { Content = "T2", IsChecked = true };
+            var check6 = new CheckBoxItem { Content = "T3" };
+
+            TypesChecks = new ObservableCollection<CheckBoxItem> { check4, check5, check6 };
+
+            var check7 = new CheckBoxItem { Content = "Nord" };
+            var check8 = new CheckBoxItem { Content = "Sud" };
+            var check9 = new CheckBoxItem { Content = "Est" };
+
+            ExpositionChecks = new ObservableCollection<CheckBoxItem> { check7, check8, check9 };
+
+            ShowFilterCommand = new Command(ShowFilter);
+            ArrowOneCommand = new Command(ChangeArrowOne);
+            ArrowTwoCommand = new Command(ChangeArrowTwo);
+            ArrowThreeCommand = new Command(ChangeArrowThree);
+
+            ViewModels.StaticViewModel.SelectionChanged += StaticViewModel_SelectionChanged;
+        }
+
+        public override void ReverseInit(object returnedData)
+        {
+            base.ReverseInit(returnedData);
+
+            ViewModels.StaticViewModel.SelectionChanged -= StaticViewModel_SelectionChanged;
+        }
+
+        private void StaticViewModel_SelectionChanged(object sender, EventArgs e)
+        {
+            foreach (var group in GroupedItems)
+            {
+                foreach (Residence r in group)
+                {
+                    if (r.IsChecked)
+                    {
+                        IsShareButtonVisible = true;
+                        return;
+                    }
+                }
+            }
+            IsShareButtonVisible = false;
+        }
+
+        void ShowFilter()
+        {
+            IsFilterOn = !IsFilterOn;
+        }
+
+        void ChangeArrowOne()
+        {
+            IsFirstListVisible = !IsFirstListVisible;
+        }
+
+        void ChangeArrowTwo()
+        {
+            IsSecondListVisible = !IsSecondListVisible;
+        }
+
+        void ChangeArrowThree()
+        {
+            IsThirdListVisible = !IsThirdListVisible;
         }
     }
 }

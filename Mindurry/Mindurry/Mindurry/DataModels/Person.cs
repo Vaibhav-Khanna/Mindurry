@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mindurry.DataModels
 {
-    public class Lead
+    public class Person
     {
         public DateTime Date { get; set; }
         public string Name { get; set; }

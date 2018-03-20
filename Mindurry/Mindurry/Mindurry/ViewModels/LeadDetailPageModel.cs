@@ -13,7 +13,7 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class LeadDetailPageModel : FreshBasePageModel
     {
-        public Lead Item { get; set; }
+        public Person Item { get; set; }
         public ObservableCollection<string> Combo1 { get; set; }
         public ObservableCollection<string> Types { get; set; }
         public string Combo1Selected { get; set; }
@@ -41,7 +41,7 @@ namespace Mindurry.ViewModels
         public override void Init(object initData)
         {
             base.Init(initData);
-            Item = (Lead)initData;
+            Item = (Person)initData;
 
             Types = new ObservableCollection<string> { "Investisseur" };
             Combo1 = new ObservableCollection<string> { "Lead" };

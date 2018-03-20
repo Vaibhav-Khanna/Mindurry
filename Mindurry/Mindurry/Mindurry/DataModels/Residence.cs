@@ -9,7 +9,16 @@ namespace Mindurry.DataModels
     public class Residence
     {
         public string Parent { get; set; }
-        public bool IsChecked { get; set; }
+        private bool isChecked;
+        public bool IsChecked
+        {
+            get => isChecked;
+            set
+            {
+                isChecked = value;
+                ViewModels.StaticViewModel.OnSelectionChanged();
+            }
+        }
         public double NoArchi { get; set; }
         public Statut Statut { get; set; }
         public string Exposition { get; set; }

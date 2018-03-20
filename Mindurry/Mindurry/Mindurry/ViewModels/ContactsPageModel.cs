@@ -12,12 +12,12 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class ContactsPageModel : FreshBasePageModel
     {
-        public ObservableCollection<Lead> Items { get; set; }
+        public ObservableCollection<Person> Items { get; set; }
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> CommercialChecks { get; set; }
 
-        private Lead selectedItem;
-        public Lead SelectedItem
+        private Person selectedItem;
+        public Person SelectedItem
         {
             get => selectedItem;
             set
@@ -50,7 +50,7 @@ namespace Mindurry.ViewModels
         {
             base.Init(initData);
 
-            var item1 = new Lead
+            var item1 = new Person
             {
                 Name = "John Doe",
                 Email = "j.doe@gmail.com",
@@ -58,7 +58,7 @@ namespace Mindurry.ViewModels
                 Commercial = "Arold Martino"
             };
 
-            var item2 = new Lead
+            var item2 = new Person
             {
                 Name = "Sullivan Marc",
                 Email = "m.sullivan@immo.com",
@@ -66,7 +66,7 @@ namespace Mindurry.ViewModels
                 Commercial = "Jean Noosa"
             };
 
-            var item3 = new Lead
+            var item3 = new Person
             {
                 Name = "Marie Yuji",
                 Email = "sean.yuji@yuji.com",
@@ -74,7 +74,7 @@ namespace Mindurry.ViewModels
                 Commercial = "Jean Noosa"
             };
 
-            var item4 = new Lead
+            var item4 = new Person
             {
                 Date = new DateTime(2017, 12, 11, 9, 34, 0),
                 Name = "Albert Louak",
@@ -83,7 +83,7 @@ namespace Mindurry.ViewModels
                 Commercial = "Jean Noosa"
             };
 
-            var item5 = new Lead
+            var item5 = new Person
             {
                 Date = new DateTime(2017, 9, 12, 11, 59, 0),
                 Name = "Louis Aroati",
@@ -92,7 +92,7 @@ namespace Mindurry.ViewModels
                 Commercial = "Jean Noosa"
             };
 
-            Items = new ObservableCollection<Lead> { item1, item2, item3, item4, item5 };
+            Items = new ObservableCollection<Person> { item1, item2, item3, item4, item5 };
 
             var check1 = new CheckBoxItem { Content = "Herrian" };
             var check2 = new CheckBoxItem { Content = "Herri Ondo", IsChecked = true };
@@ -100,9 +100,9 @@ namespace Mindurry.ViewModels
 
             ResidencesChecks = new ObservableCollection<CheckBoxItem> { check1, check2, check3 };
 
-            var check4 = new CheckBoxItem { Content = "Jean Noosa", IsChecked = true };
-            var check5 = new CheckBoxItem { Content = "Marie Shine" };
-            var check6 = new CheckBoxItem { Content = "Alfred Ducasse" };
+            var check4 = new CheckBoxItem { Content = "Studio" };
+            var check5 = new CheckBoxItem { Content = "T2", IsChecked = true };
+            var check6 = new CheckBoxItem { Content = "T3" };
 
             CommercialChecks = new ObservableCollection<CheckBoxItem> { check4, check5, check6 };
 

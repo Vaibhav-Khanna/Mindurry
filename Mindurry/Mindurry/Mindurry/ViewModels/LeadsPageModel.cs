@@ -10,9 +10,9 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class LeadsPageModel: FreshBasePageModel
     {
-        public ObservableCollection<Lead> Items { get; set; }
-        private Lead selectedItem;
-        public Lead SelectedItem
+        public ObservableCollection<Person> Items { get; set; }
+        private Person selectedItem;
+        public Person SelectedItem
         {
             get => selectedItem;
             set
@@ -27,7 +27,7 @@ namespace Mindurry.ViewModels
         {
             base.Init(initData);
 
-            var item1 = new Lead
+            var item1 = new Person
             {
                 Date = new DateTime(2018, 1, 1, 15, 45, 0),
                 Name = "Hasley Duran",
@@ -35,7 +35,7 @@ namespace Mindurry.ViewModels
                 Telephone = "09 36 73 83 83"
             };
 
-            var item2 = new Lead
+            var item2 = new Person
             {
                 Date = new DateTime(2017, 12, 24, 13, 44, 0),
                 Name = "Jeff Frazier",
@@ -43,7 +43,7 @@ namespace Mindurry.ViewModels
                 Telephone = "06 87 76 44 56"
             };
 
-            var item3 = new Lead
+            var item3 = new Person
             {
                 Date = new DateTime(2017, 12, 18, 16, 12, 0),
                 Name = "Mike Kilopi",
@@ -51,7 +51,7 @@ namespace Mindurry.ViewModels
                 Telephone = "07 56 65 63 00"
             };
 
-            var item4 = new Lead
+            var item4 = new Person
             {
                 Date = new DateTime(2017, 12, 11, 9, 34, 0),
                 Name = "Manu Surto",
@@ -59,7 +59,7 @@ namespace Mindurry.ViewModels
                 Telephone = "06 67 55 87 99"
             };
 
-            var item5 = new Lead
+            var item5 = new Person
             {
                 Date = new DateTime(2017, 9, 12, 11, 59, 0),
                 Name = "Arold Marketi",
@@ -67,7 +67,7 @@ namespace Mindurry.ViewModels
                 Telephone = "07 67 55 22 78"
             };
 
-            Items = new ObservableCollection<Lead> { item1, item2, item3, item4, item5 };
+            Items = new ObservableCollection<Person> { item1, item2, item3, item4, item5 };
         }
     }
 }

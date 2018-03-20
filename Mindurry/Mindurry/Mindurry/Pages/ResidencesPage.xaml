@@ -3,8 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Mindurry.Pages.ResidencesPage"
              xmlns:effect="clr-namespace:Mindurry.Effects"
+             xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
+             xmlns:converter="clr-namespace:Mindurry.Converters"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
 			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:StatutToColorConverter x:Key="StatutToColorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <ContentPage.Content>
         <Grid RowSpacing="0">
             <Grid.RowDefinitions>
@@ -112,16 +120,17 @@
                                         <ResourceDictionary>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontSize" Value="18"/>
+                                                <Setter Property="VerticalOptions" Value="Center"/>
                                             </Style>
                                         </ResourceDictionary>
                                     </Grid.Resources>
 
-                                    <Grid HorizontalOptions="Center">
-                                        <win:CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                    <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                                        <win:CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}" MinWidth="0"/>
                                     </Grid>
 
                                     <Label Text="{Binding NoArchi}" Grid.Column="1"/>
-                                    <Label Text="{Binding }" Grid.Column="2"/>
+                                    <Label Text="{Binding Statut}" TextColor="{Binding Statut, Converter={StaticResource StatutToColorConverter}}" Grid.Column="2"/>
                                     <Label Text="{Binding Exposition}" Grid.Column="3"/>
                                     <Label Text="{Binding Surface, StringFormat='{0}m2'}" Grid.Column="4"/>
                                     <Label Text="{Binding Terasse}" Grid.Column="5"/>
@@ -156,7 +165,7 @@
                         </Grid>
 
                         <ScrollView Grid.Row="1">
-                            <StackLayout Spacing="15" Padding="30">
+                            <StackLayout Spacing="20" Padding="20">
                                 <StackLayout Spacing="5">
                                     <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
                                         <StackLayout.GestureRecognizers>
@@ -166,6 +175,24 @@
                                         <Label Text="{Binding ArrowOne}"  FontSize="10" VerticalOptions="Center" TextColor="{StaticResource GrayPanelText}" FontFamily="Segoe MDL2 Assets"/>
                                     </StackLayout>
 
+                                    <StackLayout IsVisible="{Binding IsFirstListVisible}">
+                                        <repeater:RepeaterView ItemsSource="{Binding ResidencesChecks}" VerticalOptions="Start">
+                                            <repeater:RepeaterView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <ViewCell>
+                                                        <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                    </ViewCell>
+                                                </DataTemplate>
+                                            </repeater:RepeaterView.ItemTemplate>
+                                        </repeater:RepeaterView>
+
+                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllResidencesCommand}">
+                                            <Button.Effects>
+                                                <effect:AccentColorEffect/>
+                                            </Button.Effects>
+                                        </Button>
+                                    </StackLayout>
+
                                 </StackLayout>
 
                                 <StackLayout Spacing="5">
@@ -173,11 +200,67 @@
                                         <StackLayout.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding ArrowTwoCommand}"/>
                                         </StackLayout.GestureRecognizers>
-                                        <Label Text="Commercial en charge" TextColor="{StaticResource GrayPanelText}"/>
+                                        <Label Text="TypesChecks" TextColor="{StaticResource GrayPanelText}"/>
                                         <Label Text="{Binding ArrowTwo}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
                                     </StackLayout>
-                                    
+
+                                    <StackLayout IsVisible="{Binding IsSecondListVisible}" Spacing="15">
+                                        <repeater:RepeaterView ItemsSource="{Binding TypesChecks}" VerticalOptions="Start">
+                                            <repeater:RepeaterView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <ViewCell>
+                                                        <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                    </ViewCell>
+                                                </DataTemplate>
+                                            </repeater:RepeaterView.ItemTemplate>
+                                        </repeater:RepeaterView>
+
+                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllTypesCommand}">
+                                            <Button.Effects>
+                                                <effect:AccentColorEffect/>
+                                            </Button.Effects>
+                                        </Button>
+                                    </StackLayout>
                                 </StackLayout>
+
+                                <StackLayout Spacing="5">
+                                    <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ArrowThreeCommand}"/>
+                                        </StackLayout.GestureRecognizers>
+                                        <Label Text="Commercial en charge" TextColor="{StaticResource GrayPanelText}"/>
+                                        <Label Text="{Binding ArrowThree}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
+                                    </StackLayout>
+
+                                    <StackLayout IsVisible="{Binding IsThirdListVisible}" Spacing="15">
+                                        <repeater:RepeaterView ItemsSource="{Binding ExpositionChecks}" VerticalOptions="Start">
+                                            <repeater:RepeaterView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <ViewCell>
+                                                        <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                    </ViewCell>
+                                                </DataTemplate>
+                                            </repeater:RepeaterView.ItemTemplate>
+                                        </repeater:RepeaterView>
+
+                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllExpositionCommand}">
+                                            <Button.Effects>
+                                                <effect:AccentColorEffect/>
+                                            </Button.Effects>
+                                        </Button>
+                                    </StackLayout>
+                                </StackLayout>
+
+                                <StackLayout>
+                                    <Label Text="Terrasse" TextColor="{StaticResource GrayPanelText}" Grid.ColumnSpan="2"/>
+                                    <Switch/>
+                                </StackLayout>
+
+                                <StackLayout>
+                                    <Label Text="Jardin" TextColor="{StaticResource GrayPanelText}" Grid.ColumnSpan="2"/>
+                                    <Switch/>
+                                </StackLayout>
+
                             </StackLayout>
                         </ScrollView>
                     </Grid>
