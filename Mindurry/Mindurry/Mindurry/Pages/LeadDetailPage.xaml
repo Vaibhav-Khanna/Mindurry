@@ -70,7 +70,10 @@
                             <StackLayout Orientation="Vertical" Padding="0,30" Grid.Column="1">
                                 <Label Text="Envoyer le plan appartement" FontSize="20"/>
                                 <Grid BackgroundColor="#F5A623" Padding="10,5" WidthRequest="200" HorizontalOptions="Start">
-                                    <Label Text="⚠ Aujourd'hui" FontAttributes="Bold" FontSize="18" TextColor="White"/>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="" FontSize="18" TextColor="White" FontFamily="Segoe MDL2 Assets"/>
+                                        <Label Text="Aujourd'hui" FontAttributes="Bold" FontSize="18" TextColor="White"/>
+                                    </StackLayout>
                                 </Grid>
                             </StackLayout>
 
@@ -166,7 +169,9 @@
                                 <repeater:RepeaterView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
-                                            <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Checked}"/>
+                                            <win:CheckBox  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}">
+                                                <win:CheckBox.Content>Test</win:CheckBox.Content>
+                                            </win:CheckBox>
                                         </ViewCell>
                                     </DataTemplate>
                                 </repeater:RepeaterView.ItemTemplate>
@@ -195,7 +200,7 @@
                                 <repeater:RepeaterView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
-                                            <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Checked}"/>
+                                            <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
                                         </ViewCell>
                                     </DataTemplate>
                                 </repeater:RepeaterView.ItemTemplate>

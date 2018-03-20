@@ -152,7 +152,7 @@
                                         <repeater:RepeaterView.ItemTemplate>
                                             <DataTemplate>
                                                 <ViewCell>
-                                                    <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Checked}"/>
+                                                    <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
                                                 </ViewCell>
                                             </DataTemplate>
                                         </repeater:RepeaterView.ItemTemplate>
@@ -181,7 +181,7 @@
                                             <repeater:RepeaterView.ItemTemplate>
                                                 <DataTemplate>
                                                     <ViewCell>
-                                                        <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Checked}"/>
+                                                        <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
                                                     </ViewCell>
                                                 </DataTemplate>
                                             </repeater:RepeaterView.ItemTemplate>

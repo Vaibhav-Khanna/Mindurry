@@ -19,10 +19,10 @@
             </StackLayout>
 
             <Grid Grid.Column="1">
-                <Image/>
+                <Image Source="bkgLogin.png" HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFill"/>
                 <StackLayout VerticalOptions="Center" Padding="80" Spacing="20">
-                    <Label Text="Bienvenue sur votre plateforme d'administration locale" FontSize="48"/>
-                    <Label Text="Votre outil de gestion de relation client" FontSize="24"/>
+                    <Label Text="Bienvenue sur votre plateforme d'administration locale" FontSize="48" TextColor="White"/>
+                    <Label Text="Votre outil de gestion de relation client" FontSize="24" TextColor="White"/>
                 </StackLayout>
             </Grid>
         </Grid>

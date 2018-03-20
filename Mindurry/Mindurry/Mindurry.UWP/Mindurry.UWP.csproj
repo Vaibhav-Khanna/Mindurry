@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mindurry.UWP</RootNamespace>
     <AssemblyName>Mindurry.UWP</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
+    <DefaultLanguage>fr-FR</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.16299.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
@@ -108,6 +108,7 @@
     <None Include="Mindurry.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bkgLogin.png" />
     <Content Include="logo.png" />
     <Content Include="microsoft.png" />
     <Content Include="Properties\Default.rd.xml" />
