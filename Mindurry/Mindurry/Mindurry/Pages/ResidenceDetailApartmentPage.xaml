@@ -9,6 +9,7 @@
 			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
     <ContentPage.Resources>
         <ResourceDictionary>
+            <converter:BoolToStringConverter x:Key="BoolToStringConverter"/>
             <converter:StatutToColorConverter x:Key="StatutToColorConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -102,8 +103,8 @@
                                     <Label Text="{Binding Statut}" TextColor="{Binding Statut, Converter={StaticResource StatutToColorConverter}}" Grid.Column="1"/>
                                     <Label Text="{Binding Exposition}" Grid.Column="2"/>
                                     <Label Text="{Binding Surface, StringFormat='{0}m2'}" Grid.Column="3"/>
-                                    <Label Text="{Binding Terasse}" Grid.Column="4"/>
-                                    <Label Text="{Binding Jardin}" Grid.Column="5"/>
+                                    <Label Text="{Binding Terasse, Converter={StaticResource BoolToStringConverter}}" Grid.Column="4"/>
+                                    <Label Text="{Binding Jardin, Converter={StaticResource BoolToStringConverter}}" Grid.Column="5"/>
                                     <Label Text="{Binding Etage}" Grid.Column="6"/>
                                     <Label Text="{Binding Prix, StringFormat='{0:#,##0}€'}" Grid.Column="7"/>
                                     <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="8"/>

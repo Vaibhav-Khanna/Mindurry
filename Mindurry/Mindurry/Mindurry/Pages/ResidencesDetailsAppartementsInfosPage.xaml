@@ -1,9 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converter="clr-namespace:Mindurry.Converters"
              xmlns:effect="clr-namespace:Mindurry.Effects"
              xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
              x:Class="Mindurry.Pages.ResidencesDetailsAppartementsInfosPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:BoolToStringConverter x:Key="BoolToStringConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Spacing="30">
@@ -52,7 +59,7 @@
                 <StackLayout>
                     <StackLayout  Orientation="Horizontal">
                         <Label Text="Terasse(s)" WidthRequest="250"/>
-                        <Label Text="{Binding Item.Terasse}"/>
+                        <Label Text="{Binding Item.Terasse, Converter={StaticResource BoolToStringConverter}}"/>
                     </StackLayout>
                     <repeater:RepeaterView ItemsSource="{Binding Item.Terasses}" VerticalOptions="Start" Margin="15,0">
                         <repeater:RepeaterView.ItemTemplate>
@@ -71,7 +78,7 @@
                 <StackLayout>
                     <StackLayout  Orientation="Horizontal">
                         <Label Text="Jardin" WidthRequest="250"/>
-                        <Label Text="{Binding Item.Jardin}"/>
+                        <Label Text="{Binding Item.Jardin, Converter={StaticResource BoolToStringConverter}}"/>
                     </StackLayout>
                     <Label Text="{Binding Item.JardinSurface, StringFormat='- {0}'}" TextColor="{StaticResource GrayPanelText}"  Margin="15,0"/>
                 </StackLayout>
