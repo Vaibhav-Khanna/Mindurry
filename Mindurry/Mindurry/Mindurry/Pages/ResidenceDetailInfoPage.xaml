@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mindurry.Pages.ResidenceDetailInfoPage">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.Resources>
+                <ResourceDictionary>
+                    <Style TargetType="Label">
+                        <Setter Property="FontSize" Value="18"/>
+                    </Style>
+                </ResourceDictionary>
+            </Grid.Resources>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <Grid ColumnSpacing="40" RowSpacing="20" Padding="0,30">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Nom"/>
+                <Label Text="Herrian" Grid.Column="1"/>
+                <Label Text="Adresse" Grid.Row="1"/>
+                <Label Text="3 impasse Beau Site, 64480 Ustarritz" Grid.Row="1" Grid.Column="1"/>
+                <Label Text="Nom de société propriétaire" Grid.Row="2"/>
+                <Label Text="Mindurry Promotion" Grid.Row="2" Grid.Column="1"/>
+                
+            </Grid>
+
+            <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" Grid.Row="1">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal" Spacing="5" Padding="0,5">
+                                <Image Source="{Binding Icon}" WidthRequest="30" HeightRequest="30" Aspect="AspectFit"/>
+                                <Label Text="{Binding Title}" TextColor="#4A90E2" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

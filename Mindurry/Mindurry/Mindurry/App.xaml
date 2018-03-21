@@ -13,6 +13,7 @@
             <Color x:Key="GrayPanelText">#656565</Color>
             <Color x:Key="BlueAccent">#1FACFF</Color>
             <Color x:Key="RedAccent">#EC1414</Color>
+            <Color x:Key="BlueText">#4A90E2</Color>
             <Style TargetType="Label">
                 <Setter Property="FontFamily" Value="SegoeUI"/>
             </Style>

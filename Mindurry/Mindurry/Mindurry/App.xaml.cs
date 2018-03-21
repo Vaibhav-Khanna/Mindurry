@@ -14,7 +14,7 @@ namespace Mindurry
 		{
 			InitializeComponent();
 
-            var page = FreshPageModelResolver.ResolvePageModel<ViewModels.ResidencesPageModel>();
+            var page = FreshPageModelResolver.ResolvePageModel<ViewModels.ResidenceDetailApartmentPageModel>();
             var basicNavContainer = new FreshNavigationContainer(page);
             MainPage = basicNavContainer;
 		}

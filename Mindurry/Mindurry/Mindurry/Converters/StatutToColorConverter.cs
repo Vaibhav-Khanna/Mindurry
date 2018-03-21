@@ -21,11 +21,13 @@ namespace Mindurry.Converters
                         return Color.FromRgb(245,166,35);
                     case DataModels.Statut.Vendu:
                         return Color.FromRgb(159,24,24);
+                    case DataModels.Statut.Option:
+                        return Color.FromRgb(255, 101, 101);
                     default:
                         return Color.Black;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Color.Black;
             }

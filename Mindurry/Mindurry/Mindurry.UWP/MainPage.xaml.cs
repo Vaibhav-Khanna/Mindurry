@@ -19,6 +19,7 @@ namespace Mindurry.UWP
     {
         public MainPage()
         {
+            Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "fr-FR";
             this.InitializeComponent();
 
             LoadApplication(new Mindurry.App());

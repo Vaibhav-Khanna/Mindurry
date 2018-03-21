@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bkgLogin.png" />
+    <Content Include="icon_PDF.png" />
     <Content Include="logo.png" />
     <Content Include="microsoft.png" />
     <Content Include="Properties\Default.rd.xml" />
