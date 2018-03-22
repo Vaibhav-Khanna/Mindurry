@@ -9,19 +9,24 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class ResidencesDetailsGaragesPageModel :FreshMvvm.FreshBasePageModel
     {
+        bool IsGarage;
+
         public ObservableCollection<Residence> Garages { get; set; }
         public Residence SelectedGarage
         {
             get => null;
             set
             {
-
+                if (value != null)
+                    CoreMethods.PushPageModel<ViewModels.ResidencesDetailsGaragePageModel>(value);
             }
         }
 
         public override void Init(object initData)
         {
             base.Init(initData);
+
+            IsGarage = (bool)initData;
 
             var itemg1 = new Residence
             {
