@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Mindurry.Pages.DashboardPage"
+             xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms" 
              xmlns:effect="clr-namespace:Mindurry.Effects"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
 			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
@@ -25,6 +26,24 @@
                 <win:CalendarDatePicker Width="200" Date="{Binding StartDate}"/>
                 <Label Text="Date de fin" Margin="20,0,0,0" Style="{StaticResource SubHeaderLabelStyle}"/>
                 <win:CalendarDatePicker Width="200" Date="{Binding EndDate}"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" Spacing="70" HorizontalOptions="Center" Grid.Row="2">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <microcharts:ChartView WidthRequest="400" Chart="{Binding Chart1}"/>
+                    <Label Text="Leads reçu" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                </Grid>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <microcharts:ChartView WidthRequest="400" Chart="{Binding Chart2}"/>
+                    <Label Text="Acquéreurs" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                </Grid>
             </StackLayout>
             <Label Text="Nombre de leads" HorizontalOptions="Center" Margin="10" Grid.Row="3" FontSize="24">
                 <Label.Effects>
