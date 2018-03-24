@@ -1,5 +1,4 @@
-﻿using FreshMvvm;
-using Mindurry.DataModels;
+﻿using Mindurry.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +9,7 @@ using Xamarin.Forms;
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
-    public class ContactsPageModel : FreshBasePageModel
+    public class ClientsPageModel : FreshMvvm.FreshBasePageModel
     {
         public ObservableCollection<Person> Items { get; set; }
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
@@ -23,7 +22,7 @@ namespace Mindurry.ViewModels
             set
             {
                 if (value != null)
-                    CoreMethods.PushPageModel<LeadDetailPageModel>(value);
+                    CoreMethods.PushPageModel<ClientsDetailsInfoPageModel>(value);
                 selectedItem = null;
             }
         }
@@ -53,7 +52,7 @@ namespace Mindurry.ViewModels
 
             var item1 = new Person
             {
-                Type = PersonType.Contact,
+                Type = PersonType.Client,
                 Name = "John Doe",
                 Email = "j.doe@gmail.com",
                 Telephone = "09 36 73 83 83",
@@ -62,7 +61,7 @@ namespace Mindurry.ViewModels
 
             var item2 = new Person
             {
-                Type = PersonType.Contact,
+                Type = PersonType.Client,
                 Name = "Sullivan Marc",
                 Email = "m.sullivan@immo.com",
                 Telephone = "06 87 76 44 56",
@@ -71,7 +70,7 @@ namespace Mindurry.ViewModels
 
             var item3 = new Person
             {
-                Type = PersonType.Contact,
+                Type = PersonType.Client,
                 Name = "Marie Yuji",
                 Email = "sean.yuji@yuji.com",
                 Telephone = "07 56 65 63 00",
@@ -80,7 +79,7 @@ namespace Mindurry.ViewModels
 
             var item4 = new Person
             {
-                Type = PersonType.Contact,
+                Type = PersonType.Client,
                 Date = new DateTime(2017, 12, 11, 9, 34, 0),
                 Name = "Albert Louak",
                 Email = "m.louak@tera.net",
@@ -90,7 +89,7 @@ namespace Mindurry.ViewModels
 
             var item5 = new Person
             {
-                Type = PersonType.Contact,
+                Type = PersonType.Client,
                 Date = new DateTime(2017, 9, 12, 11, 59, 0),
                 Name = "Louis Aroati",
                 Email = "franck.aroati@immo.com",
@@ -135,7 +134,7 @@ namespace Mindurry.ViewModels
 
         void AddContact()
         {
-            CoreMethods.PushPageModel<NewContactPageModel>();
+            CoreMethods.PushPageModel<NewClientPageModel>();
         }
     }
 }

@@ -1,0 +1,462 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mindurry.Pages.ClientsDetailsInfoPage"
+             xmlns:effect="clr-namespace:Mindurry.Effects"
+             xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
+             xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
+			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="400"/>
+            </Grid.ColumnDefinitions>
+
+            <ScrollView>
+                <StackLayout>
+
+                    <StackLayout Padding="30" Orientation="Vertical">
+                        <StackLayout.Resources>
+                            <ResourceDictionary>
+                                <Style TargetType="StackLayout">
+                                    <Setter Property="Orientation" Value="Horizontal"/>
+                                    <Setter Property="Spacing" Value="20"/>
+                                </Style>
+                            </ResourceDictionary>
+                        </StackLayout.Resources>
+                        <StackLayout>
+                            <Label Text="{Binding Item.Name}" FontSize="28" VerticalOptions="Center"/>
+                            <Grid VerticalOptions="Center">
+                                <Grid HeightRequest="20" HorizontalOptions="Fill" BackgroundColor="{StaticResource BlueAccent}" VerticalOptions="Center"/>
+                                <Label Text="{Binding Item.Type}" TextColor="White" FontSize="14" VerticalOptions="Center" Margin="10,0"/>
+                            </Grid>
+                        </StackLayout>
+
+                        <StackLayout>
+                            <Label Text="" Style="{StaticResource TextIconStyle}"/>
+                            <Label Text="{Binding Item.Email}" Style="{StaticResource BlueLabel}"/>
+                        </StackLayout>
+
+                        <StackLayout>
+                            <Label Text="" Style="{StaticResource TextIconStyle}"/>
+                            <Label Text="{Binding Item.Telephone}" Style="{StaticResource BlueLabel}"/>
+                        </StackLayout>
+
+                        <StackLayout>
+                            <Label Text="" Style="{StaticResource TextIconStyle}"/>
+                            <Label Text="{Binding Item.Address}" Style="{StaticResource BlueLabel}"/>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
+
+                    <StackLayout Orientation="Vertical" Padding="30">
+                        <Label Text="Rappel à venir" FontSize="18" Margin="0,0,0,10"/>
+                        <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid HorizontalOptions="End" Margin="0,30">
+                                <win:CheckBox/>
+                            </Grid>
+
+                            <StackLayout Orientation="Vertical" Padding="0,30" Grid.Column="1">
+                                <Label Text="Envoyer le plan appartement" FontSize="20"/>
+                                <Grid BackgroundColor="#F5A623" Padding="10,5" WidthRequest="200" HorizontalOptions="Start">
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label Text="" FontSize="18" TextColor="White" FontFamily="Segoe MDL2 Assets"/>
+                                        <Label Text="Aujourd'hui" FontAttributes="Bold" FontSize="18" TextColor="White"/>
+                                    </StackLayout>
+                                </Grid>
+                            </StackLayout>
+
+                            <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center"/>
+                            <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center"/>
+                        </Grid>
+
+                        <Grid BackgroundColor="{StaticResource GrayPanel}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackLayout Orientation="Horizontal" Padding="0,30" Grid.Column="1" Spacing="20">
+                                <Grid BackgroundColor="#334A90E2" Padding="10,5" WidthRequest="200" HorizontalOptions="Start">
+                                    <Label Text="Jeudi 8 Mars"  Style="{StaticResource BlueLabel}"/>
+                                </Grid>
+                                <Label Text="Demande de rendez-vous" FontSize="18" VerticalOptions="Center"/>
+
+                            </StackLayout>
+
+                            <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center"/>
+                            <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center"/>
+                        </Grid>
+
+                        <Button Text="Envoyer une séquence" FontSize="20" TextColor="White" BackgroundColor="#9B9B9B" WidthRequest="250" HeightRequest="40" BorderWidth="0" HorizontalOptions="End"
+                                Margin="0,20,0,20"/>
+
+                        <Label Text="Ajouter une note" FontSize="18" Margin="0,0,0,10"/>
+                        <Editor HorizontalOptions="Fill" HeightRequest="200" Margin="0,10"/>
+
+                        <StackLayout HorizontalOptions="End" Orientation="Horizontal">
+                            <Label Text="🛈" VerticalOptions="End" FontSize="24"/>
+                            <win:CalendarDatePicker Header="Ajouter un rappel" Width="300"/>
+                            <Button Text="Valider" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="200" HeightRequest="40" VerticalOptions="End"/>
+                        </StackLayout>
+
+                        <Label Text="Flux d'activité" FontSize="18" Margin="0,20,0,10"/>
+                        <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
+
+                        <repeater:RepeaterView Margin="0,20,20,0" ItemsSource="{Binding Activities}">
+                            <repeater:RepeaterView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout Padding="0,10">
+                                        <Label Text="{Binding Date,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
+                                               HorizontalOptions="Center"/>
+                                        <Label Text="{Binding Name}" HorizontalOptions="{Binding HorizontalOptions}" FontSize="11" TextColor="#4A4A4A"/>
+                                        <Grid HorizontalOptions="{Binding HorizontalOptions}" BackgroundColor="{Binding Color}" WidthRequest="450" Padding="30,10">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Text="{Binding Message}" TextColor="#4A4A4A"/>
+                                            <Label Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="23" TextColor="{StaticResource GrayPanelEdge}" Grid.Column="1"
+                                                   Margin="0,0,0,30"/>
+                                        </Grid>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </repeater:RepeaterView.ItemTemplate>
+                        </repeater:RepeaterView>
+                        <Button Text="Afficher plus d'historique" BackgroundColor="White" TextColor="{StaticResource BlueAccent}" 
+                                BorderColor="{StaticResource BlueAccent}" BorderWidth="1" HorizontalOptions="Center"/>
+                    </StackLayout>
+
+                </StackLayout>
+            </ScrollView>
+
+            <Grid Grid.Column="1"  BackgroundColor="{StaticResource GrayPanel}" Padding="20,30,20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                
+                <StackLayout>
+                    <Grid>
+                        <Grid.Resources>
+                            <ResourceDictionary>
+                                <Style TargetType="Label">
+                                    <Setter Property="FontSize" Value="20"/>
+                                    <Setter Property="HorizontalOptions" Value="Center"/>
+                                </Style>
+                            </ResourceDictionary>
+                        </Grid.Resources>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="Informations" TextColor="{Binding TabOneColor}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding TabOneCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label Text="Documents" Grid.Column="1" TextColor="{Binding TabTwoColor}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding TabTwoCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Label Text="Logements" Grid.Column="2" TextColor="{Binding TabThreeColor}">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding TabThreeCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        
+                    </Grid>
+                    
+                    <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E8E6E3"/>
+                </StackLayout>
+                
+                <ScrollView Grid.Row="1">
+
+                    <Grid>
+                        <StackLayout Spacing="20" IsVisible="{Binding IsTabOneVisible}" Padding="0,0,0,20">
+
+                            <Label Text="Commercial: Arold Martino" FontSize="20" Margin="0,10,0,0">
+                                <Label.Effects>
+                                    <effect:FontLightEffect/>
+                                </Label.Effects>
+                            </Label>
+                            <Label Text="Source du lead: Immo.com" FontSize="20">
+                                <Label.Effects>
+                                    <effect:FontLightEffect/>
+                                </Label.Effects>
+                            </Label>
+                            <Picker WidthRequest="300" ItemsSource="{Binding Combo1}" SelectedItem="{Binding Combo1Selected}" HorizontalOptions="Start"/>
+                            <Label Text="Type">
+                                <Label.Effects>
+                                    <effect:SemiBoldEffect/>
+                                </Label.Effects>
+                            </Label>
+                            <Picker WidthRequest="300" ItemsSource="{Binding Types}" SelectedItem="{Binding TypeSelected}" HorizontalOptions="Start"/>
+                            <StackLayout Orientation="Horizontal" Spacing="30">
+                                <Label Text="Archiver ce lead" FontSize="16" FontAttributes="Bold" VerticalOptions="Center">
+                                    <Label.Effects>
+                                        <effect:SemiBoldEffect/>
+                                    </Label.Effects>
+                                </Label>
+                                <Switch/>
+                            </StackLayout>
+                            <Label Text="Intéressér par" FontSize="16">
+                                <Label.Effects>
+                                    <effect:SemiBoldEffect/>
+                                </Label.Effects>
+                            </Label>
+
+                            <StackLayout Spacing="5">
+                                <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ArrowOneCommand}"/>
+                                    </StackLayout.GestureRecognizers>
+                                    <Label Text="Résidences" TextColor="{StaticResource GrayPanelText}"/>
+                                    <Label Text="{Binding ArrowOne}"  FontSize="10" VerticalOptions="Center" TextColor="{StaticResource GrayPanelText}" FontFamily="Segoe MDL2 Assets"/>
+                                </StackLayout>
+
+                                <StackLayout IsVisible="{Binding IsFirstListVisible}">
+                                    <repeater:RepeaterView ItemsSource="{Binding ResidencesChecks}" VerticalOptions="Start">
+                                        <repeater:RepeaterView.ItemTemplate>
+                                            <DataTemplate>
+                                                <ViewCell>
+                                                    <win:CheckBox Content="{Binding Content}"  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                </ViewCell>
+                                            </DataTemplate>
+                                        </repeater:RepeaterView.ItemTemplate>
+                                    </repeater:RepeaterView>
+
+                                    <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllResidencesCommand}">
+                                        <Button.Effects>
+                                            <effect:AccentColorEffect/>
+                                        </Button.Effects>
+                                    </Button>
+                                </StackLayout>
+
+                            </StackLayout>
+
+                            <StackLayout Spacing="15">
+                                <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ArrowTwoCommand}"/>
+                                    </StackLayout.GestureRecognizers>
+                                    <Label Text="Types" TextColor="{StaticResource GrayPanelText}"/>
+                                    <Label Text="{Binding ArrowTwo}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
+                                </StackLayout>
+
+                                <StackLayout IsVisible="{Binding IsSecondListVisible}" Spacing="15">
+                                    <repeater:RepeaterView ItemsSource="{Binding TypesChecks}" VerticalOptions="Start">
+                                        <repeater:RepeaterView.ItemTemplate>
+                                            <DataTemplate>
+                                                <ViewCell>
+                                                    <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                </ViewCell>
+                                            </DataTemplate>
+                                        </repeater:RepeaterView.ItemTemplate>
+                                    </repeater:RepeaterView>
+
+                                    <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllTypesCommand}">
+                                        <Button.Effects>
+                                            <effect:AccentColorEffect/>
+                                        </Button.Effects>
+                                    </Button>
+                                </StackLayout>
+
+                            </StackLayout>
+
+
+
+                        </StackLayout>
+
+                        <Grid IsVisible="{Binding IsTabTwoVisible}" Padding="0,0,0,20">
+                            <Grid IsVisible="{Binding IsTabTwoL1}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <Button Text="+ Ajouter un document" HorizontalOptions="End" Margin="0,20" Command="{Binding TabTwoForwardCommand}"/>
+
+                                <ListView RowHeight="40" ItemsSource="{Binding Documents}" Grid.Row="1">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                                <Grid ColumnSpacing="0">
+                                                    <Grid.Resources>
+                                                        <ResourceDictionary>
+                                                            <Style TargetType="Label">
+                                                                <Setter Property="FontSize" Value="16"/>
+                                                                <Setter Property="VerticalOptions" Value="Center"/>
+                                                                <Setter Property="LineBreakMode" Value="TailTruncation"/>
+                                                            </Style>
+                                                        </ResourceDictionary>
+                                                    </Grid.Resources>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="80"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy}'}"/>
+                                                    <Label Text="{Binding Title}" TextColor="{StaticResource BlueText}" Grid.Column="1"/>
+                                                    <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" VerticalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="2"/>
+                                                </Grid>
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                            
+                            <StackLayout IsVisible="{Binding IsTabTwoL2}">
+                                <Label Text="Nouveau document" FontSize="16" FontAttributes="Bold" Margin="0,20"/>
+
+                                <StackLayout Orientation="Horizontal" Spacing="20" Margin="0,10">
+                                    <Label Text="Pièce jointe : C:\fakepath\plan_cuisine" FontSize="15" VerticalOptions="Center"/>
+                                    <Button Text="Supprimer" BackgroundColor="Transparent" TextColor="{StaticResource BlueAccent}" Command="{Binding TabTwoForwardCommand}"/>
+                                </StackLayout>
+
+                                <Label Text="Nom"/>
+                                <Entry Placeholder="plan_cuisine"/>
+
+                                <StackLayout Margin="0,20">
+                                    <Label Text="Catégories"/>
+                                    <win:RadioButton GroupName="First Group" Content="Plan" IsChecked="True"/>
+                                    <win:RadioButton GroupName="First Group" Content="Justificatif" IsChecked="False"/>
+                                    <win:RadioButton GroupName="First Group" Content="Autres" IsChecked="False"/>
+                                </StackLayout>
+
+                                <BoxView HeightRequest="1" BackgroundColor="{StaticResource GrayPanelEdge}" HorizontalOptions="FillAndExpand"/>
+
+                                <Grid Margin="0,15">
+                                    <win:CheckBox Content="Notifier le service technique"  IsChecked="{Binding NotifyService, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                </Grid>
+
+                                <StackLayout IsVisible="{Binding NotifyService}">
+                                    <Label Text="Description*"/>
+                                    <Editor HorizontalOptions="Fill" HeightRequest="150"/>
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal" Margin="0,30">
+                                    <Button Text="Enregistrer" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="120"/>
+                                    <Button Text="Annuler" WidthRequest="120" Command="{Binding TabTwoBackCommand}"/>
+                                </StackLayout>
+                            </StackLayout>
+
+                            <StackLayout IsVisible="{Binding IsTabTwoL3}">
+                                <Label Text="Aucun document" FontSize="16" FontAttributes="Bold" Margin="0,20"/>
+
+                                <StackLayout Orientation="Horizontal" Spacing="20" Margin="0,10">
+                                    <Label Text="" FontSize="16" FontFamily="Segoe MDL2 Assets" TextColor="{StaticResource BlueAccent}"/>
+                                    <Label Text="Charger un document" FontSize="16" TextColor="{StaticResource BlueAccent}"/>
+                                </StackLayout>
+
+                                <Label Text="Nom"/>
+                                <Entry Placeholder="plan_cuisine"/>
+
+                                <StackLayout Margin="0,20">
+                                    <Label Text="Catégories"/>
+                                    <win:RadioButton GroupName="First Group" Content="Plan" IsChecked="True"/>
+                                    <win:RadioButton GroupName="First Group" Content="Justificatif" IsChecked="False"/>
+                                    <win:RadioButton GroupName="First Group" Content="Autres" IsChecked="False"/>
+                                </StackLayout>
+
+                                <BoxView HeightRequest="1" BackgroundColor="{StaticResource GrayPanelEdge}" HorizontalOptions="FillAndExpand"/>
+
+                                <Grid Margin="0,15">
+                                    <win:CheckBox Content="Notifier le service technique"  IsChecked="{Binding NotifyService, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                </Grid>
+
+                                <StackLayout IsVisible="{Binding NotifyService}">
+                                    <Label Text="Description*"/>
+                                    <Editor HorizontalOptions="Fill" HeightRequest="150"/>
+                                </StackLayout>
+
+                                <StackLayout Orientation="Horizontal" Margin="0,30">
+                                    <Button Text="Enregistrer" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="120"/>
+                                    <Button Text="Annuler" WidthRequest="120" Command="{Binding TabTwoBackCommand}"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </Grid>
+
+                        <Grid IsVisible="{Binding IsTabThreeVisible}" Padding="0,0,0,20">
+
+                            <StackLayout IsVisible="{Binding IsTabThreeL1}">
+                                <Label Text="🛈   Ici vous pouvez associer des biens à l'acquéreur" TextColor="{StaticResource GrayPanelText}" Margin="0,10"/>
+                                <Button Text="Ajouter" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
+                                        Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding TabThreeForwardCommand}"/>
+                            </StackLayout>
+                            
+                            <StackLayout IsVisible="{Binding IsTabThreeL2}">
+                                <Button Text="" FontSize="25" FontFamily="Segoe MDL2 Assets" BackgroundColor="Transparent" HorizontalOptions="Start"
+                                        Command="{Binding TabThreeBackCommand}"/>
+                                <Label Text="🛈   Ici vous pouvez associer des biens à l'acquéreur" TextColor="{StaticResource GrayPanelText}" Margin="0,10"/>
+                                <StackLayout Spacing="5" Margin="0,20,0,0">
+                                    <Label Text="Résidence"/>
+                                    <Picker WidthRequest="300" ItemsSource="{Binding ComboL1}" SelectedItem="{Binding ComboL1Selected}" HorizontalOptions="Start"/>
+                                </StackLayout>
+                                <StackLayout Spacing="5">
+                                    <Label Text="Type"/>
+                                    <Picker WidthRequest="300" ItemsSource="{Binding ComboL2}" SelectedItem="{Binding ComboL2Selected}" HorizontalOptions="Start"/>
+                                </StackLayout>
+                                <StackLayout Spacing="5">
+                                    <Label Text="Référence"/>
+                                    <Picker WidthRequest="300" ItemsSource="{Binding ComboL3}" SelectedItem="{Binding ComboL3Selected}" HorizontalOptions="Start"/>
+                                </StackLayout>
+                                <Button Text="Ajouter" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
+                                        Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding TabThreeForwardCommand}"/>
+                            </StackLayout>
+
+                            <StackLayout IsVisible="{Binding IsTabThreeL3}">
+                                <Button Text="" FontSize="25" FontFamily="Segoe MDL2 Assets" BackgroundColor="Transparent" HorizontalOptions="Start"
+                                        Command="{Binding TabThreeBackCommand}"/>
+                                <repeater:RepeaterView ItemsSource="{Binding Residences}" VerticalOptions="Start">
+                                    <repeater:RepeaterView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                                <StackLayout Padding="10">
+                                                    <StackLayout Orientation="Horizontal">
+                                                        <Label Text="Résidence Herrian - " FontSize="16"/>
+                                                        <Label Text="{Binding ResidenceType}" FontSize="16"/>
+                                                        <Label Text="{Binding NoArchi}" FontSize="16"/>
+                                                    </StackLayout>
+                                                    
+                                                    <StackLayout Orientation="Horizontal" Spacing="5">
+                                                        <Label Text="Plan de référence" FontSize="16" VerticalOptions="Center" Margin="0,0,10,0"/>
+                                                        <Image WidthRequest="30" HeightRequest="30" Source="icon_PDF.png"/>
+                                                        <Label Text="{Binding PlanFileName}" FontSize="16" VerticalOptions="Center"/>
+                                                    </StackLayout>
+                                                    <Label Text="Statut"/>
+                                                    <Picker ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"/>
+                                                    <Button Text="Supprimer" TextColor="{StaticResource RedAccent}" BackgroundColor="Transparent"/>
+                                                </StackLayout>
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </repeater:RepeaterView.ItemTemplate>
+                                </repeater:RepeaterView>
+                                <Button Text="+  Ajouter un bien" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
+                                        Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start"/>
+                            </StackLayout>
+                        </Grid>
+                    </Grid>
+                   
+                </ScrollView>
+            </Grid>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

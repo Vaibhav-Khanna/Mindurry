@@ -48,6 +48,7 @@ namespace Mindurry.ViewModels
         }
 
         public ICommand ShowFilterCommand { get; set; }
+        public ICommand ShareCommand { get; set; }
         public ICommand ArrowOneCommand { get; set; }
         public ICommand ArrowTwoCommand { get; set; }
         public ICommand ArrowThreeCommand { get; set; }
@@ -234,6 +235,7 @@ namespace Mindurry.ViewModels
             ExpositionChecks = new ObservableCollection<CheckBoxItem> { check7, check8, check9 };
 
             ShowFilterCommand = new Command(ShowFilter);
+            ShareCommand = new Command(Share);
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
             ArrowThreeCommand = new Command(ChangeArrowThree);
@@ -267,6 +269,11 @@ namespace Mindurry.ViewModels
         void ShowFilter()
         {
             IsFilterOn = !IsFilterOn;
+        }
+
+        void Share()
+        {
+            CoreMethods.PushPageModel<SelectContactPageModel>();
         }
 
         void ChangeArrowOne()

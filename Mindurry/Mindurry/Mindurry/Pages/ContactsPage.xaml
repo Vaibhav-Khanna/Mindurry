@@ -31,6 +31,9 @@
                     <SearchBar Placeholder="Rechercher nom, prénom, email, téléphone" WidthRequest="450" HorizontalOptions="Start"/>
 
                     <StackLayout Orientation="Horizontal" Grid.Column="1" VerticalOptions="CenterAndExpand">
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding AddCommand}"/>
+                        </StackLayout.GestureRecognizers>
                         <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="18" VerticalOptions="Center"/>
                         <Label Text="Ajouter un contact" FontSize="18" VerticalOptions="Center"/>
                     </StackLayout>

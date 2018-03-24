@@ -16,5 +16,10 @@ namespace Mindurry.Pages
 			InitializeComponent ();
             NavigationPage.SetHasNavigationBar(this, false);
 		}
-	}
+
+        private void headerTapped(object sender, EventArgs e)
+        {
+            var model = BindingContext as ViewModels.ResidencesPageModel;
+        }
+    }
 }

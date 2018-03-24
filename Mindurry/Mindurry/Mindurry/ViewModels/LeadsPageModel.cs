@@ -29,6 +29,7 @@ namespace Mindurry.ViewModels
 
             var item1 = new Person
             {
+                Type = PersonType.Lead,
                 Date = new DateTime(2018, 1, 1, 15, 45, 0),
                 Name = "Hasley Duran",
                 Email = "h.duran@gmail.com",
@@ -37,6 +38,7 @@ namespace Mindurry.ViewModels
 
             var item2 = new Person
             {
+                Type = PersonType.Lead,
                 Date = new DateTime(2017, 12, 24, 13, 44, 0),
                 Name = "Jeff Frazier",
                 Email = "j.frazier@gmail.com",
@@ -45,6 +47,7 @@ namespace Mindurry.ViewModels
 
             var item3 = new Person
             {
+                Type = PersonType.Lead,
                 Date = new DateTime(2017, 12, 18, 16, 12, 0),
                 Name = "Mike Kilopi",
                 Email = "mike.kilopi@yuji.com",
@@ -53,6 +56,7 @@ namespace Mindurry.ViewModels
 
             var item4 = new Person
             {
+                Type = PersonType.Lead,
                 Date = new DateTime(2017, 12, 11, 9, 34, 0),
                 Name = "Manu Surto",
                 Email = "m.surto@tera.net",
@@ -61,6 +65,7 @@ namespace Mindurry.ViewModels
 
             var item5 = new Person
             {
+                Type = PersonType.Lead,
                 Date = new DateTime(2017, 9, 12, 11, 59, 0),
                 Name = "Arold Marketi",
                 Email = "a.marketi@immo.com",

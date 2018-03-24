@@ -4,8 +4,10 @@ using System.Text;
 
 namespace Mindurry.DataModels
 {
+    public enum PersonType { Lead, Contact, Client }
     public class Person
     {
+        public PersonType Type { get; set; }
         public DateTime Date { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
