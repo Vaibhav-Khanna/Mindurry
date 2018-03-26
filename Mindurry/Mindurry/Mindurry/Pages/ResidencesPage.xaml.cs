@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mindurry.DataModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,8 @@ namespace Mindurry.Pages
 
         private void headerTapped(object sender, EventArgs e)
         {
-            var model = BindingContext as ViewModels.ResidencesPageModel;
+            var element = sender as Xamarin.Forms.Element;
+            App.RequestTabbedPage(element.BindingContext as Residence);
         }
     }
 }

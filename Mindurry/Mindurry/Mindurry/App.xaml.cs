@@ -1,4 +1,5 @@
 ﻿using FreshMvvm;
+using Mindurry.DataModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace Mindurry
 {
 	public partial class App : Application
 	{
+        public static event EventHandler<DataModels.Residence> TabbedPageRequested;
+
 		public App ()
 		{
 			InitializeComponent();
@@ -32,5 +35,10 @@ namespace Mindurry
 		{
 			// Handle when your app resumes
 		}
+
+        public static void RequestTabbedPage(Residence data)
+        {
+            TabbedPageRequested?.Invoke(null, data);
+        }
 	}
 }

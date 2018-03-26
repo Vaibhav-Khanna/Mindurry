@@ -1,4 +1,5 @@
 ﻿using FreshMvvm;
+using Mindurry.DataModels;
 using Mindurry.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace Mindurry.Pages
                 context.MenuItemSelected += Context_MenuItemSelected;
             }
 
+            App.TabbedPageRequested += App_TabbedPageRequested;
+
             #region Setup
 
             masterpage.Title = " ";
@@ -45,16 +48,29 @@ namespace Mindurry.Pages
             Detail = Detail_navigation;
         }
 
+        private void App_TabbedPageRequested(object sender, DataModels.Residence e)
+        {
+            var tabbedNavigation = new FreshTabbedNavigationContainer();
+            tabbedNavigation.AddTab<ViewModels.ResidenceDetailInfoPageModel>("Informations", null, e);
+            tabbedNavigation.AddTab<ViewModels.ResidenceDetailApartmentPageModel>("Appartements", null, e);
+            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Garages", null, new Tuple<bool,Residence> (true, e));
+            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Caves", null, new Tuple<bool, Residence>(false, e));
+            tabbedNavigation.AddTab<ViewModels.AcquereursPageModel>("Acquéreurs", null, e);
+            Detail_navigation = null;
+            Detail = tabbedNavigation;
+        }
+
         void Context_MenuItemSelected(MasterMenuEventArgs args)
         {
-            var currenPage = Detail_navigation.CurrentPage;
-
-            var current_model = currenPage.BindingContext as FreshBasePageModel;
-
-            if (args.item.TagetType == currenPage.GetType())
+            if (Detail_navigation != null)
             {
-                IsPresented = false;
-                return;
+                var currenPage = Detail_navigation.CurrentPage;
+
+                if (args.item.TagetType == currenPage.GetType())
+                {
+                    IsPresented = false;
+                    return;
+                }
             }
 
             switch (args.item.TagetType.ToString().Split('.').Last())

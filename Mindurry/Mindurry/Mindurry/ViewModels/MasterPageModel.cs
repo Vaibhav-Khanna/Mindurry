@@ -25,7 +25,8 @@ namespace Mindurry.ViewModels
             set
             {
                 selectedItem = value;
-                MenuItemSelected?.Invoke(new MasterMenuEventArgs(selectedItem));
+                if (value != null)
+                    MenuItemSelected?.Invoke(new MasterMenuEventArgs(selectedItem));
                 RaisePropertyChanged(nameof(SelectedItem));
             }
         }
@@ -56,7 +57,14 @@ namespace Mindurry.ViewModels
             Items.Add(new MasterMenuItem() { Title = "Clients", TagetType = typeof(Pages.ClientsPage), Icon= "" });
             Items.Add(new MasterMenuItem() { Title = "Résidences", TagetType = typeof(Pages.ResidencesPage), Icon = "" });
             SelectedItem = items[0];
-                #endregion
+            #endregion
+
+            App.TabbedPageRequested += App_TabbedPageRequested;
+        }
+
+        private void App_TabbedPageRequested(object sender, DataModels.Residence e)
+        {
+            SelectedItem = null;
         }
     }
 }
