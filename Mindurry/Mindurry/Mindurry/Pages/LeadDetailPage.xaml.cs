@@ -14,7 +14,6 @@ namespace Mindurry.Pages
 		public LeadDetailPage ()
 		{
 			InitializeComponent ();
-            NavigationPage.SetHasNavigationBar(this, false);
 		}
 	}
 }

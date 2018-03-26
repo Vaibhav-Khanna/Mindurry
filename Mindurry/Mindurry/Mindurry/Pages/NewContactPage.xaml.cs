@@ -15,7 +15,6 @@ namespace Mindurry.Pages
 		public NewContactPage ()
 		{
 			InitializeComponent ();
-            NavigationPage.SetHasNavigationBar(this, false);
 		}
 	}
 }

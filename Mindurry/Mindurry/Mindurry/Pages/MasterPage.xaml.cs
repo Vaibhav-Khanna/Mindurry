@@ -9,9 +9,10 @@ using Xamarin.Forms.Xaml;
 
 namespace Mindurry.Pages
 {
-	public partial class DashboardPage : ContentPage
+	[XamlCompilation(XamlCompilationOptions.Compile)]
+	public partial class MasterPage : ContentPage
 	{
-		public DashboardPage ()
+		public MasterPage ()
 		{
 			InitializeComponent ();
 		}

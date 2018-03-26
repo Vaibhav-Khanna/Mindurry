@@ -5,29 +5,25 @@
              xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms" 
              xmlns:effect="clr-namespace:Mindurry.Effects"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
-			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
+			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows"
+             Title="TABLEAU DE BOARD">
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Label Text="TABLEAU DE BOARD" Style="{StaticResource HeaderStyle}">
-                <Label.Effects>
-                    <effect:FontLightEffect/>
-                </Label.Effects>
-            </Label>
-            <StackLayout Style="{StaticResource SubheaderStackStyle}" Orientation="Horizontal" Grid.Row="1">
+            
+            <StackLayout Style="{StaticResource SubheaderStackStyle}" Orientation="Horizontal" Grid.Row="0">
                 <Label Text="Date de début" Style="{StaticResource SubHeaderLabelStyle}"/>
                 <win:CalendarDatePicker Width="200" Date="{Binding StartDate}"/>
                 <Label Text="Date de fin" Margin="20,0,0,0" Style="{StaticResource SubHeaderLabelStyle}"/>
                 <win:CalendarDatePicker Width="200" Date="{Binding EndDate}"/>
             </StackLayout>
-            <StackLayout Orientation="Horizontal" Spacing="70" HorizontalOptions="Center" Grid.Row="2">
+            <StackLayout Orientation="Horizontal" Spacing="70" HorizontalOptions="Center" Grid.Row="1">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -45,13 +41,13 @@
                     <Label Text="Acquéreurs" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
                 </Grid>
             </StackLayout>
-            <Label Text="Nombre de leads" HorizontalOptions="Center" Margin="10" Grid.Row="3" FontSize="24">
+            <Label Text="Nombre de leads" HorizontalOptions="Center" Margin="10" Grid.Row="2" FontSize="24">
                 <Label.Effects>
                     <effect:SemiBoldEffect/>
                 </Label.Effects>
             </Label>
-            <BoxView Margin="20,0,0,0" HeightRequest="2" Color="#96918B" HorizontalOptions="FillAndExpand" Grid.Row="4"/>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="50" Grid.Row="5" Padding="30">
+            <BoxView Margin="20,0,0,0" HeightRequest="2" Color="#96918B" HorizontalOptions="FillAndExpand" Grid.Row="3"/>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="50" Grid.Row="4" Padding="30">
                 <StackLayout.Resources>
                     <ResourceDictionary>
                         <Style TargetType="Button">

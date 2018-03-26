@@ -14,7 +14,6 @@ namespace Mindurry.Pages
 		public ResidencesPage ()
 		{
 			InitializeComponent ();
-            NavigationPage.SetHasNavigationBar(this, false);
 		}
 
         private void headerTapped(object sender, EventArgs e)

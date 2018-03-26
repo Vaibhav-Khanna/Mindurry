@@ -2,18 +2,16 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:effect="clr-namespace:Mindurry.Effects"
-             x:Class="Mindurry.Pages.NewContactPage">
+             x:Class="Mindurry.Pages.NewContactPage"
+             Title="Nouveau Contact">
     <ContentPage.Content>
         <Grid RowSpacing="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Label Text="Nouveau Contact" Margin="30,30,5,5" FontSize="30"/>
-
-            <Grid BackgroundColor="{StaticResource SubheaderPanel}" Padding="30,10" ColumnSpacing="60" Grid.Row="1">
+            <Grid BackgroundColor="{StaticResource SubheaderPanel}" Padding="30,10" ColumnSpacing="60" Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -39,7 +37,7 @@
                 </StackLayout>
             </Grid>
 
-            <ScrollView Grid.Row="2">
+            <ScrollView Grid.Row="1">
                 <StackLayout Spacing="20" Padding="30,20">
                     
                     <StackLayout Spacing="5">
