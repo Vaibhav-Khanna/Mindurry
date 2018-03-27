@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:effect="clr-namespace:Mindurry.Effects"
              x:Class="Mindurry.Pages.MasterPage">
     <ContentPage.Content>
         <Grid BackgroundColor="Black">
@@ -13,8 +14,15 @@
                                     <ColumnDefinition Width="48"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Label Text="{Binding Icon}" FontSize="32" TextColor="White" FontFamily="Segoe MDL2 Assets" HorizontalOptions="Center"/>
-                                <Label Text="{Binding Title}" FontSize="24" TextColor="White" Grid.Column="1" VerticalOptions="Center"/>
+                                <Grid>
+                                    <Button VerticalOptions="Fill" HorizontalOptions="Start" WidthRequest="4" IsVisible="{Binding IsSelected}" BorderWidth="0" InputTransparent="True">
+                                        <Grid.Effects>
+                                            <effect:AccentColorEffect/>
+                                        </Grid.Effects>
+                                    </Button>
+                                    <Label Text="{Binding Icon}" FontSize="28" TextColor="White" FontFamily="Segoe MDL2 Assets" HorizontalOptions="Center"/>
+                                </Grid>
+                                <Label Text="{Binding Title}" FontSize="24" TextColor="White" Grid.Column="1" VerticalOptions="Center" Margin="20,0,5,0"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

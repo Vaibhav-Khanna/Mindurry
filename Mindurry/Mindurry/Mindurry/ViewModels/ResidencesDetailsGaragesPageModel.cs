@@ -26,7 +26,7 @@ namespace Mindurry.ViewModels
         {
             base.Init(initData);
 
-            var data = (Tuple<bool, Residence>)initData;
+            var data = (Tuple<bool, string>)initData;
             IsGarage = data.Item1;
 
             var itemg1 = new Residence

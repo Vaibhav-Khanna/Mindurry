@@ -48,14 +48,16 @@ namespace Mindurry.Pages
             Detail = Detail_navigation;
         }
 
-        private void App_TabbedPageRequested(object sender, DataModels.Residence e)
+        private void App_TabbedPageRequested(object sender, string e)
         {
             var tabbedNavigation = new FreshTabbedNavigationContainer();
-            tabbedNavigation.AddTab<ViewModels.ResidenceDetailInfoPageModel>("Informations", null, e);
-            tabbedNavigation.AddTab<ViewModels.ResidenceDetailApartmentPageModel>("Appartements", null, e);
-            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Garages", null, new Tuple<bool,Residence> (true, e));
-            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Caves", null, new Tuple<bool, Residence>(false, e));
-            tabbedNavigation.AddTab<ViewModels.AcquereursPageModel>("Acquéreurs", null, e);
+            //this causes weird behavior
+            //tabbedNavigation.Title = e;
+            tabbedNavigation.AddTab<ViewModels.ResidenceDetailInfoPageModel>("Informations", null);
+            tabbedNavigation.AddTab<ViewModels.ResidenceDetailApartmentPageModel>("Appartements", null);
+            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Garages", null, new Tuple<bool,string> (true, e));
+            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Caves", null, new Tuple<bool, string>(false, e));
+            tabbedNavigation.AddTab<ViewModels.AcquereursPageModel>("Acquéreurs", null);
             Detail_navigation = null;
             Detail = tabbedNavigation;
         }

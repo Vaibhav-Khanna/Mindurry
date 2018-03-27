@@ -20,6 +20,17 @@ namespace Mindurry
         }
         public string Icon { get; set; }
 
+        bool isSelected;
+        public bool IsSelected
+        {
+            get => isSelected;
+            set
+            {
+                isSelected = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsSelected)));
+            }
+        }
+
         public Type TagetType { get; set; } = typeof(ContentPage);
 
         public event PropertyChangedEventHandler PropertyChanged;

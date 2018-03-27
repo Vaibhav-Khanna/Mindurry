@@ -11,7 +11,7 @@ namespace Mindurry
 {
 	public partial class App : Application
 	{
-        public static event EventHandler<DataModels.Residence> TabbedPageRequested;
+        public static event EventHandler<string> TabbedPageRequested;
 
 		public App ()
 		{
@@ -36,7 +36,7 @@ namespace Mindurry
 			// Handle when your app resumes
 		}
 
-        public static void RequestTabbedPage(Residence data)
+        public static void RequestTabbedPage(string data)
         {
             TabbedPageRequested?.Invoke(null, data);
         }

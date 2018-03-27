@@ -18,15 +18,21 @@ namespace Mindurry.ViewModels
  
         public event EventHandler MenuItemSelected;
 
-        private MasterMenuItem selectedItem;
+        private MasterMenuItem lastSelectedItem;
         public MasterMenuItem SelectedItem
         {
-            get => selectedItem;
+            get => null;
             set
             {
-                selectedItem = value;
+                if (value != null && lastSelectedItem != null)
+                    lastSelectedItem.IsSelected = false;
+
                 if (value != null)
-                    MenuItemSelected?.Invoke(new MasterMenuEventArgs(selectedItem));
+                {
+                    lastSelectedItem = value;
+                    value.IsSelected = true;
+                    MenuItemSelected?.Invoke(new MasterMenuEventArgs(value));
+                }
                 RaisePropertyChanged(nameof(SelectedItem));
             }
         }
@@ -62,7 +68,7 @@ namespace Mindurry.ViewModels
             App.TabbedPageRequested += App_TabbedPageRequested;
         }
 
-        private void App_TabbedPageRequested(object sender, DataModels.Residence e)
+        private void App_TabbedPageRequested(object sender, string e)
         {
             SelectedItem = null;
         }
