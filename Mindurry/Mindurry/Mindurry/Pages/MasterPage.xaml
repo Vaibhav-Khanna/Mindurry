@@ -4,7 +4,7 @@
              xmlns:effect="clr-namespace:Mindurry.Effects"
              x:Class="Mindurry.Pages.MasterPage">
     <ContentPage.Content>
-        <Grid BackgroundColor="Black">
+        <Grid BackgroundColor="#4c4c4c">
             <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -15,14 +15,12 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid>
-                                    <Button VerticalOptions="Fill" HorizontalOptions="Start" WidthRequest="4" IsVisible="{Binding IsSelected}" BorderWidth="0" InputTransparent="True">
-                                        <Grid.Effects>
-                                            <effect:AccentColorEffect/>
-                                        </Grid.Effects>
+                                    <Button VerticalOptions="Fill" BackgroundColor="Maroon" HorizontalOptions="Start" WidthRequest="4" IsVisible="{Binding IsSelected}" BorderWidth="0" InputTransparent="True">
+                                      
                                     </Button>
-                                    <Label Text="{Binding Icon}" FontSize="28" TextColor="White" FontFamily="Segoe MDL2 Assets" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Icon}" FontSize="22" TextColor="White" FontFamily="Segoe MDL2 Assets" HorizontalOptions="Center"/>
                                 </Grid>
-                                <Label Text="{Binding Title}" FontSize="24" TextColor="White" Grid.Column="1" VerticalOptions="Center" Margin="20,0,5,0"/>
+                                <Label Text="{Binding Title}" FontSize="20" TextColor="White" Grid.Column="1" VerticalOptions="Center" Margin="20,0,5,0"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

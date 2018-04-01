@@ -7,6 +7,8 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -53,6 +55,15 @@ namespace Mindurry.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 Xamarin.Forms.Forms.Init(e);
+
+                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+
+                // Set the color of the Title Bar content
+                titleBar.BackgroundColor = Colors.Maroon;
+                titleBar.ForegroundColor = Colors.White;
+
+                titleBar.ButtonBackgroundColor = Colors.Maroon;
+                titleBar.ButtonForegroundColor = Colors.White;
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
