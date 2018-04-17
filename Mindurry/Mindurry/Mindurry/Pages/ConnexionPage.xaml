@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mindurry.Pages.ConnexionPage">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.4*"/>
+                <ColumnDefinition Width="0.6*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackLayout Spacing="100" HorizontalOptions="Center" VerticalOptions="Center">
+                <Image Source="logo.png" HorizontalOptions="Center"/>
+                <StackLayout Orientation="Horizontal">
+                    <Image HeightRequest="50" WidthRequest="50" Source="microsoft.png" VerticalOptions="Center"/>
+                    <Button Text="Se connecter avec Microsoft" HeightRequest="50" WidthRequest="300" VerticalOptions="Center" BackgroundColor="#0070D2"
+                            TextColor="White" BorderWidth="0" Command="{Binding LoadMainPageCommand}"/>
+                </StackLayout>
+            </StackLayout>
+
+            <Grid Grid.Column="1">
+                <Image Source="bkgLogin.png" HorizontalOptions="Fill" VerticalOptions="Fill" Aspect="AspectFill"/>
+                <StackLayout VerticalOptions="Center" Padding="80" Spacing="20">
+                    <Label Text="Bienvenue sur votre plateforme d'administration locale" FontSize="48" TextColor="White"/>
+                    <Label Text="Votre outil de gestion de relation client" FontSize="24" TextColor="White"/>
+                </StackLayout>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

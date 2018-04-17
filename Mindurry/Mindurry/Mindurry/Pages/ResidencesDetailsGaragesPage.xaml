@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converter="clr-namespace:Mindurry.Converters"             
+             x:Class="Mindurry.Pages.ResidencesDetailsGaragesPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:BoolToStringConverter x:Key="BoolToStringConverter"/>
+            <converter:StatutToColorConverter x:Key="StatutToColorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <ListView ItemsSource="{Binding Garages}" SelectedItem="{Binding SelectedGarage, Mode=TwoWay}" Margin="0,15,0,0">
+                <ListView.Header>
+                    <Grid>
+                        <Grid Padding="30,10,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="100"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.Resources>
+                                <ResourceDictionary>
+                                    <Style TargetType="Label">
+                                        <Setter Property="FontAttributes" Value="Bold"/>
+                                        <Setter Property="FontSize" Value="18"/>
+                                    </Style>
+                                </ResourceDictionary>
+                            </Grid.Resources>
+
+                            <Label Text="N° Archi" Grid.Column="0"/>
+                            <Label Text="Statut" Grid.Column="1"/>
+                            <Label Text="Surface" Grid.Column="2"/>
+                            <Label Text="Prix" Grid.Column="3"/>
+                        </Grid>
+                        <BoxView HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}" VerticalOptions="End"/>
+                    </Grid>
+                </ListView.Header>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="30,10,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.Resources>
+                                    <ResourceDictionary>
+                                        <Style TargetType="Label">
+                                            <Setter Property="FontSize" Value="18"/>
+                                            <Setter Property="VerticalOptions" Value="Center"/>
+                                        </Style>
+                                    </ResourceDictionary>
+                                </Grid.Resources>
+
+                                <Label Text="{Binding NoArchi}" Grid.Column="0"/>
+                                <Label Text="{Binding Statut}" TextColor="{Binding Statut, Converter={StaticResource StatutToColorConverter}}" Grid.Column="1"/>
+                                <Label Text="{Binding Surface, StringFormat='{0}m2'}" Grid.Column="2"/>
+                                <Label Text="{Binding Prix, StringFormat='{0:#,##0}€'}" Grid.Column="3"/>
+                                <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="4"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

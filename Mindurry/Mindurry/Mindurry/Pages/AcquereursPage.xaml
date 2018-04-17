@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Mindurry.Pages.AcquereursPage">
+    <ContentPage.Content>
+        <ListView ItemsSource="{Binding Acquereurs}" InputTransparent="True" Margin="0,15,0,0">
+            <ListView.Header>
+                <Grid>
+                    <StackLayout Padding="30,10,0,10" Orientation="Horizontal">
+                        <StackLayout.Resources>
+                            <ResourceDictionary>
+                                <Style TargetType="Label">
+                                    <Setter Property="FontAttributes" Value="Bold"/>
+                                    <Setter Property="FontSize" Value="18"/>
+                                    <Setter Property="WidthRequest" Value="250"/>
+                                </Style>
+                            </ResourceDictionary>
+                        </StackLayout.Resources>
+
+                        <Label Text="N°" Grid.Column="0"/>
+                        <Label Text="Type" Grid.Column="1"/>
+                        <Label Text="Client" Grid.Column="2"/>
+                        <Label Text="Stade" Grid.Column="3"/>
+                    </StackLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}" VerticalOptions="End"/>
+                </Grid>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="30,10,0,10" Orientation="Horizontal">
+                            <StackLayout.Resources>
+                                <ResourceDictionary>
+                                    <Style TargetType="Label">
+                                        <Setter Property="FontSize" Value="18"/>
+                                        <Setter Property="VerticalOptions" Value="Center"/>
+                                        <Setter Property="WidthRequest" Value="250"/>
+                                    </Style>
+                                </ResourceDictionary>
+                            </StackLayout.Resources>
+
+                            <Label Text="{Binding No}" Grid.Column="0"/>
+                            <Label Text="{Binding Type}" Grid.Column="1"/>
+                            <Label Text="{Binding Client}" Grid.Column="2"/>
+                            <Label Text="{Binding Stade}" Grid.Column="3"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>
