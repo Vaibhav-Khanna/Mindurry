@@ -1,4 +1,5 @@
 ﻿using Mindurry.DataModels;
+using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Text;
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
-    public class ResidencesDetailsAppartementsInfosPageModel : FreshMvvm.FreshBasePageModel
+    public class ResidencesDetailsAppartementsInfosPageModel : BasePageModel
     {
         public Residence Item { get; set; }
 

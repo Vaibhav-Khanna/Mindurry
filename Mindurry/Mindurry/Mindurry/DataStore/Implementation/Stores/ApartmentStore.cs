@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Mindurry.DataStore.Abstraction.Stores;
+using Mindurry.Models.DataObjects;
+using System;
 namespace Mindurry.DataStore.Implementation.Stores
 {
-    public class ApartmentStore
+    public class ApartmentStore : BaseStore<Apartment>, IApartmentStore
     {
-        public ApartmentStore()
-        {
-        }
+        public override string Identifier => "Apartment";
+
     }
 }

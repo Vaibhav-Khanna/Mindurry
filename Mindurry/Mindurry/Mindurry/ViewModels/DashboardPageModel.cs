@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 using Microcharts;
+using Mindurry.ViewModels.Base;
 
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
-    public class DashboardPageModel : FreshBasePageModel
+    public class DashboardPageModel : BasePageModel
     {
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset EndDate { get; set; }

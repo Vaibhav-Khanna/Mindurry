@@ -1,50 +1,71 @@
-﻿using Microsoft.WindowsAzure.MobileServices;
+﻿using FreshMvvm;
+using Microsoft.Identity.Client;
+using Microsoft.WindowsAzure.MobileServices;
 using Mindurry.DataStore.Abstraction;
+using Mindurry.DataStore.Abstraction.Stores;
+using Mindurry.DataStore.Implementation.Stores;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace Mindurry.DataStore.Implementation
 {
     public class StoreManager : IStoreManager
     {
+        public static PublicClientApplication ADB2CClient { get; private set; }
+
+        public static MobileServiceUser User { get; private set; }
+
         public static MobileServiceClient MobileService { get; set; }
 
         public bool IsInitialized { get; private set; }
 
-        ISiteStore siteStore;
-        public ISiteStore SiteStore => siteStore ?? (siteStore = FreshIOC.Container.Resolve<ISiteStore>());
+        IApartmentStore apartmentStore;
+        public IApartmentStore ApartmentStore => apartmentStore ?? (apartmentStore = FreshIOC.Container.Resolve<IApartmentStore>());
+
+        ICellarStore cellarStore;
+        public ICellarStore CellarStore => cellarStore ?? (cellarStore = FreshIOC.Container.Resolve<ICellarStore>());
+
+        IContactStore contactStore;
+        public IContactStore ContactStore => contactStore ?? (contactStore = FreshIOC.Container.Resolve<IContactStore>());
 
         IDocumentStore documentStore;
         public IDocumentStore DocumentStore => documentStore ?? (documentStore = FreshIOC.Container.Resolve<IDocumentStore>());
 
-        IJobStore jobStore;
-        public IJobStore JobStore => jobStore ?? (jobStore = FreshIOC.Container.Resolve<IJobStore>());
+        IGarageStore garageStore;
+        public IGarageStore GarageStore => garageStore ?? (garageStore = FreshIOC.Container.Resolve<IGarageStore>());
 
-        ILexiconStore lexiconStore;
-        public ILexiconStore LexiconStore => lexiconStore ?? (lexiconStore = FreshIOC.Container.Resolve<ILexiconStore>());
+        IGardenStore gardenStore;
+        public IGardenStore GardenStore => gardenStore ?? (gardenStore = FreshIOC.Container.Resolve<IGardenStore>());
 
-        IPostStore postStore;
-        public IPostStore PostStore => postStore ?? (postStore = FreshIOC.Container.Resolve<IPostStore>());
+        IResidenceStore residenceStore;
+        public IResidenceStore ResidenceStore => residenceStore ?? (residenceStore = FreshIOC.Container.Resolve<IResidenceStore>());
 
-        IPostCategoryStore postCategoryStore;
-        public IPostCategoryStore PostCategoryStore => postCategoryStore ?? (postCategoryStore = FreshIOC.Container.Resolve<IPostCategoryStore>());
-
-        ITagUserPostStore tagUserPostStore;
-        public ITagUserPostStore TagUserPostStore => tagUserPostStore ?? (tagUserPostStore = FreshIOC.Container.Resolve<ITagUserPostStore>());
+        ITerraceStore terraceStore;
+        public ITerraceStore TerraceStore => terraceStore ?? (terraceStore = FreshIOC.Container.Resolve<ITerraceStore>());
 
         IUserStore userStore;
         public IUserStore UserStore => userStore ?? (userStore = FreshIOC.Container.Resolve<IUserStore>());
 
-        IUserSiteStore userSiteStore;
-        public IUserSiteStore UserSiteStore => userSiteStore ?? (userSiteStore = FreshIOC.Container.Resolve<IUserSiteStore>());
+        IUserFavoriteStore userFavoriteStore;
+        public IUserFavoriteStore UserFavoriteStore => userFavoriteStore ?? (userFavoriteStore = FreshIOC.Container.Resolve<IUserFavoriteStore>());
 
-        IUserSiteJobStore userSiteJobStore;
-        public IUserSiteJobStore UserSiteJobStore => userSiteJobStore ?? (userSiteJobStore = FreshIOC.Container.Resolve<IUserSiteJobStore>());
+
 
 
         #region iStoreManager Implementation
+
+
+        public StoreManager()
+        {
+            ADB2CClient = new PublicClientApplication(Constants.ClientID, Constants.Authority);
+            ADB2CClient.RedirectUri = Constants.RedirectUri;
+        }
 
         object locker = new object();
         public void Initialize()
@@ -60,260 +81,97 @@ namespace Mindurry.DataStore.Implementation
                 MobileService = new MobileServiceClient(Constants.ApplicationURL);
             }
 
-            LoadCachedTokenAsync();
+         //   LoadCachedTokenAsync();
         }
 
         #endregion
 
-
-        public async Task<MobileServiceUser> LoginAsync(string username, string password)
+        public async Task<bool> LoginAsync(bool useSilent = false)
         {
-            if (!IsInitialized)
-            {
-                Initialize();
-            }
-
-            var credentials = new JObject();
-            credentials["email"] = username;
-            credentials["password"] = password;
-            credentials["mobile"] = true;
-
+            bool success = false;
             try
             {
-                var _client = new HttpClient();
+                AuthenticationResult authenticationResult;
 
-                _client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
-
-                var json_cred = credentials.ToString();
-                var content = new StringContent(json_cred, Encoding.UTF8, "application/json");
-                var uriService = new Uri(Constants.LoginURL);
-
-                var response = await _client.PostAsync(uriService, content);
-
-                if (response.IsSuccessStatusCode)
+                if (useSilent)
                 {
-                    var content2 = await response.Content.ReadAsStringAsync();
+                    authenticationResult = await ADB2CClient.AcquireTokenSilentAsync(
+                        Constants.Scopes,
+                        GetUserByPolicy(ADB2CClient.Users, Constants.PolicySignUpSignIn),
+                        Constants.Authority,
+                        false);
+                }
+                else
+                {
+                    authenticationResult = await ADB2CClient.AcquireTokenAsync(
+                        Constants.Scopes,
+                        GetUserByPolicy(ADB2CClient.Users, Constants.PolicySignUpSignIn),
+                        App.UiParent);
+                }
 
-                    var User = JsonConvert.DeserializeObject<Authentification>(content2);
+                if (User == null)
+                {
+                    var payload = new JObject();
+                    if (authenticationResult != null && !string.IsNullOrWhiteSpace(authenticationResult.IdToken))
+                    {
+                        payload["access_token"] = authenticationResult.IdToken;
+                    }
 
-                    MobileServiceUser user = new MobileServiceUser(User.UserId) { MobileServiceAuthenticationToken = User.Token };
+                    User = await TodoItemManager.DefaultManager.CurrentClient.LoginAsync(
+                        MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory,
+                        payload);
+                    success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return success;
+        }
 
-                    MobileService.CurrentUser = user;
-
-                    CacheToken(user, User.Role);
-
+        IUser GetUserByPolicy(IEnumerable<IUser> users, string policy)
+        {
+            foreach (var user in users)
+            {
+                string userId = Base64UrlDecode(user.Identifier.Split('.')[0]);
+                if (userId.EndsWith(policy.ToLower(), StringComparison.Ordinal))
                     return user;
-                }
-                else
-                {
-                    return null;
-                }
             }
-            catch (Exception)
-            {
-                return null;
-            }
-
+            return null;
         }
 
-        public async Task<bool> ForgotPasswordAsync(string email)
+        string Base64UrlDecode(string str)
         {
-            if (!IsInitialized)
-            {
-                Initialize();
-            }
+            str = str.Replace('-', '+').Replace('_', '/');
+            str = str.PadRight(str.Length + (4 - str.Length % 4) % 4, '=');
+            var byteArray = Convert.FromBase64String(str);
+            var decoded = Encoding.UTF8.GetString(byteArray, 0, byteArray.Count());
+            return decoded;
+        }
 
-            var mailObject = new JObject();
-            mailObject["email"] = email;
-
+        public async Task<bool> LogoutAsync()
+        {
+            bool success = false;
             try
             {
-                var _client = new HttpClient();
-                _client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
-
-                var json_cred = mailObject.ToString();
-                var content = new StringContent(json_cred, Encoding.UTF8, "application/json");
-                var uriService = new Uri(Constants.ForgotURL);
-
-                var response = await _client.PostAsync(uriService, content);
-
-                if (response.IsSuccessStatusCode)
+                if (User != null)
                 {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
+                    await TodoItemManager.DefaultManager.CurrentClient.LogoutAsync();
 
-
-        public async Task LogoutAsync()
-        {
-            if (!IsInitialized)
-            {
-                Initialize();
-            }
-
-            await MobileService.LogoutAsync();
-
-            Settings.AuthToken = string.Empty;
-            Settings.UserId = string.Empty;
-            Settings.Role = string.Empty;
-
-            (UserStore as UserStore).currentUser = null;
-        }
-
-
-        void CacheToken(MobileServiceUser user, string Role)
-        {
-            Settings.AuthToken = user.MobileServiceAuthenticationToken;
-            Settings.UserId = user.UserId;
-            Settings.Role = Role;
-        }
-
-
-        void LoadCachedTokenAsync()
-        {
-
-            if ((!string.IsNullOrEmpty(Settings.AuthToken)) && (!string.IsNullOrEmpty(Settings.UserId)))
-            {
-                try
-                {
-                    var getExpiration = JwtUtility.GetTokenExpiration(Settings.AuthToken);
-                    var dateNow = DateTimeOffset.Now;
-
-                    if (!string.IsNullOrEmpty(Settings.AuthToken) && JwtUtility.GetTokenExpiration(Settings.AuthToken) > DateTimeOffset.Now)
+                    foreach (var user in ADB2CClient.Users)
                     {
-                        MobileService.CurrentUser = new MobileServiceUser(Settings.UserId);
-                        MobileService.CurrentUser.MobileServiceAuthenticationToken = Settings.AuthToken;
+                        ADB2CClient.Remove(user);
                     }
-
-                }
-                catch (InvalidTokenException)
-                {
-                    Settings.AuthToken = string.Empty;
-                    Settings.UserId = string.Empty;
-
+                    User = null;
+                    success = true;
                 }
             }
-        }
-
-        public async Task VerifyTokenAsync()
-        {
-
-            if ((!string.IsNullOrEmpty(Settings.AuthToken)) && (!string.IsNullOrEmpty(Settings.UserId)))
+            catch (Exception ex)
             {
-                try
-                {
-                    var date = JwtUtility.GetTokenExpiration(Settings.AuthToken).Value.AddMinutes(-30);
-
-                    if (!string.IsNullOrEmpty(Settings.AuthToken) && date < DateTime.UtcNow)
-                    {
-                        var result = await RegenerateTokenAsync();
-
-                        if (!result)
-                        {
-                            //no token regenerated
-                            await LogoutAsync();
-                        }
-                    }
-                }
-                catch (InvalidTokenException)
-                {
-                    //Token exception error
-                    await LogoutAsync();
-                }
+                throw ex;
             }
-
-        }
-
-        private async Task<bool> RegenerateTokenAsync()
-        {
-            var uri = new Uri(Constants.RegenerateURL);
-
-            var actualToken = Settings.AuthToken;
-
-            try
-            {
-                var _client = new HttpClient();
-                _client.DefaultRequestHeaders.Add("token", actualToken);
-                _client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
-
-                var response = await _client.GetAsync(uri);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var authentification = JsonConvert.DeserializeObject<Authentification>(content);
-                    MobileServiceUser user = new MobileServiceUser(authentification.UserId) { MobileServiceAuthenticationToken = authentification.Token };
-                    MobileService.CurrentUser = user;
-
-                    CacheToken(user, authentification.Role);
-
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-
-        //Register
-        public async Task<MobileServiceUser> RegisterAsync(UserRegistrationInfo userRegistrationInfo)
-        {
-            try
-            {
-                var uriService = new Uri(Constants.RegisterURL);
-                var _client = new HttpClient();
-                _client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
-
-                var json_customerRegistration = JsonConvert.SerializeObject(userRegistrationInfo);
-                var content = new StringContent(json_customerRegistration, Encoding.UTF8, "application/json");
-
-                var response = await _client.PostAsync(uriService, content);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content2 = await response.Content.ReadAsStringAsync();
-                    var Authentification = JsonConvert.DeserializeObject<Authentification>(content2);
-
-                    MobileServiceUser mobileServiceUser = new MobileServiceUser(Authentification.UserId) { MobileServiceAuthenticationToken = Authentification.Token };
-
-                    MobileService.CurrentUser = mobileServiceUser;
-
-                    CacheToken(mobileServiceUser, Authentification.Role);
-
-                    return mobileServiceUser;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        public static byte[] ReadFully(Stream input)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                input.CopyTo(ms);
-                return ms.ToArray();
-            }
+            return success;
         }
 
 

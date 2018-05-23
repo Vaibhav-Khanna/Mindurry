@@ -1,4 +1,5 @@
 ﻿using Mindurry.DataModels;
+using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,7 +8,7 @@ using System.Text;
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
-    public class ResidencesDetailsGaragesPageModel :FreshMvvm.FreshBasePageModel
+    public class ResidencesDetailsGaragesPageModel : BasePageModel
     {
         bool IsGarage;
 

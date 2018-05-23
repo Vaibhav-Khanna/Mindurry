@@ -1,13 +1,10 @@
-﻿using FreshMvvm;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Mindurry.ViewModels.Base;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Mindurry.ViewModels
 {
-    public class ConnexionPageModel : FreshBasePageModel
+    public class ConnexionPageModel : BasePageModel
     {
         public ICommand LoadMainPageCommand { get; set; }
 

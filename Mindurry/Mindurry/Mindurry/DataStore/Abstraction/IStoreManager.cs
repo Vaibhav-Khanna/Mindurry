@@ -1,4 +1,5 @@
 ﻿using Mindurry.DataStore.Abstraction.Stores;
+using System.Threading.Tasks;
 
 namespace Mindurry.DataStore.Abstraction
 {
@@ -20,6 +21,8 @@ namespace Mindurry.DataStore.Abstraction
         IUserFavoriteStore UserFavoriteStore { get; }
         IUserStore UserStore { get; }
 
+        Task<bool> LoginAsync(bool useSilent = false);
 
+        Task<bool> LogoutAsync();
     }
 }

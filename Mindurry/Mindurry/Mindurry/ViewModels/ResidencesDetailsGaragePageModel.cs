@@ -1,11 +1,12 @@
 ﻿using Mindurry.DataModels;
+using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Mindurry.ViewModels
 {
-    public class ResidencesDetailsGaragePageModel : FreshMvvm.FreshBasePageModel
+    public class ResidencesDetailsGaragePageModel : BasePageModel
     {
         public Residence Garage { get; set; }
 

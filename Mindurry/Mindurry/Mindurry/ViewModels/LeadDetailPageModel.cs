@@ -1,5 +1,6 @@
 ﻿using FreshMvvm;
 using Mindurry.DataModels;
+using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +12,7 @@ using Xamarin.Forms;
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
-    public class LeadDetailPageModel : FreshBasePageModel
+    public class LeadDetailPageModel : BasePageModel
     {
         public Person Item { get; set; }
         public ObservableCollection<Activity> Activities { get; set; }

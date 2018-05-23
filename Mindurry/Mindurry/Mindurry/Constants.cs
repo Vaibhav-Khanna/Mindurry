@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Mindurry
+{
+    public static class Constants
+    {
+
+#if DEV
+
+        public static string ApplicationURL = @"https://mindurry-dev.azurewebsites.net/api";
+
+
+#elif UAT
+
+        public static string ApplicationURL = @"https://mindurry-uat.azurewebsites.net/api";
+
+
+#elif PROD
+        public static string ApplicationURL = @"https://mindurry.azurewebsites.net/api";
+
+#else
+   
+        public static string ApplicationURL = @"https://mindurry-dev.azurewebsites.net/api";
+
+#endif
+
+        public static string CallbackURL = ApplicationURL + "/api/callback";
+
+        //Azure B2C Credentials
+        public static readonly string Tenant = "INSERT_TENANT_HERE"; // Domain/resource name from AD B2C
+        public static readonly string ClientID = "INSERT_CLIENTID_HERE"; // Application ID from AD B2C
+        public static readonly string PolicySignUpSignIn = "INSERT_POLICY_HERE"; // Policy name from AD B2C
+        public static readonly string[] Scopes = { "" }; // Leave blank unless additional scopes have been added to AD B2C
+        public static string AuthorityBase = $"https://login.microsoftonline.com/tfp/{Tenant}/"; // Doesn't require editing
+        public static string Authority = $"{AuthorityBase}{PolicySignUpSignIn}"; // Doesn't require editing
+        public static readonly string URLScheme = "INSERT_URL_SCHEME_HERE"; // Custom Redirect URI from AD B2C (without ://auth/)
+        public static readonly string RedirectUri = $"{URLScheme}://auth"; // Doesn't require editing
+    }
+
+}
+
