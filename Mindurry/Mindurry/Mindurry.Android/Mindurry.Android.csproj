@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Mindurry.Droid</RootNamespace>
     <AssemblyName>Mindurry.Android</AssemblyName>
-    <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -53,6 +53,9 @@
     <PackageReference Include="Xamarin.Android.Support.v4" Version="25.4.0.2" />
     <PackageReference Include="Xamarin.Android.Support.v7.CardView" Version="25.4.0.2" />
     <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="25.4.0.2" />
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>11.0.2</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -81,7 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mindurry\Mindurry.csproj">
-      <Project>{FAA6878D-0C32-4F27-96EB-5EA76093DE11}</Project>
+      <Project>{09031479-668F-4520-8C8E-FBB0FA9B615C}</Project>
       <Name>Mindurry</Name>
     </ProjectReference>
   </ItemGroup>
