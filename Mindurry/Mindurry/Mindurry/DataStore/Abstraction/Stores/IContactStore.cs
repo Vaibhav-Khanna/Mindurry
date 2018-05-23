@@ -1,5 +1,4 @@
-﻿using System;
-using Mindurry.Models.DataObjects;
+﻿using Mindurry.Models.DataObjects;
 
 namespace Mindurry.DataStore.Abstraction.Stores
 {

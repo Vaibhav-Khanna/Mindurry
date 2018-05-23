@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Mindurry.Models.DataObjects;
+
 namespace Mindurry.DataStore.Abstraction.Stores
 {
-    public interface IUserFavoriteStore<UserFavorite>
+    public interface IUserFavoriteStore : IBaseStore<UserFavorite>
     {
     }
 }

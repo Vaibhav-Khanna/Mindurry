@@ -2,7 +2,7 @@
 
 namespace Mindurry.DataStore.Abstraction.Stores
 {
-    public interface IUserStore : IBaseStore<User>
+    public interface ITerraceStore : IBaseStore<Terrace>
     {
     }
 }

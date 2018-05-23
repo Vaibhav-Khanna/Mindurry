@@ -16,7 +16,7 @@ namespace Mindurry.DataStore.Abstraction
         IGarageStore GarageStore { get; }
         IGardenStore GardenStore { get; }
         IResidenceStore ResidenceStore { get; }
-        ITerrasseStore TerrasseStore { get; }
+        ITerraceStore TerraceStore { get; }
         IUserFavoriteStore UserFavoriteStore { get; }
         IUserStore UserStore { get; }
 
