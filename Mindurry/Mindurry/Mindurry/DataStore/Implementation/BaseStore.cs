@@ -11,11 +11,9 @@ namespace Mindurry.DataStore.Implementation
     public class BaseStore<T> : IBaseStore<T> where T : class, Models.DataObjects.IBaseDataObject, new()
     {
 
-
         IStoreManager storeManager;
 
         public virtual string Identifier => "Items";
-
 
         IMobileServiceTable<T> table;
         protected IMobileServiceTable<T> Table
@@ -34,9 +32,7 @@ namespace Mindurry.DataStore.Implementation
         {
             if (storeManager == null)
                 storeManager = FreshIOC.Container.Resolve<IStoreManager>();
-
-            if (!storeManager.IsInitialized)
-                storeManager.Initialize();
+          
         }
 
 

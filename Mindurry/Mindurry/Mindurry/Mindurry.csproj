@@ -4,6 +4,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Pages\ResidenceDetailPage.xaml.cs" />
     <Compile Remove="ViewModels\ResidenceDetailPageModel.cs" />
@@ -27,6 +32,7 @@
     <PackageReference Include="Microcharts.Forms" Version="0.7.1" />
     <PackageReference Include="Microsoft.Azure.Mobile.Client" Version="4.0.2" />
     <PackageReference Include="Microsoft.Azure.Mobile.Client.SQLiteStore" Version="4.0.2" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="1.1.2-preview0008" />
     <PackageReference Include="PropertyChanged.Fody" Version="2.2.9" />
     <PackageReference Include="Xamarin.CustomControls.RepeaterView" Version="1.2.2" />
     <PackageReference Include="Xamarin.Forms" Version="2.5.0.280555" />
@@ -99,8 +105,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataStore\Implementation\" />
-    <Folder Include="DataStore\Implementation\Stores\" />
     <Folder Include="Models\" />
     <Folder Include="Models\DataObjects\" />
     <Folder Include="Models\Base\" />

@@ -17,7 +17,7 @@ namespace Mindurry.Pages
         {
             var detailpage = FreshPageModelResolver.ResolvePageModel<ViewModels.DashboardPageModel>();
 
-            var masterpage = FreshPageModelResolver.ResolvePageModel<MasterPageModel>();
+            var masterpage = FreshPageModelResolver.ResolvePageModel<ViewModels.MasterPageModel>();
 
             var context = masterpage.BindingContext as MasterPageModel;
 

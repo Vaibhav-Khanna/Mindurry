@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Mindurry.Models.DataObjects
 {
-    public class Contact
+    public class Contact : BaseDataObject
     {
         [JsonProperty("firstname")]
         public string Firstname { get; set; }

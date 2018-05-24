@@ -5,6 +5,5 @@ namespace Mindurry.DataStore.Abstraction.Stores
 {
     public interface IUserStore : IBaseStore<User>
     {
-        Task<User> GetCurrentUserAsync();
     }
 }

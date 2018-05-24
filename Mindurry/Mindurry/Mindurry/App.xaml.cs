@@ -1,5 +1,9 @@
 ﻿using FreshMvvm;
+using Microsoft.Identity.Client;
 using Mindurry.DataModels;
+using Mindurry.DataStore.Abstraction;
+using Mindurry.DataStore.Implementation;
+using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +17,20 @@ namespace Mindurry
 	{
         public static event EventHandler<string> TabbedPageRequested;
 
-		public App ()
+        public static IAuthenticate AuthenticationProvider { get; private set; }
+
+        public static UIParent UiParent = null;
+
+        public static StoreManager StoreManager { get; set; }
+
+        public App ()
 		{
 			InitializeComponent();
-
-            var page = new Pages.MasterDetailNavigationPage();
+        
+            BasePageModel.Init();
+         
+            var page = new Pages.ConnexionPage();
+            // var page = new Pages.MasterDetailNavigationPage();
             MainPage = page;
 		}
 

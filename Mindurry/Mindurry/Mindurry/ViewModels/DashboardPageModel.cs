@@ -17,8 +17,6 @@ namespace Mindurry.ViewModels
         public DonutChart Chart1 { get; set; }
         public DonutChart Chart2 { get; set; }
 
-        bool isLoggedIn;
-
         public override void Init(object initData)
         {
             base.Init(initData);
@@ -81,15 +79,6 @@ namespace Mindurry.ViewModels
             Chart1.LabelTextSize = Chart2.LabelTextSize = 13;
         }
 
-        protected override void ViewIsAppearing(object sender, EventArgs e)
-        {
-            base.ViewIsAppearing(sender, e);
-
-            if (!isLoggedIn)
-            {
-                CoreMethods.PushPageModel<ConnexionPageModel>(null, true, false);
-                isLoggedIn = true;
-            }
-        }
+        
     }
 }
