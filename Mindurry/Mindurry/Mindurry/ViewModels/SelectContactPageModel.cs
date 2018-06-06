@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Linq;
+using Mindurry.ViewModels.Base;
 
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
-    public class SelectContactPageModel : FreshBasePageModel
+    public class SelectContactPageModel : BasePageModel
     {
         public ObservableCollection<CheckablePerson> Items { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using FreshMvvm;
+using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Text;
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
-    public class NewContactPageModel : FreshBasePageModel
+    public class NewContactPageModel : BasePageModel
     {
         public List<string> Picker1Items { get; set; }
         public List<string> Picker2Items { get; set; }

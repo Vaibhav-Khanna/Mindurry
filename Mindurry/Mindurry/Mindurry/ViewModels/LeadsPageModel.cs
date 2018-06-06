@@ -1,5 +1,6 @@
 ﻿using FreshMvvm;
 using Mindurry.DataModels;
+using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ using System.Text;
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
-    public class LeadsPageModel: FreshBasePageModel
+    public class LeadsPageModel : BasePageModel
     {
         public ObservableCollection<Person> Items { get; set; }
         private Person selectedItem;

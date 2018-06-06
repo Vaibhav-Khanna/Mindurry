@@ -4,19 +4,18 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 using Microcharts;
+using Mindurry.ViewModels.Base;
 
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
-    public class DashboardPageModel : FreshBasePageModel
+    public class DashboardPageModel : BasePageModel
     {
         public DateTimeOffset StartDate { get; set; }
         public DateTimeOffset EndDate { get; set; }
         public string Test { get; set; }
         public DonutChart Chart1 { get; set; }
         public DonutChart Chart2 { get; set; }
-
-        bool isLoggedIn;
 
         public override void Init(object initData)
         {
@@ -80,15 +79,6 @@ namespace Mindurry.ViewModels
             Chart1.LabelTextSize = Chart2.LabelTextSize = 13;
         }
 
-        protected override void ViewIsAppearing(object sender, EventArgs e)
-        {
-            base.ViewIsAppearing(sender, e);
-
-            if (!isLoggedIn)
-            {
-                CoreMethods.PushPageModel<ConnexionPageModel>(null, true, false);
-                isLoggedIn = true;
-            }
-        }
+        
     }
 }

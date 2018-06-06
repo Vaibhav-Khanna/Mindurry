@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mindurry.ViewModels.Base;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -6,7 +7,7 @@ using Xamarin.Forms;
 
 namespace Mindurry.ViewModels
 {
-    public class MasterPageModel : FreshMvvm.FreshBasePageModel
+    public class MasterPageModel : BasePageModel
     {
 
         public MasterPageModel()

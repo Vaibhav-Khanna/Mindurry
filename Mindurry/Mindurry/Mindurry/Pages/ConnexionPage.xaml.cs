@@ -17,5 +17,6 @@ namespace Mindurry.Pages
 			InitializeComponent ();
             NavigationPage.SetHasNavigationBar(this, false);
 		}
-	}
+
+    }
 }
