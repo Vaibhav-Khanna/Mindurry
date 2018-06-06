@@ -1,6 +1,7 @@
 ﻿using Microsoft.Identity.Client;
 using Mindurry.ViewModels.Base;
 using System;
+using System.Diagnostics;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -11,8 +12,10 @@ namespace Mindurry.ViewModels
       
         public ICommand LoginCommand => new Command( async (obj) =>
         {
+            Debug.Write("Dedanssss1");
             try
             {
+                Debug.Write("Dedanssss2");
                 bool authenticated = await App.AuthenticationProvider.LoginAsync();
                 if (authenticated)
                 {

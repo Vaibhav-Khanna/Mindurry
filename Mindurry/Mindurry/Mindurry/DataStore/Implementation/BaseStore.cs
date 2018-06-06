@@ -10,8 +10,7 @@ namespace Mindurry.DataStore.Implementation
 {
     public class BaseStore<T> : IBaseStore<T> where T : class, Models.DataObjects.IBaseDataObject, new()
     {
-
-        IStoreManager storeManager;
+        private IStoreManager storeManager;
 
         public virtual string Identifier => "Items";
 
@@ -32,7 +31,7 @@ namespace Mindurry.DataStore.Implementation
         {
             if (storeManager == null)
                 storeManager = FreshIOC.Container.Resolve<IStoreManager>();
-          
+
         }
 
 

@@ -1,6 +1,7 @@
 ﻿using FreshMvvm;
 using Mindurry.DataStore.Abstraction;
 using Mindurry.DataStore.Abstraction.Stores;
+using Mindurry.DataStore.Implementation;
 using Mindurry.DataStore.Implementation.Stores;
 using Xamarin.Forms;
 
@@ -90,6 +91,7 @@ namespace Mindurry.ViewModels.Base
 
         public static void Init()
         {
+            FreshIOC.Container.Register<IStoreManager, StoreManager>();
             FreshIOC.Container.Register<IApartmentStore, ApartmentStore>();
             FreshIOC.Container.Register<ICellarStore, CellarStore>();
             FreshIOC.Container.Register<IContactStore, ContactStore>();
@@ -100,9 +102,8 @@ namespace Mindurry.ViewModels.Base
             FreshIOC.Container.Register<ITerraceStore, TerraceStore>();
             FreshIOC.Container.Register<IUserFavoriteStore, UserFavoriteStore>();
             FreshIOC.Container.Register<IUserStore, UserStore>();
-
-        }
-
+            
+    }
         protected IStoreManager StoreManager { get; } = FreshIOC.Container.Resolve<IStoreManager>();
 
     }

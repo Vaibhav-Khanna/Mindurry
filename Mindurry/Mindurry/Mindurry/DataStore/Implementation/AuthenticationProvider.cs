@@ -1,4 +1,5 @@
-﻿using Microsoft.Identity.Client;
+﻿using FreshMvvm;
+using Microsoft.Identity.Client;
 using Microsoft.WindowsAzure.MobileServices;
 using Mindurry.DataStore.Abstraction;
 using Newtonsoft.Json.Linq;
@@ -18,6 +19,8 @@ namespace Mindurry.DataStore.Implementation
 
         public static MobileServiceClient MobileService { get; set; }
 
+        public static StoreManager StoreManager { get; set; }
+
         public AuthenticationProvider()
         {
             ADB2CClient = new PublicClientApplication(Constants.ClientID, Constants.Authority);
@@ -29,6 +32,8 @@ namespace Mindurry.DataStore.Implementation
             bool success = false;
             try
             {
+                StoreManager = FreshIOC.Container.Resolve<IStoreManager>() as StoreManager;
+
                 AuthenticationResult authenticationResult;
 
                 if (useSilent)
@@ -55,7 +60,7 @@ namespace Mindurry.DataStore.Implementation
                         payload["access_token"] = authenticationResult.IdToken;
                     }
                    
-                    User = await StoreManager.DefaultManager.CurrentClient.LoginAsync(
+                    User = await StoreManager.CurrentClient.LoginAsync(
                         MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory,
                         payload);
                     success = true;
@@ -75,7 +80,7 @@ namespace Mindurry.DataStore.Implementation
             {
                 if (User != null)
                 {
-                    await StoreManager.DefaultManager.CurrentClient.LogoutAsync();
+                    await StoreManager.CurrentClient.LogoutAsync();
 
                     foreach (var user in ADB2CClient.Users)
                     {

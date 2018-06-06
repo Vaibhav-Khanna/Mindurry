@@ -21,7 +21,6 @@ namespace Mindurry
 
         public static UIParent UiParent = null;
 
-        public static StoreManager StoreManager { get; set; }
 
         public App ()
 		{
@@ -29,8 +28,8 @@ namespace Mindurry
         
             BasePageModel.Init();
          
-            var page = new Pages.ConnexionPage();
-            // var page = new Pages.MasterDetailNavigationPage();
+            // var page = new Pages.ConnexionPage();
+            var page = new Pages.MasterDetailNavigationPage();
             MainPage = page;
 		}
 

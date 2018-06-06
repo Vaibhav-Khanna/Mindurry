@@ -5,7 +5,7 @@ namespace Mindurry.DataStore.Abstraction
 {
     public interface IStoreManager
     {
-       
+
         IApartmentStore ApartmentStore { get; }
         ICellarStore CellarStore { get; }
         IContactStore ContactStore { get; }

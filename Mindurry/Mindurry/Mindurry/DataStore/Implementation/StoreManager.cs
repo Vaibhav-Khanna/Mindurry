@@ -9,6 +9,7 @@ namespace Mindurry.DataStore.Implementation
 {
     public class StoreManager : IStoreManager
     {
+        public static MobileServiceClient MobileService { get; set; }
 
         IApartmentStore apartmentStore;
         public IApartmentStore ApartmentStore => apartmentStore ?? (apartmentStore = FreshIOC.Container.Resolve<IApartmentStore>());
@@ -40,31 +41,17 @@ namespace Mindurry.DataStore.Implementation
         IUserFavoriteStore userFavoriteStore;
         public IUserFavoriteStore UserFavoriteStore => userFavoriteStore ?? (userFavoriteStore = FreshIOC.Container.Resolve<IUserFavoriteStore>());
 
-        private static StoreManager defaultInstance = new StoreManager();
 
-        public static MobileServiceClient MobileService { get; set; }
-
-        private StoreManager()
-        {
-            MobileService = new MobileServiceClient(Constants.ApplicationURL);
-        }
-
-        public static StoreManager DefaultManager
-        {
-            get
-            {
-                return defaultInstance;
-            }
-            private set
-            {
-                defaultInstance = value;
-            }
-        }
+        
+        
 
         public MobileServiceClient CurrentClient
         {
-            get { return MobileService; }
+            get {
+                MobileService = new MobileServiceClient(Constants.ApplicationURL);
+                return MobileService; }
         }
+        
 
     }
 }
