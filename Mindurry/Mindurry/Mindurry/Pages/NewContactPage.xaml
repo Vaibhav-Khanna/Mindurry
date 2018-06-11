@@ -28,7 +28,7 @@
                 </StackLayout>
 
                 <StackLayout Orientation="Horizontal" Grid.Column="2" VerticalOptions="CenterAndExpand" BackgroundColor="Transparent" Spacing="20">
-                    <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="15" VerticalOptions="Center">
+                    <Label Text="&#xE711;" FontFamily="Segoe MDL2 Assets" FontSize="15" VerticalOptions="Center">
                         <Label.Effects>
                             <effect:AccentColorEffect/>
                         </Label.Effects>
@@ -57,7 +57,7 @@
                     </StackLayout>
                     
                     <StackLayout Spacing="5">
-                        <Label Text="Société"/>
+                        <Label Text="Adresse"/>
                         <Entry Placeholder="autocomplete ou google adresse" WidthRequest="580" HorizontalOptions="Start">
                             <Entry.Effects>
                                 <effect:LightBorderEffect/>
@@ -109,12 +109,12 @@
                     </StackLayout>
 
                     <StackLayout Spacing="5">
-                        <Label Text="Site internet"/>
-                        <Entry WidthRequest="480" HorizontalOptions="Start">
+                        <Label Text="Souce de la collecte"/>
+                        <Picker WidthRequest="200" HorizontalOptions="Start" ItemsSource="{Binding Picker3Items}" SelectedIndex="{Binding SelectedIndex3, Mode=TwoWay}">
                             <Entry.Effects>
                                 <effect:LightBorderEffect/>
                             </Entry.Effects>
-                        </Entry>
+                        </Picker>
                     </StackLayout>
 
                 </StackLayout>

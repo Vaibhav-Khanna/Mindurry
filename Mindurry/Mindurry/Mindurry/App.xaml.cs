@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Mindurry
@@ -27,11 +27,23 @@ namespace Mindurry
 			InitializeComponent();
         
             BasePageModel.Init();
-         
+
+            Authent();
+
+           
+
+            
+		}
+
+        private void Authent()
+        {
+            //bool authenticated = await App.AuthenticationProvider.LoginAsync(true);
+
             // var page = new Pages.ConnexionPage();
             var page = new Pages.MasterDetailNavigationPage();
             MainPage = page;
-		}
+
+        }
 
 		protected override void OnStart ()
 		{

@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:effect="clr-namespace:Mindurry.Effects"
              x:Class="Mindurry.Pages.LeadsPage"
-             Title="Leads">
+             Title="LEADS">
     <ContentPage.Content>
         <Grid>
 
-            <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+            <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" >
                 <ListView.Header>
                     <Grid>
                         <Grid.RowDefinitions>
@@ -20,21 +20,25 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="100"/>
                             </Grid.ColumnDefinitions>
                             <Grid.Resources>
                                 <ResourceDictionary>
                                     <Style TargetType="Label">
                                         <Setter Property="FontAttributes" Value="Bold"/>
-                                        <Setter Property="FontSize" Value="18"/>
+                                        <Setter Property="FontSize" Value="16"/>
                                     </Style>
                                 </ResourceDictionary>
                             </Grid.Resources>
 
-                            <Label Text="Date"/>
+                            <Label Text="Date" Grid.Column="0"/>
                             <Label Text="Nom" Grid.Column="1"/>
                             <Label Text="Email" Grid.Column="2"/>
                             <Label Text="Téléphone" Grid.Column="3"/>
+                            <Label Text="Type d'appartement" Grid.Column="4" />
+                            <Label Text="Résidence" Grid.Column="5"/>
                         </Grid>
                         <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E4E2DF" Grid.Row="1"/>
                     </Grid>
@@ -44,6 +48,8 @@
                         <ViewCell>
                             <Grid Padding="30,10,0,10">
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
@@ -58,7 +64,7 @@
                                     </ResourceDictionary>
                                 </Grid.Resources>
 
-                                <Label Text="{Binding Date}"/>
+                                <Label Text="{Binding Date}" Grid.Column="0" />
                                 <Label Text="{Binding Name}" Grid.Column="1">
                                     <Label.Effects>
                                         <effect:SemiBoldEffect/>
@@ -66,7 +72,9 @@
                                 </Label>
                                 <Label Text="{Binding Email}" Grid.Column="2"/>
                                 <Label Text="{Binding Telephone}" Grid.Column="3"/>
-                                <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="4"/>
+                                <Label Text="{Binding ApartmentType}" Grid.Column="4" HorizontalOptions="Center"/>
+                                <Label Text="{Binding Residence}" Grid.Column="5"/>
+                                <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="6"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

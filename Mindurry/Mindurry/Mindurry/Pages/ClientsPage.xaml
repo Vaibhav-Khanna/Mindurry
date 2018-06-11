@@ -13,6 +13,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
+            
 
             <Grid BackgroundColor="{StaticResource SubheaderPanel}" Padding="30,5" ColumnSpacing="40" Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -60,6 +61,10 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="100"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.Resources>
@@ -71,10 +76,14 @@
                                     </ResourceDictionary>
                                 </Grid.Resources>
 
-                                <Label Text="Nom" Grid.Column="0"/>
-                                <Label Text="Email" Grid.Column="1"/>
-                                <Label Text="Téléphone" Grid.Column="2"/>
-                                <Label Text="Commercial" Grid.Column="3"/>
+                                <Label Text="Date de création" Grid.Column="0"/>
+                                <Label Text="Nom" Grid.Column="1"/>
+                                <Label Text="Email" Grid.Column="2"/>
+                                <Label Text="Téléphone" Grid.Column="3"/>
+                                <Label Text="Commercial" Grid.Column="4"/>
+                                <Label Text="Dernière relance" Grid.Column="5"/>
+                                <Label Text="Prochaine relance" Grid.Column="6"/>
+                                <Label Text="Résidence" Grid.Column="7"/>
                             </Grid>
                             <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E4E2DF" Grid.Row="1"/>
                         </Grid>
@@ -84,6 +93,10 @@
                             <ViewCell>
                                 <Grid Padding="30,10,0,10">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
@@ -98,15 +111,19 @@
                                         </ResourceDictionary>
                                     </Grid.Resources>
 
-                                    <Label Text="{Binding Name}" Grid.Column="0">
+                                    <Label Text="{Binding Date}" Grid.Column="0"/>
+                                    <Label Text="{Binding Name}" Grid.Column="1">
                                         <Label.Effects>
                                             <effect:SemiBoldEffect/>
                                         </Label.Effects>
                                     </Label>
-                                    <Label Text="{Binding Email}" Grid.Column="1"/>
-                                    <Label Text="{Binding Telephone}" Grid.Column="2"/>
-                                    <Label Text="{Binding Commercial}" Grid.Column="3"/>
-                                    <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="4"/>
+                                    <Label Text="{Binding Email}" Grid.Column="2"/>
+                                    <Label Text="{Binding Telephone}" Grid.Column="3"/>
+                                    <Label Text="{Binding Commercial}" Grid.Column="4"/>
+                                    <Label Text="{Binding LastRelaunch}" Grid.Column="5"/>
+                                    <Label Text="{Binding NextRelaunch}" Grid.Column="6"/>
+                                    <Label Text="{Binding Residence}" Grid.Column="7"/>
+                                    <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="8"/>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>

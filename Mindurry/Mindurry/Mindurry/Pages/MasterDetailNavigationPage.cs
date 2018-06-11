@@ -108,6 +108,12 @@ namespace Mindurry.Pages
                         Detail = Detail_navigation;
                         break;
                     }
+                case "RemindersPage":
+                    {
+                        Detail_navigation = new FreshNavigationContainer(FreshPageModelResolver.ResolvePageModel<ViewModels.RemindersPageModel>()) { BarTextColor = Color.Black, BarBackgroundColor = Color.White };
+                        Detail = Detail_navigation;
+                        break;
+                    }
                 default:
                     {
                         IsPresented = false;

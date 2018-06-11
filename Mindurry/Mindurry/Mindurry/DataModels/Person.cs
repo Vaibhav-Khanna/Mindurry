@@ -14,5 +14,9 @@ namespace Mindurry.DataModels
         public string Telephone { get; set; }
         public string Address { get; set; } = "95 rue Leclerc - 64600 ANGLET";
         public string Commercial { get; set; }
+        public DateTime LastRelaunch { get; set; }
+        public DateTime NextRelaunch { get; set; }
+        public string Residence { get; set; }
+        public string ApartmentType { get; set; }
     }
 }

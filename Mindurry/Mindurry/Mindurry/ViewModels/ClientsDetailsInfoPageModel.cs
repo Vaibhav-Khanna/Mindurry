@@ -103,7 +103,8 @@ namespace Mindurry.ViewModels
 
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
-
+        public ObservableCollection<string> Combo4 { get; set; }
+        public string Combo4Selected { get; set; }
         public override void Init(object initData)
         {
             base.Init(initData);
@@ -131,6 +132,9 @@ namespace Mindurry.ViewModels
 
             Activities = new ObservableCollection<Activity> { activity1, activity2 };
 
+            Combo4 = new ObservableCollection<string> { "Arold Martino", "Jean Noosa" };
+
+
             Types = new ObservableCollection<string> { "Investisseur" };
             Combo1 = new ObservableCollection<string> { "Lead" };
             ComboL1 = new ObservableCollection<string> { "Herrian" };
@@ -141,6 +145,7 @@ namespace Mindurry.ViewModels
             ComboL1Selected = ComboL1[0];
             ComboL2Selected = ComboL2[0];
             ComboL3Selected = ComboL3[0];
+            Combo4Selected = Combo4[0];
             TypeSelected = Types[0];
 
             var item1 = new CheckBoxItem { Content = "Herrian" };

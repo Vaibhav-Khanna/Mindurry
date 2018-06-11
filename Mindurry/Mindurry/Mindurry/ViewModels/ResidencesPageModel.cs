@@ -16,7 +16,7 @@ namespace Mindurry.ViewModels
     public class ResidencesPageModel : BasePageModel
     {
         public IEnumerable<IGrouping<string, Residence>> GroupedItems { get; set; }
-
+       
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> ExpositionChecks { get; set; }
@@ -63,12 +63,13 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Herrian",
                 NoArchi = 678,
-                Statut = Statut.Libre,
+                Type = "T2",
                 Exposition = "Nord",
                 Surface = 89,
-                Terasse = true,
-                Jardin = false,
-                Etage = 1,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "John Doe",
+                Stade = "-",
                 Prix = 168000
             };
 
@@ -76,12 +77,13 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Herrian",
                 NoArchi = 456,
-                Statut = Statut.Reserve,
+                Type = "T2",
                 Exposition = "Nord",
                 Surface = 67,
-                Terasse = true,
-                Jardin = false,
-                Etage = 1,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "Marc Duix",
+                Stade = "-",
                 Prix = 130000
             };
 
@@ -89,12 +91,13 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Herrian",
                 NoArchi = 5678,
-                Statut = Statut.Libre,
+                Type = "T3",
                 Exposition = "Nord",
                 Surface = 56,
-                Terasse = false,
-                Jardin = false,
-                Etage = 1,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "Marie Marto",
+                Stade = "-",
                 Prix = 156000
             };
 
@@ -102,12 +105,13 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Herrian",
                 NoArchi = 567,
-                Statut = Statut.Vendu,
+                Type = "T4",
                 Exposition = "Nord",
                 Surface = 34,
-                Terasse = true,
-                Jardin = false,
-                Etage = 1,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "Henri Lapuie",
+                Stade = "Opts validés",
                 Prix = 110500
             };
 
@@ -115,12 +119,13 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Herri Ondo",
                 NoArchi = 5678,
-                Statut = Statut.Reserve,
+                Type = "T2",
                 Exposition = "Nord",
                 Surface = 109,
-                Terasse = false,
-                Jardin = true,
-                Etage = 1,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "John Doe",
+                Stade = "-",
                 Prix = 230000
             };
 
@@ -128,12 +133,13 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Herri Ondo",
                 NoArchi = 777,
-                Statut = Statut.Reserve,
+                Type = "T3",
                 Exposition = "Nord",
                 Surface = 87,
-                Terasse = true,
-                Jardin = false,
-                Etage = 1,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "Marc Duix",
+                Stade = "-",
                 Prix = 197000
             };
 
@@ -141,12 +147,13 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Miragarri",
                 NoArchi = 234,
-                Statut = Statut.Reserve,
+                Type = "T2",
                 Exposition = "Nord",
                 Surface = 89,
-                Terasse = true,
-                Jardin = true,
-                Etage = 1,
+                Terasse = 14,
+                Jardin = 25,
+                Client = "Marc Duix",
+                Stade = "-",
                 Prix = 206000
             };
 
@@ -154,12 +161,13 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Miragarri",
                 NoArchi = 86,
-                Statut = Statut.Libre,
+                Type = "T4",
                 Exposition = "Nord",
                 Surface = 48,
-                Terasse = true,
-                Jardin = false,
-                Etage = 1,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "Marc Duix",
+                Stade = "-",
                 Prix = 136000
             };
 
@@ -167,12 +175,13 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Miragarri",
                 NoArchi = 67,
-                Statut = Statut.Libre,
+                Type = "T4",
                 Exposition = "Nord",
                 Surface = 44,
-                Terasse = false,
-                Jardin = false,
-                Etage = 1,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "Marc Duix",
+                Stade = "-",
                 Prix = 178000
             };
 
@@ -180,12 +189,13 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Miragarri",
                 NoArchi = 78,
-                Statut = Statut.Libre,
+                Type = "T3",
                 Exposition = "Nord",
                 Surface = 67,
-                Terasse = false,
-                Jardin = false,
-                Etage = 1,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "Marc Duix",
+                Stade = "-",
                 Prix = 168000
             };
 
@@ -193,12 +203,13 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Villa Aguilera",
                 NoArchi = 657,
-                Statut = Statut.Vendu,
+                Type = "T3",
                 Exposition = "Nord",
                 Surface = 89,
-                Terasse = false,
-                Jardin = false,
-                Etage = 1,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "Marc Duix",
+                Stade = "-",
                 Prix = 198000
             };
 
@@ -206,12 +217,13 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Villa Aguilera",
                 NoArchi = 576,
-                Statut = Statut.Vendu,
+                Type = "T4",
                 Exposition = "Nord",
                 Surface = 78,
-                Terasse = false,
-                Jardin = false,
-                Etage = 1,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "Marc Duix",
+                Stade = "-",
                 Prix = 154000
             };
 

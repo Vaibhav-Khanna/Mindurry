@@ -62,6 +62,10 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("userId", NullValueHandling = NullValueHandling.Ignore)]
         public string UserId { get; set; }
 
+        [JsonIgnore]
+        public string Name => $"{Firstname} {Lastname}";
+
+
     }
     public enum Qualification { Contact, Customer, Lead };
 

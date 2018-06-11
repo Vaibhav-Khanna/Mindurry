@@ -25,12 +25,15 @@
                                 </Style>
                             </ResourceDictionary>
                         </StackLayout.Resources>
-                        <StackLayout>
+                       
+                        <StackLayout HorizontalOptions="FillAndExpand">
                             <Label Text="{Binding Item.Name}" FontSize="28" VerticalOptions="Center"/>
                             <Grid VerticalOptions="Center">
-                                <Grid HeightRequest="20" HorizontalOptions="Fill" BackgroundColor="{StaticResource BlueAccent}" VerticalOptions="Center"/>
+                                <Grid HeightRequest="20" HorizontalOptions="Fill" BackgroundColor="{StaticResource GreenAccent}" VerticalOptions="Center"/>
                                 <Label Text="{Binding Item.Type}" TextColor="White" FontSize="14" VerticalOptions="Center" Margin="10,0"/>
                             </Grid>
+                            <Button Text="Modifier" FontSize="20" TextColor="White" BackgroundColor="#9B9B9B" WidthRequest="120" HeightRequest="40" BorderWidth="0" HorizontalOptions="EndAndExpand" Margin="0,20,0,20"/>
+
                         </StackLayout>
 
                         <StackLayout>
@@ -190,91 +193,103 @@
                     <Grid>
                         <StackLayout Spacing="20" IsVisible="{Binding IsTabOneVisible}" Padding="0,0,0,20">
 
-                            <Label Text="Commercial: Arold Martino" FontSize="20" Margin="0,10,0,0">
-                                <Label.Effects>
-                                    <effect:FontLightEffect/>
-                                </Label.Effects>
-                            </Label>
-                            <Label Text="Source du lead: Immo.com" FontSize="20">
-                                <Label.Effects>
-                                    <effect:FontLightEffect/>
-                                </Label.Effects>
-                            </Label>
-                            <Picker WidthRequest="300" ItemsSource="{Binding Combo1}" SelectedItem="{Binding Combo1Selected}" HorizontalOptions="Start"/>
-                            <Label Text="Type">
-                                <Label.Effects>
-                                    <effect:SemiBoldEffect/>
-                                </Label.Effects>
-                            </Label>
-                            <Picker WidthRequest="300" ItemsSource="{Binding Types}" SelectedItem="{Binding TypeSelected}" HorizontalOptions="Start"/>
-                            <StackLayout Orientation="Horizontal" Spacing="30">
-                                <Label Text="Archiver ce lead" FontSize="16" FontAttributes="Bold" VerticalOptions="Center">
+                            <StackLayout BackgroundColor="{StaticResource GrayPanel}" Padding="20,30" Spacing="20">
+                                
+                                <Label Text="Source">
                                     <Label.Effects>
                                         <effect:SemiBoldEffect/>
                                     </Label.Effects>
                                 </Label>
-                                <Switch/>
-                            </StackLayout>
-                            <Label Text="Intéressér par" FontSize="16">
-                                <Label.Effects>
-                                    <effect:SemiBoldEffect/>
-                                </Label.Effects>
-                            </Label>
+                                <Picker WidthRequest="300" ItemsSource="{Binding Combo1}" SelectedItem="{Binding Combo1Selected}" HorizontalOptions="Start"/>
+                                <Label Text="Qualification">
+                                    <Label.Effects>
+                                        <effect:SemiBoldEffect/>
+                                    </Label.Effects>
+                                </Label>
+                                <Picker WidthRequest="300" ItemsSource="{Binding Combo1}" SelectedItem="{Binding Combo1Selected}" HorizontalOptions="Start"/>
+                                <Label Text="Type">
+                                    <Label.Effects>
+                                        <effect:SemiBoldEffect/>
+                                    </Label.Effects>
+                                </Label>
+                                <Picker WidthRequest="300" ItemsSource="{Binding Types}" SelectedItem="{Binding TypeSelected}" HorizontalOptions="Start"/>
 
-                            <StackLayout Spacing="5">
-                                <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
-                                    <StackLayout.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ArrowOneCommand}"/>
-                                    </StackLayout.GestureRecognizers>
-                                    <Label Text="Résidences" TextColor="{StaticResource GrayPanelText}"/>
-                                    <Label Text="{Binding ArrowOne}"  FontSize="10" VerticalOptions="Center" TextColor="{StaticResource GrayPanelText}" FontFamily="Segoe MDL2 Assets"/>
+                                <Label Text="Intéressé par" FontSize="16">
+                                    <Label.Effects>
+                                        <effect:SemiBoldEffect/>
+                                    </Label.Effects>
+                                </Label>
+
+                                <StackLayout Spacing="5">
+                                    <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ArrowOneCommand}"/>
+                                        </StackLayout.GestureRecognizers>
+                                        <Label Text="Résidences" TextColor="{StaticResource GrayPanelText}"/>
+                                        <Label Text="{Binding ArrowOne}"  FontSize="10" VerticalOptions="Center" TextColor="{StaticResource GrayPanelText}" FontFamily="Segoe MDL2 Assets"/>
+                                    </StackLayout>
+
+                                    <StackLayout IsVisible="{Binding IsFirstListVisible}">
+                                        <repeater:RepeaterView ItemsSource="{Binding ResidencesChecks}" VerticalOptions="Start">
+                                            <repeater:RepeaterView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <ViewCell>
+                                                        <win:CheckBox Content="{Binding Content}"  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                    </ViewCell>
+                                                </DataTemplate>
+                                            </repeater:RepeaterView.ItemTemplate>
+                                        </repeater:RepeaterView>
+
+                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllResidencesCommand}">
+                                            <Button.Effects>
+                                                <effect:AccentColorEffect/>
+                                            </Button.Effects>
+                                        </Button>
+                                    </StackLayout>
+
                                 </StackLayout>
 
-                                <StackLayout IsVisible="{Binding IsFirstListVisible}">
-                                    <repeater:RepeaterView ItemsSource="{Binding ResidencesChecks}" VerticalOptions="Start">
-                                        <repeater:RepeaterView.ItemTemplate>
-                                            <DataTemplate>
-                                                <ViewCell>
-                                                    <win:CheckBox Content="{Binding Content}"  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
-                                                </ViewCell>
-                                            </DataTemplate>
-                                        </repeater:RepeaterView.ItemTemplate>
-                                    </repeater:RepeaterView>
+                                <StackLayout Spacing="15">
+                                    <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ArrowTwoCommand}"/>
+                                        </StackLayout.GestureRecognizers>
+                                        <Label Text="Types" TextColor="{StaticResource GrayPanelText}"/>
+                                        <Label Text="{Binding ArrowTwo}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
+                                    </StackLayout>
 
-                                    <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllResidencesCommand}">
-                                        <Button.Effects>
-                                            <effect:AccentColorEffect/>
-                                        </Button.Effects>
-                                    </Button>
-                                </StackLayout>
+                                    <StackLayout IsVisible="{Binding IsSecondListVisible}" Spacing="15">
+                                        <repeater:RepeaterView ItemsSource="{Binding TypesChecks}" VerticalOptions="Start">
+                                            <repeater:RepeaterView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <ViewCell>
+                                                        <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                    </ViewCell>
+                                                </DataTemplate>
+                                            </repeater:RepeaterView.ItemTemplate>
+                                        </repeater:RepeaterView>
 
-                            </StackLayout>
+                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllTypesCommand}">
+                                            <Button.Effects>
+                                                <effect:AccentColorEffect/>
+                                            </Button.Effects>
+                                        </Button>
+                                    </StackLayout>
 
-                            <StackLayout Spacing="15">
-                                <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
-                                    <StackLayout.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ArrowTwoCommand}"/>
-                                    </StackLayout.GestureRecognizers>
-                                    <Label Text="Types" TextColor="{StaticResource GrayPanelText}"/>
-                                    <Label Text="{Binding ArrowTwo}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
-                                </StackLayout>
-
-                                <StackLayout IsVisible="{Binding IsSecondListVisible}" Spacing="15">
-                                    <repeater:RepeaterView ItemsSource="{Binding TypesChecks}" VerticalOptions="Start">
-                                        <repeater:RepeaterView.ItemTemplate>
-                                            <DataTemplate>
-                                                <ViewCell>
-                                                    <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
-                                                </ViewCell>
-                                            </DataTemplate>
-                                        </repeater:RepeaterView.ItemTemplate>
-                                    </repeater:RepeaterView>
-
-                                    <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllTypesCommand}">
-                                        <Button.Effects>
-                                            <effect:AccentColorEffect/>
-                                        </Button.Effects>
-                                    </Button>
+                                    <Label Text="Commercial en Charge">
+                                        <Label.Effects>
+                                            <effect:SemiBoldEffect/>
+                                        </Label.Effects>
+                                    </Label>
+                                    <Picker WidthRequest="300" ItemsSource="{Binding Combo4}" SelectedItem="{Binding Combo4Selected}" HorizontalOptions="Start"/>
+                                    <StackLayout Orientation="Horizontal" Spacing="20" HeightRequest="100" WidthRequest="300" BackgroundColor="#e9e9e9" HorizontalOptions="Start">
+                                        <Label Text="Archiver ce lead" FontSize='16' FontAttributes="Bold" VerticalOptions="Center" Margin="10,0,0,0" WidthRequest="200" >
+                                            <Label.Effects>
+                                                <effect:SemiBoldEffect/>
+                                            </Label.Effects>
+                                        </Label>
+                                        <Switch IsToggled="{Binding IsSwitchToggled}" VerticalOptions="Center"/>
+                                    </StackLayout>
                                 </StackLayout>
 
                             </StackLayout>

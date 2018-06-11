@@ -50,45 +50,12 @@
 
             <Grid Grid.Row="1">
                 <ListView ItemsSource="{Binding GroupedItems}" IsGroupingEnabled="True" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" Margin="0,10,0,0">
-                    <ListView.Header>
-                        <Grid>
-                            <Grid Padding="30,10,0,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="100"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.Resources>
-                                    <ResourceDictionary>
-                                        <Style TargetType="Label">
-                                            <Setter Property="FontAttributes" Value="Bold"/>
-                                            <Setter Property="FontSize" Value="18"/>
-                                        </Style>
-                                    </ResourceDictionary>
-                                </Grid.Resources>
-
-                                <Label Text="N° Archi" Grid.Column="1"/>
-                                <Label Text="Statut" Grid.Column="2"/>
-                                <Label Text="Exposition" Grid.Column="3"/>
-                                <Label Text="Surface" Grid.Column="4"/>
-                                <Label Text="Terrasse" Grid.Column="5"/>
-                                <Label Text="Jardin" Grid.Column="6"/>
-                                <Label Text="Étage" Grid.Column="7"/>
-                                <Label Text="Prix" Grid.Column="8"/>
-                            </Grid>
-                        </Grid>
-                    </ListView.Header>
+                   
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate>
-                            <ViewCell>
-                                <Grid BackgroundColor="#FCFCFC">
+                            <ViewCell Height="100">
+
+                                <StackLayout BackgroundColor="#FCFCFC">
                                     <Label Text="{Binding Key}" FontSize="28" Margin="30,5">
                                         <Label.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="headerTapped"/>
@@ -97,7 +64,42 @@
                                             <effect:FontLightEffect/>
                                         </Label.Effects>
                                     </Label>
+                               
+
+                                <Grid Padding="30,10,0,10" BackgroundColor="White">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.Resources>
+                                        <ResourceDictionary>
+                                            <Style TargetType="Label">
+                                                <Setter Property="FontAttributes" Value="Bold"/>
+                                                <Setter Property="FontSize" Value="12"/>
+                                            </Style>
+                                        </ResourceDictionary>
+                                    </Grid.Resources>
+                                    <Label Text="N° Archi" Grid.Column="1"/>
+                                    <Label Text="Type" Grid.Column="2"/>
+                                    <Label Text="Exposition" Grid.Column="3"/>
+                                    <Label Text="Surface" Grid.Column="4"/>
+                                    <Label Text="Terrasse" Grid.Column="5"/>
+                                    <Label Text="Jardin" Grid.Column="6"/>
+                                    <Label Text="Client" Grid.Column="7"/>
+                                    <Label Text="Stade" Grid.Column="8"/>
+                                    <Label Text="Prix" Grid.Column="9"/>
                                 </Grid>
+
+                                </StackLayout>
+
                             </ViewCell>
                         </DataTemplate>
                     </ListView.GroupHeaderTemplate>
@@ -106,6 +108,7 @@
                             <ViewCell>
                                 <Grid Padding="30,10,0,10">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
@@ -131,14 +134,15 @@
                                     </Grid>
 
                                     <Label Text="{Binding NoArchi}" Grid.Column="1"/>
-                                    <Label Text="{Binding Statut}" TextColor="{Binding Statut, Converter={StaticResource StatutToColorConverter}}" Grid.Column="2"/>
+                                    <Label Text="{Binding Type}"  Grid.Column="2"/>
                                     <Label Text="{Binding Exposition}" Grid.Column="3"/>
                                     <Label Text="{Binding Surface, StringFormat='{0}m2'}" Grid.Column="4"/>
-                                    <Label Text="{Binding Terasse, Converter={StaticResource BoolToStringConverter}}" Grid.Column="5"/>
-                                    <Label Text="{Binding Jardin, Converter={StaticResource BoolToStringConverter}}" Grid.Column="6"/>
-                                    <Label Text="{Binding Etage}" Grid.Column="7"/>
-                                    <Label Text="{Binding Prix, StringFormat='{0:#,##0}€'}" Grid.Column="8"/>
-                                    <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="9"/>
+                                    <Label Text="{Binding Terasse}" Grid.Column="5"/>
+                                    <Label Text="{Binding Jardin}" Grid.Column="6"/>
+                                    <Label Text="{Binding Client}" Grid.Column="7"/>
+                                    <Label Text="{Binding Stade}" Grid.Column="8"/>
+                                    <Label Text="{Binding Prix, StringFormat='{0:#,##0}€'}" Grid.Column="9"/>
+                                    <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="10"/>
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
