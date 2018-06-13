@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Mindurry.Pages.ClientsDetailsInfoPage"
              xmlns:effect="clr-namespace:Mindurry.Effects"
-             xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
-			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
+			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows"
+             xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
+             x:Class="Mindurry.Pages.ClientsDetailsInfoPage">
     <ContentPage.Content>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -166,29 +166,38 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
+                        <StackLayout Orientation="Vertical" Grid.Column="0">
+                            <Label Text="&#xE779;"  FontSize="16" VerticalOptions="Center" TextColor="{Binding TabOneColor}" FontFamily="Segoe MDL2 Assets"/>
+                            <Label Text="Informations" FontSize="16" TextColor="{Binding TabOneColor}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding TabOneCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
 
-                        <Label Text="Informations" TextColor="{Binding TabOneColor}">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding TabOneCommand}"/>
-                            </Label.GestureRecognizers>
-                        </Label>
-                        <Label Text="Documents" Grid.Column="1" TextColor="{Binding TabTwoColor}">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding TabTwoCommand}"/>
-                            </Label.GestureRecognizers>
-                        </Label>
-                        <Label Text="Logements" Grid.Column="2" TextColor="{Binding TabThreeColor}">
-                            <Label.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding TabThreeCommand}"/>
-                            </Label.GestureRecognizers>
-                        </Label>
-                        
+                        <StackLayout Orientation="Vertical" Grid.Column="1">
+                            <Label Text="&#xE7C3;"  FontSize="16" VerticalOptions="Center" TextColor="{Binding TabTwoColor}" FontFamily="Segoe MDL2 Assets"/>
+                            <Label Text="Documents" FontSize="16" TextColor="{Binding TabTwoColor}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding TabTwoCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
+
+                        <StackLayout Orientation="Vertical" Grid.Column="2">
+                            <Label Text="&#xE8D7;"  FontSize="16" VerticalOptions="Center" TextColor="{Binding TabThreeColor}" FontFamily="Segoe MDL2 Assets"/>
+                            <Label Text="Logements"  FontSize="16" TextColor="{Binding TabThreeColor}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding TabThreeCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </StackLayout>
                     </Grid>
                     
                     <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E8E6E3"/>
                 </StackLayout>
-                
-                <ScrollView Grid.Row="1">
+
+                <ScrollView Grid.Row="1" >
 
                     <Grid>
                         <StackLayout Spacing="20" IsVisible="{Binding IsTabOneVisible}" Padding="0,0,0,20">
@@ -412,7 +421,7 @@
 
                             <StackLayout IsVisible="{Binding IsTabThreeL1}">
                                 <Label Text="🛈   Ici vous pouvez associer des biens à l'acquéreur" TextColor="{StaticResource GrayPanelText}" Margin="0,10"/>
-                                <Button Text="Ajouter" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
+                                <Button Text="+ Ajouter un bien" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
                                         Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding TabThreeForwardCommand}"/>
                             </StackLayout>
                             
@@ -443,21 +452,42 @@
                                     <repeater:RepeaterView.ItemTemplate>
                                         <DataTemplate>
                                             <ViewCell>
-                                                <StackLayout Padding="10">
+                                                <StackLayout Padding="10" BackgroundColor="#e9e9e9">
+                                                    <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                                                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                                            <Label Text="Résidence Herrian" FontSize="22" >
+                                                            <Label.Effects>
+                                                                <effect:SemiBoldEffect/>
+                                                            </Label.Effects>
+                                                        </Label>
+                                                        <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/>
+                                                    </StackLayout>
                                                     <StackLayout Orientation="Horizontal">
-                                                        <Label Text="Résidence Herrian - " FontSize="16"/>
-                                                        <Label Text="{Binding ResidenceType}" FontSize="16"/>
-                                                        <Label Text="{Binding NoArchi}" FontSize="16"/>
+                                                            <Label Text="{Binding ResidenceType}" FontSize="16">
+                                                                <Label.Effects>
+                                                                    <effect:SemiBoldEffect/>
+                                                                </Label.Effects>
+                                                            </Label>
+                                                            <Label Text="{Binding NoArchi, StringFormat='N° {0}'}" FontSize="16">
+                                                                <Label.Effects>
+                                                                    <effect:SemiBoldEffect/>
+                                                                </Label.Effects>
+                                                            </Label>
+                                                        </StackLayout>
+                                                        <StackLayout Orientation="Horizontal">
+                                                            <Label Text="{Binding Type}" FontSize="12"/>
+                                                            <Label Text=" - " FontSize="12"/>
+                                                            <Label Text="{Binding Surface, StringFormat='{0}m2'}" FontSize="12"/>
+                                                        </StackLayout>
                                                     </StackLayout>
-                                                    
-                                                    <StackLayout Orientation="Horizontal" Spacing="5">
-                                                        <Label Text="Plan de référence" FontSize="16" VerticalOptions="Center" Margin="0,0,10,0"/>
-                                                        <Image WidthRequest="30" HeightRequest="30" Source="icon_PDF.png"/>
-                                                        <Label Text="{Binding PlanFileName}" FontSize="16" VerticalOptions="Center"/>
-                                                    </StackLayout>
-                                                    <Label Text="Statut"/>
-                                                    <Picker ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"/>
-                                                    <Button Text="Supprimer" TextColor="{StaticResource RedAccent}" BackgroundColor="Transparent"/>
+
+
+                                                    <Label Text="{Binding SelectedStatus, StringFormat='Statut: {0}'}" FontSize="12"/>
+                                                   <!-- <Picker ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"/>
+                                                    <Button Text="Supprimer" TextColor="{StaticResource RedAccent}" BackgroundColor="Transparent"/> -->
+                                                    <Label Text="{Binding Prix, StringFormat='Prix: {0} €'}" FontSize="12"/>
+                                                    <Label Text="{Binding Stade, StringFormat='Stade: {0}'}" FontSize="12"/>
+                                                    <Label Text="Voir le bien ->" FontSize="12" TextColor="#9f182c" HorizontalOptions="End"/>
                                                 </StackLayout>
                                             </ViewCell>
                                         </DataTemplate>

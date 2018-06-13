@@ -61,7 +61,8 @@ namespace Mindurry.ViewModels
                 Commercial = "Arold Martino",
                 LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
                 NextRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                Residence = "Villa Aguilera"
+                Residence = "Villa Aguilera",
+                Index = 0
             };
 
             var item2 = new Person
@@ -74,7 +75,8 @@ namespace Mindurry.ViewModels
                 Commercial = "Jean Noosa",
                 LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
                 NextRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                Residence = "Villa Aguilera"
+                Residence = "Villa Aguilera",
+                Index = 1
             };
 
             var item3 = new Person
@@ -87,7 +89,8 @@ namespace Mindurry.ViewModels
                 Commercial = "Jean Noosa",
                 LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
                 NextRelaunch = new DateTime(201, 12, 11, 9, 34, 0),
-                Residence = "Herrian"
+                Residence = "Herrian",
+                Index = 2
             };
 
             var item4 = new Person
@@ -100,7 +103,8 @@ namespace Mindurry.ViewModels
                 Commercial = "Jean Noosa",
                 LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
                 NextRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                Residence = "Villa Aguilera"
+                Residence = "Villa Aguilera",
+                Index = 3
             };
 
             var item5 = new Person
@@ -113,7 +117,8 @@ namespace Mindurry.ViewModels
                 Commercial = "Jean Noosa",
                 LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
                 NextRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                Residence = "Villa Aguilera"
+                Residence = "Villa Aguilera",
+                Index = 4
             };
 
             Items = new ObservableCollection<Person> { item1, item2, item3, item4, item5 };

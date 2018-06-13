@@ -48,17 +48,17 @@ namespace Mindurry.ViewModels
 
         public Color TabOneColor
         {
-            get => TabIndex == 0 ? Color.Black : Color.FromRgb(101, 101, 101);
+            get => TabIndex == 0 ? Color.FromHex("9f182c") : Color.FromRgb(101, 101, 101);
         }
 
         public Color TabTwoColor
         {
-            get => TabIndex == 1 ? Color.Black : Color.FromRgb(101, 101, 101);
+            get => TabIndex == 1 ? Color.FromHex("9f182c") : Color.FromRgb(101, 101, 101);
         }
 
         public Color TabThreeColor
         {
-            get => TabIndex == 2 ? Color.Black : Color.FromRgb(101, 101, 101);
+            get => TabIndex == 2 ? Color.FromHex("9f182c") : Color.FromRgb(101, 101, 101);
         }
 
         public bool IsTabTwoL1 => TabTwoLevel == 0;
@@ -189,8 +189,11 @@ namespace Mindurry.ViewModels
             var residence1 = new Residence()
             {
                 NoArchi = 456,
-                ResidenceType = ResidenceType.Apartment,
-                PlanFileName = "Plan-Version-Final06.pdf",
+                Type = "T3",
+                Surface = 86,
+                Prix = 126000,
+                Stade = "En attente des options",
+                ResidenceType = ResidenceType.Apartment,            
                 SelectedStatus = Statut.Reserve
             };
 

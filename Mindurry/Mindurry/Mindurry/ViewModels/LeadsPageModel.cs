@@ -44,7 +44,8 @@ namespace Mindurry.ViewModels
                 Email = "h.duran@gmail.com",
                 Telephone = "09 36 73 83 83",
                 ApartmentType= "T2",
-                Residence = "Villa Aguilera"
+                Residence = "Villa Aguilera",
+                Index = 0
             };
 
             var item2 = new Person
@@ -55,7 +56,8 @@ namespace Mindurry.ViewModels
                 Email = "j.frazier@gmail.com",
                 Telephone = "06 87 76 44 56",
                 ApartmentType = "T2",
-                Residence = "Villa Aguilera"
+                Residence = "Villa Aguilera",
+                Index = 1
             };
 
             var item3 = new Person
@@ -66,7 +68,8 @@ namespace Mindurry.ViewModels
                 Email = "mike.kilopi@yuji.com",
                 Telephone = "07 56 65 63 00",
                 ApartmentType = "T2",
-                Residence = "Villa Aguilera"
+                Residence = "Villa Aguilera",
+                Index = 2
             };
 
             var item4 = new Person
@@ -77,7 +80,8 @@ namespace Mindurry.ViewModels
                 Email = "m.surto@tera.net",
                 Telephone = "06 67 55 87 99",
                 ApartmentType = "T2",
-                Residence = "Villa Aguilera"
+                Residence = "Villa Aguilera",
+                Index = 3
             };
 
             var item5 = new Person
@@ -88,7 +92,8 @@ namespace Mindurry.ViewModels
                 Email = "a.marketi@immo.com",
                 Telephone = "07 67 55 22 78",
                 ApartmentType = "T4",
-                Residence = "Villa Aguilera"
+                Residence = "Villa Aguilera",
+                Index = 4
             };
 
             Items = new ObservableCollection<Person> { item1, item2, item3, item4, item5 };

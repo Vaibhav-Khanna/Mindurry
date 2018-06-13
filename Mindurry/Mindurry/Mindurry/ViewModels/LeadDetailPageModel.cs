@@ -19,10 +19,11 @@ namespace Mindurry.ViewModels
 
         public ObservableCollection<string> Combo1 { get; set; }
         public ObservableCollection<string> Types { get; set; }
-
+        public ObservableCollection<string> Combo3 { get; set; }
         public ObservableCollection<string> Combo4 { get; set; }
         public string Combo1Selected { get; set; }
         public string TypeSelected { get; set; }
+        public string Combo3Selected { get; set; }
         public string Combo4Selected { get; set; }
         public bool IsFirstListVisible { get; set; } = true;
         public bool IsSecondListVisible { get; set; } = true;
@@ -69,10 +70,13 @@ namespace Mindurry.ViewModels
 
             Types = new ObservableCollection<string> { "Investisseur" };
             Combo1 = new ObservableCollection<string> { "Lead" };
+            Combo3 = new ObservableCollection<string> { "Ne cherche plus" };
+
             Combo4 = new ObservableCollection<string> { "Arold Martino", "Jean Noosa" };
 
             Combo1Selected = Combo1[0];
             TypeSelected = Types[0];
+            Combo3Selected = Combo3[0];
             Combo4Selected = Combo4[0];
 
             var item1 = new CheckBoxItem { Content = "Herrian" };

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Mindurry.DataModels;
+using Mindurry.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +13,11 @@ namespace Mindurry.Pages
 {
 	public partial class ContactsPage : ContentPage
 	{
-		public ContactsPage ()
+
+        public ContactsPage ()
 		{
 			InitializeComponent ();
 		}
-	}
+
+    }
 }

@@ -234,14 +234,21 @@
                         </Label.Effects>
                         </Label>
                         <Picker WidthRequest="300" ItemsSource="{Binding Combo4}" SelectedItem="{Binding Combo4Selected}" HorizontalOptions="Start"/>
-                        <StackLayout Orientation="Horizontal" Spacing="20" HeightRequest="100" WidthRequest="300" BackgroundColor="#e9e9e9" HorizontalOptions="Start">
+                        <StackLayout BackgroundColor="#e9e9e9" Orientation="Vertical" Spacing="10">
+                            <StackLayout Orientation="Horizontal" Spacing="20" HeightRequest="100" WidthRequest="300" HorizontalOptions="Start">
                             <Label Text="Archiver ce lead" FontSize='16' FontAttributes="Bold" VerticalOptions="Center" Margin="10,0,0,0" WidthRequest="200" >
                                 <Label.Effects>
                                     <effect:SemiBoldEffect/>
                                 </Label.Effects>
                             </Label>
                             <Switch IsToggled="{Binding IsSwitchToggled}" VerticalOptions="Center"/>
+                            </StackLayout>
+                            <Picker WidthRequest="300" ItemsSource="{Binding Combo3}" SelectedItem="{Binding Combo3Selected}" IsVisible="{Binding IsSwitchToggled}"
+                            HorizontalOptions="Center"/>
+                            <Button Text="Valider" Margin="180,0,26,0" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}"  IsVisible="{Binding IsSwitchToggled}" WidthRequest="120" HeightRequest="40" HorizontalOptions="End"/>
+
                         </StackLayout>
+                       
                     </StackLayout>
 
                 </StackLayout>

@@ -38,19 +38,19 @@ namespace Mindurry.ViewModels
 
             var item1 = new Reminder
             {              
-                ReminderDate = new DateTime(2017, 12, 11, 9, 34, 0),
+                ReminderDate = new DateTime(2018, 06, 10, 9, 34, 0),
                 ContactName = "Edith Herain",
                 Title = "A checkIn",
             };
             var item2 = new Reminder
             {
-                ReminderDate = new DateTime(2017, 12, 11, 9, 34, 0),
+                ReminderDate = new DateTime(2018, 06, 12, 9, 34, 0),
                 ContactName = "Frank Marquez",
                 Title = "Envoyer SEPA par DocuSign",
             };
             var item3 = new Reminder
             {
-                ReminderDate = new DateTime(2017, 12, 11, 9, 34, 0),
+                ReminderDate = new DateTime(2018, 07, 11, 9, 34, 0),
                 ContactName = "Marc Franol",
                 Title = "Envoyer Contrat",
             };

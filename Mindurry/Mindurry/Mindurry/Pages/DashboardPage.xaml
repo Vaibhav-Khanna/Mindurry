@@ -6,41 +6,88 @@
              xmlns:effect="clr-namespace:Mindurry.Effects"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
 			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows"
-             Title="TABLEAU DE BOARD">
+             Title="TABLEAU DE BORD">
     <ContentPage.Content>
+        <ScrollView>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             
-            <StackLayout Style="{StaticResource SubheaderStackStyle}" Orientation="Horizontal" Grid.Row="0">
+            <StackLayout Style="{StaticResource SubheaderStackStyle}" Orientation="Horizontal" Grid.Row="0" >
                 <Label Text="Date de début" Style="{StaticResource SubHeaderLabelStyle}"/>
                 <win:CalendarDatePicker Width="200" Date="{Binding StartDate}"/>
                 <Label Text="Date de fin" Margin="20,0,0,0" Style="{StaticResource SubHeaderLabelStyle}"/>
                 <win:CalendarDatePicker Width="200" Date="{Binding EndDate}"/>
             </StackLayout>
-            <StackLayout Orientation="Horizontal" Spacing="70" HorizontalOptions="Center" Grid.Row="1">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <microcharts:ChartView WidthRequest="400" Chart="{Binding Chart1}"/>
-                    <Label Text="Leads reçu" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
-                </Grid>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <microcharts:ChartView WidthRequest="400" Chart="{Binding Chart2}"/>
-                    <Label Text="Acquéreurs" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
-                </Grid>
-            </StackLayout>
+            
+                <StackLayout Orientation="Horizontal" Spacing="10"  Grid.Row="1" HorizontalOptions="FillAndExpand" Padding="20,40,20,0">
+                        <Frame OutlineColor="Gray" HorizontalOptions="FillAndExpand">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart1}" Grid.Row="0"/>
+                                <Label Text="Leads reçu" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                            </Grid>
+                        </Frame>
+                    <Frame OutlineColor="Gray" HorizontalOptions="FillAndExpand">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart2}" Grid.Row="0"/>
+                                <Label Text="Acquéreurs" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                            </Grid>
+                        </Frame>
+                    <Frame OutlineColor="Gray" HorizontalOptions="FillAndExpand">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart2}" Grid.Row="0"/>
+                                <Label Text="Acquéreurs" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                            </Grid>
+                        </Frame>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="10" Grid.Row="2" HorizontalOptions="FillAndExpand" Padding="20,10,20,40" >
+                    <Frame OutlineColor="Gray"  HorizontalOptions="FillAndExpand">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart1}" Grid.Row="0" />
+                            <Label Text="Leads reçu" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                        </Grid>
+                    </Frame>
+                    <Frame OutlineColor="Gray"  HorizontalOptions="FillAndExpand">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart2}" Grid.Row="0"/>
+                            <Label Text="Acquéreurs" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                        </Grid>
+                    </Frame>
+                    <Frame OutlineColor="Gray"  HorizontalOptions="FillAndExpand">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart2}" Grid.Row="0"/>
+                            <Label Text="Acquéreurs" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                        </Grid>
+                    </Frame>
+                </StackLayout>
+                <!-- 
             <Label Text="Nombre de leads" HorizontalOptions="Center" Margin="10" Grid.Row="2" FontSize="24">
                 <Label.Effects>
                     <effect:SemiBoldEffect/>
@@ -101,7 +148,9 @@
                         </Label.Effects>
                     </Label>
                 </StackLayout>
-            </StackLayout>
+            </StackLayout> -->
+            
         </Grid>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

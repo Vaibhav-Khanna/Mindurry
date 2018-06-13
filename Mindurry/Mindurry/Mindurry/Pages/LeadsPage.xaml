@@ -2,8 +2,14 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:effect="clr-namespace:Mindurry.Effects"
+             xmlns:converter="clr-namespace:Mindurry.Converters"
              x:Class="Mindurry.Pages.LeadsPage"
              Title="LEADS">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:BgColorConverter x:Key="BgColorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
 
@@ -46,7 +52,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Padding="30,10,0,10">
+                            <Grid Padding="30,10,0,10" BackgroundColor="{Binding Index, Converter={StaticResource BgColorConverter}}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
