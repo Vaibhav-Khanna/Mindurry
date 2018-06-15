@@ -24,66 +24,90 @@
             </StackLayout>
             
                 <StackLayout Orientation="Horizontal" Spacing="10"  Grid.Row="1" HorizontalOptions="FillAndExpand" Padding="20,40,20,0">
-                        <Frame OutlineColor="Gray" HorizontalOptions="FillAndExpand">
+                    <Frame OutlineColor="#F5F4F3" HorizontalOptions="FillAndExpand">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart1}" Grid.Row="0"/>
-                                <Label Text="Leads reçu" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
-                            </Grid>
-                        </Frame>
-                    <Frame OutlineColor="Gray" HorizontalOptions="FillAndExpand">
+                                <Label Text="INTERESSEMENT PAR RESIDENCE" TextColor="{StaticResource GrayPanelText}" FontSize="12" HorizontalOptions="Start" Grid.Row="0">
+                                    <Label.Effects>
+                                        <effect:SemiBoldEffect/>
+                                    </Label.Effects>
+                                </Label>
+                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart2}" Grid.Row="1"/>
+                             </Grid> 
+                    </Frame>
+                    <Frame OutlineColor="#F5F4F3" HorizontalOptions="FillAndExpand">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
                                     <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart2}" Grid.Row="0"/>
-                                <Label Text="Acquéreurs" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Label Text="LEADS PICS" TextColor="{StaticResource GrayPanelText}" FontSize="12" HorizontalOptions="Start" Grid.Row="0">
+                                <Label.Effects>
+                                    <effect:SemiBoldEffect/>
+                                </Label.Effects>
+                            </Label>
+                            <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart3}" Grid.Row="1"/>
                             </Grid>
                         </Frame>
-                    <Frame OutlineColor="Gray" HorizontalOptions="FillAndExpand">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                </Grid.RowDefinitions>
-                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart2}" Grid.Row="0"/>
-                                <Label Text="Acquéreurs" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                    <Frame OutlineColor="#F5F4F3" HorizontalOptions="FillAndExpand">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Label Text="LEADS SOURCES" TextColor="{StaticResource GrayPanelText}" FontSize="12" HorizontalOptions="Start" Grid.Row="0">
+                                <Label.Effects>
+                                    <effect:SemiBoldEffect/>
+                                </Label.Effects>
+                            </Label>
+                            <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart1}" Grid.Row="1"/>
                             </Grid>
-                        </Frame>
+                    </Frame>
                 </StackLayout>
                 <StackLayout Orientation="Horizontal" Spacing="10" Grid.Row="2" HorizontalOptions="FillAndExpand" Padding="20,10,20,40" >
-                    <Frame OutlineColor="Gray"  HorizontalOptions="FillAndExpand">
+                    <Frame OutlineColor="#F5F4F3"  HorizontalOptions="FillAndExpand">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart1}" Grid.Row="0" />
-                            <Label Text="Leads reçu" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                            <Label Text="SOURCES D'ACQUISITIONS" TextColor="{StaticResource GrayPanelText}" FontSize="12" HorizontalOptions="Start" Grid.Row="0">
+                                <Label.Effects>
+                                    <effect:SemiBoldEffect/>
+                                </Label.Effects>
+                            </Label>
+                            <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart1}" Grid.Row="1"/>
                         </Grid>
                     </Frame>
-                    <Frame OutlineColor="Gray"  HorizontalOptions="FillAndExpand">
+                    <Frame OutlineColor="#F5F4F3"  HorizontalOptions="FillAndExpand">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart2}" Grid.Row="0"/>
-                            <Label Text="Acquéreurs" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                            <Label Text="ACQUEREURS PICS" TextColor="{StaticResource GrayPanelText}" FontSize="12" HorizontalOptions="Start" Grid.Row="0">
+                                <Label.Effects>
+                                    <effect:SemiBoldEffect/>
+                                </Label.Effects>
+                            </Label>
+                            <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart3}" Grid.Row="1"/>
                         </Grid>
                     </Frame>
-                    <Frame OutlineColor="Gray"  HorizontalOptions="FillAndExpand">
+                    <Frame OutlineColor="#F5F4F3"  HorizontalOptions="FillAndExpand">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart2}" Grid.Row="0"/>
-                            <Label Text="Acquéreurs" TextColor="{StaticResource GrayPanelText}" HorizontalOptions="Center" Grid.Row="1"/>
+                            <Label Text="ACQUEREURS SOURCES" TextColor="{StaticResource GrayPanelText}" FontSize="12" HorizontalOptions="Start" Grid.Row="0">
+                                <Label.Effects>
+                                    <effect:SemiBoldEffect/>
+                                </Label.Effects>
+                            </Label>
+                            <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart1}" Grid.Row="1"/>
                         </Grid>
                     </Frame>
                 </StackLayout>

@@ -21,11 +21,16 @@ namespace Mindurry.ViewModels
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> ExpositionChecks { get; set; }
 
+        private Residence selectedItem;
         public Residence SelectedItem
         {
-            get => null;
+            get => selectedItem;
             set
-            { }
+            {
+                if (value != null)
+                    CoreMethods.PushPageModel<ResidencesDetailsAppartementsInfosPageModel>(value);
+                selectedItem = null;
+            }
         }
 
         public bool IsShareButtonVisible { get; set; } = false;

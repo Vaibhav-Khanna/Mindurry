@@ -3,40 +3,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Mindurry.Pages.ResidenceDetailInfoPage">
     <ContentPage.Content>
-        <Grid>
-            <Grid.Resources>
+        <StackLayout Orientation="Vertical" WidthRequest="600" HorizontalOptions="Start">
+            <StackLayout.Resources>
                 <ResourceDictionary>
                     <Style TargetType="Label">
-                        <Setter Property="FontSize" Value="18"/>
+                        <Setter Property="FontSize" Value="14"/>
                     </Style>
                 </ResourceDictionary>
-            </Grid.Resources>
+            </StackLayout.Resources>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            
-            <Grid ColumnSpacing="40" RowSpacing="20" Padding="0,30">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
 
-                <Label Text="Nom"/>
-                <Label Text="Herrian" Grid.Column="1"/>
-                <Label Text="Adresse" Grid.Row="1"/>
-                <Label Text="3 impasse Beau Site, 64480 Ustarritz" Grid.Row="1" Grid.Column="1"/>
-                <Label Text="Nom de société propriétaire" Grid.Row="2"/>
-                <Label Text="Mindurry Promotion" Grid.Row="2" Grid.Column="1"/>
-                
-            </Grid>
+            <StackLayout Orientation="Horizontal" Spacing="50" BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand" WidthRequest="600">
+                <Label Text="Nom"  HorizontalOptions="EndAndExpand" WidthRequest="250"/>
+            <Label Text="Herrian" HorizontalOptions="StartAndExpand" />
+        </StackLayout>
+            <StackLayout Orientation="Horizontal" Spacing="50" BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand" WidthRequest="600">
+                <Label Text="Description"  HorizontalOptions="EndAndExpand" WidthRequest="250"/>
+                <Label Text="Parking en option à partir de 10000 €" HorizontalOptions="StartAndExpand" />
+        </StackLayout>
+            <StackLayout Orientation="Horizontal" Spacing="50" BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand" WidthRequest="600">
+                <Label Text="Adresse"  HorizontalOptions="EndAndExpand" WidthRequest="250"/>
+                <Label Text="3 impasse Beau Site, 64480 Ustarritz" HorizontalOptions="StartAndExpand" />
+        </StackLayout>
+            <StackLayout Orientation="Horizontal" Spacing="50" BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand" WidthRequest="600">
+                <Label Text="Nom de société propriétaire"  HorizontalOptions="EndAndExpand" WidthRequest="250"/>
+                <Label Text="Mindurry Promotion" HorizontalOptions="StartAndExpand" />
+        </StackLayout>
 
-            <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" Grid.Row="1">
+            <StackLayout  Orientation="Horizontal" Spacing="50" BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand" WidthRequest="600">
+                <Label Text="Document(s)"     HorizontalOptions="EndAndExpand" WidthRequest="250"/>
+                <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" HorizontalOptions="StartAndExpand" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -48,6 +44,7 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </Grid>
+        </StackLayout>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>
