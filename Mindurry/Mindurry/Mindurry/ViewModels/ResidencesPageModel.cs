@@ -28,7 +28,9 @@ namespace Mindurry.ViewModels
             set
             {
                 if (value != null)
-                    CoreMethods.PushPageModel<ResidencesDetailsAppartementsInfosPageModel>(value);
+                App.RequestApartmentTabbedPage(value);
+
+                //CoreMethods.PushPageModel<ResidencesDetailsAppartementsInfosPageModel>(value);
                 selectedItem = null;
             }
         }

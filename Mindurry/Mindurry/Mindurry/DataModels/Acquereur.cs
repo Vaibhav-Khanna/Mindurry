@@ -10,5 +10,6 @@ namespace Mindurry.DataModels
         public string Type { get; set; }
         public string Client { get; set; }
         public string Stade { get; set; }
+        public int Prix { get; set; }
     }
 }

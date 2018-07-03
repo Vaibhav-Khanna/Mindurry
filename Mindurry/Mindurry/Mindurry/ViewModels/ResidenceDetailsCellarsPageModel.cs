@@ -8,7 +8,7 @@ using System.Text;
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
-    public class ResidencesDetailsGaragesPageModel : BasePageModel
+    public class ResidenceDetailsCellarsPageModel : BasePageModel
     {
         bool IsGarage;
 
@@ -33,8 +33,7 @@ namespace Mindurry.ViewModels
             var itemg1 = new Residence
             {
                 Parent = "John Doe",
-                NoArchi = 2,
-                Type = "Extérieur",
+                NoArchi = 2,               
                 Surface = 13,
                 Prix = 10000,
                 PlanFileName = "Plan-Version-Final06.pdf"
@@ -44,30 +43,30 @@ namespace Mindurry.ViewModels
             {
                 Parent = "Isabelle Soliu",
                 NoArchi = 2,
-                Type = "Aérien",
                 Surface = 12,
                 Prix = 5000,
                 PlanFileName = "Plan-Version-Final06.pdf"
+
             };
 
             var itemg3 = new Residence
             {
                 Parent = "Frank Rico",
                 NoArchi = 3,
-                Type = "Exterieur Couvert",
                 Surface = 12,
                 Prix = 5000,
                 PlanFileName = "Plan-Version-Final06.pdf"
+
             };
 
             var itemg4 = new Residence
             {
                 Parent = "Aron Yoto",
                 NoArchi = 4,
-                Type = "Sous Sol",
                 Surface = 13,
                 Prix = 11000,
                 PlanFileName = "Plan-Version-Final06.pdf"
+
             };
 
             Garages = new ObservableCollection<Residence> { itemg1, itemg2, itemg3, itemg4 };

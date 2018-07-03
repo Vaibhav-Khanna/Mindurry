@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Mindurry.Pages.ResidenceDetailInfoPage">
+             x:Class="Mindurry.Pages.ResidenceDetailInfoPage" >
     <ContentPage.Content>
         <StackLayout Orientation="Vertical" WidthRequest="600" HorizontalOptions="Start">
             <StackLayout.Resources>
@@ -13,38 +13,62 @@
             </StackLayout.Resources>
 
 
-            <StackLayout Orientation="Horizontal" Spacing="50" BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand" WidthRequest="600">
-                <Label Text="Nom"  HorizontalOptions="EndAndExpand" WidthRequest="250"/>
-            <Label Text="Herrian" HorizontalOptions="StartAndExpand" />
-        </StackLayout>
-            <StackLayout Orientation="Horizontal" Spacing="50" BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand" WidthRequest="600">
-                <Label Text="Description"  HorizontalOptions="EndAndExpand" WidthRequest="250"/>
-                <Label Text="Parking en option à partir de 10000 €" HorizontalOptions="StartAndExpand" />
-        </StackLayout>
-            <StackLayout Orientation="Horizontal" Spacing="50" BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand" WidthRequest="600">
-                <Label Text="Adresse"  HorizontalOptions="EndAndExpand" WidthRequest="250"/>
-                <Label Text="3 impasse Beau Site, 64480 Ustarritz" HorizontalOptions="StartAndExpand" />
-        </StackLayout>
-            <StackLayout Orientation="Horizontal" Spacing="50" BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand" WidthRequest="600">
-                <Label Text="Nom de société propriétaire"  HorizontalOptions="EndAndExpand" WidthRequest="250"/>
-                <Label Text="Mindurry Promotion" HorizontalOptions="StartAndExpand" />
-        </StackLayout>
 
-            <StackLayout  Orientation="Horizontal" Spacing="50" BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand" WidthRequest="600">
-                <Label Text="Document(s)"     HorizontalOptions="EndAndExpand" WidthRequest="250"/>
-                <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" HorizontalOptions="StartAndExpand" >
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Orientation="Horizontal" Spacing="5" Padding="0,5">
-                                <Image Source="{Binding Icon}" WidthRequest="30" HeightRequest="30" Aspect="AspectFit"/>
-                                <Label Text="{Binding Title}" TextColor="#4A90E2" VerticalOptions="Center"/>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
+            <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand" WidthRequest="600" HeightRequest="100">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30*"/>
+                    <ColumnDefinition Width="70*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Nom"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0"  VerticalOptions="Center"/>
+                <Label Text="Herrian"  Grid.Column="1" HorizontalOptions="Start"  VerticalOptions="Center" />
+            </Grid>
+            <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="100">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30*"/>
+                    <ColumnDefinition Width="70*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Description"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                <Label  Text="Parking en option à partir de 10000 €" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" />
+            </Grid>
+            <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="100">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30*"/>
+                    <ColumnDefinition Width="70*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Adresse"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                <Label Text="3 impasse Beau Site, 64480 Ustarritz"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+            </Grid>
+            <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="100">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30*"/>
+                    <ColumnDefinition Width="70*"/>
+                </Grid.ColumnDefinitions>
+                <StackLayout Orientation="Vertical"  Grid.Column="0" HorizontalOptions="EndAndExpand" Margin="0,0,50,0" VerticalOptions="Center">
+                    <Label Text="Nom de société" HorizontalOptions="End" />
+                    <Label Text="propriétaire" HorizontalOptions="End"/>
+                </StackLayout>
+                <Label  Text="Mindurry Promotion" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" />
+            </Grid>
+            <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="600" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30*"/>
+                    <ColumnDefinition Width="70*"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="Document(s)"  Grid.Column="0" HorizontalOptions="End" Margin="0,10,50,0"/>
+                <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" Grid.Column="1" HorizontalOptions="StartAndExpand" VerticalOptions="Center" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal" Spacing="5" Padding="0,5">
+                                    <Image Source="{Binding Icon}" WidthRequest="30" HeightRequest="30" Aspect="AspectFit"/>
+                                    <Label Text="{Binding Title}" TextColor="#4A90E2" VerticalOptions="Center"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid> 
+           
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

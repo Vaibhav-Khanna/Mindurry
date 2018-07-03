@@ -21,7 +21,8 @@ namespace Mindurry.ViewModels
                 No = 123,
                 Type = "T2",
                 Client = "John Doe",
-                Stade = "En attente des options"
+                Stade = "En attente des options",
+                Prix = 126000
             };
 
             var itema2 = new Acquereur
@@ -29,7 +30,8 @@ namespace Mindurry.ViewModels
                 No = 123,
                 Type = "T4",
                 Client = "Marie Dupont",
-                Stade = "Options validées"
+                Stade = "Options validées",
+                Prix = 126000
             };
 
             var itema3 = new Acquereur
@@ -37,7 +39,8 @@ namespace Mindurry.ViewModels
                 No = 123,
                 Type = "T3",
                 Client = "Albert Caro",
-                Stade = "Options validées"
+                Stade = "Options validées",
+                Prix = 126000
             };
 
             var itema4 = new Acquereur
@@ -45,7 +48,8 @@ namespace Mindurry.ViewModels
                 No = 123,
                 Type = "Studio",
                 Client = "Claire Aront",
-                Stade = "En attente des options"
+                Stade = "En attente des options",
+                Prix = 126000
             };
 
             Acquereurs = new ObservableCollection<Acquereur> { itema1, itema2, itema3, itema4 };

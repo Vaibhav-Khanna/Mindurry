@@ -4,29 +4,9 @@
              xmlns:converter="clr-namespace:Mindurry.Converters"
              xmlns:effect="clr-namespace:Mindurry.Effects"
              xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
-             x:Class="Mindurry.Pages.ResidencesDetailsAppartementsInfosPage">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converter:BoolToStringConverter x:Key="BoolToStringConverter"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-    
+             x:Class="Mindurry.Pages.ApartmentDetailInfoPage">
     <ContentPage.Content>
-        <StackLayout Spacing="30">
-            <StackLayout Orientation="Horizontal" Spacing="5">
-                <Label Text="Associé au contact">
-                    <Label.Effects>
-                        <effect:AccentColorEffect/>
-                    </Label.Effects>
-                </Label>
-                <Label Text="{Binding Item.Parent}" FontAttributes="Bold">
-                    <Label.Effects>
-                        <effect:AccentColorEffect/>
-                    </Label.Effects>
-                </Label>
-            </StackLayout>
-        </StackLayout>
-        <!--<ScrollView>
+        <ScrollView>
             <StackLayout Spacing="30">
                 <StackLayout Orientation="Horizontal" Spacing="5">
                     <Label Text="Associé au contact">
@@ -108,6 +88,6 @@
                 </StackLayout>
 
             </StackLayout>
-        </ScrollView> -->
-    </ContentPage.Content> 
+        </ScrollView>
+    </ContentPage.Content>
 </ContentPage>

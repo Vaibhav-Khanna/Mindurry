@@ -56,14 +56,21 @@
                             <ViewCell Height="100">
 
                                 <StackLayout BackgroundColor="#FCFCFC">
-                                    <Label Text="{Binding Key}" FontSize="20" Margin="30,5">
-                                        <Label.GestureRecognizers>
-                                            <TapGestureRecognizer Tapped="headerTapped"/>
-                                        </Label.GestureRecognizers>
-                                        <Label.Effects>
-                                            <effect:FontLightEffect/>
-                                        </Label.Effects>
-                                    </Label>
+                                    <StackLayout Orientation="Vertical">
+                                    <Label x:Name="HeaderText" Text="{Binding Key}" FontSize="20" Margin="30,5">
+                                            <Label.Effects>
+                                                <effect:FontLightEffect/>
+                                            </Label.Effects>
+                                        </Label>
+                                        <Label Text="Parking en option à partir de 10000€" FontSize="10" Margin="30,5" >
+                                                <Label.Effects>
+                                                    <effect:FontLightEffect/>
+                                                </Label.Effects>
+                                            </Label>
+                                            <StackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="headerTapped"/>
+                                            </StackLayout.GestureRecognizers>
+                                    </StackLayout>                
                                
 
                                 <Grid Padding="30,10,0,10" BackgroundColor="White">

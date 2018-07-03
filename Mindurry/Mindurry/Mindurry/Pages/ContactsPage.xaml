@@ -161,13 +161,13 @@
                                         <effect:FontLightEffect/>
                                     </Label.Effects>
                                 </Label>
-                            <Grid VerticalOptions="Center" BackgroundColor="Lime">
+                            <Grid VerticalOptions="Center">
                                 <Button Text="" Style="{StaticResource IconButton}" HorizontalOptions="End" VerticalOptions="Center"/>
-                                <Label Text="" Font="Segoe MDL2 Assets" FontSize="9" HorizontalOptions="End" VerticalOptions="End" InputTransparent="True" Margin="2" >
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding CloseFilterCommand}"/>
-                                    </Label.GestureRecognizers>
-                                </Label>
+                                <Label Text="" Font="Segoe MDL2 Assets" FontSize="9" HorizontalOptions="End" VerticalOptions="End" InputTransparent="True" Margin="2" />
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ShowFilterCommand}"/>
+                                </Grid.GestureRecognizers>
+
                             </Grid>
                         </Grid>
 
