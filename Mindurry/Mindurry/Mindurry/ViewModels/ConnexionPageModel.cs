@@ -9,13 +9,13 @@ namespace Mindurry.ViewModels
 {
     public class ConnexionPageModel : BasePageModel
     {
-      
-        public ICommand LoginCommand => new Command( async (obj) =>
+        
+        public Command LogCommand => new Command( async () =>
         {
-            Debug.Write("Dedanssss1");
+            
             try
             {
-                Debug.Write("Dedanssss2");
+                
                 bool authenticated = await App.AuthenticationProvider.LoginAsync();
                 if (authenticated)
                 {
@@ -46,7 +46,7 @@ namespace Mindurry.ViewModels
         }); 
 
 
-        protected override async void ViewIsAppearing(object sender, EventArgs e)
+       /* protected override async void ViewIsAppearing(object sender, EventArgs e)
         {
             try
             {
@@ -63,6 +63,6 @@ namespace Mindurry.ViewModels
             }
             base.ViewIsAppearing(sender, e);
        
-        } 
+        }  */
     }
 }

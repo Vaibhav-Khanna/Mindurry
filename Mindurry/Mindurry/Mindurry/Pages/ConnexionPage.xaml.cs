@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Identity.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,38 @@ namespace Mindurry.Pages
 			InitializeComponent ();
             NavigationPage.SetHasNavigationBar(this, false);
 		}
+
+        async void OnLoginButtonClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                bool authenticated = await App.AuthenticationProvider.LoginAsync();
+                if (authenticated)
+                {
+                    var page = new Pages.MasterDetailNavigationPage();
+                    Application.Current.MainPage = page;
+                }
+                else
+                {
+                    await DisplayAlert("Authentication", "Authentication", "OK");
+                }
+            }
+            catch (MsalException ex)
+            {
+                if (ex.ErrorCode == "authentication_canceled")
+                {
+                    await DisplayAlert("Authentication", "Authentication was cancelled by the user.", "OK");
+                }
+                else
+                {
+                    await DisplayAlert("An error has occurred", "Exception message: " + ex.Message, "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Authentication", "Authentication failed. Exception: " + ex.Message, "OK");
+            }
+        }
 
     }
 }

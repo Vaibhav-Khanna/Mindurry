@@ -45,12 +45,7 @@ namespace Mindurry.DataStore.Implementation
         
         
 
-        public MobileServiceClient CurrentClient
-        {
-            get {
-                MobileService = new MobileServiceClient(Constants.ApplicationURL);
-                return MobileService; }
-        }
+        
         
 
     }

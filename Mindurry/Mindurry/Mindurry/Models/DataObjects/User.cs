@@ -34,5 +34,5 @@ namespace Mindurry.Models.DataObjects
 
     }
 
-    public enum Role { Admin, Standard };
+    public enum Role { administrator, employee };
 }

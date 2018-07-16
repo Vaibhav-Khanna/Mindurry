@@ -30,21 +30,9 @@ namespace Mindurry
         
             BasePageModel.Init();
 
-            Authent();
+            AuthenticationProvider = new AuthenticationProvider();
 
-           
-
-            
-		}
-
-        private void Authent()
-        {
-            //bool authenticated = await App.AuthenticationProvider.LoginAsync(true);
-
-            // var page = new Pages.ConnexionPage();
-            var page = new Pages.MasterDetailNavigationPage();
-            MainPage = page;
-
+            MainPage = new Pages.ConnexionPage();
         }
 
 		protected override void OnStart ()

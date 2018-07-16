@@ -2,9 +2,13 @@
 using Microsoft.Identity.Client;
 using Microsoft.WindowsAzure.MobileServices;
 using Mindurry.DataStore.Abstraction;
+using Mindurry.Helpers;
+using Mindurry.Models.DataObjects;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +29,10 @@ namespace Mindurry.DataStore.Implementation
         {
             ADB2CClient = new PublicClientApplication(Constants.ClientID, Constants.Authority);
             ADB2CClient.RedirectUri = Constants.RedirectUri;
+
+            MobileService = new MobileServiceClient(Constants.ApplicationURL);
         }
+
 
         public async Task<bool> LoginAsync(bool useSilent = false)
         {
@@ -54,23 +61,47 @@ namespace Mindurry.DataStore.Implementation
 
                 if (User == null)
                 {
-                    var payload = new JObject();
+                   
                     if (authenticationResult != null && !string.IsNullOrWhiteSpace(authenticationResult.IdToken))
                     {
-                        payload["access_token"] = authenticationResult.IdToken;
+
+                        //Read token
+
+                        var tokenClaims = JwtUtility.GetClaims(authenticationResult.IdToken);
+
+                        var sub = tokenClaims["sub"];
+
+                        MobileServiceUser user = new MobileServiceUser(sub.ToString()) { MobileServiceAuthenticationToken = authenticationResult.IdToken };
+
+                        MobileService.CurrentUser = user;
+
+                        User = user;
+
+                       var profileUser = await StoreManager.UserStore.GetProfileAsync(authenticationResult.IdToken);
+
+                        // CacheToken
+                         CacheToken(user, profileUser.Role.ToString());
+
+                        success = true;
+
                     }
-                   
-                    User = await StoreManager.CurrentClient.LoginAsync(
-                        MobileServiceAuthenticationProvider.WindowsAzureActiveDirectory,
-                        payload);
-                    success = true;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
+                Debug.WriteLine(ex);
+
             }
             return success;
+        }
+
+        void CacheToken(MobileServiceUser user, string Role)
+        {
+
+            Settings.AuthToken = user.MobileServiceAuthenticationToken;
+            Settings.UserId = user.UserId;
+            Settings.Role = Role;
         }
 
         public async Task<bool> LogoutAsync()
@@ -80,13 +111,18 @@ namespace Mindurry.DataStore.Implementation
             {
                 if (User != null)
                 {
-                    await StoreManager.CurrentClient.LogoutAsync();
+                    await MobileService.LogoutAsync();
 
                     foreach (var user in ADB2CClient.Users)
                     {
                         ADB2CClient.Remove(user);
                     }
                     User = null;
+
+                    Settings.AuthToken = string.Empty;
+                    Settings.UserId = string.Empty;
+                    Settings.Role = string.Empty;
+
                     success = true;
                 }
             }

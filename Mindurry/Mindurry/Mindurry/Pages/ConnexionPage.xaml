@@ -14,7 +14,7 @@
                 <StackLayout Orientation="Horizontal">
                     <Image HeightRequest="50" WidthRequest="50" Source="microsoft.png" VerticalOptions="Center"/>
                     <Button Text="Se connecter avec Microsoft" HeightRequest="50" WidthRequest="300" VerticalOptions="Center" BackgroundColor="#0070D2"
-                            TextColor="White" BorderWidth="0"  Command="{Binding LoginCommand}"/>
+                            TextColor="White" BorderWidth="0"  Clicked="OnLoginButtonClicked" />
                 </StackLayout>
             </StackLayout>
 

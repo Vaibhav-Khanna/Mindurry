@@ -69,8 +69,8 @@ namespace Mindurry.Pages
             var tabbedNavigation = new FreshTabbedFONavigationContainer(e.NoArchi.ToString());
             //this causes weird 
             //tabbedNavigation.Title = e;
-            tabbedNavigation.AddTab<ViewModels.ApartmentDetailInfoPageModel>("Informations", null);
-            tabbedNavigation.AddTab<ViewModels.ApartmentPlansPageModel>("Plans", null);
+            tabbedNavigation.AddTab<ViewModels.ApartmentDetailInfoPageModel>("Informations", null,e);
+            tabbedNavigation.AddTab<ViewModels.ApartmentPlansPageModel>("Plans", null,e);
             
             Detail_navigation = null;
             Detail = tabbedNavigation;

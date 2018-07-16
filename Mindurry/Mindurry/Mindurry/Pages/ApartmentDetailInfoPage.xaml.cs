@@ -14,7 +14,8 @@ namespace Mindurry.Pages
 	{
 		public ApartmentDetailInfoPage ()
 		{
-			InitializeComponent ();
-		}
+			InitializeComponent();
+           
+        }
 	}
 }
