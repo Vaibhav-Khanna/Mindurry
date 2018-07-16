@@ -19,6 +19,25 @@ namespace Mindurry.Pages
             NavigationPage.SetHasNavigationBar(this, false);
 		}
 
+        protected override async void OnAppearing()
+        {
+            try
+            {
+                bool authenticated = await App.AuthenticationProvider.LoginAsync(true);
+                if (authenticated)
+                {
+                    var page = new Pages.MasterDetailNavigationPage();
+                    Application.Current.MainPage = page;
+                }
+            }
+            catch
+            {
+                // Do nothing - the user isn't logged in
+            }
+
+            base.OnAppearing();
+        }
+
         async void OnLoginButtonClicked(object sender, EventArgs e)
         {
             try
@@ -31,7 +50,7 @@ namespace Mindurry.Pages
                 }
                 else
                 {
-                    await DisplayAlert("Authentication", "Authentication", "OK");
+                    await DisplayAlert("Erreur", "Erreur D'authentification, veuillez recommencer", "OK");
                 }
             }
             catch (MsalException ex)
