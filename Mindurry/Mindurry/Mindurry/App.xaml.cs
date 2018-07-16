@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Mindurry
@@ -16,6 +16,8 @@ namespace Mindurry
 	public partial class App : Application
 	{
         public static event EventHandler<string> TabbedPageRequested;
+
+        public static event EventHandler<Residence> TabbedPageApartmentRequested;
 
         public static IAuthenticate AuthenticationProvider { get; private set; }
 
@@ -27,11 +29,11 @@ namespace Mindurry
 			InitializeComponent();
         
             BasePageModel.Init();
-         
-            // var page = new Pages.ConnexionPage();
-            var page = new Pages.MasterDetailNavigationPage();
-            MainPage = page;
-		}
+
+            AuthenticationProvider = new AuthenticationProvider();
+
+            MainPage = new Pages.ConnexionPage();
+        }
 
 		protected override void OnStart ()
 		{
@@ -52,5 +54,9 @@ namespace Mindurry
         {
             TabbedPageRequested?.Invoke(null, data);
         }
-	}
+        public static void RequestApartmentTabbedPage(Residence data)
+        {
+            TabbedPageApartmentRequested?.Invoke(null, data);
+        }
+    }
 }

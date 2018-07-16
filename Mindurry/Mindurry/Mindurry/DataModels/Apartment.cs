@@ -4,10 +4,7 @@ using System.Text;
 
 namespace Mindurry.DataModels
 {
-    public enum Statut { Libre, Reserve, Vendu, Option}
-    public enum ResidenceType { Apartment, Garage, Cave }
-
-    public class Residence
+    class Apartment
     {
         public string Parent { get; set; }
         public ResidenceType ResidenceType { get; set; }
@@ -33,7 +30,7 @@ namespace Mindurry.DataModels
         public string Client { get; set; }
         public string Stade { get; set; }
         public int NoCoPro { get; set; }
-       
+
         public string PlanFileName { get; set; }
         public List<string> Terasses { get; set; }
         public string JardinSurface { get; set; }
@@ -41,9 +38,10 @@ namespace Mindurry.DataModels
         public List<Statut> Statuses { get; set; }
         public Statut SelectedStatus { get; set; }
 
-        public Residence()
+        public Apartment()
         {
             Statuses = new List<Statut> { Statut.Libre, Statut.Option, Statut.Reserve, Statut.Vendu };
         }
     }
 }
+

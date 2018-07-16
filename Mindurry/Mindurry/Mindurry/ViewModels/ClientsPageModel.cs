@@ -49,33 +49,48 @@ namespace Mindurry.ViewModels
 
         public override void Init(object initData)
         {
-            base.Init(initData);
+            
 
             var item1 = new Person
             {
                 Type = PersonType.Client,
-                Name = "John Doe",
+                Date = new DateTime(2017, 12, 11, 9, 34, 0),
+                Name = "Jean Michel Marc",
                 Email = "j.doe@gmail.com",
                 Telephone = "09 36 73 83 83",
-                Commercial = "Arold Martino"
+                Commercial = "Arold Martino",
+                LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
+                NextRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
+                Residence = "Villa Aguilera",
+                Index = 0
             };
 
             var item2 = new Person
             {
                 Type = PersonType.Client,
+                Date = new DateTime(2017, 12, 11, 9, 34, 0),
                 Name = "Sullivan Marc",
                 Email = "m.sullivan@immo.com",
                 Telephone = "06 87 76 44 56",
-                Commercial = "Jean Noosa"
+                Commercial = "Jean Noosa",
+                LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
+                NextRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
+                Residence = "Villa Aguilera",
+                Index = 1
             };
 
             var item3 = new Person
             {
                 Type = PersonType.Client,
+                Date = new DateTime(2017, 12, 11, 9, 34, 0),
                 Name = "Marie Yuji",
                 Email = "sean.yuji@yuji.com",
                 Telephone = "07 56 65 63 00",
-                Commercial = "Jean Noosa"
+                Commercial = "Jean Noosa",
+                LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
+                NextRelaunch = new DateTime(201, 12, 11, 9, 34, 0),
+                Residence = "Herrian",
+                Index = 2
             };
 
             var item4 = new Person
@@ -85,7 +100,11 @@ namespace Mindurry.ViewModels
                 Name = "Albert Louak",
                 Email = "m.louak@tera.net",
                 Telephone = "06 67 55 87 99",
-                Commercial = "Jean Noosa"
+                Commercial = "Jean Noosa",
+                LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
+                NextRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
+                Residence = "Villa Aguilera",
+                Index = 3
             };
 
             var item5 = new Person
@@ -95,7 +114,11 @@ namespace Mindurry.ViewModels
                 Name = "Louis Aroati",
                 Email = "franck.aroati@immo.com",
                 Telephone = "07 67 55 22 78",
-                Commercial = "Jean Noosa"
+                Commercial = "Jean Noosa",
+                LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
+                NextRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
+                Residence = "Villa Aguilera",
+                Index = 4
             };
 
             Items = new ObservableCollection<Person> { item1, item2, item3, item4, item5 };

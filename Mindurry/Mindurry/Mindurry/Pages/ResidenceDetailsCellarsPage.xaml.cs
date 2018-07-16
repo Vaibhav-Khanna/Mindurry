@@ -1,6 +1,4 @@
-﻿using Mindurry.DataModels;
-using Mindurry.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,13 +9,12 @@ using Xamarin.Forms.Xaml;
 
 namespace Mindurry.Pages
 {
-	public partial class ContactsPage : ContentPage
+	[XamlCompilation(XamlCompilationOptions.Compile)]
+	public partial class ResidenceDetailsCellarsPage : ContentPage
 	{
-
-        public ContactsPage ()
+		public ResidenceDetailsCellarsPage ()
 		{
 			InitializeComponent ();
 		}
-
-    }
+	}
 }

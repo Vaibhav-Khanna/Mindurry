@@ -51,74 +51,57 @@ namespace Mindurry.ViewModels
 
             var item1 = new Residence
             {
-                Parent = "Margot Dupuis",
-                NoArchi = 1234,
-                Statut = Statut.Libre,
-                Exposition = "Sud",
+                Parent = "Herrian",
+                NoArchi = 678,
+                Type = "T2",
+                Exposition = "Nord",
                 Surface = 89,
-                Terasse = true,
-                Jardin = true,
-                Etage = 5,
-                Prix = 168000,
-                PlanFileName = "Plan-Version-Final06.pdf",
-                Terasses = new List<string> { "Terasse Sud - 10m2", "Terasse Ouest - 16m2" },
-                JardinSurface = "Surface 10m2",
-                NoCoPro = 678,
-                Type = "T3"
+                Terasse = 14,
+                Jardin = 0,
+                Client = "John Doe",
+                Stade = "-",
+                Prix = 168000
             };
 
             var item2 = new Residence
             {
-                Parent = "Margot Dupuis",
-                NoArchi = 690,
-                Statut = Statut.Option,
+                Parent = "Herrian",
+                NoArchi = 456,
+                Type = "T2",
                 Exposition = "Nord",
-                Surface = 89,
-                Terasse = true,
-                Jardin = false,
-                Etage = 1,
-                Prix = 168000,
-                PlanFileName = "Plan-Version-Final06.pdf",
-                Terasses = new List<string> { "Terasse Sud - 10m2", "Terasse Ouest - 16m2" },
-                JardinSurface = "Surface 10m2",
-                NoCoPro = 678,
-                Type = "T3"
+                Surface = 67,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "Marc Duix",
+                Stade = "-",
+                Prix = 130000
             };
-
             var item3 = new Residence
             {
-                Parent = "Margot Dupuis",
-                NoArchi = 876,
-                Statut = Statut.Vendu,
+                Parent = "Herrian",
+                NoArchi = 5678,
+                Type = "T3",
                 Exposition = "Nord",
-                Surface = 89,
-                Terasse = true,
-                Jardin = false,
-                Etage = 1,
-                Prix = 134000,
-                PlanFileName = "Plan-Version-Final06.pdf",
-                Terasses = new List<string> { "Terasse Sud - 10m2", "Terasse Ouest - 16m2" },
-                JardinSurface = "Surface 10m2",
-                NoCoPro = 678,
-                Type = "T3"
+                Surface = 56,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "Marie Marto",
+                Stade = "-",
+                Prix = 156000
             };
 
             var item4 = new Residence
             {
-                Parent = "Margot Dupuis",
-                NoArchi = 722,
-                Statut = Statut.Reserve,
+                Parent = "Herrian",
+                NoArchi = 567,
+                Type = "T4",
                 Exposition = "Nord",
-                Surface = 89,
-                Terasse = true,
-                Jardin = false,
-                Etage = 1,
-                Prix = 230000,
-                PlanFileName = "Plan-Version-Final06.pdf",
-                Terasses = new List<string> { "Terasse Sud - 10m2", "Terasse Ouest - 16m2" },
-                JardinSurface = "Surface 10m2",
-                NoCoPro = 678,
-                Type = "T3"
+                Surface = 34,
+                Terasse = 14,
+                Jardin = 0,
+                Client = "Henri Lapuie",
+                Stade = "Opts validés",
+                Prix = 110500
             };
 
             Items = new ObservableCollection<Residence> { item1, item2, item3, item4 };

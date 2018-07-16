@@ -2,11 +2,17 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:effect="clr-namespace:Mindurry.Effects"
+             xmlns:converter="clr-namespace:Mindurry.Converters"
              xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
              x:Class="Mindurry.Pages.ContactsPage"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
 			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows" 
              Title="CONTACTS">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:BgColorConverter x:Key="BgColorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
             <Grid RowSpacing="0">
             <Grid.RowDefinitions>
@@ -28,26 +34,26 @@
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding AddCommand}"/>
                         </StackLayout.GestureRecognizers>
-                        <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="18" VerticalOptions="Center"/>
-                        <Label Text="Ajouter un contact" FontSize="18" VerticalOptions="Center"/>
+                        <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalOptions="Center"/>
+                        <Label Text="Ajouter un contact" FontSize="16" VerticalOptions="Center"/>
                     </StackLayout>
 
                     <StackLayout Orientation="Horizontal" Grid.Column="2" VerticalOptions="CenterAndExpand">
-                        <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="18" TextColor="#417505" VerticalOptions="Center"/>
-                        <Label Text="Exporter en CSV" FontSize="18" TextColor="#417505" VerticalOptions="Center"/>
+                        <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="16" TextColor="#417505" VerticalOptions="Center"/>
+                        <Label Text="Exporter en CSV" FontSize="16" TextColor="#417505" VerticalOptions="Center"/>
                     </StackLayout>
 
                     <StackLayout Orientation="Horizontal" Grid.Column="3" VerticalOptions="CenterAndExpand" BackgroundColor="Transparent">
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding ShowFilterCommand}"/>
                         </StackLayout.GestureRecognizers>
-                        <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="18" VerticalOptions="Center"/>
-                        <Label Text="Filtres" FontSize="18" VerticalOptions="Center"/>
+                        <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalOptions="Center"/>
+                        <Label Text="Filtres" FontSize="16" VerticalOptions="Center"/>
                     </StackLayout>
                 </Grid>
 
             <Grid Grid.Row="1">
-                    <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" Margin="0,10,0,0">
+                <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" Margin="0,10,0,0">
                         <ListView.Header>
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -60,55 +66,83 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="60"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.Resources>
                                         <ResourceDictionary>
                                             <Style TargetType="Label">
                                                 <Setter Property="FontAttributes" Value="Bold"/>
-                                                <Setter Property="FontSize" Value="18"/>
+                                                <Setter Property="FontSize" Value="16"/>
                                             </Style>
                                         </ResourceDictionary>
                                     </Grid.Resources>
 
-                                    <Label Text="Nom" Grid.Column="0"/>
-                                    <Label Text="Email" Grid.Column="1"/>
-                                    <Label Text="Téléphone" Grid.Column="2"/>
-                                    <Label Text="Commercial" Grid.Column="3"/>
-                                </Grid>
-                                <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E4E2DF" Grid.Row="1"/>
+                               <!-- <Label Text="Date de création" Grid.Column="0"/> -->
+                                <StackLayout Orientation="Horizontal" Grid.Column="0" VerticalOptions="Center" Spacing="1" HorizontalOptions="StartAndExpand">
+                                    <Label Text="Prochaine relance" HorizontalOptions="FillAndExpand" />
+                                    <Label Text="&#xE8CB;" FontFamily="Segoe MDL2 Assets"  VerticalOptions="Center" WidthRequest="20" HorizontalOptions="End"/>
+                                </StackLayout>
+
+                                <Label Text="Nom" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                <Label Text="Email" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                <Label Text="Téléphone" Grid.Column="3" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                                <Label Text="Commercial" Grid.Column="4" VerticalOptions="Center" HorizontalOptions="StartAndExpand" />
+                                <StackLayout Orientation="Horizontal" Grid.Column="5" VerticalOptions="Center" Spacing="1" HorizontalOptions="StartAndExpand">
+                                    <Label Text="Prochaine relance" HorizontalOptions="FillAndExpand" />
+                                    <Label Text="&#xE8CB;" FontFamily="Segoe MDL2 Assets"  VerticalOptions="Center" WidthRequest="20" HorizontalOptions="End"/>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal" Grid.Column="6" VerticalOptions="Center" Spacing="1" HorizontalOptions="StartAndExpand">
+                                    <Label Text="Prochaine relance" HorizontalOptions="FillAndExpand" />
+                                    <Label Text="&#xE8CB;" FontFamily="Segoe MDL2 Assets"  VerticalOptions="Center" WidthRequest="20" HorizontalOptions="End"/>
+                                </StackLayout>
+                                <Label Text="Résidence" Grid.Column="7" VerticalOptions="Center" HorizontalOptions="StartAndExpand"/>
+                            </Grid>
+                                <BoxView  HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E4E2DF" Grid.Row="1"/>
                             </Grid>
                         </ListView.Header>
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <ViewCell>
-                                    <Grid Padding="30,10,0,10">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="100"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.Resources>
-                                            <ResourceDictionary>
-                                                <Style TargetType="Label">
-                                                    <Setter Property="FontSize" Value="15"/>
-                                                </Style>
-                                            </ResourceDictionary>
-                                        </Grid.Resources>
+                            <ViewCell>
 
-                                        <Label Text="{Binding Name}" Grid.Column="0">
-                                            <Label.Effects>
-                                                <effect:SemiBoldEffect/>
-                                            </Label.Effects>
-                                        </Label>
-                                        <Label Text="{Binding Email}" Grid.Column="1"/>
-                                        <Label Text="{Binding Telephone}" Grid.Column="2"/>
-                                        <Label Text="{Binding Commercial}" Grid.Column="3"/>
-                                        <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="4"/>
-                                    </Grid>
-                                </ViewCell>
+                                <Grid Padding="30,10,0,10" BackgroundColor="{Binding Index, Converter={StaticResource BgColorConverter}}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="60"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.Resources>
+                                        <ResourceDictionary>
+                                            <Style TargetType="Label">
+                                                <Setter Property="FontSize" Value="15"/>
+                                            </Style>
+                                        </ResourceDictionary>
+                                    </Grid.Resources>
+
+                                    <Label Text="{Binding Date, StringFormat='{0:dd/MM/yyyy à HH\\hmm}'}" Grid.Column="0" HorizontalOptions="StartAndExpand"/>
+                                    <Label Text="{Binding Name}" Grid.Column="1" HorizontalOptions="StartAndExpand" >
+                                        <Label.Effects>
+                                            <effect:SemiBoldEffect/>
+                                        </Label.Effects>
+                                    </Label>
+                                    <Label Text="{Binding Email}" Grid.Column="2" HorizontalOptions="StartAndExpand"/>
+                                    <Label Text="{Binding Telephone}" Grid.Column="3" HorizontalOptions="StartAndExpand"/>
+                                    <Label Text="{Binding Commercial}" Grid.Column="4" HorizontalOptions="StartAndExpand"/>
+                                    <Label Text="{Binding LastRelaunch, StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="5" HorizontalOptions="StartAndExpand"/>
+                                    <Label Text="{Binding NextRelaunch, StringFormat='{0:dd/MM/yyyy}'}" Grid.Column="6" HorizontalOptions="StartAndExpand"/>
+                                    <Label Text="{Binding Residence}" Grid.Column="7" HorizontalOptions="StartAndExpand"/>
+                                    <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="8"/>
+                                </Grid>
+                            </ViewCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
@@ -129,7 +163,11 @@
                                 </Label>
                             <Grid VerticalOptions="Center">
                                 <Button Text="" Style="{StaticResource IconButton}" HorizontalOptions="End" VerticalOptions="Center"/>
-                                <Label Text="" Font="Segoe MDL2 Assets" FontSize="9" HorizontalOptions="End" VerticalOptions="End" InputTransparent="True" Margin="2"/>
+                                <Label Text="" Font="Segoe MDL2 Assets" FontSize="9" HorizontalOptions="End" VerticalOptions="End" InputTransparent="True" Margin="2" />
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ShowFilterCommand}"/>
+                                </Grid.GestureRecognizers>
+
                             </Grid>
                         </Grid>
 

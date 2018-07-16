@@ -30,7 +30,7 @@
                 </StackLayout>
 
                 <StackLayout Orientation="Horizontal" Grid.Column="2" VerticalOptions="CenterAndExpand" BackgroundColor="Transparent" Spacing="20">
-                    <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="15" VerticalOptions="Center">
+                    <Label Text="&#xE711;" FontFamily="Segoe MDL2 Assets" FontSize="15" VerticalOptions="Center">
                         <Label.Effects>
                             <effect:AccentColorEffect/>
                         </Label.Effects>

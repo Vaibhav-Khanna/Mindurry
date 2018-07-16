@@ -12,6 +12,7 @@
             <Color x:Key="GrayPanelEdge">#9B9B9B</Color>
             <Color x:Key="GrayPanelText">#656565</Color>
             <Color x:Key="BlueAccent">#1FACFF</Color>
+            <Color x:Key="GreenAccent">#7ed321</Color>
             <Color x:Key="RedAccent">#EC1414</Color>
             <Color x:Key="BlueText">#4A90E2</Color>
             <Style TargetType="Label">

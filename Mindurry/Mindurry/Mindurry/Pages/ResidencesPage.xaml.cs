@@ -19,8 +19,10 @@ namespace Mindurry.Pages
 
         private void headerTapped(object sender, EventArgs e)
         {
-            var element = sender as Xamarin.Forms.Label;
-            App.RequestTabbedPage(element.Text);
+            var element = sender as Xamarin.Forms.StackLayout;
+            var children = element.Children[0].BindingContext as IGrouping<string, Residence>;
+            var key = children.Key;
+            App.RequestTabbedPage(key);
         }
     }
 }

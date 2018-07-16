@@ -48,17 +48,17 @@ namespace Mindurry.ViewModels
 
         public Color TabOneColor
         {
-            get => TabIndex == 0 ? Color.Black : Color.FromRgb(101, 101, 101);
+            get => TabIndex == 0 ? Color.FromHex("9f182c") : Color.FromRgb(101, 101, 101);
         }
 
         public Color TabTwoColor
         {
-            get => TabIndex == 1 ? Color.Black : Color.FromRgb(101, 101, 101);
+            get => TabIndex == 1 ? Color.FromHex("9f182c") : Color.FromRgb(101, 101, 101);
         }
 
         public Color TabThreeColor
         {
-            get => TabIndex == 2 ? Color.Black : Color.FromRgb(101, 101, 101);
+            get => TabIndex == 2 ? Color.FromHex("9f182c") : Color.FromRgb(101, 101, 101);
         }
 
         public bool IsTabTwoL1 => TabTwoLevel == 0;
@@ -103,7 +103,8 @@ namespace Mindurry.ViewModels
 
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
-
+        public ObservableCollection<string> Combo4 { get; set; }
+        public string Combo4Selected { get; set; }
         public override void Init(object initData)
         {
             base.Init(initData);
@@ -131,6 +132,9 @@ namespace Mindurry.ViewModels
 
             Activities = new ObservableCollection<Activity> { activity1, activity2 };
 
+            Combo4 = new ObservableCollection<string> { "Arold Martino", "Jean Noosa" };
+
+
             Types = new ObservableCollection<string> { "Investisseur" };
             Combo1 = new ObservableCollection<string> { "Lead" };
             ComboL1 = new ObservableCollection<string> { "Herrian" };
@@ -141,6 +145,7 @@ namespace Mindurry.ViewModels
             ComboL1Selected = ComboL1[0];
             ComboL2Selected = ComboL2[0];
             ComboL3Selected = ComboL3[0];
+            Combo4Selected = Combo4[0];
             TypeSelected = Types[0];
 
             var item1 = new CheckBoxItem { Content = "Herrian" };
@@ -184,8 +189,11 @@ namespace Mindurry.ViewModels
             var residence1 = new Residence()
             {
                 NoArchi = 456,
-                ResidenceType = ResidenceType.Apartment,
-                PlanFileName = "Plan-Version-Final06.pdf",
+                Type = "T3",
+                Surface = 86,
+                Prix = 126000,
+                Stade = "En attente des options",
+                ResidenceType = ResidenceType.Apartment,            
                 SelectedStatus = Statut.Reserve
             };
 

@@ -17,20 +17,21 @@
                 <StackLayout>
 
                     <StackLayout Padding="30" Orientation="Vertical">
-                        <StackLayout.Resources>
+                       <StackLayout.Resources>
                             <ResourceDictionary>
                                 <Style TargetType="StackLayout">
                                     <Setter Property="Orientation" Value="Horizontal"/>
                                     <Setter Property="Spacing" Value="20"/>
                                 </Style>
                             </ResourceDictionary>
-                        </StackLayout.Resources>
-                        <StackLayout>
+                        </StackLayout.Resources> 
+                        <StackLayout HorizontalOptions="FillAndExpand">
                             <Label Text="{Binding Item.Name}" FontSize="28" VerticalOptions="Center"/>
                             <Grid VerticalOptions="Center">
                                 <Grid HeightRequest="20" HorizontalOptions="Fill" BackgroundColor="{StaticResource BlueAccent}" VerticalOptions="Center"/>
                                 <Label Text="{Binding Item.Type}" TextColor="White" FontSize="14" VerticalOptions="Center" Margin="10,0"/>
                             </Grid>
+                            <Button Text="Modifier" FontSize="20" TextColor="White" BackgroundColor="#9B9B9B" WidthRequest="120" HeightRequest="40" BorderWidth="0" HorizontalOptions="EndAndExpand" Margin="0,20,0,20"/>
 
                         </StackLayout>
 
@@ -146,14 +147,15 @@
                 <StackLayout BackgroundColor="{StaticResource GrayPanel}" Padding="20,30" Spacing="20">
                     <Label Text="Informations" FontSize="22"/>
                     <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E8E6E3"/>
-                    <Label Text="Commercial: Arold Martino" FontSize="20"  Margin="0,10,0,0">
+                    <Label Text="Source">
                         <Label.Effects>
-                            <effect:FontLightEffect/>
+                            <effect:SemiBoldEffect/>
                         </Label.Effects>
                     </Label>
-                    <Label Text="Source du lead: Immo.com" FontSize="20">
+                    <Picker WidthRequest="300" ItemsSource="{Binding Combo1}" SelectedItem="{Binding Combo1Selected}" HorizontalOptions="Start"/>
+                    <Label Text="Qualification">
                         <Label.Effects>
-                            <effect:FontLightEffect/>
+                            <effect:SemiBoldEffect/>
                         </Label.Effects>
                     </Label>
                     <Picker WidthRequest="300" ItemsSource="{Binding Combo1}" SelectedItem="{Binding Combo1Selected}" HorizontalOptions="Start"/>
@@ -163,17 +165,8 @@
                         </Label.Effects>
                     </Label>
                     <Picker WidthRequest="300" ItemsSource="{Binding Types}" SelectedItem="{Binding TypeSelected}" HorizontalOptions="Start"/>
-                    <StackLayout Orientation="Horizontal" Spacing="30">
-                        <Label Text="Archiver ce lead" FontSize="16" FontAttributes="Bold" VerticalOptions="Center">
-                            <Label.Effects>
-                                <effect:SemiBoldEffect/>
-                            </Label.Effects>
-                        </Label>
-                        <Switch IsToggled="{Binding IsSwitchToggled}"/>
-                    </StackLayout>
-                    <Picker WidthRequest="300" ItemsSource="{Binding Combo3}" SelectedItem="{Binding Combo3Selected}" IsVisible="{Binding IsSwitchToggled}"
-                            HorizontalOptions="Start"/>
-                    <Label Text="Intéressér par" FontSize="16">
+
+                    <Label Text="Intéressé par" FontSize="16">
                         <Label.Effects>
                             <effect:SemiBoldEffect/>
                         </Label.Effects>
@@ -235,6 +228,27 @@
                             </Button>
                         </StackLayout>
 
+                        <Label Text="Commercial en Charge">
+                        <Label.Effects>
+                            <effect:SemiBoldEffect/>
+                        </Label.Effects>
+                        </Label>
+                        <Picker WidthRequest="300" ItemsSource="{Binding Combo4}" SelectedItem="{Binding Combo4Selected}" HorizontalOptions="Start"/>
+                        <StackLayout BackgroundColor="#e9e9e9" Orientation="Vertical" Spacing="10">
+                            <StackLayout Orientation="Horizontal" Spacing="20" HeightRequest="100" WidthRequest="300" HorizontalOptions="Start">
+                            <Label Text="Archiver ce lead" FontSize='16' FontAttributes="Bold" VerticalOptions="Center" Margin="10,0,0,0" WidthRequest="200" >
+                                <Label.Effects>
+                                    <effect:SemiBoldEffect/>
+                                </Label.Effects>
+                            </Label>
+                            <Switch IsToggled="{Binding IsSwitchToggled}" VerticalOptions="Center"/>
+                            </StackLayout>
+                            <Picker WidthRequest="300" ItemsSource="{Binding Combo3}" SelectedItem="{Binding Combo3Selected}" IsVisible="{Binding IsSwitchToggled}"
+                            HorizontalOptions="Center"/>
+                            <Button Text="Valider" Margin="180,0,26,0" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}"  IsVisible="{Binding IsSwitchToggled}" WidthRequest="120" HeightRequest="40" HorizontalOptions="End"/>
+
+                        </StackLayout>
+                       
                     </StackLayout>
 
                 </StackLayout>

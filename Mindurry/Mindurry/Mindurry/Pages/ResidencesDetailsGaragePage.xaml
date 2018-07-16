@@ -5,8 +5,15 @@
              x:Class="Mindurry.Pages.ResidencesDetailsGaragePage">
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout Spacing="30">
-                <StackLayout Orientation="Horizontal" Spacing="5">
+            <StackLayout Orientation="Vertical" WidthRequest="600" Spacing="0">
+                <StackLayout.Resources>
+                    <ResourceDictionary>
+                        <Style TargetType="Label">
+                            <Setter Property="FontSize" Value="14"/>
+                        </Style>
+                    </ResourceDictionary>
+                </StackLayout.Resources>
+                <StackLayout Orientation="Horizontal" Spacing="5" >
                     <Label Text="Associé au contact">
                         <Label.Effects>
                             <effect:AccentColorEffect/>
@@ -19,32 +26,61 @@
                     </Label>
                 </StackLayout>
 
-                <StackLayout  Orientation="Horizontal">
-                    <Label Text="N° Archi" WidthRequest="250" FontAttributes="Bold"/>
-                    <Label Text="{Binding Garage.NoArchi}" FontAttributes="Bold"/>
-                </StackLayout>
 
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="N° Co-pro " WidthRequest="250"/>
-                    <Label Text="{Binding Garage.NoCoPro}"/>
-                </StackLayout>
 
-                <StackLayout  Orientation="Horizontal">
-                    <Label Text="Surface" WidthRequest="250"/>
-                    <Label Text="{Binding Garage.Surface, StringFormat='{0}m2'}"/>
-                </StackLayout>
 
-                <StackLayout  Orientation="Horizontal">
-                    <Label Text="Prix " WidthRequest="250"/>
-                    <Label Text="{Binding Garage.Prix, StringFormat='{0:#,##0}€'}"/>
-                </StackLayout>
+                <Grid BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="100" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30*"/>
+                        <ColumnDefinition Width="70*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="N° Archi"  Grid.Column="0" FontAttributes="Bold" HorizontalOptions="End" Margin="0,0,50,0"  VerticalOptions="Center"/>
+                    <Label Text="{Binding Garage.NoArchi}"  FontAttributes="Bold" Grid.Column="1" HorizontalOptions="Start"  VerticalOptions="Center" />
+                </Grid>
 
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="Plan de référence" Margin="0,0,50,0" VerticalOptions="Center"/>
-                    <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit"/>
-                    <Label Text="{Binding Garage.PlanFileName}" VerticalOptions="Center" TextColor="{StaticResource BlueText}"/>
-                </StackLayout>
-
+                <Grid  BackgroundColor="#FFFFFF"  HorizontalOptions="FillAndExpand" WidthRequest="600" HeightRequest="100">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30*"/>
+                        <ColumnDefinition Width="70*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Type"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                    <Label  Text="{Binding Garage.Type}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" />
+                </Grid>
+                <Grid  BackgroundColor="#F5F4F3"  HorizontalOptions="FillAndExpand" WidthRequest="600" HeightRequest="100">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30*"/>
+                        <ColumnDefinition Width="70*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Surface"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                    <Label Text="{Binding Garage.Surface, StringFormat='{0}m2'}"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                </Grid>
+                <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="100">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30*"/>
+                        <ColumnDefinition Width="70*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Acquéreur"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                    <Label Text="{Binding Garage.Parent}"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                </Grid>
+                <Grid  BackgroundColor="#FFFFFF"  HorizontalOptions="FillAndExpand" WidthRequest="600" HeightRequest="100">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30*"/>
+                        <ColumnDefinition Width="70*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Prix"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                    <Label Text="{Binding Garage.Prix, StringFormat='{0:#,##0}€'}"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                </Grid>
+                <Grid  BackgroundColor="#F5F4F3"  HorizontalOptions="FillAndExpand" WidthRequest="600" HeightRequest="100">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30*"/>
+                        <ColumnDefinition Width="70*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Text="Plan de référence"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                    <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="StartAndExpand" VerticalOptions="Center" >
+                        <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit"/>
+                        <Label Text="{Binding Garage.PlanFileName}" VerticalOptions="Center" TextColor="{StaticResource BlueText}"/>
+                    </StackLayout>
+                </Grid>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

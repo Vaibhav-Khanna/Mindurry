@@ -10,7 +10,7 @@ namespace Mindurry.DataStore.Implementation
         public static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 
-        public static IDictionary<string, string> GetClaims(string rawToken)
+        public static IDictionary<string, object> GetClaims(string rawToken)
         {
             string[] tokenParts = rawToken.Split('.');
 
@@ -21,14 +21,14 @@ namespace Mindurry.DataStore.Implementation
 
             string mobileAppToken = GetDecodedPayload(tokenParts[1]);
 
-            return JsonConvert.DeserializeObject<Dictionary<string, string>>(mobileAppToken);
+            return JsonConvert.DeserializeObject<Dictionary<string, object>>(mobileAppToken);
         }
 
 
-
+        /*
         public static DateTime? GetTokenExpiration(string token)
         {
-            IDictionary<string, string> claims = GetClaims(token);
+            IDictionary<string, object> claims = GetClaims(token);
 
             if (claims.ContainsKey(JwtClaimNames.Expiration))
             {
@@ -38,7 +38,7 @@ namespace Mindurry.DataStore.Implementation
             }
 
             return null;
-        }
+        } */
 
 
 

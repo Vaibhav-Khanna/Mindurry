@@ -28,6 +28,8 @@ namespace Mindurry.Pages
 
             App.TabbedPageRequested += App_TabbedPageRequested;
 
+            App.TabbedPageApartmentRequested += App_TabbedPageApartmentRequested;
+            
             #region Setup
 
             masterpage.Title = " ";
@@ -50,14 +52,26 @@ namespace Mindurry.Pages
 
         private void App_TabbedPageRequested(object sender, string e)
         {
-            var tabbedNavigation = new FreshTabbedNavigationContainer();
-            //this causes weird behavior
+            var tabbedNavigation = new FreshTabbedFONavigationContainer(e);
+            //this causes weird 
             //tabbedNavigation.Title = e;
             tabbedNavigation.AddTab<ViewModels.ResidenceDetailInfoPageModel>("Informations", null);
             tabbedNavigation.AddTab<ViewModels.ResidenceDetailApartmentPageModel>("Appartements", null);
             tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Garages", null, new Tuple<bool,string> (true, e));
-            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Caves", null, new Tuple<bool, string>(false, e));
+            tabbedNavigation.AddTab<ViewModels.ResidenceDetailsCellarsPageModel>("Caves", null, new Tuple<bool, string>(false, e));
             tabbedNavigation.AddTab<ViewModels.AcquereursPageModel>("Acquéreurs", null);
+            Detail_navigation = null;
+            Detail = tabbedNavigation;
+        }
+
+        private void App_TabbedPageApartmentRequested(object sender, Residence e)
+        {
+            var tabbedNavigation = new FreshTabbedFONavigationContainer(e.NoArchi.ToString());
+            //this causes weird 
+            //tabbedNavigation.Title = e;
+            tabbedNavigation.AddTab<ViewModels.ApartmentDetailInfoPageModel>("Informations", null,e);
+            tabbedNavigation.AddTab<ViewModels.ApartmentPlansPageModel>("Plans", null,e);
+            
             Detail_navigation = null;
             Detail = tabbedNavigation;
         }
@@ -105,6 +119,12 @@ namespace Mindurry.Pages
                 case "ResidencesPage":
                     {
                         Detail_navigation = new FreshNavigationContainer(FreshPageModelResolver.ResolvePageModel<ViewModels.ResidencesPageModel>()) { BarTextColor = Color.Black, BarBackgroundColor = Color.White };
+                        Detail = Detail_navigation;
+                        break;
+                    }
+                case "RemindersPage":
+                    {
+                        Detail_navigation = new FreshNavigationContainer(FreshPageModelResolver.ResolvePageModel<ViewModels.RemindersPageModel>()) { BarTextColor = Color.Black, BarBackgroundColor = Color.White };
                         Detail = Detail_navigation;
                         break;
                     }

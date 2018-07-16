@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:effect="clr-namespace:Mindurry.Effects"
+             xmlns:converter="clr-namespace:Mindurry.Converters"
+             x:Class="Mindurry.Pages.RemindersPage"
+             Title="RAPPELS"
+             xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
+			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DateToBgColorConverter x:Key="DateToBgColorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid RowSpacing="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+                <StackLayout BackgroundColor="{StaticResource SubheaderPanel}" Padding="30,5" Grid.Row="0">
+                    <SearchBar Placeholder="Rechercher" WidthRequest="300" HorizontalOptions="Start"/>
+                </StackLayout>
+            
+                <StackLayout Spacing="20" Padding="40,20" Grid.Row="1" Orientation="Horizontal">
+                <StackLayout.Resources>
+                    <ResourceDictionary>
+                        <Style TargetType="Label">
+                            <Setter Property="FontSize" Value="22"/>
+                        </Style>
+                    </ResourceDictionary>
+                </StackLayout.Resources>
+                <Label Text="A Faire (3)" HorizontalOptions="Start" TextColor="Black"/>
+                <Label Text="Terminer (2)" HorizontalOptions="Start" TextColor="Gray"/>
+                    
+            </StackLayout>
+            
+
+            <Grid Grid.Row="2">
+                <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" Margin="0,10,0,0">
+                        <ListView.Header>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid Padding="30,10,0,10">
+                                <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="160"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.Resources>
+                                        <ResourceDictionary>
+                                            <Style TargetType="Label">
+                                                <Setter Property="FontAttributes" Value="Bold"/>
+                                                <Setter Property="FontSize" Value="16"/>
+                                            </Style>
+                                        </ResourceDictionary>
+                                    </Grid.Resources>
+
+                                    <Label Text="Date" Grid.Column="1"/>
+                                    <Label Text="Contact" Grid.Column="3"/>
+                                    <Label Text="Rappel" Grid.Column="4"/>
+                                   
+                                </Grid>
+                                <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E4E2DF" Grid.Row="1"/>
+                            </Grid>
+                        </ListView.Header>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid Padding="30,10,0,10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="160"/>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="100"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.Resources>
+                                            <ResourceDictionary>
+                                                <Style TargetType="Label">
+                                                    <Setter Property="FontSize" Value="15"/>
+                                                </Style>
+                                            </ResourceDictionary>
+                                        </Grid.Resources>
+                                    <Grid HorizontalOptions="End" VerticalOptions="Center" Grid.Column="0">
+                                        <win:CheckBox MinWidth="0"/>
+                                    </Grid>
+                                    <StackLayout BackgroundColor="{Binding ReminderDate, Converter={StaticResource DateToBgColorConverter}}" Grid.Column="1" >
+                                        <Label Text="{Binding ReminderDate,StringFormat='{0:dddd dd MMMM}'}" VerticalOptions="CenterAndExpand" Margin="20,0,0,0"/>
+                                    </StackLayout>
+                                    <Label Text="{Binding ContactName}" Grid.Column="3" VerticalOptions="Center">
+                                            <Label.Effects>
+                                                <effect:SemiBoldEffect/>
+                                            </Label.Effects>
+                                        </Label>
+                                   
+                                    <Label Text="{Binding Title}" Grid.Column="4" VerticalOptions="Center"/>
+                                    <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" Grid.Column="5" VerticalOptions="Center"/>
+                                    <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource RedAccent}" Grid.Column="6" VerticalOptions="Center"/>
+
+                                </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                </Grid>
+            </Grid> 
+    </ContentPage.Content>
+</ContentPage>
