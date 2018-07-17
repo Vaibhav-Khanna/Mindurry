@@ -9,13 +9,24 @@ namespace Mindurry.DataStore.Implementation
 {
     public class StoreManager : IStoreManager
     {
-        public static MobileServiceClient MobileService { get; set; }
 
         IApartmentStore apartmentStore;
         public IApartmentStore ApartmentStore => apartmentStore ?? (apartmentStore = FreshIOC.Container.Resolve<IApartmentStore>());
 
         ICellarStore cellarStore;
         public ICellarStore CellarStore => cellarStore ?? (cellarStore = FreshIOC.Container.Resolve<ICellarStore>());
+
+        ICollectSourceStore collectSourceStore;
+        public ICollectSourceStore CollectSourceStore => collectSourceStore ?? (collectSourceStore = FreshIOC.Container.Resolve<ICollectSourceStore>());
+
+        IContactCustomFieldSourceEntryStore contactCustomFieldSourceEntryStore;
+        public IContactCustomFieldSourceEntryStore ContactCustomFieldSourceEntryStore => contactCustomFieldSourceEntryStore ?? (contactCustomFieldSourceEntryStore = FreshIOC.Container.Resolve<IContactCustomFieldSourceEntryStore>());
+
+        IContactCustomFieldSourceStore contactCustomFieldSourceStore;
+        public IContactCustomFieldSourceStore ContactCustomFieldSourceStore => contactCustomFieldSourceStore ?? (contactCustomFieldSourceStore = FreshIOC.Container.Resolve<IContactCustomFieldSourceStore>());
+
+        IContactCustomFieldStore contactCustomFieldStore;
+        public IContactCustomFieldStore ContactCustomFieldStore => contactCustomFieldStore ?? (contactCustomFieldStore = FreshIOC.Container.Resolve<IContactCustomFieldStore>());
 
         IContactStore contactStore;
         public IContactStore ContactStore => contactStore ?? (contactStore = FreshIOC.Container.Resolve<IContactStore>());
@@ -41,12 +52,6 @@ namespace Mindurry.DataStore.Implementation
         IUserFavoriteStore userFavoriteStore;
         public IUserFavoriteStore UserFavoriteStore => userFavoriteStore ?? (userFavoriteStore = FreshIOC.Container.Resolve<IUserFavoriteStore>());
 
-
-        
-        
-
-        
-        
 
     }
 }

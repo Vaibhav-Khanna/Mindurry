@@ -94,6 +94,10 @@ namespace Mindurry.ViewModels.Base
             FreshIOC.Container.Register<IStoreManager, StoreManager>();
             FreshIOC.Container.Register<IApartmentStore, ApartmentStore>();
             FreshIOC.Container.Register<ICellarStore, CellarStore>();
+            FreshIOC.Container.Register<ICollectSourceStore, CollectSourceStore>();
+            FreshIOC.Container.Register<IContactCustomFieldSourceEntryStore, ContactCustomFieldSourceEntryStore>();
+            FreshIOC.Container.Register<IContactCustomFieldSourceStore, ContactCustomFieldSourceStore>();
+            FreshIOC.Container.Register<IContactCustomFieldStore, ContactCustomFieldStore>();
             FreshIOC.Container.Register<IContactStore, ContactStore>();
             FreshIOC.Container.Register<IDocumentStore, DocumentStore>();
             FreshIOC.Container.Register<IGarageStore, GarageStore>();
