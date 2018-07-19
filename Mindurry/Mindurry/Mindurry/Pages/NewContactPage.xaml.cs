@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mindurry.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,5 +17,20 @@ namespace Mindurry.Pages
 		{
 			InitializeComponent ();
 		}
-	}
+        void Handle_ItemTapped(object sender, Xamarin.Forms.ItemTappedEventArgs e)
+        {
+            var item = ((ListView)sender).SelectedItem;
+
+            if (item != null)
+            {
+                ((NewContactPageModel)BindingContext)?.PickPlaceCommand.Execute(item);
+            }
+                  ((ListView)sender).SelectedItem = null;
+        }
+
+        private void SearchPlace_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            ((NewContactPageModel)BindingContext)?.FindPlaceCommand.Execute(e.NewTextValue);
+        }
+    }
 }

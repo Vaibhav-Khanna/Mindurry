@@ -17,7 +17,7 @@ namespace Mindurry.DataStore.Implementation
         IMobileServiceTable<T> table;
         protected IMobileServiceTable<T> Table
         {
-            get { return table ?? (table = StoreManager.MobileService.GetTable<T>()); }
+            get { return table ?? (table = AuthenticationProvider.MobileService.GetTable<T>()); }
 
         }
 

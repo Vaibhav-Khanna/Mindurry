@@ -19,13 +19,13 @@ namespace Mindurry.Models.DataObjects
         /// <summary>
         /// Azure created at time stamp
         /// </summary>
-        [JsonProperty("createdAt")]
+        [JsonIgnore]
         public DateTimeOffset CreatedAt { get; set; }
 
         /// <summary>
         /// Azure UpdateAt timestamp for online/offline sync
         /// </summary>
-        [JsonProperty("updatedAt")]
+        [JsonIgnore]
         public DateTimeOffset UpdatedAt { get; set; }
 
         /// <summary>

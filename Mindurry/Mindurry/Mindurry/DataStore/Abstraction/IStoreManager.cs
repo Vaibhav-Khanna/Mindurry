@@ -8,7 +8,11 @@ namespace Mindurry.DataStore.Abstraction
 
         IApartmentStore ApartmentStore { get; }
         ICellarStore CellarStore { get; }
-        IContactStore ContactStore { get; }
+        IContactCustomFieldSourceEntryStore ContactCustomFieldSourceEntryStore { get; }
+        IContactCustomFieldSourceStore ContactCustomFieldSourceStore { get; }
+        IContactCustomFieldStore ContactCustomFieldStore { get; }
+        IContactStore ContactStore { get; }       
+        ICollectSourceStore CollectSourceStore { get; }
         IDocumentStore DocumentStore { get; }
         IGarageStore GarageStore { get; }
         IGardenStore GardenStore { get; }

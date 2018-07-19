@@ -22,6 +22,7 @@ namespace Mindurry
 #endif
 
         public static string ProfileURL = ApplicationURL + "/api/profile";
+        public static string GoogleApiKey = "AIzaSyC3NvEG3aSe66MbwmauzVUZ0SVNblL73CU";
 
         //Azure B2C Credentials
         public static readonly string Tenant = "appsmatsiya.onmicrosoft.com"; // Domain/resource name from AD B2C
