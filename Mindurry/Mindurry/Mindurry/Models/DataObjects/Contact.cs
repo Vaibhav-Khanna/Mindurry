@@ -23,6 +23,9 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("state", NullValueHandling = NullValueHandling.Ignore)]
         public string State { get; set; }
 
+        [JsonProperty("city", NullValueHandling = NullValueHandling.Ignore)]
+        public string City { get; set; }
+
         [JsonProperty("country", NullValueHandling = NullValueHandling.Ignore)]
         public string Country { get; set; }
 
@@ -38,27 +41,15 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("phone", NullValueHandling = NullValueHandling.Ignore)]
         public string Phone { get; set; }
 
+        [JsonProperty("jobTitle", NullValueHandling = NullValueHandling.Ignore)]
+        public string JobTitle { get; set; }
+
         [JsonProperty("qualification", NullValueHandling = NullValueHandling.Ignore)]
-        public Qualification? Qualification { get; set; }
+        public string Qualification { get; set; }
 
-        [JsonProperty("profil", NullValueHandling = NullValueHandling.Ignore)]
-        public Profil? Profil { get; set; }
-
-        [JsonProperty("creationDate", NullValueHandling = NullValueHandling.Ignore)]
-        public string CreationDate { get; set; }
-
-        [JsonProperty("dateLead", NullValueHandling = NullValueHandling.Ignore)]
-        public string DateLead { get; set; }
-
-        [JsonProperty("dateContact", NullValueHandling = NullValueHandling.Ignore)]
-        public string DateContact { get; set; }
-
-        [JsonProperty("dateCustomer", NullValueHandling = NullValueHandling.Ignore)]
-        public string DateCustomer { get; set; }
-
-        [JsonProperty("originLead", NullValueHandling = NullValueHandling.Ignore)]
-        public string OriginLead { get; set; }
-
+        [JsonProperty("collectSourceId", NullValueHandling = NullValueHandling.Ignore)]
+        public string CollectSourceId { get; set; }
+        
         [JsonProperty("userId", NullValueHandling = NullValueHandling.Ignore)]
         public string UserId { get; set; }
 

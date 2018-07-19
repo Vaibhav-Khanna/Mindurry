@@ -18,5 +18,8 @@ namespace Mindurry.Models.DataObjects
 
         [JsonProperty("contactCustomFieldSourceEntryId")]
         public string ContactCustomFieldSourceEntryId { get; set; }
+
+        [JsonProperty("contactCustomFieldSourceId")]
+        public string ContactCustomFieldSourceId { get; set; }
     }
 }

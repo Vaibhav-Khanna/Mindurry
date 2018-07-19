@@ -1,13 +1,17 @@
 ﻿using FreshMvvm;
 using Mindurry.Models;
 using Mindurry.Models.DataObjects;
+using Mindurry.Services.Abstraction;
+using Mindurry.Services.Implementation;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Mindurry.ViewModels
@@ -15,15 +19,151 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class NewContactPageModel : BasePageModel
     {
-        public List<string> Picker1Items { get; set; }
-        public List<string> Picker2Items { get; set; }
-        public List<string> Picker3Items { get; set; }
 
-        public int SelectedIndex1 { get; set; }
-        public int SelectedIndex2 { get; set; }
-        public int SelectedIndex3 { get; set; }
+        //public string Address { get; set; }
+        private readonly IPlaceService _placeService;
+        private CancellationTokenSource _cancel;
 
-        public string Address { get; set; }
+        private ObservableCollection<PlaceLocation> _locations = new ObservableCollection<PlaceLocation>();
+        public ObservableCollection<PlaceLocation> Locations
+        {
+            get { return _locations; }
+            set
+            {
+                _locations = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        private bool _isVisibleListView;
+        public bool IsVisibleListView
+        {
+
+            get { return _isVisibleListView; }
+            set
+            {
+                _isVisibleListView = value;
+                RaisePropertyChanged();
+            }
+        }
+        private string searchText;
+        public string SearchText
+        {
+            get { return searchText; }
+            set
+            {
+                searchText = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public NewContactPageModel()
+        {
+            _placeService = new PlaceService();
+        }
+
+        public ICommand FindPlaceCommand => new Command<string>(ExecuteFindPlaceCommandAsync);
+
+        private void ExecuteFindPlaceCommandAsync(string searchString)
+        {
+            if (searchString?.Length >= 3)
+            {
+                IsVisibleListView = true;
+                PerformSearch();
+            }
+            else
+            {
+                IsVisibleListView = false;
+                Locations.Clear();
+            }
+        }
+
+        private void PerformSearch()
+        {
+            try
+            {
+                //cancel existing task if applicable
+                if (_cancel != null && !_cancel.IsCancellationRequested)
+                {
+                    _cancel.Cancel();
+                }
+
+                //create new search task
+                _cancel = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+                FirePlacesSearch(_placeService.GetResult(SearchText), _cancel);
+            }
+            catch (TaskCanceledException tce)
+            {
+            }
+        }
+
+        private async void FirePlacesSearch(Task<WebServiceResults.Result> getResult, CancellationTokenSource onCancel)
+        {
+            try
+            {
+                WebServiceResults.Result result = await Task.Run(() => getResult, onCancel.Token);
+                if (result != null)
+                {
+                    Locations.Clear();
+
+                    foreach (var prediction in result.predictions.Where(newItem => Locations.All(oldItem => oldItem.Id != newItem.id)))
+                    {
+
+                        Locations.Add(new PlaceLocation()
+                        {
+                            Id = prediction.place_id,
+                            Location = prediction.description
+                        });
+
+                    }
+                }
+
+            }
+
+            catch (TaskCanceledException ex)
+            {
+
+            }
+
+
+
+        }
+
+        public ICommand PickPlaceCommand => new Command<PlaceLocation>((place) => { var mypage = ExecutePickPlaceCommandAsync(place); });
+
+
+        private async Task ExecutePickPlaceCommandAsync(PlaceLocation place)
+        {
+            SearchText = place.Location;
+            var position = await _placeService.GetResultDetail(place.Id);
+             _latitude = position.Result.Geometry.Location.Lat;
+             _longitude = position.Result.Geometry.Location.Lng;
+            var  _addressComponents = position.Result.AddressComponents;
+            IsVisibleListView = false;
+
+            for (var i = 0; i < _addressComponents.Count; i++)
+            {
+
+                for (var j = 0; j < _addressComponents[i].Types.Count; j++)
+                {
+                    if (_addressComponents[i].Types[j] == "street_number") { _streetNumber = _addressComponents[i].LongName; }
+                    if (_addressComponents[i].Types[j] == "route") { _street = _addressComponents[i].LongName; }
+                    if (_addressComponents[i].Types[j] == "locality") { _locality = _addressComponents[i].LongName; }
+                    if (_addressComponents[i].Types[j] == "country") { _country = _addressComponents[i].LongName; }
+                    if (_addressComponents[i].Types[j] == "postal_code") { _postalCode = _addressComponents[i].LongName; }
+
+                }
+
+            }
+        }
+
+
+
+
+
+
+
+
 
         private double? _latitude;
         private double? _longitude;
@@ -33,25 +173,29 @@ namespace Mindurry.ViewModels
         private string _postalCode;
         private string _country;
 
-        public List<string> CollectSourcesName { get; set; }
+        public List<CollectSource> CollectSources { get; set; }
 
-        public string CollectSourcesSelectedName { get; set; }
+        public CollectSource CollectSourcesSelected { get; set; }
 
-        public List<string> CustomFieldsName { get; set; }
+        public List<ContactCustomFieldSourceEntry> CustomFields { get; set; }
 
-        public string CustomFieldsSelectedName { get; set; }
-        
+        public ContactCustomFieldSourceEntry CustomFieldsSelected { get; set; }
+
+        public Contact Contact { get; set; } = new Contact();
+
 
         public async override void Init(object initData)
         {
             base.Init(initData);
-            await FetchCollectSources();
 
+            IsVisibleListView = false;
+
+            await FetchCollectSources();
             await FetchType();
         }
 
 
-        public override void ReverseInit(object returnedData)
+       /* public override void ReverseInit(object returnedData)
         {
             base.ReverseInit(returnedData);
          if (returnedData is Tuple<string, double, double, List<AddressComponent>>)
@@ -79,10 +223,50 @@ namespace Mindurry.ViewModels
 
             }
         }
-
+        */
         public Command SaveCommand => new Command(async () =>
         {
-                      
+        if ( !string.IsNullOrWhiteSpace(Contact.Firstname)) //Address != null &&
+            {
+
+                Contact ContactToSave = new Contact();
+
+                ContactToSave.Firstname = Contact.Firstname;
+                ContactToSave.Lastname = Contact.Lastname;
+                ContactToSave.Street1 = _streetNumber + " " + _street;
+                ContactToSave.ZipCode = _postalCode;
+                ContactToSave.City = _locality;
+                ContactToSave.Country = _country;
+                ContactToSave.Latitude = _latitude;
+                ContactToSave.Longitude = _longitude;
+                ContactToSave.JobTitle = Contact.JobTitle;
+                ContactToSave.Email = Contact.Email;
+                ContactToSave.Phone = Contact.Phone;
+                ContactToSave.Qualification = Qualification.Contact.ToString();
+                ContactToSave.CollectSourceId = CollectSourcesSelected.Id;
+
+
+                //Save contact
+               bool isInsertedContact =  await StoreManager.ContactStore.InsertAsync(ContactToSave);
+
+                if (isInsertedContact) { 
+                    ContactCustomField contactCustomFieldToSave = new ContactCustomField();
+
+                    contactCustomFieldToSave.ContactId = ContactToSave.Id;
+                    contactCustomFieldToSave.ContactCustomFieldSourceEntryId = CustomFieldsSelected.Id;
+                    contactCustomFieldToSave.ContactCustomFieldSourceId = CustomFieldsSelected.ContactCustomFieldSourceId;
+
+                    //Save ContactCustomField
+                    await StoreManager.ContactCustomFieldStore.InsertAsync(contactCustomFieldToSave);
+                
+                    await CoreMethods.PopPageModel(false, false);
+                }
+                else
+                {
+                    await CoreMethods.DisplayAlert("Erreur", "Une erreur a eu lieu lors de l'enregistrement du contact, veuillez recommencer s'il vous plait.", "Ok");
+                }
+            }
+
 
         });
 
@@ -94,32 +278,25 @@ namespace Mindurry.ViewModels
         async Task FetchCollectSources()
         {
             var collectSource = await StoreManager.CollectSourceStore.GetItemsAsync();
+            CollectSources = new List<CollectSource>();
 
-            CollectSourcesName = new List<string>();
+            if (collectSource.Any())
+            {
+                CollectSources = collectSource.ToList();
+                CollectSourcesSelected = CollectSources[0];
+            }
 
-            foreach (CollectSource item in collectSource)
-            {
-                CollectSourcesName.Add(item.Name);
-            }
-        if (CollectSourcesName.Any())
-            {
-                CollectSourcesSelectedName = CollectSourcesName[0];
-            }
-            
         }
 
         async Task FetchType()
         {
-            var customField = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("98c3e3eb-07dc-4a7b-b222-17fe859ddf6e");
-                CustomFieldsName = new List<string>();
+            var customField = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Type");
+                CustomFields = new List<ContactCustomFieldSourceEntry>();
 
-            foreach (ContactCustomFieldSourceEntry item in customField)
+            if (customField.Any())
             {
-                CustomFieldsName.Add(item.Value);
-            }
-            if (CustomFieldsName.Any())
-            {
-                CustomFieldsSelectedName = CustomFieldsName[0];
+                CustomFields = customField.ToList();
+                CustomFieldsSelected = CustomFields[0];
             }
         }
 

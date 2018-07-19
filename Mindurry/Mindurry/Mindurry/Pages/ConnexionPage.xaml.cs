@@ -50,7 +50,7 @@ namespace Mindurry.Pages
                 }
                 else
                 {
-                    await DisplayAlert("Erreur", "Erreur D'authentification, veuillez recommencer", "OK");
+                    await DisplayAlert("Erreur", "Erreur d'authentification, veuillez recommencer s'il vous plaît", "OK");
                 }
             }
             catch (MsalException ex)

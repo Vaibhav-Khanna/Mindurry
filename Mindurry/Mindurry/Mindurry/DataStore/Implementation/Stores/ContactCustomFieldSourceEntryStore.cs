@@ -11,13 +11,13 @@ namespace Mindurry.DataStore.Implementation.Stores
     {
         public override string Identifier => "ContactCustomFieldSourceEntry";
 
-        public async Task<IEnumerable<ContactCustomFieldSourceEntry>> GetItemsByContactCustomFieldSourceName(string contactCustomFieldSourceId)
+        public async Task<IEnumerable<ContactCustomFieldSourceEntry>> GetItemsByContactCustomFieldSourceName(string contactCustomFieldSourceInternalName)
         {
             InitializeStore();
 
             try
             {
-                return await Table.Where(x => x.ContactCustomFieldSourceId == contactCustomFieldSourceId).OrderBy(x => x.DisplayOrder).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                return await Table.Where(x => (x.ContactCustomFieldSourceInternalName == contactCustomFieldSourceInternalName) ).OrderBy(x => x.DisplayOrder).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
             }
             catch (Exception)
             {

@@ -46,12 +46,12 @@
                     <StackLayout Spacing="5">
                         <Label Text="Identité"/>
                         <StackLayout Orientation="Horizontal" Spacing="30">
-                            <Entry Placeholder="Nom" WidthRequest="300" Text="{Binding Lastname, Mode=TwoWay}">
+                            <Entry Placeholder="Nom" WidthRequest="300" Text="{Binding Contact.Lastname, Mode=TwoWay}">
                                 <Entry.Effects>
                                     <effect:LightBorderEffect/>
                                 </Entry.Effects>
                             </Entry>
-                            <Entry Placeholder="Prénom" WidthRequest="250" Text="{Binding Firstname, Mode=TwoWay}">
+                            <Entry Placeholder="Prénom" WidthRequest="250" Text="{Binding Contact.Firstname, Mode=TwoWay}">
                                 <Entry.Effects>
                                     <effect:LightBorderEffect/>
                                 </Entry.Effects>
@@ -59,7 +59,7 @@
                         </StackLayout>
                     </StackLayout>
                     
-                    <StackLayout Spacing="5">
+                   <!-- <StackLayout Spacing="5">
                         <Label Text="Adresse"/>
                         <Entry  Placeholder="autocomplete ou google adresse"  Text="{Binding Address}" WidthRequest="580" HorizontalOptions="Start">
                             <Entry.Effects>
@@ -69,13 +69,29 @@
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer NumberOfTapsRequired="1" Command="{Binding AddressCommand}" />
                         </StackLayout.GestureRecognizers>
-                    </StackLayout>
+                    </StackLayout> -->
+                    <StackLayout Spacing="5">
+                        <Label Text="Adresse"/>
+                        <SearchBar  Placeholder="Taper une adresse" x:Name="search"  Text="{Binding SearchText,Mode=TwoWay}"  WidthRequest="580" HorizontalOptions="Start" TextChanged="SearchPlace_OnTextChanged"/>
+                        <ListView HeightRequest="250" IsVisible="{Binding IsVisibleListView}" VerticalOptions="FillAndExpand" x:Name="list" ItemsSource="{Binding Locations}" ItemTapped="Handle_ItemTapped" HasUnevenRows="true" >
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <StackLayout BackgroundColor="White" Padding="20,15,10,15" VerticalOptions="FillAndExpand">
+                                            <Label Text="{Binding Location}" FontSize="14" VerticalOptions="Center" LineBreakMode="WordWrap" />
+                                        </StackLayout>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                        
+                    </StackLayout> 
 
                     <StackLayout Spacing="5">
                         <Label Text="Type"/>
                         <StackLayout Orientation="Horizontal" Spacing="30">
 
-                            <Picker WidthRequest="250" ItemsSource="{Binding CustomFieldsName}" SelectedItem="{Binding CustomFieldsSelectedName, Mode=TwoWay}">
+                            <Picker WidthRequest="250" ItemsSource="{Binding CustomFields}" ItemDisplayBinding="{Binding Value}" SelectedItem="{Binding CustomFieldsSelected, Mode=TwoWay}">
                                
                             </Picker>
                         </StackLayout>
@@ -83,7 +99,7 @@
 
                     <StackLayout Spacing="5">
                         <Label Text="Fonction"/>
-                        <Entry WidthRequest="480" HorizontalOptions="Start" Text="{Binding Function, Mode=TwoWay}">
+                        <Entry WidthRequest="480" HorizontalOptions="Start" Text="{Binding Contact.JobTitle, Mode=TwoWay}">
                             <Entry.Effects>
                                 <effect:LightBorderEffect/>
                             </Entry.Effects>
@@ -92,7 +108,7 @@
 
                     <StackLayout Spacing="5">
                         <Label Text="Email"/>
-                        <Entry WidthRequest="480" HorizontalOptions="Start" Text="{Binding Email, Mode=TwoWay}">
+                        <Entry WidthRequest="480" HorizontalOptions="Start" Text="{Binding Contact.Email, Mode=TwoWay}">
                             <Entry.Effects>
                                 <effect:LightBorderEffect/>
                             </Entry.Effects>
@@ -101,7 +117,7 @@
 
                     <StackLayout Spacing="5">
                         <Label Text="Téléphone"/>
-                        <Entry WidthRequest="480" HorizontalOptions="Start" Text="{Binding Phone, Mode=TwoWay}" >
+                        <Entry WidthRequest="480" HorizontalOptions="Start" Text="{Binding Contact.Phone, Mode=TwoWay}" >
                             <Entry.Effects>
                                 <effect:LightBorderEffect/>
                             </Entry.Effects>
@@ -110,7 +126,7 @@
                     
                     <StackLayout Spacing="5">
                         <Label Text="Source de la collecte"/>
-                        <Picker WidthRequest="200" HorizontalOptions="Start" ItemsSource="{Binding CollectSourcesName}" SelectedItem="{Binding CollectSourcesSelectedName, Mode=TwoWay}">
+                        <Picker WidthRequest="200" HorizontalOptions="Start" ItemsSource="{Binding CollectSources}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding CollectSourcesSelected, Mode=TwoWay}">
                         </Picker>
                     </StackLayout> 
 
