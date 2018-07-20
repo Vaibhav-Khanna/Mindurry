@@ -53,6 +53,15 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("userId", NullValueHandling = NullValueHandling.Ignore)]
         public string UserId { get; set; }
 
+        [JsonProperty("userFirstname", NullValueHandling = NullValueHandling.Ignore)]
+        public string UserFirstname { get; set; }
+
+        [JsonProperty("userLastname", NullValueHandling = NullValueHandling.Ignore)]
+        public string UserLastname { get; set; }
+
+        [JsonProperty("contactCreatedAt", NullValueHandling = NullValueHandling.Ignore)]
+        public DateTimeOffset ContactCreatedAt { get; set; }
+
         [JsonIgnore]
         public string Name => $"{Firstname} {Lastname}";
 

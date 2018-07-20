@@ -20,7 +20,24 @@ namespace Mindurry.ViewModels
     public class NewContactPageModel : BasePageModel
     {
 
-        //public string Address { get; set; }
+        private double? _latitude;
+        private double? _longitude;
+        private string _streetNumber;
+        private string _street;
+        private string _locality;
+        private string _postalCode;
+        private string _country;
+
+        public List<CollectSource> CollectSources { get; set; }
+
+        public CollectSource CollectSourcesSelected { get; set; }
+
+        public List<ContactCustomFieldSourceEntry> CustomFields { get; set; }
+
+        public ContactCustomFieldSourceEntry CustomFieldsSelected { get; set; }
+
+        public Contact Contact { get; set; } = new Contact();
+
         private readonly IPlaceService _placeService;
         private CancellationTokenSource _cancel;
 
@@ -158,32 +175,6 @@ namespace Mindurry.ViewModels
         }
 
 
-
-
-
-
-
-
-
-        private double? _latitude;
-        private double? _longitude;
-        private string _streetNumber;
-        private string _street;
-        private string _locality;
-        private string _postalCode;
-        private string _country;
-
-        public List<CollectSource> CollectSources { get; set; }
-
-        public CollectSource CollectSourcesSelected { get; set; }
-
-        public List<ContactCustomFieldSourceEntry> CustomFields { get; set; }
-
-        public ContactCustomFieldSourceEntry CustomFieldsSelected { get; set; }
-
-        public Contact Contact { get; set; } = new Contact();
-
-
         public async override void Init(object initData)
         {
             base.Init(initData);
@@ -194,39 +185,14 @@ namespace Mindurry.ViewModels
             await FetchType();
         }
 
-
-       /* public override void ReverseInit(object returnedData)
+        public Command CloseCommand => new Command(async () =>
         {
-            base.ReverseInit(returnedData);
-         if (returnedData is Tuple<string, double, double, List<AddressComponent>>)
-            {
-                Address = ((Tuple<string, double, double, List<AddressComponent>>)returnedData).Item1;
-                _latitude = ((Tuple<string, double, double, List<AddressComponent>>)returnedData).Item2;
-                _longitude = ((Tuple<string, double, double, List<AddressComponent>>)returnedData).Item3;
-                var AddressComponents = ((Tuple<string, double, double, List<AddressComponent>>)returnedData).Item4;
+            await CoreMethods.PopPageModel(false, false);
+        });
 
-
-                for (var i = 0; i < AddressComponents.Count; i++)
-                {
-
-                    for (var j = 0; j < AddressComponents[i].Types.Count; j++)
-                    {
-                        if (AddressComponents[i].Types[j] == "street_number") { _streetNumber = AddressComponents[i].LongName; }
-                        if (AddressComponents[i].Types[j] == "route") { _street = AddressComponents[i].LongName; }
-                        if (AddressComponents[i].Types[j] == "locality") { _locality = AddressComponents[i].LongName; }
-                        if (AddressComponents[i].Types[j] == "country") { _country = AddressComponents[i].LongName; }
-                        if (AddressComponents[i].Types[j] == "postal_code") { _postalCode = AddressComponents[i].LongName; }
-
-                    }
-
-                }
-
-            }
-        }
-        */
         public Command SaveCommand => new Command(async () =>
         {
-        if ( !string.IsNullOrWhiteSpace(Contact.Firstname)) //Address != null &&
+        if ( !string.IsNullOrWhiteSpace(Contact.Firstname) && !string.IsNullOrWhiteSpace(Contact.Lastname) && !string.IsNullOrWhiteSpace(_street)) //Address != null &&
             {
 
                 Contact ContactToSave = new Contact();
@@ -258,21 +224,19 @@ namespace Mindurry.ViewModels
 
                     //Save ContactCustomField
                     await StoreManager.ContactCustomFieldStore.InsertAsync(contactCustomFieldToSave);
-                
+                    MessagingCenter.Send(this, "ReloadCollection");
                     await CoreMethods.PopPageModel(false, false);
                 }
                 else
                 {
                     await CoreMethods.DisplayAlert("Erreur", "Une erreur a eu lieu lors de l'enregistrement du contact, veuillez recommencer s'il vous plait.", "Ok");
                 }
+            } else
+            {
+                await CoreMethods.DisplayAlert("Erreur", "Des champs ne sont pas remplis", "Ok");
             }
 
 
-        });
-
-        public Command AddressCommand => new Command(async () =>
-        {
-            await CoreMethods.PushPageModel<AddressPickPageModel>(null, true);
         });
 
         async Task FetchCollectSources()

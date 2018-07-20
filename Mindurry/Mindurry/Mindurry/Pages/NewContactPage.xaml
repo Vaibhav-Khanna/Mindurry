@@ -37,6 +37,9 @@
                         </Label.Effects>
                     </Label>
                     <Label Text="Annuler" FontSize="15" VerticalOptions="Center"/>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CloseCommand}" />
+                    </StackLayout.GestureRecognizers>
                 </StackLayout>
             </Grid>
 
