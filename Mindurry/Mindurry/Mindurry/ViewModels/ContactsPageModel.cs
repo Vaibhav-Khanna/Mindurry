@@ -17,7 +17,11 @@ namespace Mindurry.ViewModels
     {
         IEnumerable<Contact> _contacts { get; set; }
         public ObservableCollection<ContactsListModel> Contacts { get; set; }
-        public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
+        private ObservableCollection<ContactsListModel> NonFilteredContacts; 
+        public string SearchText{ get; set; }
+
+
+    public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> CommercialChecks { get; set; }
 
         private ContactsListModel selectedItem;
@@ -32,7 +36,7 @@ namespace Mindurry.ViewModels
             }
         }
 
-        
+        private bool SortBy;
 
         public int Index { get; set; }
 
@@ -124,16 +128,14 @@ namespace Mindurry.ViewModels
                             {
                                 residenceFormat += ", ";
                             }
-
                         }
-
-                       
-                        contactListItem.Residence = residenceFormat;
-                       
+                        contactListItem.Residence = residenceFormat;                     
                     }
                     indexValue++; //increment to change Backgroung Color
-                    Contacts.Add(contactListItem);                
+                    Contacts.Add(contactListItem);                  
                 }
+                NonFilteredContacts = new ObservableCollection<ContactsListModel>(Contacts);
+
 
             }
             else
@@ -141,7 +143,59 @@ namespace Mindurry.ViewModels
                 await CoreMethods.DisplayAlert("Erreur", "Impossibilité de charger les données", "OK");
             }
         }
-        
+
+        public Command SearchCommand => new Command<string>((searchString) =>
+        {
+
+            if (searchString?.Length > 0) {
+                searchString = searchString.ToLower();
+                Contacts = new ObservableCollection<ContactsListModel>(NonFilteredContacts.Where(x => ((x.Name.ToLower().Contains(searchString))|| (x.Email.ToLower().Contains(searchString))|| (x.Telephone.ToLower().Contains(searchString)))).ToList());
+            }
+            else
+            {
+                Contacts = NonFilteredContacts;
+            }
+        });
+
+        public Command SortByCreationDateCommand => new Command( () =>
+        {
+            SortBy = !SortBy;
+            if (SortBy)
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.Date).ToList());
+            }
+            else
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderByDescending(x => x.Date).ToList());
+            }
+        });
+
+        public Command SortByLastRelaunchCommand => new Command( () =>
+        {
+            SortBy = !SortBy;
+            if (SortBy)
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.LastRelaunch).ToList());
+            }
+            else
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderByDescending(x => x.LastRelaunch).ToList());
+            }
+        });
+
+        public Command SortByNextRelaunchCommand => new Command( () =>
+        {
+            SortBy = !SortBy;
+            if (SortBy)
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.NextRelaunch).ToList());
+            }
+            else
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderByDescending(x => x.NextRelaunch).ToList());
+            }
+        });
+
         void ShowFilter()
         {
             IsFilterOn = !IsFilterOn;
@@ -165,10 +219,6 @@ namespace Mindurry.ViewModels
         {
             CoreMethods.PushPageModel<NewContactPageModel>();
             SubUnsub();
-        }
-        public void Dispose()
-        {
-            MessagingCenter.Unsubscribe<NewClientPageModel>(this, "ReloadCollection");
         }
 
         void SubUnsub()
