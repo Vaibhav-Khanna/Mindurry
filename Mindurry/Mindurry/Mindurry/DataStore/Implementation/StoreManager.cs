@@ -40,6 +40,10 @@ namespace Mindurry.DataStore.Implementation
         IGardenStore gardenStore;
         public IGardenStore GardenStore => gardenStore ?? (gardenStore = FreshIOC.Container.Resolve<IGardenStore>());
 
+        INoteStore noteStore;
+        public INoteStore NoteStore => noteStore ?? (noteStore = FreshIOC.Container.Resolve<INoteStore>());
+
+
         IResidenceStore residenceStore;
         public IResidenceStore ResidenceStore => residenceStore ?? (residenceStore = FreshIOC.Container.Resolve<IResidenceStore>());
 

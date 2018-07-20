@@ -102,6 +102,7 @@ namespace Mindurry.ViewModels.Base
             FreshIOC.Container.Register<IDocumentStore, DocumentStore>();
             FreshIOC.Container.Register<IGarageStore, GarageStore>();
             FreshIOC.Container.Register<IGardenStore, GardenStore>();
+            FreshIOC.Container.Register<INoteStore, NoteStore>();
             FreshIOC.Container.Register<IResidenceStore, ResidenceStore>();
             FreshIOC.Container.Register<ITerraceStore, TerraceStore>();
             FreshIOC.Container.Register<IUserFavoriteStore, UserFavoriteStore>();
