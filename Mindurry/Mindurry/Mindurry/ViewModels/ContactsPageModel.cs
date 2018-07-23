@@ -18,11 +18,15 @@ namespace Mindurry.ViewModels
         IEnumerable<Contact> _contacts { get; set; }
         public ObservableCollection<ContactsListModel> Contacts { get; set; }
         private ObservableCollection<ContactsListModel> NonFilteredContacts; 
+
+
         public string SearchText{ get; set; }
 
 
-    public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
+        public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> CommercialChecks { get; set; }
+
+        private List<CheckBoxItem> filterRes = new List<CheckBoxItem>();
 
         private ContactsListModel selectedItem;
         public ContactsListModel SelectedItem 
@@ -69,17 +73,34 @@ namespace Mindurry.ViewModels
             
             await LoadData();
 
-            var check1 = new CheckBoxItem { Content = "Herrian" };
-            var check2 = new CheckBoxItem { Content = "Herri Ondo", IsChecked = true };
-            var check3 = new CheckBoxItem { Content = "Villa Aguiléra" };
+           // Chargement filtre 
+           var residences = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
+            residences.OrderBy(x => x.ContactCustomFieldSourceInternalName);
 
-            ResidencesChecks = new ObservableCollection<CheckBoxItem> { check1, check2, check3 };
+            ResidencesChecks = new ObservableCollection<CheckBoxItem>();
+            foreach (var item in residences)
+            {
+                var resCheck = new CheckBoxItem
+                {
+                    Content = item.Value,
+                    IsChecked = false
+                };
+                ResidencesChecks.Add(resCheck);
+            }
 
-            var check4 = new CheckBoxItem { Content = "Jean Noosa", IsChecked = true };
-            var check5 = new CheckBoxItem { Content = "Marie Shine" };
-            var check6 = new CheckBoxItem { Content = "Arold Martino" };
+            // Chargement commercial
+            var commercials = Contacts.Select(x => x.Commercial).Distinct().OrderBy(x => x).ToList();
 
-            CommercialChecks = new ObservableCollection<CheckBoxItem> { check4, check5, check6 };
+            CommercialChecks = new ObservableCollection<CheckBoxItem>();
+            foreach (var item in commercials)
+            {
+                var commCheck = new CheckBoxItem
+                {
+                    Content = item,
+                    IsChecked = false
+                };
+                CommercialChecks.Add(commCheck);
+            }
 
             ShowFilterCommand = new Command(ShowFilter);
             CloseFilterCommand = new Command(CloseFilter);
@@ -94,6 +115,7 @@ namespace Mindurry.ViewModels
             _contacts = await StoreManager.ContactStore.GetItemsAsync();
             if ((_contacts != null) || (!_contacts.Any()))
             {
+                _contacts = _contacts.OrderBy(x => x.Name);
                 Contacts = new ObservableCollection<ContactsListModel>();
                 var indexValue = 0; //to calculate Index to the backgroundColor
                 foreach (var item in _contacts)
@@ -143,6 +165,20 @@ namespace Mindurry.ViewModels
                 await CoreMethods.DisplayAlert("Erreur", "Impossibilité de charger les données", "OK");
             }
         }
+
+        public Command SelectResidenceCommand => new Command<CheckBoxItem>((obj) =>
+        {
+            if (obj.IsChecked)
+            {
+                filterRes.Add(obj);
+            }
+            else
+            {
+                filterRes.Remove(obj);
+            }
+            Contacts = new ObservableCollection<ContactsListModel>();
+
+        });
 
         public Command SearchCommand => new Command<string>((searchString) =>
         {

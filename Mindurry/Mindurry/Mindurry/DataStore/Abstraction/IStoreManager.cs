@@ -5,6 +5,8 @@ namespace Mindurry.DataStore.Abstraction
 {
     public interface IStoreManager
     {
+        bool IsInitialized { get; }
+        Task InitializeAsync();
 
         IApartmentStore ApartmentStore { get; }
         ICellarStore CellarStore { get; }
@@ -21,5 +23,12 @@ namespace Mindurry.DataStore.Abstraction
         ITerraceStore TerraceStore { get; }
         IUserFavoriteStore UserFavoriteStore { get; }
         IUserStore UserStore { get; }
+
+        Task<bool> SyncAllAsync(bool syncUserSpecific);
+        Task DropEverythingAsync();
+
+        Task<bool> LoginAsync(bool useSilent = false);
+
+        Task<bool> LogoutAsync();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Identity.Client;
+using Mindurry.DataStore.Implementation;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Diagnostics;
@@ -9,18 +10,18 @@ namespace Mindurry.ViewModels
 {
     public class ConnexionPageModel : BasePageModel
     {
-        
         public Command LogCommand => new Command( async () =>
         {
             
             try
             {
-                
-                bool authenticated = await App.AuthenticationProvider.LoginAsync();
+               
+                bool authenticated = await StoreManager.LoginAsync();
                 if (authenticated)
                 {
                     var page = new Pages.MasterDetailNavigationPage();
                     Application.Current.MainPage = page;
+                    StoreManager.SyncAllAsync(true);
                 }
                 else
                 {

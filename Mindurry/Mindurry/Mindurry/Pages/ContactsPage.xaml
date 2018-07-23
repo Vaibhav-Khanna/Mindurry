@@ -192,11 +192,11 @@
                                 </StackLayout>
 
                                 <StackLayout IsVisible="{Binding IsFirstListVisible}">
-                                    <repeater:RepeaterView ItemsSource="{Binding ResidencesChecks}" VerticalOptions="Start">
+                                    <repeater:RepeaterView ItemsSource="{Binding ResidencesChecks}" VerticalOptions="Start" SelectedItemCommand="{Binding SelectResidenceCommand}">
                                         <repeater:RepeaterView.ItemTemplate>
                                             <DataTemplate>
                                                 <ViewCell>
-                                                    <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                    <win:CheckBox  Content="{Binding Content}"  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
                                                 </ViewCell>
                                             </DataTemplate>
                                         </repeater:RepeaterView.ItemTemplate>

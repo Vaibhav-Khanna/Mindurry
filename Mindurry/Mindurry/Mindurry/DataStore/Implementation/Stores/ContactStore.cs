@@ -6,5 +6,6 @@ namespace Mindurry.DataStore.Implementation.Stores
     public class ContactStore : BaseStore<Contact>, IContactStore
     {
         public override string Identifier => "Contact";
+
     }
 }

@@ -1,10 +1,13 @@
 ﻿using FreshMvvm;
 using Microsoft.WindowsAzure.MobileServices;
+using Microsoft.WindowsAzure.MobileServices.Sync;
 using Mindurry.DataStore.Abstraction;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace Mindurry.DataStore.Implementation
 {
@@ -14,41 +17,59 @@ namespace Mindurry.DataStore.Implementation
 
         public virtual string Identifier => "Items";
 
-        IMobileServiceTable<T> table;
-        protected IMobileServiceTable<T> Table
+        IMobileServiceTable<T> onlinetable;
+        protected IMobileServiceTable<T> OnlineTable
         {
-            get { return table ?? (table = AuthenticationProvider.MobileService.GetTable<T>()); }
+            get { return onlinetable ?? (onlinetable = StoreManager.MobileService.GetTable<T>()); }
 
         }
 
-        public void DropTable()
+
+        IMobileServiceSyncTable<T> table;
+        protected IMobileServiceSyncTable<T> Table
         {
+            get { return table ?? (table = StoreManager.MobileService.GetSyncTable<T>()); }
+        }
+
+        public async Task DropTable()
+        {
+            await Table.PurgeAsync();
             table = null;
         }
 
 
-        public void InitializeStore()
+        public async Task InitializeStore()
         {
             if (storeManager == null)
                 storeManager = FreshIOC.Container.Resolve<IStoreManager>();
 
+            if (!storeManager.IsInitialized)
+                await storeManager.InitializeAsync().ConfigureAwait(false);
         }
 
 
-        public virtual async Task<IEnumerable<T>> GetItemsAsync(int currentCount = 0)
+        public virtual async Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = false, bool AllItems = false)
         {
+            await InitializeStore().ConfigureAwait(false);
+            if (forceRefresh)
+                await PullLatestAsync().ConfigureAwait(false);
+
+            if (AllItems)
+                return await Table.IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+            else
+                return await Table.Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+        }
+
+
+        public virtual async Task<IEnumerable<T>> GetNextItemsAsync(int currentitemCount)
+        {
+            await InitializeStore().ConfigureAwait(false);
+
             try
             {
-                InitializeStore();
-                return await Table.Skip(currentCount).Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                return await Table.Skip(currentitemCount).Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
             }
-            catch (MobileServiceInvalidOperationException ex)
-            {
-                var error = await ex.Response?.Content?.ReadAsStringAsync();
-                Debug.WriteLine(error);
-                return null;
-            }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -56,90 +77,88 @@ namespace Mindurry.DataStore.Implementation
 
         public virtual async Task<T> GetItemAsync(string id)
         {
-            InitializeStore();
+            await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
+            var items = await Table.Where(s => s.Id == id).ToListAsync().ConfigureAwait(false);
 
-            try
-            {
-                var item = await Table.LookupAsync(id);
-
-                if (item == null)
-                    return null;
-
-                return item;
-
-            }
-            catch (Exception)
-            {
+            if (items == null || items.Count == 0)
                 return null;
-            }
 
+            return items[0];
         }
 
         public virtual async Task<bool> InsertAsync(T item)
         {
-            InitializeStore();
-
-            try
-            {
-                await Table.InsertAsync(item).ConfigureAwait(false);
-            }
-            catch (MobileServiceInvalidOperationException ex)
-            {
-                var error = await ex.Response?.Content?.ReadAsStringAsync();
-                Debug.WriteLine(error);
-                return false;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-
+            await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
+            await Table.InsertAsync(item).ConfigureAwait(false);
+            await SyncAsync().ConfigureAwait(false);
             return true;
         }
 
         public virtual async Task<bool> RemoveAsync(T item)
         {
-            InitializeStore();
+            await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
+            await Table.DeleteAsync(item).ConfigureAwait(false);
+            await SyncAsync().ConfigureAwait(false);
+            return true;
+        }
+
+
+        public virtual async Task<bool> UpdateAsync(T item)
+        {
+            await InitializeStore().ConfigureAwait(false);
+            await Table.UpdateAsync(item).ConfigureAwait(false);
+            await SyncAsync().ConfigureAwait(false);
+            return true;
+        }
+
+        public virtual async Task<bool> SyncAsync()
+        {
+            var current = Connectivity.NetworkAccess;
+
+            if (current != NetworkAccess.Internet)
+            {
+                Debug.WriteLine("Unable to sync items, we are offline");
+                return false;
+            }
 
             try
             {
-                await Table.DeleteAsync(item).ConfigureAwait(false);
-            }
-            catch (MobileServiceInvalidOperationException ex)
-            {
-                var error = await ex.Response?.Content?.ReadAsStringAsync();
-                Debug.WriteLine(error);
-                return false;
+                await StoreManager.MobileService.SyncContext.PushAsync(new CancellationToken(false)).ConfigureAwait(false);
+                if (!(await PullLatestAsync().ConfigureAwait(false)))
+                    return false;
             }
             catch (Exception ex)
             {
+                Debug.WriteLine("Unable to sync items, we have offline capabilities: " + ex);
                 return false;
             }
 
             return true;
         }
 
-        public virtual async Task<bool> UpdateAsync(T item)
+        public async Task<bool> PullLatestAsync()
         {
+            var current = Connectivity.NetworkAccess;
 
-            InitializeStore();
+            if (current != NetworkAccess.Internet)              
+            {
+                Debug.WriteLine("Unable to pull items, we are offline");
+                return false;
+            }
 
             try
             {
-                await Table.UpdateAsync(item).ConfigureAwait(false);
-            }
-            catch (MobileServiceInvalidOperationException ex)
-            {
-                var error = await ex.Response?.Content?.ReadAsStringAsync();
-                Debug.WriteLine(error);
-                return false;
-
+                var query = Table.CreateQuery();
+                await Table.PullAsync<T>($"all{Identifier}", query, false, new CancellationToken(false), new PullOptions() { MaxPageSize = 150 }).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
+                Debug.WriteLine("Unable to pull items, we have offline capabilities: " + ex);
                 return false;
             }
-
 
             return true;
         }
