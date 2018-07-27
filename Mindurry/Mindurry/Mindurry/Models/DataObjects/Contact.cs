@@ -11,55 +11,55 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("lastname")]
         public string Lastname { get; set; }
 
-        [JsonProperty("street1", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("street1")]
         public string Street1 { get; set; }
 
-        [JsonProperty("street2", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("street2")]
         public string Street2 { get; set; }
 
-        [JsonProperty("zipCode", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("zipCode")]
         public string ZipCode { get; set; }
 
-        [JsonProperty("state", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("state")]
         public string State { get; set; }
 
-        [JsonProperty("city", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("city")]
         public string City { get; set; }
 
-        [JsonProperty("country", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("country")]
         public string Country { get; set; }
 
-        [JsonProperty("longitude", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("longitude")]
         public double? Longitude { get; set; }
 
-        [JsonProperty("latitude", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("latitude")]
         public double? Latitude { get; set; }
 
-        [JsonProperty("email", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("email")]
         public string Email { get; set; }
 
-        [JsonProperty("phone", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("phone")]
         public string Phone { get; set; }
 
-        [JsonProperty("jobTitle", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("jobTitle")]
         public string JobTitle { get; set; }
 
-        [JsonProperty("qualification", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("qualification")]
         public string Qualification { get; set; }
 
-        [JsonProperty("collectSourceId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("collectSourceId")]
         public string CollectSourceId { get; set; }
         
-        [JsonProperty("userId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("userId")]
         public string UserId { get; set; }
 
-        [JsonProperty("userFirstname", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("userFirstname")]
         public string UserFirstname { get; set; }
 
-        [JsonProperty("userLastname", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("userLastname")]
         public string UserLastname { get; set; }
 
-        [JsonProperty("contactCreatedAt", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("contactCreatedAt")]
         public DateTimeOffset ContactCreatedAt { get; set; }
 
         [JsonIgnore]

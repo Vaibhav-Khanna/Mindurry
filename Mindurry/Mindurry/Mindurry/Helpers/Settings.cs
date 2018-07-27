@@ -48,5 +48,22 @@ namespace Mindurry.Helpers
             set { AppSettings.AddOrUpdateValue(role, value); }
         }
 
+        const string DatabaseIdKey = "azure_database";
+        static readonly int DatabaseIdDefault = 0;
+
+        public static int DatabaseId
+        {
+            get { return AppSettings.GetValueOrDefault(DatabaseIdKey, DatabaseIdDefault); }
+            set
+            {
+                AppSettings.AddOrUpdateValue(DatabaseIdKey, value);
+            }
+        }
+
+        public static int UpdateDatabaseId()
+        {
+            return DatabaseId++;
+        }
+
     }
 }

@@ -1,4 +1,7 @@
-﻿using Microsoft.Identity.Client;
+﻿using FreshMvvm;
+using Microsoft.Identity.Client;
+using Mindurry.DataStore.Abstraction;
+using Mindurry.DataStore.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +26,15 @@ namespace Mindurry.Pages
         {
             try
             {
-                bool authenticated = await App.AuthenticationProvider.LoginAsync(true);
+                var storeManager = FreshIOC.Container.Resolve<IStoreManager>() as StoreManager;
+
+
+                bool authenticated = await storeManager.LoginAsync(true);
                 if (authenticated)
                 {
                     var page = new Pages.MasterDetailNavigationPage();
                     Application.Current.MainPage = page;
+                    storeManager.SyncAllAsync(true);
                 }
             }
             catch
@@ -42,11 +49,13 @@ namespace Mindurry.Pages
         {
             try
             {
-                bool authenticated = await App.AuthenticationProvider.LoginAsync();
+                var storeManager = FreshIOC.Container.Resolve<IStoreManager>() as StoreManager;
+                bool authenticated = await storeManager.LoginAsync();
                 if (authenticated)
                 {
                     var page = new Pages.MasterDetailNavigationPage();
                     Application.Current.MainPage = page;
+                    storeManager.SyncAllAsync(true);
                 }
                 else
                 {

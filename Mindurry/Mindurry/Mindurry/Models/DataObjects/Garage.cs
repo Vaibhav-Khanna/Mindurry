@@ -11,20 +11,20 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("lotNumberArchitect")]
         public string LotNumberArchitect { get; set; }
 
-        [JsonProperty("lotNumberCopro", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("lotNumberCopro")]
         public string LotNumberCopro { get; set; }
 
-        [JsonProperty("area", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("area")]
         public double? Area { get; set; }
 
-        [JsonProperty("price", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("price")]
         public double? Price { get; set; }
 
-        [JsonProperty("contactId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("contactId")]
         public string ContactId { get; set; }
 
-        [JsonProperty("commandState", NullValueHandling = NullValueHandling.Ignore)]
-        public CommandState? CommandState { get; set; }
+        [JsonProperty("commandState")]
+        public string CommandState { get; set; }
 
     }
 }

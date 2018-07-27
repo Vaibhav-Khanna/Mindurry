@@ -3,6 +3,7 @@ using Microsoft.Identity.Client;
 using Mindurry.DataModels;
 using Mindurry.DataStore.Abstraction;
 using Mindurry.DataStore.Implementation;
+using Mindurry.Helpers;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -19,23 +20,38 @@ namespace Mindurry
 
         public static event EventHandler<Residence> TabbedPageApartmentRequested;
 
-        public static IAuthenticate AuthenticationProvider { get; private set; }
+       // public static IAuthenticate AuthenticationProvider { get; private set; }
 
         public static UIParent UiParent = null;
 
+        public static StoreManager storeManager { get; set; }
 
         public App ()
 		{
 			InitializeComponent();
-        
+
             BasePageModel.Init();
 
-            AuthenticationProvider = new AuthenticationProvider();
+            Init();
 
             MainPage = new Pages.ConnexionPage();
         }
 
-		protected override void OnStart ()
+        public async void Init()
+        {
+            if (storeManager == null)
+                return;
+
+            if (!storeManager.IsInitialized)
+                await storeManager.InitializeAsync();
+            
+            if (!string.IsNullOrWhiteSpace(Settings.AuthToken))
+            {
+                await storeManager.SyncAllAsync(true);
+            }
+        }
+
+        protected override void OnStart ()
 		{
 			// Handle when your app starts
 		}

@@ -17,7 +17,7 @@ namespace Mindurry.Pages
         public ContactsPage ()
 		{
 			InitializeComponent ();
-		}
+        }
         private void SearchPlace_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             ((ContactsPageModel)BindingContext)?.SearchCommand.Execute(e.NewTextValue);

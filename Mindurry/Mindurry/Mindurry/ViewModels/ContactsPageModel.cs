@@ -17,12 +17,18 @@ namespace Mindurry.ViewModels
     {
         IEnumerable<Contact> _contacts { get; set; }
         public ObservableCollection<ContactsListModel> Contacts { get; set; }
-        private ObservableCollection<ContactsListModel> NonFilteredContacts; 
+        private ObservableCollection<ContactsListModel> NonFilteredContacts;
+        private string Filter = null;
+        private string SortName = null;
+        private bool SortBy = false;
+
         public string SearchText{ get; set; }
 
 
-    public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
+        public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> CommercialChecks { get; set; }
+
+        private List<CheckBoxItem> filterRes = new List<CheckBoxItem>();
 
         private ContactsListModel selectedItem;
         public ContactsListModel SelectedItem 
@@ -36,7 +42,7 @@ namespace Mindurry.ViewModels
             }
         }
 
-        private bool SortBy;
+
 
         public int Index { get; set; }
 
@@ -66,20 +72,36 @@ namespace Mindurry.ViewModels
         public async override void Init(object initData)
         {
             base.Init(initData);
-            
             await LoadData();
 
-            var check1 = new CheckBoxItem { Content = "Herrian" };
-            var check2 = new CheckBoxItem { Content = "Herri Ondo", IsChecked = true };
-            var check3 = new CheckBoxItem { Content = "Villa Aguiléra" };
+           // Chargement filtre 
+           var residences = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
+            residences.OrderBy(x => x.ContactCustomFieldSourceInternalName);
 
-            ResidencesChecks = new ObservableCollection<CheckBoxItem> { check1, check2, check3 };
+            ResidencesChecks = new ObservableCollection<CheckBoxItem>();
+            foreach (var item in residences)
+            {
+                var resCheck = new CheckBoxItem
+                {
+                    Content = item.Value,
+                    IsChecked = false
+                };
+                ResidencesChecks.Add(resCheck);
+            }
 
-            var check4 = new CheckBoxItem { Content = "Jean Noosa", IsChecked = true };
-            var check5 = new CheckBoxItem { Content = "Marie Shine" };
-            var check6 = new CheckBoxItem { Content = "Arold Martino" };
+            // Chargement commercial
+            var commercials = Contacts.Select(x => x.Commercial).Distinct().OrderBy(x => x).ToList();
 
-            CommercialChecks = new ObservableCollection<CheckBoxItem> { check4, check5, check6 };
+            CommercialChecks = new ObservableCollection<CheckBoxItem>();
+            foreach (var item in commercials)
+            {
+                var commCheck = new CheckBoxItem
+                {
+                    Content = item,
+                    IsChecked = false
+                };
+                CommercialChecks.Add(commCheck);
+            }
 
             ShowFilterCommand = new Command(ShowFilter);
             CloseFilterCommand = new Command(CloseFilter);
@@ -91,9 +113,11 @@ namespace Mindurry.ViewModels
         public async Task LoadData()
         {
 
-            _contacts = await StoreManager.ContactStore.GetItemsAsync();
+            // _contacts = await StoreManager.ContactStore.GetItemsAsync();
+            _contacts = await StoreManager.ContactStore.GetItemsByFilterAsync(Filter,SortName, SortBy);
             if ((_contacts != null) || (!_contacts.Any()))
             {
+                
                 Contacts = new ObservableCollection<ContactsListModel>();
                 var indexValue = 0; //to calculate Index to the backgroundColor
                 foreach (var item in _contacts)
@@ -144,30 +168,40 @@ namespace Mindurry.ViewModels
             }
         }
 
-        public Command SearchCommand => new Command<string>((searchString) =>
+        public Command SelectResidenceCommand => new Command<CheckBoxItem>((obj) =>
+        {
+            if (obj.IsChecked)
+            {
+                filterRes.Add(obj);
+            }
+            else
+            {
+                filterRes.Remove(obj);
+            }
+            Contacts = new ObservableCollection<ContactsListModel>();
+
+        });
+
+        public Command SearchCommand => new Command<string>(async (searchString) =>
         {
 
             if (searchString?.Length > 0) {
                 searchString = searchString.ToLower();
-                Contacts = new ObservableCollection<ContactsListModel>(NonFilteredContacts.Where(x => ((x.Name.ToLower().Contains(searchString))|| (x.Email.ToLower().Contains(searchString))|| (x.Telephone.ToLower().Contains(searchString)))).ToList());
+                Filter = searchString;
+               
             }
             else
             {
-                Contacts = NonFilteredContacts;
+                Filter = null;
             }
+            await LoadData();
         });
 
-        public Command SortByCreationDateCommand => new Command( () =>
+        public Command SortByCreationDateCommand => new Command( async () =>
         {
             SortBy = !SortBy;
-            if (SortBy)
-            {
-                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.Date).ToList());
-            }
-            else
-            {
-                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderByDescending(x => x.Date).ToList());
-            }
+            SortName = "CreatedDate";
+            await LoadData();
         });
 
         public Command SortByLastRelaunchCommand => new Command( () =>
@@ -225,7 +259,8 @@ namespace Mindurry.ViewModels
         {
             MessagingCenter.Subscribe<NewContactPageModel>(this, "ReloadCollection", async (obj) =>
             {
-                    await LoadData();
+                      
+                      await LoadData();
 
                 MessagingCenter.Unsubscribe<NewContactPageModel>(this, "ReloadCollection");
             });
