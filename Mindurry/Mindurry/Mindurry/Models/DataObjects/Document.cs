@@ -17,12 +17,12 @@ namespace Mindurry.Models.DataObjects
         public string ReferenceId { get; set; }
 
         [JsonProperty("referenceKind")]
-        public ReferenceKind ReferenceKind { get; set; }
+        public string ReferenceKind { get; set; }
 
         [JsonProperty("documentType")]
-        public DocumentType DocumentType { get; set; }
+        public string DocumentType { get; set; }
 
-        [JsonProperty("documentVersion", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("documentVersion")]
         public string DocumentVersion { get; set; }
 
     }

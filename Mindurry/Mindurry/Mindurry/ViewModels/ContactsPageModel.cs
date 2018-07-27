@@ -17,8 +17,10 @@ namespace Mindurry.ViewModels
     {
         IEnumerable<Contact> _contacts { get; set; }
         public ObservableCollection<ContactsListModel> Contacts { get; set; }
-        private ObservableCollection<ContactsListModel> NonFilteredContacts; 
-
+        private ObservableCollection<ContactsListModel> NonFilteredContacts;
+        private string Filter = null;
+        private string SortName = null;
+        private bool SortBy = false;
 
         public string SearchText{ get; set; }
 
@@ -40,7 +42,7 @@ namespace Mindurry.ViewModels
             }
         }
 
-        private bool SortBy;
+
 
         public int Index { get; set; }
 
@@ -70,7 +72,6 @@ namespace Mindurry.ViewModels
         public async override void Init(object initData)
         {
             base.Init(initData);
-            
             await LoadData();
 
            // Chargement filtre 
@@ -112,10 +113,11 @@ namespace Mindurry.ViewModels
         public async Task LoadData()
         {
 
-            _contacts = await StoreManager.ContactStore.GetItemsAsync();
+            // _contacts = await StoreManager.ContactStore.GetItemsAsync();
+            _contacts = await StoreManager.ContactStore.GetItemsByFilterAsync(Filter,SortName, SortBy);
             if ((_contacts != null) || (!_contacts.Any()))
             {
-                _contacts = _contacts.OrderBy(x => x.Name);
+                
                 Contacts = new ObservableCollection<ContactsListModel>();
                 var indexValue = 0; //to calculate Index to the backgroundColor
                 foreach (var item in _contacts)
@@ -180,30 +182,26 @@ namespace Mindurry.ViewModels
 
         });
 
-        public Command SearchCommand => new Command<string>((searchString) =>
+        public Command SearchCommand => new Command<string>(async (searchString) =>
         {
 
             if (searchString?.Length > 0) {
                 searchString = searchString.ToLower();
-                Contacts = new ObservableCollection<ContactsListModel>(NonFilteredContacts.Where(x => ((x.Name.ToLower().Contains(searchString))|| (x.Email.ToLower().Contains(searchString))|| (x.Telephone.ToLower().Contains(searchString)))).ToList());
+                Filter = searchString;
+               
             }
             else
             {
-                Contacts = NonFilteredContacts;
+                Filter = null;
             }
+            await LoadData();
         });
 
-        public Command SortByCreationDateCommand => new Command( () =>
+        public Command SortByCreationDateCommand => new Command( async () =>
         {
             SortBy = !SortBy;
-            if (SortBy)
-            {
-                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.Date).ToList());
-            }
-            else
-            {
-                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderByDescending(x => x.Date).ToList());
-            }
+            SortName = "CreatedDate";
+            await LoadData();
         });
 
         public Command SortByLastRelaunchCommand => new Command( () =>
@@ -261,7 +259,8 @@ namespace Mindurry.ViewModels
         {
             MessagingCenter.Subscribe<NewContactPageModel>(this, "ReloadCollection", async (obj) =>
             {
-                    await LoadData();
+                      
+                      await LoadData();
 
                 MessagingCenter.Unsubscribe<NewContactPageModel>(this, "ReloadCollection");
             });

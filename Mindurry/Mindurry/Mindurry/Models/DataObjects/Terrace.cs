@@ -11,13 +11,13 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("apartmentId")]
         public string ApartmentId { get; set; }
 
-        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("exposure", NullValueHandling = NullValueHandling.Ignore)]
-        public Exposure? Exposure { get; set; }
+        [JsonProperty("exposure")]
+        public string Exposure { get; set; }
 
-        [JsonProperty("area", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("area")]
         public double? Area { get; set; }
 
     }

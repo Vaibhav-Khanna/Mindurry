@@ -5,31 +5,31 @@ namespace Mindurry.Models.DataObjects
 {
     public class User : BaseDataObject
     {
-        [JsonProperty("firstname", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("firstname")]
         public string Firstname { get; set; }
 
-        [JsonProperty("lastname", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("lastname")]
         public string Lastname { get; set; }
 
         [JsonProperty("email")]
         public string Email { get; set; }
 
-        [JsonProperty("password", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("password")]
         public string Password { get; set; }
 
-        [JsonProperty("phoneMobile", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("phoneMobile")]
         public string PhoneMobile { get; set; }
 
-        [JsonProperty("role", NullValueHandling = NullValueHandling.Ignore)]
-        public Role? Role { get; set; }
+        [JsonProperty("role")]
+        public string Role { get; set; }
 
-        [JsonProperty("invitationSentAt", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("invitationSentAt")]
         public string InvitationSentAt { get; set; }
 
-        [JsonProperty("iosOneSignalID", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("iosOneSignalID")]
         public string IosOneSignalId { get; set; }
 
-        [JsonProperty("androidOneSignalID", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("androidOneSignalID")]
         public string AndroidOneSignalId { get; set; }
 
     }

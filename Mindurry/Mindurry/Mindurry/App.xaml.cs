@@ -30,12 +30,9 @@ namespace Mindurry
 		{
 			InitializeComponent();
 
-
-        
             BasePageModel.Init();
 
             Init();
-         //   AuthenticationProvider = new AuthenticationProvider();
 
             MainPage = new Pages.ConnexionPage();
         }

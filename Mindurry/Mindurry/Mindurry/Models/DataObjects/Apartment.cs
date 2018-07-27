@@ -8,31 +8,31 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("residenceId")]
         public string ResidenceId { get; set; }
 
-        [JsonProperty("contactId", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("contactId")]
         public string ContactId { get; set; }
 
-        [JsonProperty("commandState", NullValueHandling = NullValueHandling.Ignore)]
-        public CommandState? CommandState { get; set; }
+        [JsonProperty("commandState")]
+        public string CommandState { get; set; }
 
-        [JsonProperty("lotNumberArchitect", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("lotNumberArchitect")]
         public string LotNumberArchitect { get; set; }
 
-        [JsonProperty("lotNumberCopro", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("lotNumberCopro")]
         public string LotNumberCopro { get; set; }
 
-        [JsonProperty("kind", NullValueHandling = NullValueHandling.Ignore)]
-        public Kind? Kind { get; set; }
+        [JsonProperty("kind")]
+        public string Kind { get; set; }
 
-        [JsonProperty("exposure", NullValueHandling = NullValueHandling.Ignore)]
-        public Exposure? Exposure { get; set; }
+        [JsonProperty("exposure")]
+        public string Exposure { get; set; }
 
-        [JsonProperty("area", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("area")]
         public double? Area { get; set; }
 
-        [JsonProperty("floor", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("floor")]
         public double? Floor { get; set; }
 
-        [JsonProperty("price", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonProperty("price")]
         public double? Price { get; set; }
 
 
