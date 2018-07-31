@@ -1,9 +1,13 @@
 ﻿using Mindurry.DataModels;
+using Mindurry.Models;
+using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -12,21 +16,36 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class ClientsPageModel : BasePageModel
     {
-        public ObservableCollection<Person> Items { get; set; }
+        private IEnumerable<Contact> _contacts;
+        public ObservableCollection<ContactsListModel> Contacts { get; set; }
+        private string Filter = null;
+        private string SortName = null;
+        private bool SortBy = false;
+
+        public string SearchText { get; set; }
+
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> CommercialChecks { get; set; }
 
-        private Person selectedItem;
-        public Person SelectedItem
+        private List<CheckBoxItem> filterRes = new List<CheckBoxItem>();
+        private List<CheckBoxItem> filterCommercial = new List<CheckBoxItem>();
+
+        private ContactsListModel selectedItem;
+        public ContactsListModel SelectedItem
         {
             get => selectedItem;
             set
             {
                 if (value != null)
-                    CoreMethods.PushPageModel<ClientsDetailsInfoPageModel>(value);
+                    CoreMethods.PushPageModel<LeadDetailPageModel>(value);
                 selectedItem = null;
             }
         }
+
+
+
+        public int Index { get; set; }
+
 
         public bool IsFirstListVisible { get; set; } = true;
         public bool IsSecondListVisible { get; set; } = true;
@@ -43,108 +62,224 @@ namespace Mindurry.ViewModels
         }
 
         public ICommand ShowFilterCommand { get; set; }
+        //public ICommand CloseFilterCommand { get; set; }
         public ICommand ArrowOneCommand { get; set; }
         public ICommand ArrowTwoCommand { get; set; }
         public ICommand AddCommand { get; set; }
 
-        public override void Init(object initData)
+        public async override void Init(object initData)
         {
-            
+            base.Init(initData);
+            await LoadData();
 
-            var item1 = new Person
-            {
-                Type = PersonType.Client,
-                Date = new DateTime(2017, 12, 11, 9, 34, 0),
-                Name = "Jean Michel Marc",
-                Email = "j.doe@gmail.com",
-                Telephone = "09 36 73 83 83",
-                Commercial = "Arold Martino",
-                LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                NextRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                Residence = "Villa Aguilera",
-                Index = 0
-            };
-
-            var item2 = new Person
-            {
-                Type = PersonType.Client,
-                Date = new DateTime(2017, 12, 11, 9, 34, 0),
-                Name = "Sullivan Marc",
-                Email = "m.sullivan@immo.com",
-                Telephone = "06 87 76 44 56",
-                Commercial = "Jean Noosa",
-                LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                NextRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                Residence = "Villa Aguilera",
-                Index = 1
-            };
-
-            var item3 = new Person
-            {
-                Type = PersonType.Client,
-                Date = new DateTime(2017, 12, 11, 9, 34, 0),
-                Name = "Marie Yuji",
-                Email = "sean.yuji@yuji.com",
-                Telephone = "07 56 65 63 00",
-                Commercial = "Jean Noosa",
-                LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                NextRelaunch = new DateTime(201, 12, 11, 9, 34, 0),
-                Residence = "Herrian",
-                Index = 2
-            };
-
-            var item4 = new Person
-            {
-                Type = PersonType.Client,
-                Date = new DateTime(2017, 12, 11, 9, 34, 0),
-                Name = "Albert Louak",
-                Email = "m.louak@tera.net",
-                Telephone = "06 67 55 87 99",
-                Commercial = "Jean Noosa",
-                LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                NextRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                Residence = "Villa Aguilera",
-                Index = 3
-            };
-
-            var item5 = new Person
-            {
-                Type = PersonType.Client,
-                Date = new DateTime(2017, 9, 12, 11, 59, 0),
-                Name = "Louis Aroati",
-                Email = "franck.aroati@immo.com",
-                Telephone = "07 67 55 22 78",
-                Commercial = "Jean Noosa",
-                LastRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                NextRelaunch = new DateTime(2017, 12, 11, 9, 34, 0),
-                Residence = "Villa Aguilera",
-                Index = 4
-            };
-
-            Items = new ObservableCollection<Person> { item1, item2, item3, item4, item5 };
-
-            var check1 = new CheckBoxItem { Content = "Herrian" };
-            var check2 = new CheckBoxItem { Content = "Herri Ondo", IsChecked = true };
-            var check3 = new CheckBoxItem { Content = "Villa Aguiléra" };
-
-            ResidencesChecks = new ObservableCollection<CheckBoxItem> { check1, check2, check3 };
-
-            var check4 = new CheckBoxItem { Content = "Studio" };
-            var check5 = new CheckBoxItem { Content = "T2", IsChecked = true };
-            var check6 = new CheckBoxItem { Content = "T3" };
-
-            CommercialChecks = new ObservableCollection<CheckBoxItem> { check4, check5, check6 };
+            await LoadFilter();
 
             ShowFilterCommand = new Command(ShowFilter);
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
             AddCommand = new Command(AddContact);
         }
+        public async Task LoadFilter()
+        {
+            // Chargement filtre 
+            var residences = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
+            residences.OrderBy(x => x.ContactCustomFieldSourceInternalName);
+
+            ResidencesChecks = new ObservableCollection<CheckBoxItem>();
+            foreach (var item in residences)
+            {
+                var resCheck = new CheckBoxItem
+                {
+                    Content = item.Value,
+                    IsChecked = false,
+                    Id = item.Id
+                };
+                ResidencesChecks.Add(resCheck);
+            }
+
+            // Chargement commercial
+            var commercials = (await StoreManager.UserStore.GetItemsAsync()).OrderBy(x => x.Lastname).ToList();
+            //  var commercials = Contacts.Select(x => x.Commercial).Distinct().OrderBy(x => x).ToList();
+
+            CommercialChecks = new ObservableCollection<CheckBoxItem>();
+            foreach (var item in commercials)
+            {
+                var commCheck = new CheckBoxItem
+                {
+                    Content = item.Firstname + " " + item.Lastname,
+                    IsChecked = false,
+                    Id = item.Id
+                };
+                CommercialChecks.Add(commCheck);
+            }
+
+        }
+
+        public async Task LoadData()
+        {
+            if (!filterCommercial.Any() && !filterRes.Any())
+            {
+                _contacts = await StoreManager.ContactStore.GetItemsByTypeAsync("Client", Filter);
+            }
+            else
+            {
+                _contacts = await StoreManager.ContactStore.GetItemsByCommercialFilterAsync("CLient",filterCommercial, filterRes);
+            }
+
+            if ((_contacts != null) || (!_contacts.Any()))
+            {
+
+                Contacts = new ObservableCollection<ContactsListModel>();
+                var indexValue = 0; //to calculate Index to the backgroundColor
+                foreach (var item in _contacts)
+                {
+
+                    var contactListItem = new ContactsListModel();
+                    contactListItem.Index = indexValue; // to alternante background Color
+                    contactListItem.ContactId = item.Id;
+                    contactListItem.Date = item.ContactCreatedAt;
+                    contactListItem.Name = item.Firstname + " " + item.Lastname;
+                    contactListItem.Email = item.Email;
+                    contactListItem.Telephone = item.Phone;
+                    contactListItem.Commercial = item.UserFirstname + " " + item.UserLastname;
+
+                    // Calcul de dernier relance (derniere Note sur le contact)
+                    DateTimeOffset? lastNoteDate = await StoreManager.NoteStore.GetLastNoteDateAsync(item.Id);
+                    contactListItem.LastRelaunch = lastNoteDate;
+                    // Calcul du prochain Reminder (Note avec ReminderAt de set)
+                    DateTimeOffset? nextReminderDate = await StoreManager.NoteStore.GetNextNoteReminderDateAsync(item.Id);
+                    contactListItem.NextRelaunch = nextReminderDate;
+                    string customFields = item.CustomFields;
+
+                    if (!String.IsNullOrEmpty(customFields))
+                    {
+                        string residenceFormat = "";
+                        if (customFields.Contains("residence="))
+                        {
+
+                            string[] substrings = customFields.Split(',');
+                            for (int i = 0; i < substrings.Length; i++)
+                            {
+                                if (substrings[i].Contains("residence="))
+                                {
+                                    // string[]  = substring.Split('residence=');
+                                    string[] stringSeparators = new string[] { "residence=" };
+                                    string[] result;
+                                    result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
+                                    ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                    residenceFormat += residence.Value + "-";
+
+                                }
+                            }
+
+                        }
+                        contactListItem.Residence = residenceFormat;
+                    }
+
+                    indexValue++; //increment to change Backgroung Color
+                    Contacts.Add(contactListItem);
+                }
+            }
+            else
+            {
+                await CoreMethods.DisplayAlert("Erreur", "Impossibilité de charger les données", "OK");
+            }
+        }
+
+        public Command SelectResidenceCommand => new Command<CheckBoxItem>(async (obj) =>
+        {
+            if (obj.IsChecked)
+            {
+                filterRes.Add(obj);
+            }
+            else
+            {
+                filterRes.Remove(obj);
+            }
+
+            await LoadData();
+
+        });
+        public Command SelectCommercialCommand => new Command<CheckBoxItem>(async (obj) =>
+        {
+            if (obj.IsChecked)
+            {
+                filterCommercial.Add(obj);
+            }
+            else
+            {
+                filterCommercial.Remove(obj);
+            }
+
+            await LoadData();
+        });
+
+        public Command SearchCommand => new Command<string>(async (searchString) =>
+        {
+
+            if (searchString?.Length > 0)
+            {
+                searchString = searchString.ToLower();
+                Filter = searchString;
+
+            }
+            else
+            {
+                Filter = null;
+            }
+            await LoadData();
+        });
+
+        public Command SortByCreationDateCommand => new Command(async () =>
+        {
+            SortBy = !SortBy;
+            if (!SortBy)
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.Date).ToList());
+            }
+            else
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderByDescending(x => x.Date).ToList());
+            }
+        });
+
+        public Command SortByLastRelaunchCommand => new Command(() =>
+        {
+            SortBy = !SortBy;
+            if (!SortBy)
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.LastRelaunch).ToList());
+            }
+            else
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderByDescending(x => x.LastRelaunch).ToList());
+            }
+        });
+
+        public Command SortByNextRelaunchCommand => new Command(() =>
+        {
+            SortBy = !SortBy;
+            if (!SortBy)
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.NextRelaunch).ToList());
+            }
+            else
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderByDescending(x => x.NextRelaunch).ToList());
+            }
+        });
 
         void ShowFilter()
         {
             IsFilterOn = !IsFilterOn;
         }
+        public Command CloseFilterCommand => new Command(async () =>
+        {
+            await LoadFilter();
+            filterRes = new List<CheckBoxItem>();
+            filterCommercial = new List<CheckBoxItem>();
+            await LoadData();
+        });
 
         void ChangeArrowOne()
         {
@@ -159,6 +294,18 @@ namespace Mindurry.ViewModels
         void AddContact()
         {
             CoreMethods.PushPageModel<NewClientPageModel>();
+            SubUnsub();
+        }
+
+        void SubUnsub()
+        {
+            MessagingCenter.Subscribe<NewClientPageModel>(this, "ReloadCollection", async (obj) =>
+            {
+
+                await LoadData();
+
+                MessagingCenter.Unsubscribe<NewClientPageModel>(this, "ReloadCollection");
+            });
         }
     }
 }
