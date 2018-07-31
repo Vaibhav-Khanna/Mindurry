@@ -62,9 +62,11 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("contactCreatedAt")]
         public DateTimeOffset ContactCreatedAt { get; set; }
 
+        [JsonProperty("customFields")]
+        public string CustomFields { get; set; }
+        
         [JsonIgnore]
         public string Name => $"{Firstname} {Lastname}";
-
 
     }
     public enum Qualification { Contact, Customer, Lead };

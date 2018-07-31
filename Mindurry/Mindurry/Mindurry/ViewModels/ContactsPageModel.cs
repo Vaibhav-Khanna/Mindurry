@@ -1,4 +1,5 @@
-﻿using Mindurry.DataModels;
+﻿using Microsoft.WindowsAzure.MobileServices;
+using Mindurry.DataModels;
 using Mindurry.Models;
 using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
@@ -15,20 +16,19 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class ContactsPageModel : BasePageModel
     {
-        IEnumerable<Contact> _contacts { get; set; }
+        private IEnumerable<Contact> _contacts;
         public ObservableCollection<ContactsListModel> Contacts { get; set; }
-        private ObservableCollection<ContactsListModel> NonFilteredContacts;
         private string Filter = null;
         private string SortName = null;
         private bool SortBy = false;
 
         public string SearchText{ get; set; }
 
-
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> CommercialChecks { get; set; }
 
         private List<CheckBoxItem> filterRes = new List<CheckBoxItem>();
+        private List<CheckBoxItem> filterCommercial = new List<CheckBoxItem>();
 
         private ContactsListModel selectedItem;
         public ContactsListModel SelectedItem 
@@ -62,20 +62,29 @@ namespace Mindurry.ViewModels
         }
 
         public ICommand ShowFilterCommand { get; set; }
-        public ICommand CloseFilterCommand { get; set; }
+        //public ICommand CloseFilterCommand { get; set; }
         public ICommand ArrowOneCommand { get; set; }
         public ICommand ArrowTwoCommand { get; set; }
         public ICommand AddCommand { get; set; }
-
-
 
         public async override void Init(object initData)
         {
             base.Init(initData);
             await LoadData();
 
-           // Chargement filtre 
-           var residences = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
+            await LoadFilter();
+           
+
+            ShowFilterCommand = new Command(ShowFilter);
+            //CloseFilterCommand = new Command(CloseFilter);
+            ArrowOneCommand = new Command(ChangeArrowOne);
+            ArrowTwoCommand = new Command(ChangeArrowTwo);
+            AddCommand = new Command(AddContact);
+        }
+        public async Task LoadFilter()
+        {
+            // Chargement filtre 
+            var residences = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
             residences.OrderBy(x => x.ContactCustomFieldSourceInternalName);
 
             ResidencesChecks = new ObservableCollection<CheckBoxItem>();
@@ -84,38 +93,40 @@ namespace Mindurry.ViewModels
                 var resCheck = new CheckBoxItem
                 {
                     Content = item.Value,
-                    IsChecked = false
+                    IsChecked = false,
+                    Id = item.Id
                 };
                 ResidencesChecks.Add(resCheck);
             }
 
             // Chargement commercial
-            var commercials = Contacts.Select(x => x.Commercial).Distinct().OrderBy(x => x).ToList();
+            var commercials = (await StoreManager.UserStore.GetItemsAsync()).OrderBy(x => x.Lastname).ToList();
+            //  var commercials = Contacts.Select(x => x.Commercial).Distinct().OrderBy(x => x).ToList();
 
             CommercialChecks = new ObservableCollection<CheckBoxItem>();
             foreach (var item in commercials)
             {
                 var commCheck = new CheckBoxItem
                 {
-                    Content = item,
-                    IsChecked = false
+                    Content = item.Firstname + " " + item.Lastname,
+                    IsChecked = false,
+                    Id = item.Id
                 };
                 CommercialChecks.Add(commCheck);
             }
 
-            ShowFilterCommand = new Command(ShowFilter);
-            CloseFilterCommand = new Command(CloseFilter);
-            ArrowOneCommand = new Command(ChangeArrowOne);
-            ArrowTwoCommand = new Command(ChangeArrowTwo);
-            AddCommand = new Command(AddContact);
         }
-        
+
         public async Task LoadData()
         {
-
-            // _contacts = await StoreManager.ContactStore.GetItemsAsync();
+            if (!filterCommercial.Any() && !filterRes.Any()) { 
             _contacts = await StoreManager.ContactStore.GetItemsByFilterAsync(Filter,SortName, SortBy);
-            if ((_contacts != null) || (!_contacts.Any()))
+            }
+            else {
+                _contacts = await StoreManager.ContactStore.GetItemsByCommercialFilterAsync(filterCommercial, filterRes);
+            }
+
+                if ((_contacts != null) || (!_contacts.Any()))
             {
                 
                 Contacts = new ObservableCollection<ContactsListModel>();
@@ -138,7 +149,34 @@ namespace Mindurry.ViewModels
                     // Calcul du prochain Reminder (Note avec ReminderAt de set)
                     DateTimeOffset? nextReminderDate = await StoreManager.NoteStore.GetNextNoteReminderDateAsync(item.Id);
                     contactListItem.NextRelaunch = nextReminderDate;
+                    string customFields = item.CustomFields;
 
+                    if (!String.IsNullOrEmpty(customFields))
+                    {
+                            string residenceFormat = "";
+                            if (customFields.Contains("residence="))
+                            {
+
+                                string[] substrings = customFields.Split(',');
+                                for (int i = 0; i < substrings.Length; i++)
+                                {
+                                    if (substrings[i].Contains("residence="))
+                                    {
+                                        // string[]  = substring.Split('residence=');
+                                        string[] stringSeparators = new string[] { "residence=" };
+                                        string[] result;
+                                        result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
+                                        ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                        residenceFormat += residence.Value + " ";
+
+                                    }
+                                }
+
+                            }
+                        contactListItem.Residence = residenceFormat;
+                    }
+                    
+                    /*
                     // Custom Field Residence
                     var residences = (await StoreManager.ContactCustomFieldStore.GetItemsByContactCustomFieldSourceName("Résidences", item.Id)).ToList();
                    
@@ -154,13 +192,10 @@ namespace Mindurry.ViewModels
                             }
                         }
                         contactListItem.Residence = residenceFormat;                     
-                    }
+                    } */
                     indexValue++; //increment to change Backgroung Color
                     Contacts.Add(contactListItem);                  
                 }
-                NonFilteredContacts = new ObservableCollection<ContactsListModel>(Contacts);
-
-
             }
             else
             {
@@ -168,7 +203,7 @@ namespace Mindurry.ViewModels
             }
         }
 
-        public Command SelectResidenceCommand => new Command<CheckBoxItem>((obj) =>
+        public Command SelectResidenceCommand => new Command<CheckBoxItem>(async (obj) =>
         {
             if (obj.IsChecked)
             {
@@ -178,8 +213,22 @@ namespace Mindurry.ViewModels
             {
                 filterRes.Remove(obj);
             }
-            Contacts = new ObservableCollection<ContactsListModel>();
+           
+            await LoadData();
 
+        });
+        public Command SelectCommercialCommand => new Command<CheckBoxItem>(async(obj) =>
+        {
+            if (obj.IsChecked)
+            {
+                filterCommercial.Add(obj);
+            }
+            else
+            {
+                filterCommercial.Remove(obj);
+            }
+
+            await LoadData();
         });
 
         public Command SearchCommand => new Command<string>(async (searchString) =>
@@ -199,15 +248,24 @@ namespace Mindurry.ViewModels
 
         public Command SortByCreationDateCommand => new Command( async () =>
         {
-            SortBy = !SortBy;
+           /* SortBy = !SortBy;
             SortName = "CreatedDate";
-            await LoadData();
+            await LoadData(); */
+            SortBy = !SortBy;
+            if (!SortBy)
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.Date).ToList());
+            }
+            else
+            {
+                Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderByDescending(x => x.Date).ToList());
+            }
         });
 
         public Command SortByLastRelaunchCommand => new Command( () =>
         {
             SortBy = !SortBy;
-            if (SortBy)
+            if (!SortBy)
             {
                 Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.LastRelaunch).ToList());
             }
@@ -220,7 +278,7 @@ namespace Mindurry.ViewModels
         public Command SortByNextRelaunchCommand => new Command( () =>
         {
             SortBy = !SortBy;
-            if (SortBy)
+            if (!SortBy)
             {
                 Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.NextRelaunch).ToList());
             }
@@ -234,10 +292,13 @@ namespace Mindurry.ViewModels
         {
             IsFilterOn = !IsFilterOn;
         }
-        void CloseFilter()
+        public Command CloseFilterCommand => new Command(async() =>
         {
-            IsFilterOn = false;
-        }
+            await LoadFilter();
+            filterRes = new List<CheckBoxItem>();
+            filterCommercial = new List<CheckBoxItem>();
+            await LoadData();
+        });
 
         void ChangeArrowOne()
         {

@@ -13,7 +13,7 @@ namespace Mindurry.DataStore.Implementation.Stores
 
         public async Task<IEnumerable<ContactCustomFieldSourceEntry>> GetItemsByContactCustomFieldSourceName(string contactCustomFieldSourceInternalName)
         {
-            InitializeStore();
+            await InitializeStore();
 
             try
             {

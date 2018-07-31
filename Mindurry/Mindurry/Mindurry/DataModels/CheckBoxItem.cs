@@ -10,6 +10,7 @@ namespace Mindurry.DataModels
     {
         public bool IsChecked { get; set; }
         public string Content { get; set; }
+        public string Id { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }
