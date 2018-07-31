@@ -22,5 +22,6 @@ namespace Mindurry.Pages
         {
             ((ContactsPageModel)BindingContext)?.SearchCommand.Execute(e.NewTextValue);
         }
+
     }
 }

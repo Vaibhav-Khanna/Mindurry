@@ -171,11 +171,11 @@
                                     </Label.Effects>
                                 </Label>
                             <Grid VerticalOptions="Center">
-                                <Button Text="" Style="{StaticResource IconButton}" HorizontalOptions="End" VerticalOptions="Center"/>
-                                <Label Text="" Font="Segoe MDL2 Assets" FontSize="9" HorizontalOptions="End" VerticalOptions="End" InputTransparent="True" Margin="2" />
-                                <Grid.GestureRecognizers>
+                                <Button Text="" Style="{StaticResource IconButton}" HorizontalOptions="End" VerticalOptions="Center" Command="{Binding CloseFilterCommand}"/>
+                                <Label Text="" Font="Segoe MDL2 Assets" FontSize="9" HorizontalOptions="End" VerticalOptions="End" InputTransparent="True" Margin="2"/>
+                               <!-- <Grid.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding ShowFilterCommand}"/>
-                                </Grid.GestureRecognizers>
+                                </Grid.GestureRecognizers> -->
 
                             </Grid>
                         </Grid>
@@ -221,7 +221,7 @@
                                     </StackLayout>
 
                                     <StackLayout IsVisible="{Binding IsSecondListVisible}" Spacing="15">
-                                        <repeater:RepeaterView ItemsSource="{Binding CommercialChecks}" VerticalOptions="Start">
+                                        <repeater:RepeaterView ItemsSource="{Binding CommercialChecks}" VerticalOptions="Start" SelectedItemCommand="{Binding SelectCommercialCommand}">
                                             <repeater:RepeaterView.ItemTemplate>
                                                 <DataTemplate>
                                                     <ViewCell>
