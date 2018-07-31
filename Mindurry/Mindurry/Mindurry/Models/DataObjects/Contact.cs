@@ -69,7 +69,7 @@ namespace Mindurry.Models.DataObjects
         public string Name => $"{Firstname} {Lastname}";
 
     }
-    public enum Qualification { Contact, Customer, Lead };
+    public enum Qualification { Contact, Client, Lead };
 
     public enum Profil { Investisseur, RésidencePrincipale, RésidenceSecondaire };
 }

@@ -119,11 +119,11 @@ namespace Mindurry.ViewModels
 
         public async Task LoadData()
         {
-            if (!filterCommercial.Any() && !filterRes.Any()) { 
-            _contacts = await StoreManager.ContactStore.GetItemsByFilterAsync(Filter,SortName, SortBy);
+            if (!filterCommercial.Any() && !filterRes.Any()) {
+                _contacts = await StoreManager.ContactStore.GetItemsByTypeAsync("Contact", Filter);
             }
             else {
-                _contacts = await StoreManager.ContactStore.GetItemsByCommercialFilterAsync(filterCommercial, filterRes);
+                _contacts = await StoreManager.ContactStore.GetItemsByCommercialFilterAsync("Contact",filterCommercial, filterRes);
             }
 
                 if ((_contacts != null) || (!_contacts.Any()))
@@ -167,7 +167,7 @@ namespace Mindurry.ViewModels
                                         string[] result;
                                         result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
                                         ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
-                                        residenceFormat += residence.Value + " ";
+                                        residenceFormat += residence.Value + "-";
 
                                     }
                                 }
@@ -252,7 +252,7 @@ namespace Mindurry.ViewModels
             SortName = "CreatedDate";
             await LoadData(); */
             SortBy = !SortBy;
-            if (!SortBy)
+            if (SortBy)
             {
                 Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.Date).ToList());
             }
@@ -265,7 +265,7 @@ namespace Mindurry.ViewModels
         public Command SortByLastRelaunchCommand => new Command( () =>
         {
             SortBy = !SortBy;
-            if (!SortBy)
+            if (SortBy)
             {
                 Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderBy(x => x.LastRelaunch).ToList());
             }

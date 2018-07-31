@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mindurry.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,9 @@ namespace Mindurry.Pages
 		{
 			InitializeComponent ();
 		}
-	}
+        private void SearchPlace_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            ((ClientsPageModel)BindingContext)?.SearchCommand.Execute(e.NewTextValue);
+        }
+    }
 }
