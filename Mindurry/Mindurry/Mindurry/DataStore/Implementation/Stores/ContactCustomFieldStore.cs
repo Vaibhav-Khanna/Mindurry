@@ -28,5 +28,45 @@ namespace Mindurry.DataStore.Implementation.Stores
                 return null;
             }
         }
+
+        public async Task<ContactCustomField> GetItemByContactIdAndSourceEntryIdAsync(string ContactId, string ContactCustomFieldSourceId)
+        {
+            await InitializeStore().ConfigureAwait(false);
+
+            try
+            {
+                 var result = await Table.Where(x => ((x.ContactId == ContactId) && (x.ContactCustomFieldSourceId == ContactCustomFieldSourceId))).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                if (result != null)
+                {
+                    return result.ToList()[0];
+                }
+                else return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+
+        public async Task<IEnumerable<ContactCustomField>> GetItemsByContactIdAsync(string ContactId)
+        {
+            await InitializeStore().ConfigureAwait(false);
+
+            try
+            {
+                var result = await Table.Where(x => (x.ContactId == ContactId)).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                if (result != null)
+                {
+                    return result;
+                }
+                else return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
     }
 }

@@ -26,28 +26,28 @@
                             </ResourceDictionary>
                         </StackLayout.Resources> 
                         <StackLayout HorizontalOptions="FillAndExpand">
-                            <Label Text="{Binding Item.Name}" FontSize="28" VerticalOptions="Center"/>
+                            <Label Text="{Binding Contact.Name}" FontSize="28" VerticalOptions="Center"/>
                             <Grid VerticalOptions="Center">
                                 <Grid HeightRequest="20" HorizontalOptions="Fill" BackgroundColor="{StaticResource BlueAccent}" VerticalOptions="Center"/>
-                                <Label Text="{Binding Item.Type}" TextColor="White" FontSize="14" VerticalOptions="Center" Margin="10,0"/>
+                                <Label Text="{Binding Contact.Qualification}" TextColor="White" FontSize="14" VerticalOptions="Center" Margin="10,0"/>
                             </Grid>
-                            <Button Text="Modifier" FontSize="20" TextColor="White" BackgroundColor="#9B9B9B" WidthRequest="120" HeightRequest="40" BorderWidth="0" HorizontalOptions="EndAndExpand" Margin="0,20,0,20"/>
+                            <Button Text="Modifier" Command="{Binding UpdateContactCommand}" FontSize="18" TextColor="White" BackgroundColor="#9B9B9B" WidthRequest="120" HeightRequest="40" BorderWidth="0" HorizontalOptions="EndAndExpand" Margin="0,20,0,20"/>
 
                         </StackLayout>
 
                         <StackLayout>
                             <Label Text="" Style="{StaticResource TextIconStyle}"/>
-                            <Label Text="{Binding Item.Email}" Style="{StaticResource BlueLabel}"/>
+                            <Label Text="{Binding Contact.Email}" Style="{StaticResource BlueLabel}"/>
                         </StackLayout>
 
                         <StackLayout>
                             <Label Text="" Style="{StaticResource TextIconStyle}"/>
-                            <Label Text="{Binding Item.Telephone}" Style="{StaticResource BlueLabel}"/>
+                            <Label Text="{Binding Contact.Phone}" Style="{StaticResource BlueLabel}"/>
                         </StackLayout>
 
                         <StackLayout>
                             <Label Text="" Style="{StaticResource TextIconStyle}"/>
-                            <Label Text="{Binding Item.Address}" Style="{StaticResource BlueLabel}"/>
+                            <Label Text="{Binding Contact.PlaceLocation}" Style="{StaticResource BlueLabel}"/>
                         </StackLayout>
                     </StackLayout>
 
@@ -102,7 +102,7 @@
                             <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center"/>
                         </Grid>
 
-                        <Button Text="Envoyer une séquence" FontSize="20" TextColor="White" BackgroundColor="#9B9B9B" WidthRequest="250" HeightRequest="40" BorderWidth="0" HorizontalOptions="End"
+                        <Button Text="Envoyer une séquence" FontSize="18" TextColor="White" BackgroundColor="#9B9B9B" WidthRequest="250" HeightRequest="40" BorderWidth="0" HorizontalOptions="End"
                                 Margin="0,20,0,20"/>
 
                         <Label Text="Ajouter une note" FontSize="18" Margin="0,0,0,10"/>

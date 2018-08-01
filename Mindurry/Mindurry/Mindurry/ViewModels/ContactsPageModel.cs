@@ -37,7 +37,7 @@ namespace Mindurry.ViewModels
             set
             {
                 if (value != null)
-                    CoreMethods.PushPageModel<LeadDetailPageModel>(value);
+                    CoreMethods.PushPageModel<LeadDetailPageModel>(value.ContactId);
                 selectedItem = null;
             }
         }

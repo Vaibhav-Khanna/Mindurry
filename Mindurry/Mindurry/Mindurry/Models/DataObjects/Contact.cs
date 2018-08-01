@@ -35,6 +35,12 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("latitude")]
         public double? Latitude { get; set; }
 
+        [JsonProperty("placeId")]
+        public string PlaceId { get; set; }
+
+        [JsonProperty("placeLocation")]
+        public string PlaceLocation { get; set; }
+
         [JsonProperty("email")]
         public string Email { get; set; }
 

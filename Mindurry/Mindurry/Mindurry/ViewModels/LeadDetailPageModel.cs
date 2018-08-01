@@ -1,11 +1,14 @@
 ﻿using FreshMvvm;
 using Mindurry.DataModels;
+using Mindurry.Models;
+using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -14,7 +17,9 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class LeadDetailPageModel : BasePageModel
     {
-        public Person Item { get; set; }
+        private string ContactId;
+        public Contact Contact { get; set; }
+
         public ObservableCollection<Activity> Activities { get; set; }
 
         public ObservableCollection<string> Combo1 { get; set; }
@@ -41,10 +46,14 @@ namespace Mindurry.ViewModels
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
 
-        public override void Init(object initData)
+        public async override void Init(object initData)
         {
             base.Init(initData);
-            Item = (Person)initData;
+            ContactId = (string)initData;
+
+            await LoadData();
+
+          
 
             var activity1 = new Activity
             {
@@ -98,6 +107,11 @@ namespace Mindurry.ViewModels
             ClearAllTypesCommand = new Command(ClearAllTypes);
         }
 
+        private async Task LoadData()
+        {
+            Contact = await StoreManager.ContactStore.GetItemAsync(ContactId);
+        }
+
         void ChangeArrowOne()
         {
             IsFirstListVisible = !IsFirstListVisible;
@@ -122,6 +136,23 @@ namespace Mindurry.ViewModels
             {
                 item.IsChecked = false;
             }
+        }
+
+        public Command UpdateContactCommand => new Command(async (obj) =>
+        {
+            await CoreMethods.PushPageModel<NewContactPageModel>(Contact.Id);
+            SubUnsub();
+
+        });
+        void SubUnsub()
+        {
+            MessagingCenter.Subscribe<NewContactPageModel>(this, "ReloadDetailContact", async (obj) =>
+            {
+
+                await LoadData();
+
+                MessagingCenter.Unsubscribe<NewContactPageModel>(this, "ReloadDetailContact");
+            });
         }
     }
 }

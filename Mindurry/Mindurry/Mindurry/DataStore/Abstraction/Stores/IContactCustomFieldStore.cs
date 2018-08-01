@@ -10,5 +10,7 @@ namespace Mindurry.DataStore.Abstraction.Stores
     public interface IContactCustomFieldStore : IBaseStore<ContactCustomField>
     {
         Task<IEnumerable<ContactCustomField>> GetItemsByContactCustomFieldSourceName(string contactCustomFieldSourceInternalName, string contactId);
+        Task<ContactCustomField> GetItemByContactIdAndSourceEntryIdAsync(string ContactId, string ContactCustomFieldSourceId);
+        Task<IEnumerable<ContactCustomField>> GetItemsByContactIdAsync(string ContactId);
     }
 }
