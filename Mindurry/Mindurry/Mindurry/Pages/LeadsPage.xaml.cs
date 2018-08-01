@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mindurry.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,16 @@ using Xamarin.Forms.Xaml;
 
 namespace Mindurry.Pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+	
 	public partial class LeadsPage : ContentPage
 	{
 		public LeadsPage ()
 		{
 			InitializeComponent ();
 		}
-	}
+        private void SearchPlace_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            ((LeadsPageModel)BindingContext)?.SearchCommand.Execute(e.NewTextValue);
+        }
+    }
 }

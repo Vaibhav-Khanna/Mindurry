@@ -11,5 +11,6 @@ namespace Mindurry.DataStore.Abstraction.Stores
 
         Task<IEnumerable<Contact>> GetItemsByTypeAsync(string ContactType, string Filter = null, bool forceRefresh = false);
         Task<IEnumerable<Contact>> GetItemsByCommercialFilterAsync(string ContactType, List<CheckBoxItem> SelectedCommercials = null, List<CheckBoxItem> SelectedResidences = null, bool forceRefresh = false);
+        Task<IEnumerable<Contact>> GetItemsByTypeFilterAsync(string ContactType, List<CheckBoxItem> SelectedTypes = null, List<CheckBoxItem> SelectedResidences = null, bool forceRefresh = false);
     }
 }
