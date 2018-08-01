@@ -159,20 +159,92 @@ namespace Mindurry.DataStore.Implementation.Stores
            
         }
 
-      /*  public async Task<IEnumerable<User>> GetCommercialsAsync(bool forceRefresh = false)
+        public async Task<IEnumerable<Contact>> GetItemsByTypeFilterAsync(string ContactType, List<CheckBoxItem> SelectedTypes = null, List<CheckBoxItem> SelectedResidences = null, bool forceRefresh = false)
         {
             await InitializeStore().ConfigureAwait(false);
 
             if (forceRefresh)
-                await PullLatestAsync().ConfigureAwait(false);
+            { await PullLatestAsync().ConfigureAwait(false); }
 
-            IEnumerable<Contact> items = await Table.OrderBy(x => x.UserLastname).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
-            var contactsList = new List<Contact>(items);
-            if (contactsList != null && contactsList.Any())
+            try
             {
-                var cLists = contactsList.Select(x => x.UserId).Distinct().ToList();
+                //construction dynamique de la query
+                string query = "$filter= (qualification eq '" + ContactType + "')";
+                //remise objets à null si objet != null mais vide
+                if (SelectedTypes != null && SelectedTypes.Count() == 0) { SelectedTypes = null; }
+                if (SelectedResidences != null && SelectedResidences.Count() == 0) { SelectedResidences = null; }
+
+                if ((SelectedTypes != null && SelectedTypes.Any()) && SelectedResidences == null)
+                {
+                    for (int i = 0; i < SelectedTypes.Count(); i++)
+                    {
+                        if (i == 0)
+                        {
+                            query += "and (substringof('" + SelectedTypes[i].Id.ToString() + "', CustomFields) eq true";
+                        }
+                        else
+                        {
+                            query += " or substringof('" + SelectedTypes[i].Id.ToString() + "', CustomFields) eq true";
+                        }
+
+                    }
+                    query += ")";
+                }
+                if (SelectedTypes == null && (SelectedResidences != null && SelectedResidences.Any()))
+                {
+                    for (int i = 0; i < SelectedResidences.Count(); i++)
+                    {
+                        if (i == 0)
+                        {
+                            query += "and (substringof('" + SelectedResidences[i].Id.ToString() + "', CustomFields) eq true";
+                        }
+                        else
+                        {
+                            query += " or substringof('" + SelectedResidences[i].Id.ToString() + "', CustomFields) eq true";
+                        }
+                    }
+                    query += ")";
+                }
+
+                if ((SelectedTypes != null && SelectedTypes.Any()) && (SelectedResidences != null && SelectedResidences.Any()))
+                {
+                    for (int i = 0; i < SelectedTypes.Count(); i++)
+                    {
+                        if (i == 0)
+                        {
+                            query += "and ((substringof('" + SelectedTypes[i].Id.ToString() + "', CustomFields) eq true";
+                        }
+                        else
+                        {
+                            query += " or substringof('" + SelectedTypes[i].Id.ToString() + "', CustomFields) eq true";
+                        }
+                    }
+                    query += ") and ";
+                    for (int i = 0; i < SelectedResidences.Count(); i++)
+                    {
+                        if (i == 0)
+                        {
+                            query += "(substringof('" + SelectedResidences[i].Id.ToString() + "', CustomFields) eq true";
+                        }
+                        else
+                        {
+                            query += " or substringof('" + SelectedResidences[i].Id.ToString() + "', CustomFields) eq true";
+                        }
+                        query += ")";
+                    }
+                    query += ")";
+                }
+                JToken contactList = await Table.ReadAsync(query);
+                return contactList.ToObject<IEnumerable<Contact>>();
+
             }
-            
-        } */
+            catch (Exception e)
+            {
+                return null;
+                Debug.WriteLine(e);
+            }
+
+        }
+
     }
 }

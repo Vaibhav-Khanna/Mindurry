@@ -18,6 +18,7 @@ namespace Mindurry.Models
         public DateTimeOffset? LastRelaunch { get; set; }
         public DateTimeOffset? NextRelaunch { get; set; }
         public string Residence { get; set; }
+        public string Type { get; set; }
         public int Index { get; set; }
 
     }
