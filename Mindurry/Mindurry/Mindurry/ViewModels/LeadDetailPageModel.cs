@@ -20,6 +20,11 @@ namespace Mindurry.ViewModels
         private string ContactId;
         public Contact Contact { get; set; }
 
+        public ObservableCollection<Note> Reminders { get; set; }
+        public ObservableCollection<Note> Notes { get; set; }
+        public DateTimeOffset? DateReminder { get; set; } = null;
+        public string TextNote { get; set; }
+
         public ObservableCollection<Activity> Activities { get; set; }
 
         public ObservableCollection<string> Combo1 { get; set; }
@@ -46,14 +51,26 @@ namespace Mindurry.ViewModels
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
 
+        private bool isChecked;
+        public bool IsChecked
+        {
+            get => isChecked;
+            set
+            {
+                var toto = isChecked;
+            }
+        }
+
         public async override void Init(object initData)
         {
             base.Init(initData);
             ContactId = (string)initData;
 
-            await LoadData();
+            await LoadContact();
 
-          
+            await LoadReminders();
+
+            await LoadNotes();
 
             var activity1 = new Activity
             {
@@ -107,10 +124,45 @@ namespace Mindurry.ViewModels
             ClearAllTypesCommand = new Command(ClearAllTypes);
         }
 
-        private async Task LoadData()
+        public async override void ReverseInit(object reverseData)
+        {
+            if (reverseData is Note)
+            {
+                await LoadReminders();
+            }
+        }
+
+        private async Task LoadContact()
         {
             Contact = await StoreManager.ContactStore.GetItemAsync(ContactId);
         }
+
+        private async Task LoadReminders()
+        {
+            var reminders = await StoreManager.NoteStore.GetNextRemindersByContactIdAsync(ContactId);
+            if (reminders != null && reminders.Any())
+            {
+                Reminders = new ObservableCollection<Note>(reminders);
+            }
+            else
+            {
+                Reminders = new ObservableCollection<Note>();
+            }
+        }
+
+        private async Task LoadNotes()
+        {
+            var notes = await StoreManager.NoteStore.GetNotesByContactIdAsync(ContactId);
+            if (notes != null && notes.Any())
+            {
+                Notes = new ObservableCollection<Note>(notes);
+            }
+            else
+            {
+                Notes = new ObservableCollection<Note>();
+            }
+        }
+
 
         void ChangeArrowOne()
         {
@@ -137,19 +189,67 @@ namespace Mindurry.ViewModels
                 item.IsChecked = false;
             }
         }
+        
 
         public Command UpdateContactCommand => new Command(async (obj) =>
         {
-            await CoreMethods.PushPageModel<NewContactPageModel>(Contact.Id);
+            await CoreMethods.PushPageModel<UpdateReminderPageModel>(Contact.Id);
             SubUnsub();
 
         });
+
+        
+        public Command TerminateReminderCommand => new Command(async (obj) =>
+        {
+            
+            var result = await CoreMethods.DisplayAlert("Classer", "Etes vous sur de vouloir classer ce rappel ?", "Oui", "Non");
+            if (result)
+            {
+                Note _note = obj as Note;
+                _note.DoneAt = DateTimeOffset.Now;
+                _note.ActivityStreamDate = DateTimeOffset.Now;
+                await StoreManager.NoteStore.UpdateAsync(_note);
+                await LoadReminders();
+            }
+
+        });
+
+        public Command UpdateReminderCommand => new Command(async (obj) =>
+        {
+            await CoreMethods.PushPageModel<UpdateReminderPageModel>(obj,true,false); 
+
+        });
+        public Command DeleteReminderCommand => new Command(async (obj) =>
+        {
+           var result = await CoreMethods.DisplayAlert("Suppression", "Etes vous sur de vouloir supprimer ce rappel ?", "Oui", "Non");
+            if (result)
+            {
+                await StoreManager.NoteStore.RemoveAsync((Note)obj);
+                await LoadReminders();
+            }
+        });
+
+        public Command AddNoteCommand => new Command(async (obj) =>
+        {
+            Note NoteToInsert = new Note()
+            {
+                ContactId = ContactId,
+                UserId = Contact.UserId,
+                Kind = "note",
+                Content = TextNote
+            };
+            if (DateReminder != null) { NoteToInsert.ReminderAt = DateReminder; }
+            await StoreManager.NoteStore.InsertAsync(NoteToInsert);
+            await LoadNotes();
+
+        });
+
         void SubUnsub()
         {
             MessagingCenter.Subscribe<NewContactPageModel>(this, "ReloadDetailContact", async (obj) =>
             {
 
-                await LoadData();
+                await LoadContact();
 
                 MessagingCenter.Unsubscribe<NewContactPageModel>(this, "ReloadDetailContact");
             });

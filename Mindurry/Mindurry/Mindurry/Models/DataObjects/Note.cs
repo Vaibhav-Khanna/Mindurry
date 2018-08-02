@@ -8,16 +8,16 @@ namespace Mindurry.Models.DataObjects
     public class Note : BaseDataObject
     {
         [JsonProperty("doneAt")]
-        public DateTimeOffset DoneAt { get; set; }
+        public DateTimeOffset? DoneAt { get; set; }
 
         [JsonProperty("databaseInsertAt")]
-        public DateTimeOffset DatabaseInsertAt { get; set; }
+        public DateTimeOffset? DatabaseInsertAt { get; set; }
 
         [JsonProperty("reminderAt")]
-        public DateTimeOffset ReminderAt { get; set; }
+        public DateTimeOffset? ReminderAt { get; set; }
 
         [JsonProperty("activityStreamDate")]
-        public DateTimeOffset ActivityStreamDate { get; set; }
+        public DateTimeOffset? ActivityStreamDate { get; set; }
 
         [JsonProperty("contactId")]
         public string ContactId { get; set; }
@@ -31,11 +31,29 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("userFirstname")]
         public string UserFirstname { get; set; }
 
+        [JsonIgnore]
+        public string Username
+        {
+            get
+            {
+                return string.Format("{0} {1}", UserFirstname, UserLastname);
+            }
+        }
+
         [JsonProperty("contactFirstname")]
         public string ContactFirstname { get; set; }
 
         [JsonProperty("contactLastname")]
         public string ContactLastname { get; set; }
+
+        [JsonIgnore]
+        public string Contactname
+        {
+            get
+            {
+                return string.Format("{0} {1}", ContactFirstname, ContactLastname);
+            }
+        }
 
         [JsonProperty("contactCompanyName")]
         public string ContactCompanyName { get; set; }

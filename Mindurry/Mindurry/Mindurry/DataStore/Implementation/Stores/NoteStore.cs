@@ -14,11 +14,11 @@ namespace Mindurry.DataStore.Implementation.Stores
 
         public async Task<DateTimeOffset?> GetLastNoteDateAsync(string contactId)
         {
-            InitializeStore();
+            await InitializeStore().ConfigureAwait(false);
             try
             {
                 var collection = await Table.Where(x => (x.ContactId == contactId)).OrderByDescending(x => x.DatabaseInsertAt).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
-                if (collection.Any())
+                if (collection != null && collection.Any())
                 {
                     return collection.First().DatabaseInsertAt;
                 } else
@@ -34,13 +34,53 @@ namespace Mindurry.DataStore.Implementation.Stores
 
         public async Task<DateTimeOffset?> GetNextNoteReminderDateAsync(string contactId)
         {
-            InitializeStore();
+            await InitializeStore().ConfigureAwait(false);
             try
             {
                 var collection = await Table.Where(x => ((x.ContactId == contactId) && x.ReminderAt != null)).OrderBy(x => x.ReminderAt).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
-                if (collection.Any())
+                if (collection != null && collection.Any())
                 {
                     return collection.First().ReminderAt;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public async Task<IEnumerable<Note>> GetNextRemindersByContactIdAsync(string contactId)
+        {
+            await InitializeStore().ConfigureAwait(false);
+            try
+            {
+                var collection = await Table.Where(x => ((x.ContactId == contactId) && x.ReminderAt != null && x.ReminderAt > DateTimeOffset.Now)).OrderBy(x => x.ReminderAt).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                if (collection != null && collection.Any())
+                {
+                    return collection;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public async Task<IEnumerable<Note>> GetNotesByContactIdAsync(string contactId)
+        {
+            await InitializeStore().ConfigureAwait(false);
+            try
+            {
+                var collection = await Table.Where(x => (x.ContactId == contactId && x.ActivityStreamDate != null)).OrderByDescending(x => x.ActivityStreamDate).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                if (collection != null && collection.Any())
+                {
+                    return collection;
                 }
                 else
                 {

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+    <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              x:Class="Mindurry.Pages.UpdateReminderPage"
+             xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
+			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
+
+
+        <ContentPage.Content>
+        <StackLayout Orientation="Vertical" Margin="50">
+            <Label Text="Modifier le contenu du rappel" FontSize="18" Margin="0,0,0,10"/>
+            <Editor HorizontalOptions="Fill" HeightRequest="200" Margin="0,10" Text="{Binding Content}" />
+
+            <StackLayout HorizontalOptions="End" Orientation="Horizontal">
+                <Label Text="🛈" VerticalOptions="End" FontSize="24"/>
+                <win:CalendarDatePicker Header="Modifier la date du rappel" Width="300" Date="{Binding ReminderDate, Mode=TwoWay}"/>
+                <Button Text="Valider" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="200" HeightRequest="40" VerticalOptions="End" Command="{Binding SaveReminderCommand}"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
