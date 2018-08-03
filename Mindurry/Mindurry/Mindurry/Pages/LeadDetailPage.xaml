@@ -167,8 +167,10 @@
 
                         <Label Text="Flux d'activité" FontSize="18" Margin="0,20,0,10"/>
                         <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
-                        <ListView Margin="0,20,20,0" ItemsSource="{Binding Notes}" ItemTemplate="{StaticResource noteListSelector}"/>
-                       <!-- <ListView.ItemTemplate>
+
+                        <ListView Margin="0,20,20,0" ItemsSource="{Binding Notes}" IsEnabled="False" ItemTemplate="{StaticResource noteListSelector}">
+
+                            <!-- <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Padding="0,10">
                                     <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
@@ -186,9 +188,11 @@
                                 </StackLayout>
                             </DataTemplate>
                         </ListView.ItemTemplate> -->
-
-                        <Button Text="Afficher plus d'historique" BackgroundColor="White" TextColor="{StaticResource BlueAccent}" 
+                            <ListView.Footer>
+                                <Button Text="Afficher plus d'historique" BackgroundColor="White" TextColor="{StaticResource BlueAccent}" 
                                 BorderColor="{StaticResource BlueAccent}" BorderWidth="1" HorizontalOptions="Center"/>
+                            </ListView.Footer>
+                        </ListView>
                     </StackLayout>
                     
                 </StackLayout>
@@ -203,19 +207,19 @@
                             <effect:SemiBoldEffect/>
                         </Label.Effects>
                     </Label>
-                    <Picker WidthRequest="300" ItemsSource="{Binding Combo1}" SelectedItem="{Binding Combo1Selected}" HorizontalOptions="Start"/>
+                    <Picker WidthRequest="300" ItemsSource="{Binding CollectSources}" ItemDisplayBinding="{Binding Name}"   SelectedItem="{Binding SelectedSource, Mode=TwoWay}"  HorizontalOptions="Start"/>
                     <Label Text="Qualification">
                         <Label.Effects>
                             <effect:SemiBoldEffect/>
                         </Label.Effects>
                     </Label>
-                    <Picker WidthRequest="300" ItemsSource="{Binding Combo1}" SelectedItem="{Binding Combo1Selected}" HorizontalOptions="Start"/>
+                    <Picker WidthRequest="300" ItemsSource="{Binding Qualifications}" SelectedItem="{Binding SelectedQualification, , Mode=TwoWay}"   HorizontalOptions="Start"/>
                     <Label Text="Type">
                         <Label.Effects>
                             <effect:SemiBoldEffect/>
                         </Label.Effects>
                     </Label>
-                    <Picker WidthRequest="300" ItemsSource="{Binding Types}" SelectedItem="{Binding TypeSelected}" HorizontalOptions="Start"/>
+                    <Picker WidthRequest="300" ItemsSource="{Binding Types}" ItemDisplayBinding="{Binding Value}" SelectedItem="{Binding SelectedType}" HorizontalOptions="Start"/>
 
                     <Label Text="Intéressé par" FontSize="16">
                         <Label.Effects>
@@ -233,7 +237,7 @@
                         </StackLayout>
 
                         <StackLayout IsVisible="{Binding IsFirstListVisible}">
-                            <repeater:RepeaterView ItemsSource="{Binding ResidencesChecks}" VerticalOptions="Start">
+                            <repeater:RepeaterView ItemsSource="{Binding ResidencesChecks}" VerticalOptions="Start" SelectedItemCommand="{Binding SaveChecksCommand}">
                                 <repeater:RepeaterView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
@@ -262,7 +266,7 @@
                         </StackLayout>
 
                         <StackLayout IsVisible="{Binding IsSecondListVisible}" Spacing="15">
-                            <repeater:RepeaterView ItemsSource="{Binding TypesChecks}" VerticalOptions="Start">
+                            <repeater:RepeaterView ItemsSource="{Binding TypesChecks}" VerticalOptions="Start" SelectedItemCommand="{Binding SaveChecksCommand}">
                                 <repeater:RepeaterView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
@@ -284,8 +288,8 @@
                             <effect:SemiBoldEffect/>
                         </Label.Effects>
                         </Label>
-                        <Picker WidthRequest="300" ItemsSource="{Binding Combo4}" SelectedItem="{Binding Combo4Selected}" HorizontalOptions="Start"/>
-                        <StackLayout BackgroundColor="#e9e9e9" Orientation="Vertical" Spacing="10">
+                        <Picker WidthRequest="300" ItemsSource="{Binding Commercials}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedCommercial, Mode=TwoWay}"  HorizontalOptions="Start"/>
+                      <!--  <StackLayout BackgroundColor="#e9e9e9" Orientation="Vertical" Spacing="10">
                             <StackLayout Orientation="Horizontal" Spacing="20" HeightRequest="100" WidthRequest="300" HorizontalOptions="Start">
                             <Label Text="Archiver ce lead" FontSize='16' FontAttributes="Bold" VerticalOptions="Center" Margin="10,0,0,0" WidthRequest="200" >
                                 <Label.Effects>
@@ -298,9 +302,9 @@
                             HorizontalOptions="Center"/>
                             <Button Text="Valider" Margin="180,0,26,0" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}"  IsVisible="{Binding IsSwitchToggled}" WidthRequest="120" HeightRequest="40" HorizontalOptions="End"/>
 
-                        </StackLayout>
+                        </StackLayout> -->
                        
-                    </StackLayout>
+                    </StackLayout> 
 
                 </StackLayout>
             </ScrollView>

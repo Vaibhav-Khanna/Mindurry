@@ -318,7 +318,7 @@ namespace Mindurry.ViewModels
                 //selected if update of contact
                 if (!String.IsNullOrEmpty(ContactId))
                 {
-                    _customF = await StoreManager.ContactCustomFieldStore.GetItemByContactIdAndSourceEntryIdAsync(Contact.Id, CustomFields[0].ContactCustomFieldSourceId);
+                    _customF = await StoreManager.ContactCustomFieldStore.GetItemByContactIdAndSourceIdAsync(Contact.Id, CustomFields[0].ContactCustomFieldSourceId);
                     foreach (var item in CustomFields)
                     {
                         if (item.Id == _customF.ContactCustomFieldSourceEntryId)

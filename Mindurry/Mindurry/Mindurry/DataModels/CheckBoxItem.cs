@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
+using Mindurry.Models.DataObjects;
 
 namespace Mindurry.DataModels
 {

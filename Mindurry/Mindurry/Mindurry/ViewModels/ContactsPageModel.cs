@@ -108,7 +108,7 @@ namespace Mindurry.ViewModels
             {
                 var commCheck = new CheckBoxItem
                 {
-                    Content = item.Firstname + " " + item.Lastname,
+                    Content = item.Name,
                     IsChecked = false,
                     Id = item.Id
                 };

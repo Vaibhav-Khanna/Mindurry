@@ -1,5 +1,6 @@
 ﻿using FreshMvvm;
 using Mindurry.DataModels;
+using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class ClientsDetailsInfoPageModel : BasePageModel
     {
-        public Person Item { get; set; }
+        public Contact Item { get; set; }
         public ObservableCollection<Activity> Activities { get; set; }
 
         public ObservableCollection<string> Combo1 { get; set; }
@@ -23,7 +24,7 @@ namespace Mindurry.ViewModels
         public ObservableCollection<string> ComboL3 { get; set; }
         public ObservableCollection<string> Types { get; set; }
         public ObservableCollection<DateTitle> Documents { get; set; }
-        public ObservableCollection<Residence> Residences { get; set; }
+        public ObservableCollection<DataModels.Residence> Residences { get; set; }
 
         public int TabIndex { get; set; }
         public int TabTwoLevel { get; set; }
@@ -108,7 +109,7 @@ namespace Mindurry.ViewModels
         public override void Init(object initData)
         {
             base.Init(initData);
-            Item = (Person)initData;
+            Item = (Contact)initData;
 
             var activity1 = new Activity
             {
@@ -186,7 +187,7 @@ namespace Mindurry.ViewModels
 
             Documents = new ObservableCollection<DateTitle> { doc1, doc2, doc3, doc4 };
 
-            var residence1 = new Residence()
+            var residence1 = new DataModels.Residence()
             {
                 NoArchi = 456,
                 Type = "T3",
@@ -197,7 +198,7 @@ namespace Mindurry.ViewModels
                 SelectedStatus = Statut.Reserve
             };
 
-            Residences = new ObservableCollection<Residence> { residence1 };
+            Residences = new ObservableCollection<DataModels.Residence> { residence1 };
 
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);

@@ -77,7 +77,7 @@ namespace Mindurry.DataStore.Implementation.Stores
             await InitializeStore().ConfigureAwait(false);
             try
             {
-                var collection = await Table.Where(x => (x.ContactId == contactId && x.ActivityStreamDate != null)).OrderByDescending(x => x.ActivityStreamDate).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                var collection = await Table.Where(x => (x.ContactId == contactId && x.ActivityStreamDate != null && x.Kind != "contactAdded" && x.Kind != "contactUpdated" && x.Kind != "contactDeleted")).OrderByDescending(x => x.ActivityStreamDate).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
                 if (collection != null && collection.Any())
                 {
                     return collection;

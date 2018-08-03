@@ -11,6 +11,9 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("lastname")]
         public string Lastname { get; set; }
 
+        [JsonIgnore]
+        public string Name => $"{Firstname} {Lastname}";
+
         [JsonProperty("email")]
         public string Email { get; set; }
 
