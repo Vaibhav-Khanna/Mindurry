@@ -12,8 +12,8 @@ namespace Mindurry.ViewModels
     {
         bool IsGarage;
 
-        public ObservableCollection<Residence> Garages { get; set; }
-        public Residence SelectedGarage
+        public ObservableCollection<ResidenceModel> Garages { get; set; }
+        public ResidenceModel SelectedGarage
         {
             get => null;
             set
@@ -30,47 +30,47 @@ namespace Mindurry.ViewModels
             var data = (Tuple<bool, string>)initData;
             IsGarage = data.Item1;
 
-            var itemg1 = new Residence
+            var itemg1 = new ResidenceModel
             {
                 Parent = "John Doe",
                 NoArchi = 2,
                 Type = "Extérieur",
                 Surface = 13,
-                Prix = 10000,
+                Price = 10000,
                 PlanFileName = "Plan-Version-Final06.pdf"
             };
 
-            var itemg2 = new Residence
+            var itemg2 = new ResidenceModel
             {
                 Parent = "Isabelle Soliu",
                 NoArchi = 2,
                 Type = "Aérien",
                 Surface = 12,
-                Prix = 5000,
+                Price = 5000,
                 PlanFileName = "Plan-Version-Final06.pdf"
             };
 
-            var itemg3 = new Residence
+            var itemg3 = new ResidenceModel
             {
                 Parent = "Frank Rico",
                 NoArchi = 3,
                 Type = "Exterieur Couvert",
                 Surface = 12,
-                Prix = 5000,
+                Price = 5000,
                 PlanFileName = "Plan-Version-Final06.pdf"
             };
 
-            var itemg4 = new Residence
+            var itemg4 = new ResidenceModel
             {
                 Parent = "Aron Yoto",
                 NoArchi = 4,
                 Type = "Sous Sol",
                 Surface = 13,
-                Prix = 11000,
+                Price = 11000,
                 PlanFileName = "Plan-Version-Final06.pdf"
             };
 
-            Garages = new ObservableCollection<Residence> { itemg1, itemg2, itemg3, itemg4 };
+            Garages = new ObservableCollection<ResidenceModel> { itemg1, itemg2, itemg3, itemg4 };
         }
     }
 }

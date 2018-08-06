@@ -24,7 +24,7 @@ namespace Mindurry.ViewModels
         public ObservableCollection<string> ComboL3 { get; set; }
         public ObservableCollection<string> Types { get; set; }
         public ObservableCollection<DateTitle> Documents { get; set; }
-        public ObservableCollection<DataModels.Residence> Residences { get; set; }
+        public ObservableCollection<DataModels.ResidenceModel> Residences { get; set; }
 
         public int TabIndex { get; set; }
         public int TabTwoLevel { get; set; }
@@ -187,18 +187,18 @@ namespace Mindurry.ViewModels
 
             Documents = new ObservableCollection<DateTitle> { doc1, doc2, doc3, doc4 };
 
-            var residence1 = new DataModels.Residence()
+            var residence1 = new DataModels.ResidenceModel()
             {
                 NoArchi = 456,
                 Type = "T3",
                 Surface = 86,
-                Prix = 126000,
+                Price = 126000,
                 Stade = "En attente des options",
                 ResidenceType = ResidenceType.Apartment,            
-                SelectedStatus = Statut.Reserve
+                SelectedStatus = Status.Reserve
             };
 
-            Residences = new ObservableCollection<DataModels.Residence> { residence1 };
+            Residences = new ObservableCollection<DataModels.ResidenceModel> { residence1 };
 
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);

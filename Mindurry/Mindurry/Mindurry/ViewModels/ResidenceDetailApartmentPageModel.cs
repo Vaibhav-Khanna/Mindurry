@@ -12,11 +12,11 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class ResidenceDetailApartmentPageModel : BasePageModel
     {
-        public ObservableCollection<Residence> Items { get; set; }
+        public ObservableCollection<ResidenceModel> Items { get; set; }
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> ExpositionChecks { get; set; }
 
-        public Residence SelectedItem
+        public ResidenceModel SelectedItem
         {
             get => null;
             set
@@ -49,62 +49,62 @@ namespace Mindurry.ViewModels
         {
             base.Init(initData);
 
-            var item1 = new Residence
+            var item1 = new ResidenceModel
             {
                 Parent = "Herrian",
                 NoArchi = 678,
                 Type = "T2",
                 Exposition = "Nord",
                 Surface = 89,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "John Doe",
                 Stade = "-",
-                Prix = 168000
+                Price = 168000
             };
 
-            var item2 = new Residence
+            var item2 = new ResidenceModel
             {
                 Parent = "Herrian",
                 NoArchi = 456,
                 Type = "T2",
                 Exposition = "Nord",
                 Surface = 67,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "Marc Duix",
                 Stade = "-",
-                Prix = 130000
+                Price = 130000
             };
-            var item3 = new Residence
+            var item3 = new ResidenceModel
             {
                 Parent = "Herrian",
                 NoArchi = 5678,
                 Type = "T3",
                 Exposition = "Nord",
                 Surface = 56,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "Marie Marto",
                 Stade = "-",
-                Prix = 156000
+                Price = 156000
             };
 
-            var item4 = new Residence
+            var item4 = new ResidenceModel
             {
                 Parent = "Herrian",
                 NoArchi = 567,
                 Type = "T4",
                 Exposition = "Nord",
                 Surface = 34,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "Henri Lapuie",
                 Stade = "Opts validés",
-                Prix = 110500
+                Price = 110500
             };
 
-            Items = new ObservableCollection<Residence> { item1, item2, item3, item4 };
+            Items = new ObservableCollection<ResidenceModel> { item1, item2, item3, item4 };
 
             var check4 = new CheckBoxItem { Content = "Studio" };
             var check5 = new CheckBoxItem { Content = "T2", IsChecked = true };

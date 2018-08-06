@@ -15,14 +15,14 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class ResidencesPageModel : BasePageModel
     {
-        public IEnumerable<IGrouping<string, Residence>> GroupedItems { get; set; }
+        public IEnumerable<IGrouping<string, ResidenceModel>> GroupedItems { get; set; }
        
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> ExpositionChecks { get; set; }
 
-        private Residence selectedItem;
-        public Residence SelectedItem
+        private ResidenceModel selectedItem;
+        public ResidenceModel SelectedItem
         {
             get => selectedItem;
             set
@@ -66,175 +66,175 @@ namespace Mindurry.ViewModels
         {
             base.Init(initData);
 
-            var item1 = new Residence
+            var item1 = new ResidenceModel
             {
                 Parent = "Herrian",
                 NoArchi = 678,
                 Type = "T2",
                 Exposition = "Nord",
                 Surface = 89,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "John Doe",
                 Stade = "-",
-                Prix = 168000
+                Price = 168000
             };
 
-            var item2 = new Residence
+            var item2 = new ResidenceModel
             {
                 Parent = "Herrian",
                 NoArchi = 456,
                 Type = "T2",
                 Exposition = "Nord",
                 Surface = 67,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "Marc Duix",
                 Stade = "-",
-                Prix = 130000
+                Price = 130000
             };
 
-            var item3 = new Residence
+            var item3 = new ResidenceModel
             {
                 Parent = "Herrian",
                 NoArchi = 5678,
                 Type = "T3",
                 Exposition = "Nord",
                 Surface = 56,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "Marie Marto",
                 Stade = "-",
-                Prix = 156000
+                Price = 156000
             };
 
-            var item4 = new Residence
+            var item4 = new ResidenceModel
             {
                 Parent = "Herrian",
                 NoArchi = 567,
                 Type = "T4",
                 Exposition = "Nord",
                 Surface = 34,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "Henri Lapuie",
                 Stade = "Opts validés",
-                Prix = 110500
+                Price = 110500
             };
 
-            var item21 = new Residence
+            var item21 = new ResidenceModel
             {
                 Parent = "Herri Ondo",
                 NoArchi = 5678,
                 Type = "T2",
                 Exposition = "Nord",
                 Surface = 109,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "John Doe",
                 Stade = "-",
-                Prix = 230000
+                Price = 230000
             };
 
-            var item22 = new Residence
+            var item22 = new ResidenceModel
             {
                 Parent = "Herri Ondo",
                 NoArchi = 777,
                 Type = "T3",
                 Exposition = "Nord",
                 Surface = 87,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "Marc Duix",
                 Stade = "-",
-                Prix = 197000
+                Price = 197000
             };
 
-            var item31 = new Residence
+            var item31 = new ResidenceModel
             {
                 Parent = "Miragarri",
                 NoArchi = 234,
                 Type = "T2",
                 Exposition = "Nord",
                 Surface = 89,
-                Terasse = 14,
-                Jardin = 25,
+                Terace = 14,
+                Garden = 25,
                 Client = "Marc Duix",
                 Stade = "-",
-                Prix = 206000
+                Price = 206000
             };
 
-            var item32 = new Residence
+            var item32 = new ResidenceModel
             {
                 Parent = "Miragarri",
                 NoArchi = 86,
                 Type = "T4",
                 Exposition = "Nord",
                 Surface = 48,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "Marc Duix",
                 Stade = "-",
-                Prix = 136000
+                Price = 136000
             };
 
-            var item33 = new Residence
+            var item33 = new ResidenceModel
             {
                 Parent = "Miragarri",
                 NoArchi = 67,
                 Type = "T4",
                 Exposition = "Nord",
                 Surface = 44,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "Marc Duix",
                 Stade = "-",
-                Prix = 178000
+                Price = 178000
             };
 
-            var item34 = new Residence
+            var item34 = new ResidenceModel
             {
                 Parent = "Miragarri",
                 NoArchi = 78,
                 Type = "T3",
                 Exposition = "Nord",
                 Surface = 67,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "Marc Duix",
                 Stade = "-",
-                Prix = 168000
+                Price = 168000
             };
 
-            var item41 = new Residence
+            var item41 = new ResidenceModel
             {
                 Parent = "Villa Aguilera",
                 NoArchi = 657,
                 Type = "T3",
                 Exposition = "Nord",
                 Surface = 89,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "Marc Duix",
                 Stade = "-",
-                Prix = 198000
+                Price = 198000
             };
 
-            var item42 = new Residence
+            var item42 = new ResidenceModel
             {
                 Parent = "Villa Aguilera",
                 NoArchi = 576,
                 Type = "T4",
                 Exposition = "Nord",
                 Surface = 78,
-                Terasse = 14,
-                Jardin = 0,
+                Terace = 14,
+                Garden = 0,
                 Client = "Marc Duix",
                 Stade = "-",
-                Prix = 154000
+                Price = 154000
             };
 
-            var items = new ObservableCollection<Residence> { item1, item2, item21, item22, item3, item31, item32, item33, item34, item4, item41, item42 };
+            var items = new ObservableCollection<ResidenceModel> { item1, item2, item21, item22, item3, item31, item32, item33, item34, item4, item41, item42 };
             GroupedItems = items.GroupBy(x => x.Parent);
 
             var check1 = new CheckBoxItem { Content = "Herrian" };
@@ -275,7 +275,7 @@ namespace Mindurry.ViewModels
         {
             foreach (var group in GroupedItems)
             {
-                foreach (Residence r in group)
+                foreach (ResidenceModel r in group)
                 {
                     if (r.IsChecked)
                     {

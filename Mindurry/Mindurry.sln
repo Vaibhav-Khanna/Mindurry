@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mindurry.iOS", "Mindurry\Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mindurry.UWP", "Mindurry\Mindurry.UWP\Mindurry.UWP.csproj", "{A3A86081-7360-497C-8CB9-3EE8B84D94A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mindurry", "Mindurry\Mindurry\Mindurry.csproj", "{09031479-668F-4520-8C8E-FBB0FA9B615C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mindurry", "Mindurry\Mindurry\Mindurry.csproj", "{09031479-668F-4520-8C8E-FBB0FA9B615C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,8 +91,6 @@ Global
 		{6E7D9A09-CFF1-4B38-A61B-47844F6F79C6}.Debug|x64.Build.0 = Debug|Any CPU
 		{6E7D9A09-CFF1-4B38-A61B-47844F6F79C6}.Debug|x64.Deploy.0 = Debug|Any CPU
 		{6E7D9A09-CFF1-4B38-A61B-47844F6F79C6}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6E7D9A09-CFF1-4B38-A61B-47844F6F79C6}.Debug|x86.Build.0 = Debug|Any CPU
-		{6E7D9A09-CFF1-4B38-A61B-47844F6F79C6}.Debug|x86.Deploy.0 = Debug|Any CPU
 		{6E7D9A09-CFF1-4B38-A61B-47844F6F79C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E7D9A09-CFF1-4B38-A61B-47844F6F79C6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6E7D9A09-CFF1-4B38-A61B-47844F6F79C6}.Release|Any CPU.Deploy.0 = Release|Any CPU

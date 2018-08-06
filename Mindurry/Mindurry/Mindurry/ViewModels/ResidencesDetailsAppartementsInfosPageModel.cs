@@ -10,13 +10,13 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class ResidencesDetailsAppartementsInfosPageModel : BasePageModel
     {
-        public Residence Item { get; set; }
+        public ResidenceModel Item { get; set; }
 
         public override void Init(object initData)
         {
             base.Init(initData);
 
-            Item = (Residence)initData;
+            Item = (ResidenceModel)initData;
            
 
         }
