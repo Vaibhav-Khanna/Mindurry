@@ -20,7 +20,7 @@ namespace Mindurry.ViewModels
         private string ContactId;
         public Contact Contact { get; set; }
 
-        public ObservableCollection<Note> Reminders { get; set; }
+        public ObservableCollection<RemindersCheckBoxListModel> Reminders { get; set; }
         public ObservableCollection<Note> Notes { get; set; }
         public DateTimeOffset? DateReminder { get; set; } = null;
         public string TextNote { get; set; }
@@ -114,17 +114,7 @@ namespace Mindurry.ViewModels
         public ICommand ClearAllResidencesCommand { get; set; }
         public ICommand ClearAllTypesCommand { get; set; }
 
-        
-
-        private bool isChecked;
-        public bool IsChecked
-        {
-            get => isChecked;
-            set
-            {
-                var toto = isChecked;
-            }
-        }
+       
 
         public async override void Init(object initData)
         {
@@ -162,14 +152,19 @@ namespace Mindurry.ViewModels
 
         private async Task LoadReminders()
         {
+            Reminders = new ObservableCollection<RemindersCheckBoxListModel>();
             var reminders = await StoreManager.NoteStore.GetNextRemindersByContactIdAsync(ContactId);
             if (reminders != null && reminders.Any())
             {
-                Reminders = new ObservableCollection<Note>(reminders);
-            }
-            else
-            {
-                Reminders = new ObservableCollection<Note>();
+                foreach (var item in reminders)
+                {
+                    var reminderList = new RemindersCheckBoxListModel
+                    {
+                        Reminder = item,
+                        IsChecked = false
+                    };
+                    Reminders.Add(reminderList);
+                }
             }
         }
 
@@ -199,8 +194,7 @@ namespace Mindurry.ViewModels
                     {
                         SelectedSource = item;
                     }
-                }
-                
+                }  
             }
             else
             {
@@ -321,7 +315,7 @@ namespace Mindurry.ViewModels
                 Commercials = new ObservableCollection<User>();
             }
         }
-
+        
         private async void SaveCollect(string collectId)
         {
             Contact.CollectSourceId = collectId;
@@ -343,7 +337,6 @@ namespace Mindurry.ViewModels
             }
         }
 
-        
         public Command SaveChecksCommand => new Command<CheckBoxItem>(async (obj) =>
         {
             if (obj.IsChecked)
@@ -399,42 +392,53 @@ namespace Mindurry.ViewModels
                 item.IsChecked = false;
             }
         }
-        
+
+        public Command SendSequenceCommand => new Command(async (obj) =>
+        {
+            await CoreMethods.PushPageModel<NewContactPageModel>(Contact.Id);
+
+        });
 
         public Command UpdateContactCommand => new Command(async (obj) =>
         {
-            await CoreMethods.PushPageModel<UpdateReminderPageModel>(Contact.Id);
+            await CoreMethods.PushPageModel<NewContactPageModel>(Contact.Id);
             SubUnsub();
 
         });
 
         
-        public Command TerminateReminderCommand => new Command(async (obj) =>
+        public Command SelectReminderCommand => new Command<RemindersCheckBoxListModel>(async (obj) =>
         {
+
             
-            var result = await CoreMethods.DisplayAlert("Classer", "Etes vous sur de vouloir classer ce rappel ?", "Oui", "Non");
-            if (result)
+            if (obj.IsChecked)
             {
-                Note _note = obj as Note;
-                _note.DoneAt = DateTimeOffset.Now;
-                _note.ActivityStreamDate = DateTimeOffset.Now;
-                await StoreManager.NoteStore.UpdateAsync(_note);
-                await LoadReminders();
+                var result = await CoreMethods.DisplayAlert("Classer", "Etes vous sur de vouloir terminer ce rappel ?", "Oui", "Non");
+                if (result)
+                {
+                    RemindersCheckBoxListModel  reminderObj= obj as RemindersCheckBoxListModel;
+                    Note _note = reminderObj.Reminder;
+                    _note.DoneAt = DateTimeOffset.Now;
+                    _note.ActivityStreamDate = DateTimeOffset.Now;
+                    await StoreManager.NoteStore.UpdateAsync(_note);
+                    await LoadReminders();
+                    await LoadNotes();
+                }
+                else { obj.IsChecked = false; }
             }
-
         });
-
-        public Command UpdateReminderCommand => new Command(async (obj) =>
+       
+        public Command UpdateReminderCommand => new Command<RemindersCheckBoxListModel>(async (obj) =>
         {
-            await CoreMethods.PushPageModel<UpdateReminderPageModel>(obj,true,false); 
+            await CoreMethods.PushPageModel<UpdateReminderPageModel>(obj.Reminder,true,false); 
 
         });
-        public Command DeleteReminderCommand => new Command(async (obj) =>
+        public Command DeleteReminderCommand => new Command<RemindersCheckBoxListModel>(async (obj) =>
         {
            var result = await CoreMethods.DisplayAlert("Suppression", "Etes vous sur de vouloir supprimer ce rappel ?", "Oui", "Non");
             if (result)
             {
-                await StoreManager.NoteStore.RemoveAsync((Note)obj);
+                await StoreManager.NoteStore.RemoveAsync((Note)obj.Reminder);
                 await LoadReminders();
             }
         });
