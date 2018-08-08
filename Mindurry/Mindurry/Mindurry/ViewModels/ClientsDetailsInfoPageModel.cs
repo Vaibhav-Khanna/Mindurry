@@ -1,5 +1,6 @@
 ﻿using FreshMvvm;
 using Mindurry.DataModels;
+using Mindurry.Models;
 using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
 using System;
@@ -19,7 +20,7 @@ namespace Mindurry.ViewModels
         private string ContactId;
         public Contact Contact { get; set; }
 
-        public ObservableCollection<Note> Reminders { get; set; }
+        public ObservableCollection<RemindersCheckBoxListModel> Reminders { get; set; }
         public ObservableCollection<Note> Notes { get; set; }
         public DateTimeOffset? DateReminder { get; set; } = null;
         public string TextNote { get; set; }
@@ -103,13 +104,76 @@ namespace Mindurry.ViewModels
 
         public ObservableCollection<Activity> Activities { get; set; }
 
-        public ObservableCollection<string> Combo1 { get; set; }
+        public ObservableCollection<Models.DataObjects.Residence> Residences { get; set; }
+        
+        private Models.DataObjects.Residence residenceSelected;
+        public Models.DataObjects.Residence ResidenceSelected
+         {
+            get
+            {
+                return residenceSelected;
+            }
+            set
+            {
+                if (value != residenceSelected && value != null)
+                {
+                    References = null;
+                    CalculReference(value.Id , TypeBienSelected);
+                }
+                residenceSelected = value;
+            }
+        }
+
+        public ObservableCollection<string> Statuts { get; set; }
+        public string StatutSelected { get; set; }
+
+        public ObservableCollection<string> TypeBiens { get; set; }
+
+        private string typeBienSelected;
+        public string TypeBienSelected
+        {
+            get
+            {
+                return typeBienSelected;
+            }
+            set
+            {
+                if (value != typeBienSelected && value != null)
+                {
+                    References = null;
+                    CalculReference(ResidenceSelected.Id ,value);
+                }
+                typeBienSelected = value;
+            }
+        }
+
+        public ObservableCollection<string> References { get; set; }
+        private string referenceSelected;
+        public string ReferenceSelected
+        {
+            get
+            {
+                return referenceSelected;
+            }
+            set
+            {
+                if (value != referenceSelected && value != null)
+                {                 
+                    CalculPrice(value);
+                }
+                referenceSelected = value;
+            }
+        }
+
+        public double? Price { get; set; }
+        public ObservableCollection<ClientPropertyModel> PropertyList { get; set; }
+
         public ObservableCollection<string> ComboL1 { get; set; }
         public ObservableCollection<string> ComboL2 { get; set; }
         public ObservableCollection<string> ComboL3 { get; set; }
 
         public ObservableCollection<DateTitle> Documents { get; set; }
-        public ObservableCollection<DataModels.Residence> Residences { get; set; }
+        //public ObservableCollection<DataModels.Residence> Residences { get; set; }
 
         public int TabIndex { get; set; }
         public int TabTwoLevel { get; set; }
@@ -153,7 +217,7 @@ namespace Mindurry.ViewModels
 
         public bool IsTabThreeL1 => TabThreeLevel == 0;
         public bool IsTabThreeL2 => TabThreeLevel == 1;
-        public bool IsTabThreeL3 => TabThreeLevel == 2;
+       // public bool IsTabThreeL3 => TabThreeLevel == 2;
 
         public string Combo1Selected { get; set; }
         public string ComboL1Selected { get; set; }
@@ -229,19 +293,6 @@ namespace Mindurry.ViewModels
 
             Documents = new ObservableCollection<DateTitle> { doc1, doc2, doc3, doc4 };
 
-            var residence1 = new DataModels.Residence()
-            {
-                NoArchi = 456,
-                Type = "T3",
-                Surface = 86,
-                Prix = 126000,
-                Stade = "En attente des options",
-                ResidenceType = ResidenceType.Apartment,            
-                SelectedStatus = Statut.Reserve
-            };
-
-            Residences = new ObservableCollection<DataModels.Residence> { residence1 };
-
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
 
@@ -259,6 +310,14 @@ namespace Mindurry.ViewModels
             TabTwoForwardCommand = new Command(TabTwoForward);
         }
 
+        public async override void ReverseInit(object reverseData)
+        {
+            if (reverseData is Note)
+            {
+                await LoadReminders();
+            }
+        }
+
         private async Task LoadContact()
         {
             Contact = await StoreManager.ContactStore.GetItemAsync(ContactId);
@@ -266,14 +325,19 @@ namespace Mindurry.ViewModels
 
         private async Task LoadReminders()
         {
+            Reminders = new ObservableCollection<RemindersCheckBoxListModel>();
             var reminders = await StoreManager.NoteStore.GetNextRemindersByContactIdAsync(ContactId);
             if (reminders != null && reminders.Any())
             {
-                Reminders = new ObservableCollection<Note>(reminders);
-            }
-            else
-            {
-                Reminders = new ObservableCollection<Note>();
+                foreach (var item in reminders)
+                {
+                    var reminderList = new RemindersCheckBoxListModel
+                    {
+                        Reminder = item,
+                        IsChecked = false
+                    };
+                    Reminders.Add(reminderList);
+                }
             }
         }
 
@@ -483,6 +547,43 @@ namespace Mindurry.ViewModels
 
         });
 
+        public Command SelectReminderCommand => new Command<RemindersCheckBoxListModel>(async (obj) =>
+        {
+
+
+            if (obj.IsChecked)
+            {
+                var result = await CoreMethods.DisplayAlert("Classer", "Etes vous sur de vouloir terminer ce rappel ?", "Oui", "Non");
+                if (result)
+                {
+                    RemindersCheckBoxListModel reminderObj = obj as RemindersCheckBoxListModel;
+                    Note _note = reminderObj.Reminder;
+                    _note.DoneAt = DateTimeOffset.Now;
+                    _note.ActivityStreamDate = DateTimeOffset.Now;
+                    await StoreManager.NoteStore.UpdateAsync(_note);
+                    await LoadReminders();
+                    await LoadNotes();
+                }
+                else { obj.IsChecked = false; }
+            }
+        });
+
+        public Command UpdateReminderCommand => new Command<RemindersCheckBoxListModel>(async (obj) =>
+        {
+            await CoreMethods.PushPageModel<UpdateReminderPageModel>(obj.Reminder, true, false);
+
+        });
+
+        public Command DeleteReminderCommand => new Command<RemindersCheckBoxListModel>(async (obj) =>
+        {
+            var result = await CoreMethods.DisplayAlert("Suppression", "Etes vous sur de vouloir supprimer ce rappel ?", "Oui", "Non");
+            if (result)
+            {
+                await StoreManager.NoteStore.RemoveAsync((Note)obj.Reminder);
+                await LoadReminders();
+            }
+        });
+
         public Command AddNoteCommand => new Command(async (obj) =>
         {
             Note NoteToInsert = new Note()
@@ -494,10 +595,10 @@ namespace Mindurry.ViewModels
             };
             if (DateReminder != null) { NoteToInsert.ReminderAt = DateReminder; }
             await StoreManager.NoteStore.InsertAsync(NoteToInsert);
+            TextNote = null;
             await LoadNotes();
 
         });
-
 
         void SubUnsub()
         {
@@ -546,9 +647,28 @@ namespace Mindurry.ViewModels
             TabIndex = 1;
         }
 
-        void TabThree()
+        async void TabThree()
         {
             TabIndex = 2;
+
+            // Trouver les biens immobiliers de ce contacts
+            await LoadProperties();
+
+            // init formulaire (Ajouter un bien)
+            var res = await StoreManager.ResidenceStore.GetItemsAsync();
+            if (res != null && res.Any())
+            {
+                Residences = new ObservableCollection<Models.DataObjects.Residence>(res);
+                ResidenceSelected = Residences[0];
+
+                Statuts = new ObservableCollection<string> { "Option", "Réservation", "Signature" };
+                StatutSelected = Statuts[0];
+                TypeBiens = new ObservableCollection<string> { "Appartement", "Cave", "Parking" };
+                TypeBienSelected = TypeBiens[0];
+
+            }
+
+
         }
 
         void TabTwoBack()
@@ -566,9 +686,186 @@ namespace Mindurry.ViewModels
             TabThreeLevel--;
         }
 
-        void TabThreeForward()
+         void TabThreeForward()
         {
             TabThreeLevel++;
+
         }
+
+        private async Task LoadProperties()
+        {
+            PropertyList = new ObservableCollection<ClientPropertyModel>();
+            // Recherche Appartements
+            var apartmentList = await StoreManager.ApartmentStore.GetItemsByContactId(ContactId);
+            if (apartmentList != null && apartmentList.Any())
+            {
+                foreach (var item in apartmentList)
+                {
+                    var ClientProperty = new ClientPropertyModel
+                    {
+                        ResidenceName = item.ResidenceName,
+                        PropertyType = ResidenceType.Appartement.ToString(),
+                        PropertyNumber = item.LotNumberArchitect,
+                        ApartmentType = item.Kind,
+                        Area = item.Area.ToString(),
+                        CommandState = item.CommandState,
+                        Price = item.Price,
+                        Stage = item.Stage,
+                        PropertyId = item.Id
+                    };
+                    PropertyList.Add(ClientProperty);
+                }
+            }
+
+            // Recherche Cave
+            var cellarList = await StoreManager.CellarStore.GetItemsByContactId(ContactId);
+            if (cellarList != null && cellarList.Any())
+            {
+                foreach (var item in cellarList)
+                {
+                    var ClientProperty = new ClientPropertyModel
+                    {
+                        ResidenceName = item.ResidenceName,
+                        PropertyType = ResidenceType.Cave.ToString(),
+                        PropertyNumber = item.LotNumberArchitect,
+                        Area = item.Area.ToString(),
+                        CommandState = item.CommandState,
+                        Price = item.Price,
+                        Stage = item.Stage,
+                        PropertyId = item.Id
+                    };
+                    PropertyList.Add(ClientProperty);
+                }
+            }
+
+            // Recherche Parking
+            var garageList = await StoreManager.GarageStore.GetItemsByContactId(ContactId);
+            if (garageList != null && garageList.Any())
+            {
+                foreach (var item in garageList)
+                {
+                    var ClientProperty = new ClientPropertyModel
+                    {
+                        ResidenceName = item.ResidenceName,
+                        PropertyType = ResidenceType.Garage.ToString(),
+                        PropertyNumber = item.LotNumberArchitect,
+                        Area = item.Area.ToString(),
+                        CommandState = item.CommandState,
+                        Price = item.Price,
+                        Stage = item.Stage,
+                        PropertyId = item.Id
+                    };
+                    PropertyList.Add(ClientProperty);
+                }
+            }
+        }
+
+            async void CalculReference(string residenceId, string typeBien)
+        {
+            if ((typeBien == null) || (residenceId == null)) return;
+
+            if (typeBien == "Appartement")
+            {
+                var refs = await StoreManager.ApartmentStore.GetItemsByResidenceId(residenceId);
+                if (refs != null && refs.Any())
+                {
+                    References = new ObservableCollection<string>();
+                     
+                    foreach (var item in refs)
+                    {
+                        References.Add(item.LotNumberArchitect);
+                    }
+                    ReferenceSelected = References[0];
+                    CalculPrice(ReferenceSelected);
+                }
+            }
+            if (typeBien == "Cave")
+            {
+                var refs = await StoreManager.CellarStore.GetItemsByResidenceId(residenceId);
+                if (refs != null && refs.Any())
+                {
+                    References = new ObservableCollection<string>();
+                    foreach (var item in refs)
+                    {
+                        References.Add(item.LotNumberArchitect);
+                    }
+                    ReferenceSelected = References[0];
+                    CalculPrice(ReferenceSelected);
+                }
+            }
+            if (typeBien == "Parking")
+            {
+                var refs = await StoreManager.GarageStore.GetItemsByResidenceId(residenceId);
+                if (refs != null && refs.Any())
+                {
+                    References = new ObservableCollection<string>();
+                    foreach (var item in refs)
+                    {
+                        References.Add(item.LotNumberArchitect);
+                    }
+                    ReferenceSelected = References[0];
+                    CalculPrice(ReferenceSelected);
+                }
+            }
+            
+        }
+
+        async void CalculPrice(string reference)
+        {
+            if (!String.IsNullOrEmpty(reference))
+            {
+                if (TypeBienSelected == "Appartement")
+                {
+                    var apt =await StoreManager.ApartmentStore.GetItemByRefenceAsync(reference);
+                    Price = apt.Price;
+                }
+                if (TypeBienSelected == "Cave")
+                {
+                    var cellar = await StoreManager.CellarStore.GetItemByRefenceAsync(reference);
+                    Price = cellar.Price;
+                }
+                if (TypeBienSelected == "Parking")
+                {
+                    var parking = await StoreManager.GarageStore.GetItemByRefenceAsync(reference);
+                    Price = parking.Price;
+                }
+
+
+            }
+
+        }
+
+        public Command AddPropertyCommand => new Command(async (obj) =>
+        {
+            if (TypeBienSelected == "Appartement")
+            {
+                var apt = await StoreManager.ApartmentStore.GetItemByRefenceAsync(ReferenceSelected);
+                if (apt != null)
+                {
+                    apt.ContactId = ContactId;
+                    await StoreManager.ApartmentStore.UpdateAsync(apt);
+                }
+            }
+            if (TypeBienSelected == "Cave")
+            {
+                var cellar = await StoreManager.CellarStore.GetItemByRefenceAsync(ReferenceSelected);
+                if (cellar != null)
+                {
+                    cellar.ContactId = ContactId;
+                    await StoreManager.CellarStore.UpdateAsync(cellar);
+                }
+            }
+            if (TypeBienSelected == "Parking")
+            {
+                var parking = await StoreManager.GarageStore.GetItemByRefenceAsync(ReferenceSelected);
+                if (parking != null)
+                {
+                    parking.ContactId = ContactId;
+                    await StoreManager.GarageStore.UpdateAsync(parking);
+                }
+            }
+            await LoadProperties();
+            TabThreeLevel--;
+        });
     }
 }

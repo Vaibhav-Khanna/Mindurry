@@ -169,9 +169,9 @@
                         </StackLayout>
                         <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
                         <Label Text="Flux d'activité" FontSize="18" Margin="0,20,0,10"/>
-                        <ListView Margin="0" ItemsSource="{Binding Notes}" IsEnabled="False" ItemTemplate="{StaticResource noteListSelector}"/>
 
-
+                      
+                            <ListView ItemsSource="{Binding Notes}" IsEnabled="False" ItemTemplate="{StaticResource noteListSelector}"/>
                         <!-- <ListView.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Padding="0,10">

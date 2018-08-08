@@ -49,8 +49,8 @@ namespace Mindurry.DataStore.Implementation
         IContactStore contactStore;
         public IContactStore ContactStore => contactStore ?? (contactStore = FreshIOC.Container.Resolve<IContactStore>());
 
-        IDocumentStore documentStore;
-        public IDocumentStore DocumentStore => documentStore ?? (documentStore = FreshIOC.Container.Resolve<IDocumentStore>());
+        IDocumentMindurryStore documentMindurryStore;
+        public IDocumentMindurryStore DocumentMindurryStore => documentMindurryStore ?? (documentMindurryStore = FreshIOC.Container.Resolve<IDocumentMindurryStore>());
 
         IGarageStore garageStore;
         public IGarageStore GarageStore => garageStore ?? (garageStore = FreshIOC.Container.Resolve<IGarageStore>());
@@ -219,7 +219,7 @@ namespace Mindurry.DataStore.Implementation
             await ContactCustomFieldSourceStore.DropTable();
             await ContactCustomFieldStore.DropTable();
             await ContactStore.DropTable();
-            await DocumentStore.DropTable();
+            await DocumentMindurryStore.DropTable();
             await GarageStore.DropTable();
             await GardenStore.DropTable();
             await NoteStore.DropTable();
@@ -268,7 +268,7 @@ namespace Mindurry.DataStore.Implementation
                 store.DefineTable<ContactCustomFieldSource>();
                 store.DefineTable<ContactCustomFieldSourceEntry>();
                 store.DefineTable<Contact>();
-                store.DefineTable<Document>();
+                store.DefineTable<DocumentMindurry>();
                 store.DefineTable<Garage>();
                 store.DefineTable<Garden>();
                 store.DefineTable<Note>();
@@ -301,7 +301,7 @@ namespace Mindurry.DataStore.Implementation
             taskList.Add(ContactCustomFieldSourceStore.SyncAsync());
             taskList.Add(ContactCustomFieldStore.SyncAsync());
             taskList.Add(ContactStore.SyncAsync());
-            taskList.Add(DocumentStore.SyncAsync());
+            taskList.Add(DocumentMindurryStore.SyncAsync());
             taskList.Add(GarageStore.SyncAsync());
             taskList.Add(GardenStore.SyncAsync());
             taskList.Add(NoteStore.SyncAsync());

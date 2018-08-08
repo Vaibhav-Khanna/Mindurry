@@ -3,45 +3,52 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:effect="clr-namespace:Mindurry.Effects"
              xmlns:selector="clr-namespace:Mindurry.ListTemplate;assembly=Mindurry"
+             xmlns:converter="clr-namespace:Mindurry.Converters"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
 			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows"
              xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
              x:Class="Mindurry.Pages.ClientsDetailsInfoPage">
     <ContentPage.Resources>
         <ResourceDictionary>
+            <converter:DateToBgColorConverter x:Key="DateToBgColorConverter"/>
+            <converter:StringNullOrEmptyBoolConverter x:Key="StringNullOrEmptyBoolConverter"/>
             <DataTemplate x:Key="ContactNoteTemplate">
                 <ViewCell>
-                    <StackLayout Padding="0,10" HorizontalOptions="Start">
+                    <StackLayout Padding="0,10" HorizontalOptions="FillAndExpand" Orientation="Vertical">
                         <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
-                                               HorizontalOptions="Center"/>
-                        <Label Text="{Binding Contactname}" HorizontalOptions="Start" FontSize="11" TextColor="#4A4A4A"/>
-                        <Grid HorizontalOptions="Start" BackgroundColor="#E7F3FF" WidthRequest="450" Padding="30,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Text="{Binding Content}" TextColor="#4A4A4A"/>
-                            <Label Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="23" TextColor="{StaticResource GrayPanelEdge}" Grid.Column="1" Margin="0,0,0,30"/>
-                        </Grid>
+                                               HorizontalOptions="CenterAndExpand"/>
+                        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                            <Label Text="{Binding Contactname}" HorizontalOptions="StartAndExpand" FontSize="11" TextColor="#4A4A4A"/>
+                            <Grid HorizontalOptions="Start" BackgroundColor="#E7F3FF" WidthRequest="450" Padding="30,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Content}" TextColor="#4A4A4A"/>
+                                <Label Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="23" TextColor="{StaticResource GrayPanelEdge}" Grid.Column="1" Margin="0,0,0,30"/>
+                            </Grid>
+                        </StackLayout>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
 
             <DataTemplate x:Key="CommercialNoteTemplate">
                 <ViewCell>
-                    <StackLayout Padding="0,10" HorizontalOptions="Center">
+                    <StackLayout Padding="0,10" HorizontalOptions="FillAndExpand">
                         <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
-                                               HorizontalOptions="Center"/>
-                        <Label Text="{Binding Username}" HorizontalOptions="End" FontSize="11" TextColor="#4A4A4A"/>
-                        <Grid HorizontalOptions="EndAndExpand" BackgroundColor="#F9F9F9" WidthRequest="450" Padding="30,10">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <Label Text="{Binding Content}" TextColor="#4A4A4A"/>
-                            <Label Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="23" TextColor="{StaticResource GrayPanelEdge}" Grid.Column="1"
-                                                   Margin="0,0,0,30"/>
-                        </Grid>
+                                               HorizontalOptions="CenterAndExpand"/>
+                        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                            <Label Text="{Binding Username}" HorizontalOptions="EndAndExpand" FontSize="11" TextColor="#4A4A4A"/>
+                            <Grid HorizontalOptions="EndAndExpand" BackgroundColor="#F9F9F9" WidthRequest="450" Padding="30,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Content}" TextColor="#4A4A4A"/>
+                                <Label Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="23" TextColor="{StaticResource GrayPanelEdge}" Grid.Column="1"
+                                                       Margin="0,0,0,30"/>
+                            </Grid>
+                        </StackLayout>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
@@ -119,11 +126,11 @@
                                             </Grid>
 
                                             <StackLayout Orientation="Vertical" Padding="0,30" Grid.Column="1">
-                                                <Label Text="{Binding Content}" FontSize="20"/>
-                                                <Grid BackgroundColor="#F5A623" Padding="10,5" WidthRequest="200" HorizontalOptions="Start">
+                                                <Label Text="{Binding Reminder.Content}" FontSize="20"/>
+                                                <Grid BackgroundColor="{Binding Reminder.ReminderAt, Converter={StaticResource DateToBgColorConverter}}" Padding="10,5" WidthRequest="200" HorizontalOptions="Start">
                                                     <StackLayout Orientation="Horizontal">
-                                                        <Label Text="" FontSize="18" TextColor="White" FontFamily="Segoe MDL2 Assets"/>
-                                                        <Label Text="Aujourd'hui" FontAttributes="Bold" FontSize="18" TextColor="White"/>
+                                                        <!-- <Label Text="" FontSize="18" TextColor="White" FontFamily="Segoe MDL2 Assets"/> -->
+                                                        <Label Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}" FontAttributes="Bold" FontSize="18" TextColor="White"/>
                                                     </StackLayout>
                                                 </Grid>
                                             </StackLayout>
@@ -138,7 +145,7 @@
                                 Margin="0,20,0,20"/>
 
                         <Label Text="Ajouter une note" FontSize="18" Margin="0,0,0,10"/>
-                        <Editor HorizontalOptions="Fill" HeightRequest="200" Margin="0,10"/>
+                        <Editor HorizontalOptions="Fill" HeightRequest="200" Margin="0,10" Text="{Binding TextNote, Mode=TwoWay}"/>
 
                         <StackLayout HorizontalOptions="End" Orientation="Horizontal">
                             <Label Text="🛈" VerticalOptions="End" FontSize="24"/>
@@ -149,7 +156,7 @@
                         <Label Text="Flux d'activité" FontSize="18" Margin="0,20,0,10"/>
                         <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
 
-                        <ListView Margin="0,20,20,0" ItemsSource="{Binding Notes}" IsEnabled="False" ItemTemplate="{StaticResource noteListSelector}">
+                        <ListView  ItemsSource="{Binding Notes}" IsEnabled="False" ItemTemplate="{StaticResource noteListSelector}">
                             <ListView.Footer>
                                 <Button Text="Afficher plus d'historique" BackgroundColor="White" TextColor="{StaticResource BlueAccent}" 
                                 BorderColor="{StaticResource BlueAccent}" BorderWidth="1" HorizontalOptions="Center"/>
@@ -434,74 +441,82 @@
 
                         <Grid IsVisible="{Binding IsTabThreeVisible}" Padding="0,0,0,20">
 
-                            <StackLayout IsVisible="{Binding IsTabThreeL1}">
+                          <!--  <StackLayout IsVisible="{Binding IsTabThreeL1}">
                                 <Label Text="🛈   Ici vous pouvez associer des biens à l'acquéreur" TextColor="{StaticResource GrayPanelText}" Margin="0,10"/>
                                 <Button Text="+ Ajouter un bien" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
                                         Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding TabThreeForwardCommand}"/>
-                            </StackLayout>
+                            </StackLayout> -->
                             
                             <StackLayout IsVisible="{Binding IsTabThreeL2}">
                                 <Button Text="" FontSize="25" FontFamily="Segoe MDL2 Assets" BackgroundColor="Transparent" HorizontalOptions="Start"
                                         Command="{Binding TabThreeBackCommand}"/>
                                 <Label Text="🛈   Ici vous pouvez associer des biens à l'acquéreur" TextColor="{StaticResource GrayPanelText}" Margin="0,10"/>
                                 <StackLayout Spacing="5" Margin="0,20,0,0">
+                                    <Label Text="Statut"/>
+                                    <Picker WidthRequest="300" ItemsSource="{Binding Statuts}" SelectedItem="{Binding StatutSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
+                                </StackLayout>
+                                <StackLayout Spacing="5" Margin="0,20,0,0">
                                     <Label Text="Résidence"/>
-                                    <Picker WidthRequest="300" ItemsSource="{Binding ComboL1}" SelectedItem="{Binding ComboL1Selected}" HorizontalOptions="Start"/>
+                                    <Picker WidthRequest="300" ItemsSource="{Binding Residences}" SelectedItem="{Binding ResidenceSelected, Mode=TwoWay}" ItemDisplayBinding="{Binding Name}" HorizontalOptions="Start"/>
                                 </StackLayout>
                                 <StackLayout Spacing="5">
                                     <Label Text="Type"/>
-                                    <Picker WidthRequest="300" ItemsSource="{Binding ComboL2}" SelectedItem="{Binding ComboL2Selected}" HorizontalOptions="Start"/>
+                                    <Picker WidthRequest="300" ItemsSource="{Binding TypeBiens}" SelectedItem="{Binding TypeBienSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
                                 </StackLayout>
                                 <StackLayout Spacing="5">
                                     <Label Text="Référence"/>
-                                    <Picker WidthRequest="300" ItemsSource="{Binding ComboL3}" SelectedItem="{Binding ComboL3Selected}" HorizontalOptions="Start"/>
+                                    <Picker WidthRequest="300" ItemsSource="{Binding References}" SelectedItem="{Binding ReferenceSelected}" HorizontalOptions="Start"/>
+                                </StackLayout>
+                                <StackLayout Spacing="5">
+                                    <Label Text="Prix en €"/>
+                                    <Entry WidthRequest="300" Text="{Binding Price}" IsEnabled="False" HorizontalOptions="Start"/>
                                 </StackLayout>
                                 <Button Text="Ajouter" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
-                                        Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding TabThreeForwardCommand}"/>
+                                        Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding AddPropertyCommand}"/>
                             </StackLayout>
 
-                            <StackLayout IsVisible="{Binding IsTabThreeL3}">
-                                <Button Text="" FontSize="25" FontFamily="Segoe MDL2 Assets" BackgroundColor="Transparent" HorizontalOptions="Start"
-                                        Command="{Binding TabThreeBackCommand}"/>
-                                <repeater:RepeaterView ItemsSource="{Binding Residences}" VerticalOptions="Start">
+                            <StackLayout IsVisible="{Binding IsTabThreeL1}">
+                              <!--  <Button Text="" FontSize="25" FontFamily="Segoe MDL2 Assets" BackgroundColor="Transparent" HorizontalOptions="Start"
+                                        Command="{Binding TabThreeBackCommand}"/> -->
+                                <repeater:RepeaterView ItemsSource="{Binding PropertyList}" VerticalOptions="Start" Spacing="10">
                                     <repeater:RepeaterView.ItemTemplate>
                                         <DataTemplate>
                                             <ViewCell>
                                                 <StackLayout Padding="10" BackgroundColor="#e9e9e9">
                                                     <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
                                                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                                                            <Label Text="Résidence Herrian" FontSize="22" >
+                                                            <Label Text="{Binding ResidenceName, StringFormat='Résidence {0}'}" FontSize="22" >
                                                             <Label.Effects>
                                                                 <effect:SemiBoldEffect/>
                                                             </Label.Effects>
                                                         </Label>
-                                                        <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/>
+                                                      <!--  <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/> -->
                                                     </StackLayout>
                                                     <StackLayout Orientation="Horizontal">
-                                                            <Label Text="{Binding ResidenceType}" FontSize="16">
+                                                            <Label Text="{Binding PropertyType}" FontSize="16">
                                                                 <Label.Effects>
                                                                     <effect:SemiBoldEffect/>
                                                                 </Label.Effects>
                                                             </Label>
-                                                            <Label Text="{Binding NoArchi, StringFormat='N° {0}'}" FontSize="16">
+                                                            <Label Text="{Binding PropertyNumber, StringFormat='N° {0}'}" FontSize="16">
                                                                 <Label.Effects>
                                                                     <effect:SemiBoldEffect/>
                                                                 </Label.Effects>
                                                             </Label>
                                                         </StackLayout>
                                                         <StackLayout Orientation="Horizontal">
-                                                            <Label Text="{Binding Type}" FontSize="12"/>
-                                                            <Label Text=" - " FontSize="12"/>
-                                                            <Label Text="{Binding Surface, StringFormat='{0}m2'}" FontSize="12"/>
+                                                            <Label Text="{Binding ApartmentType}" IsVisible="{Binding ApartmentType, Converter={StaticResource StringNullOrEmptyBoolConverter}}" FontSize="12"/>
+                                                            <Label Text=" - " FontSize="12" IsVisible="{Binding ApartmentType, Converter={StaticResource StringNullOrEmptyBoolConverter}}" />
+                                                            <Label Text="{Binding Area, StringFormat='{0} m2'}" FontSize="12" IsVisible="{Binding Area, Converter={StaticResource StringNullOrEmptyBoolConverter}}" />
                                                         </StackLayout>
                                                     </StackLayout>
 
 
-                                                    <Label Text="{Binding SelectedStatus, StringFormat='Statut: {0}'}" FontSize="12"/>
+                                                    <Label Text="{Binding CommandState, StringFormat='Statut: {0}'}" FontSize="12"/>
                                                    <!-- <Picker ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"/>
                                                     <Button Text="Supprimer" TextColor="{StaticResource RedAccent}" BackgroundColor="Transparent"/> -->
-                                                    <Label Text="{Binding Prix, StringFormat='Prix: {0} €'}" FontSize="12"/>
-                                                    <Label Text="{Binding Stade, StringFormat='Stade: {0}'}" FontSize="12"/>
+                                                    <Label Text="{Binding Price, StringFormat='Prix: {0} €'}" FontSize="12"/>
+                                                    <Label Text="{Binding Stage, StringFormat='Stade: {0}'}" FontSize="12" IsVisible="{Binding Stage, Converter={StaticResource StringNullOrEmptyBoolConverter}}"/>
                                                     <Label Text="Voir le bien ->" FontSize="12" TextColor="#9f182c" HorizontalOptions="End"/>
                                                 </StackLayout>
                                             </ViewCell>
@@ -509,7 +524,7 @@
                                     </repeater:RepeaterView.ItemTemplate>
                                 </repeater:RepeaterView>
                                 <Button Text="+  Ajouter un bien" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
-                                        Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start"/>
+                                        Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding TabThreeForwardCommand}"/>
                             </StackLayout>
                         </Grid>
                     </Grid>

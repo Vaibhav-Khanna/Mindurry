@@ -5,7 +5,7 @@ using System.Text;
 namespace Mindurry.DataModels
 {
     public enum Statut { Libre, Reserve, Vendu, Option}
-    public enum ResidenceType { Apartment, Garage, Cave }
+    public enum ResidenceType { Appartement, Garage, Cave }
 
     public class Residence
     {

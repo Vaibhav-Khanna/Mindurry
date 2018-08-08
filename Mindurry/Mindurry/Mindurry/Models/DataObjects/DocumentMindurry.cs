@@ -2,7 +2,7 @@
 
 namespace Mindurry.Models.DataObjects
 {
-    public class Document : BaseDataObject
+    public class DocumentMindurry : BaseDataObject
     {
         [JsonProperty("path")]
         public string Path { get; set; }
