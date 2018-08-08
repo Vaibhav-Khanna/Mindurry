@@ -37,7 +37,7 @@ namespace Mindurry.ViewModels
             set
             {
                 if (value != null)
-                    CoreMethods.PushPageModel<LeadDetailPageModel>(value);
+                    CoreMethods.PushPageModel<LeadDetailPageModel>(value.ContactId);
                 selectedItem = null;
             }
         }
@@ -108,7 +108,7 @@ namespace Mindurry.ViewModels
             {
                 var commCheck = new CheckBoxItem
                 {
-                    Content = item.Firstname + " " + item.Lastname,
+                    Content = item.Name,
                     IsChecked = false,
                     Id = item.Id
                 };

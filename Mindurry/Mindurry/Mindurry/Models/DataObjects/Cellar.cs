@@ -8,6 +8,9 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("residenceId")]
         public string ResidenceId { get; set; }
 
+        [JsonProperty("residenceName")]
+        public string ResidenceName { get; set; }
+
         [JsonProperty("lotNumberArchitect")]
         public string LotNumberArchitect { get; set; }
 
@@ -25,6 +28,9 @@ namespace Mindurry.Models.DataObjects
 
         [JsonProperty("commandState")]
         public string CommandState { get; set; }
+
+        [JsonProperty("stage")]
+        public string Stage { get; set; }
 
     }
 }

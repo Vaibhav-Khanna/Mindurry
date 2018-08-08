@@ -1,17 +1,16 @@
-﻿using System;
+﻿using Mindurry.Models.DataObjects;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.ComponentModel;
-using Mindurry.Models.DataObjects;
+using System.Text;
 
-namespace Mindurry.DataModels
+namespace Mindurry.Models
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
-    public class CheckBoxItem : INotifyPropertyChanged
+    public class RemindersCheckBoxListModel : INotifyPropertyChanged
     {
+        public Note Reminder { get; set; }
         public bool IsChecked { get; set; }
-        public string Content { get; set; }
-        public string Id { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

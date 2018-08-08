@@ -1,4 +1,6 @@
-﻿using Mindurry.DataModels;
+﻿using FreshMvvm;
+using Mindurry.DataModels;
+using Mindurry.DataStore.Abstraction;
 using Mindurry.DataStore.Abstraction.Stores;
 using Mindurry.Models.DataObjects;
 using Newtonsoft.Json;
@@ -243,6 +245,28 @@ namespace Mindurry.DataStore.Implementation.Stores
                 return null;
                 Debug.WriteLine(e);
             }
+
+        }
+
+        public async Task<string> RewriteCustomFields(string contactId)
+        {
+            await InitializeStore().ConfigureAwait(false);
+
+            var storeManager = FreshIOC.Container.Resolve<IStoreManager>();
+
+            var customsFields = (await storeManager.ContactCustomFieldStore.GetItemsByContactIdAsync(contactId)).ToList();
+            if (customsFields != null && customsFields.Any())
+            {
+                string customs = "";
+                for (int i = 0; i < customsFields.Count(); i++)
+                {
+                    customs += customsFields[i].ContactCustomFieldSourceInternalName + "=" + customsFields[i].ContactCustomFieldSourceEntryId + ",";
+                }
+                
+                return customs;
+            }
+            else return null;
+            
 
         }
 

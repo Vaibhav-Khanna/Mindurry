@@ -8,11 +8,17 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("residenceId")]
         public string ResidenceId { get; set; }
 
+        [JsonProperty("residenceName")]
+        public string ResidenceName { get; set; }
+
         [JsonProperty("contactId")]
         public string ContactId { get; set; }
 
         [JsonProperty("commandState")]
         public string CommandState { get; set; }
+
+        [JsonProperty("stage")]
+        public string Stage { get; set; }
 
         [JsonProperty("lotNumberArchitect")]
         public string LotNumberArchitect { get; set; }

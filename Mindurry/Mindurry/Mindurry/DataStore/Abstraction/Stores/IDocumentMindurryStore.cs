@@ -2,7 +2,7 @@
 
 namespace Mindurry.DataStore.Abstraction.Stores
 {
-    public interface IDocumentStore : IBaseStore<Document>
+    public interface IDocumentMindurryStore : IBaseStore<DocumentMindurry>
     {
     }
 }

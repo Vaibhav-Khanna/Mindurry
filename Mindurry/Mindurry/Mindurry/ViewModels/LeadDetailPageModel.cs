@@ -1,11 +1,14 @@
 ﻿using FreshMvvm;
 using Mindurry.DataModels;
+using Mindurry.Models;
+using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -14,17 +17,90 @@ namespace Mindurry.ViewModels
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class LeadDetailPageModel : BasePageModel
     {
-        public Person Item { get; set; }
-        public ObservableCollection<Activity> Activities { get; set; }
+        private string ContactId;
+        public Contact Contact { get; set; }
 
-        public ObservableCollection<string> Combo1 { get; set; }
-        public ObservableCollection<string> Types { get; set; }
-        public ObservableCollection<string> Combo3 { get; set; }
-        public ObservableCollection<string> Combo4 { get; set; }
-        public string Combo1Selected { get; set; }
-        public string TypeSelected { get; set; }
-        public string Combo3Selected { get; set; }
-        public string Combo4Selected { get; set; }
+        public ObservableCollection<RemindersCheckBoxListModel> Reminders { get; set; }
+        public ObservableCollection<Note> Notes { get; set; }
+        public DateTimeOffset? DateReminder { get; set; } = null;
+        public string TextNote { get; set; }
+
+        public ObservableCollection<CollectSource> CollectSources { get; set; }
+
+        CollectSource selectedSource;
+        public CollectSource SelectedSource
+        {
+            get
+            {
+                return selectedSource;
+            }
+            set
+            {
+                if (value != selectedSource && value != null)
+                {
+                    SaveCollect(value.Id);
+                }
+                selectedSource = value;
+            }
+        }
+        public ObservableCollection<string> Qualifications { get; set; }
+        private string selectedQualification;
+        public string SelectedQualification
+        {
+            get
+            {
+                return selectedQualification;
+            }
+            set
+            {
+                if (value != selectedQualification && value != null)
+                {
+                    SaveQualification(value);
+                }
+                selectedQualification = value;
+            }
+        }
+
+        public ObservableCollection<ContactCustomFieldSourceEntry> Types { get; set; }
+       // public ContactCustomFieldSourceEntry SelectedType { get; set; }
+        private ContactCustomFieldSourceEntry selectedType;
+        public ContactCustomFieldSourceEntry SelectedType
+        {
+            get
+            {
+                return selectedType;
+            }
+            set
+            {
+                if (value != selectedType && value != null)
+                {
+                    SaveTypeContact(value.Id);
+                }
+                selectedType = value;
+            }
+        }
+
+
+        public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
+        public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
+        public ObservableCollection<User> Commercials { get; set; }
+        private User selectedCommercial;
+        public User SelectedCommercial
+        {
+            get
+            {
+                return selectedCommercial;
+            }
+            set
+            {
+                if (value != selectedCommercial && value != null)
+                {
+                    SaveCommercial(value.Id);
+                }
+                selectedCommercial = value;
+            }
+        }
+
         public bool IsFirstListVisible { get; set; } = true;
         public bool IsSecondListVisible { get; set; } = true;
         public bool IsSwitchToggled { get; set; }
@@ -38,64 +114,257 @@ namespace Mindurry.ViewModels
         public ICommand ClearAllResidencesCommand { get; set; }
         public ICommand ClearAllTypesCommand { get; set; }
 
-        public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
-        public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
+       
 
-        public override void Init(object initData)
+        public async override void Init(object initData)
         {
             base.Init(initData);
-            Item = (Person)initData;
+            ContactId = (string)initData;
 
-            var activity1 = new Activity
-            {
-                Date = new DateTime(2018, 2, 21, 15, 5, 0),
-                Name = "Manuel  Llop",
-                Message = "Prise de contact effectué, rdv pris pour le vendredi 25",
-                Icon = "",
-                Color = Color.FromRgb(249, 249, 249),
-                HorizontalOptions = Xamarin.Forms.LayoutOptions.End
-            };
+            await LoadContact();
 
-            var activity2 = new Activity
-            {
-                Date = new DateTime(2018, 2, 20, 15, 12, 0),
-                Name = "John Doe",
-                Message = "Bonjour, je souhaiterais en savoir plus sur le programme villa Aguiléra. Merci pour votre aide !",
-                Icon = "",
-                Color = Color.FromRgb(231, 243, 255),
-                HorizontalOptions = Xamarin.Forms.LayoutOptions.Start
-            };
+            await LoadReminders();
 
-            Activities = new ObservableCollection<Activity> { activity1, activity2 };
+            await LoadNotes();
 
-            Types = new ObservableCollection<string> { "Investisseur" };
-            Combo1 = new ObservableCollection<string> { "Lead" };
-            Combo3 = new ObservableCollection<string> { "Ne cherche plus" };
+            await LoadFilters();
 
-            Combo4 = new ObservableCollection<string> { "Arold Martino", "Jean Noosa" };
-
-            Combo1Selected = Combo1[0];
-            TypeSelected = Types[0];
-            Combo3Selected = Combo3[0];
-            Combo4Selected = Combo4[0];
-
-            var item1 = new CheckBoxItem { Content = "Herrian" };
-            var item2 = new CheckBoxItem { Content = "Herri Ondo", IsChecked = true };
-            var item3 = new CheckBoxItem { Content = "Villa Aguiléra" };
-
-            ResidencesChecks = new ObservableCollection<CheckBoxItem> { item1, item2, item3 };
-
-            var item4 = new CheckBoxItem { Content = "Studio" };
-            var item5 = new CheckBoxItem { Content = "T2", IsChecked = true };
-            var item6 = new CheckBoxItem { Content = "T3" };
-
-            TypesChecks = new ObservableCollection<CheckBoxItem> { item4, item5, item6 };
 
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
 
             ClearAllResidencesCommand = new Command(ClearAllResidences);
             ClearAllTypesCommand = new Command(ClearAllTypes);
+        }
+
+        public async override void ReverseInit(object reverseData)
+        {
+            if (reverseData is Note)
+            {
+                await LoadReminders();
+            }
+        }
+
+        private async Task LoadContact()
+        {
+            Contact = await StoreManager.ContactStore.GetItemAsync(ContactId);
+        }
+
+        private async Task LoadReminders()
+        {
+            Reminders = new ObservableCollection<RemindersCheckBoxListModel>();
+            var reminders = await StoreManager.NoteStore.GetNextRemindersByContactIdAsync(ContactId);
+            if (reminders != null && reminders.Any())
+            {
+                foreach (var item in reminders)
+                {
+                    var reminderList = new RemindersCheckBoxListModel
+                    {
+                        Reminder = item,
+                        IsChecked = false
+                    };
+                    Reminders.Add(reminderList);
+                }
+            }
+        }
+
+        private async Task LoadNotes()
+        {
+            var notes = await StoreManager.NoteStore.GetNotesByContactIdAsync(ContactId);
+            if (notes != null && notes.Any())
+            {
+                Notes = new ObservableCollection<Note>(notes);
+            }
+            else
+            {
+                Notes = new ObservableCollection<Note>();
+            }
+        }
+
+        private async Task LoadFilters()
+        {
+            // Source
+            var collectSources = await StoreManager.CollectSourceStore.GetItemsAsync();
+            if (collectSources != null && collectSources.Any())
+            {
+                CollectSources = new ObservableCollection<CollectSource>(collectSources);
+                foreach (var item in CollectSources)
+                {
+                    if (item.Id == Contact.CollectSourceId)
+                    {
+                        SelectedSource = item;
+                    }
+                }  
+            }
+            else
+            {
+                CollectSources = new ObservableCollection<CollectSource>();
+            }
+
+            // Qualification
+            Qualifications = new ObservableCollection<string>(Enum.GetNames(typeof(Qualification)));
+            foreach(var item in Qualifications)
+            {
+                if(item == Contact.Qualification)
+                {
+                    SelectedQualification = item;
+                }
+            }
+
+            // Type
+            var types = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Type");
+            if (types != null && types.Any())
+            {
+                Types = new ObservableCollection<ContactCustomFieldSourceEntry>(types);
+                var customType = (await StoreManager.ContactCustomFieldStore.GetItemsByContactCustomFieldSourceNameAndContactIdAsync("Type", ContactId)).ToList();
+                if (customType != null && customType.Any())
+                {
+                    foreach (var item in Types)
+                    {
+                        if (customType[0].ContactCustomFieldSourceEntryId == item.Id)
+                        {
+                            SelectedType = item;
+                        }
+                    }
+                }
+                
+            }
+            else
+            {
+                Types = new ObservableCollection<ContactCustomFieldSourceEntry>();
+            }
+
+            // Residence
+            var residences = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
+            residences.OrderBy(x => x.ContactCustomFieldSourceInternalName);
+
+            ResidencesChecks = new ObservableCollection<CheckBoxItem>();
+            foreach (var item in residences)
+            {
+                var customResidences = (await StoreManager.ContactCustomFieldStore.GetItemsByContactCustomFieldSourceNameAndContactIdAsync("Résidences", ContactId)).ToList();
+                bool isCheck = false;
+
+                if (customResidences != null && customResidences.Any())
+                {
+                    foreach (var customR in customResidences)
+                    {
+                        if (customR.ContactCustomFieldSourceEntryValue == item.Value)
+                        {
+                            isCheck = true;
+                            break;
+                        }
+                    }
+                }
+               
+                var resCheck = new CheckBoxItem
+                {
+                    Content = item.Value,
+                    IsChecked = isCheck,
+                    Id = item.Id
+                };
+                ResidencesChecks.Add(resCheck);
+            }
+
+            // Chargement type
+            var typesApt = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Type d\'appartement");
+            typesApt.OrderBy(x => x.ContactCustomFieldSourceInternalName);
+
+            TypesChecks = new ObservableCollection<CheckBoxItem>();
+
+            foreach (var item in typesApt)
+            {
+                var customTypes = (await StoreManager.ContactCustomFieldStore.GetItemsByContactCustomFieldSourceNameAndContactIdAsync("Type d\'appartement", ContactId)).ToList();
+                bool isCheck = false;
+
+                if (customTypes != null && customTypes.Any())
+                {
+                    foreach (var customT in customTypes)
+                    {
+                        if (customT.ContactCustomFieldSourceEntryValue == item.Value)
+                        {
+                            isCheck = true;
+                            break;
+                        }
+                    }
+                }
+                var typeCheck = new CheckBoxItem
+                {
+                    Content = item.Value,
+                    IsChecked = isCheck,
+                    Id = item.Id
+                };
+                TypesChecks.Add(typeCheck);
+            }
+
+
+            // Commercials
+            var commercials = await StoreManager.UserStore.GetItemsAsync();
+            if (commercials != null && commercials.Any())
+            {
+                Commercials = new ObservableCollection<User>(commercials);
+                foreach (var item in Commercials)
+                {
+                    if (item.Id == Contact.UserId)
+                    {
+                        SelectedCommercial = item;
+                    }
+                }
+            }
+            else
+            {
+                Commercials = new ObservableCollection<User>();
+            }
+        }
+        
+        private async void SaveCollect(string collectId)
+        {
+            Contact.CollectSourceId = collectId;
+            await StoreManager.ContactStore.UpdateAsync(Contact);
+        }
+
+        private async void SaveQualification(string qualification)
+        {
+            Contact.Qualification = qualification;
+            await StoreManager.ContactStore.UpdateAsync(Contact);
+        }
+        private async void SaveTypeContact(string contactCustomEntryId)
+        {
+           List<ContactCustomField> customField = (await StoreManager.ContactCustomFieldStore.GetItemsByContactCustomFieldSourceNameAndContactIdAsync("Type", ContactId)).ToList();
+            if (customField != null && customField.Any())
+            {
+                customField[0].ContactCustomFieldSourceEntryId = contactCustomEntryId;
+                await StoreManager.ContactCustomFieldStore.UpdateAsync(customField[0]);
+            }
+        }
+
+        public Command SaveChecksCommand => new Command<CheckBoxItem>(async (obj) =>
+        {
+            if (obj.IsChecked)
+            {
+                var ccfSourceEntry = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(obj.Id);
+
+                ContactCustomField customToInsert = new ContactCustomField
+                {
+                    ContactId = ContactId,
+                    ContactCustomFieldSourceEntryId = obj.Id,
+                    ContactCustomFieldSourceId = ccfSourceEntry.ContactCustomFieldSourceId
+                };
+
+                await StoreManager.ContactCustomFieldStore.InsertAsync(customToInsert);
+            }
+            else
+            {
+                var customField = await StoreManager.ContactCustomFieldStore.GetItemByContactIdAndSourceEntryIdAsync(ContactId, obj.Id);
+                await StoreManager.ContactCustomFieldStore.RemoveAsync(customField);
+            }
+
+
+        });
+
+        private async void SaveCommercial(string commercialId)
+        {
+            Contact.UserId = commercialId;
+            await StoreManager.ContactStore.UpdateAsync(Contact);
         }
 
         void ChangeArrowOne()
@@ -122,6 +391,83 @@ namespace Mindurry.ViewModels
             {
                 item.IsChecked = false;
             }
+        }
+
+        public Command SendSequenceCommand => new Command(async (obj) =>
+        {
+            await CoreMethods.PushPageModel<NewContactPageModel>(Contact.Id);
+
+        });
+
+        public Command UpdateContactCommand => new Command(async (obj) =>
+        {
+            await CoreMethods.PushPageModel<NewContactPageModel>(Contact.Id);
+            SubUnsub();
+
+        });
+
+        
+        public Command SelectReminderCommand => new Command<RemindersCheckBoxListModel>(async (obj) =>
+        {
+
+            
+            if (obj.IsChecked)
+            {
+                var result = await CoreMethods.DisplayAlert("Classer", "Etes vous sur de vouloir terminer ce rappel ?", "Oui", "Non");
+                if (result)
+                {
+                    RemindersCheckBoxListModel  reminderObj= obj as RemindersCheckBoxListModel;
+                    Note _note = reminderObj.Reminder;
+                    _note.DoneAt = DateTimeOffset.Now;
+                    _note.ActivityStreamDate = DateTimeOffset.Now;
+                    await StoreManager.NoteStore.UpdateAsync(_note);
+                    await LoadReminders();
+                    await LoadNotes();
+                }
+                else { obj.IsChecked = false; }
+            }
+        });
+       
+        public Command UpdateReminderCommand => new Command<RemindersCheckBoxListModel>(async (obj) =>
+        {
+            await CoreMethods.PushPageModel<UpdateReminderPageModel>(obj.Reminder,true,false); 
+
+        });
+        public Command DeleteReminderCommand => new Command<RemindersCheckBoxListModel>(async (obj) =>
+        {
+           var result = await CoreMethods.DisplayAlert("Suppression", "Etes vous sur de vouloir supprimer ce rappel ?", "Oui", "Non");
+            if (result)
+            {
+                await StoreManager.NoteStore.RemoveAsync((Note)obj.Reminder);
+                await LoadReminders();
+            }
+        });
+
+        public Command AddNoteCommand => new Command(async (obj) =>
+        {
+            Note NoteToInsert = new Note()
+            {
+                ContactId = ContactId,
+                UserId = Contact.UserId,
+                Kind = "note",
+                Content = TextNote
+            };
+            if (DateReminder != null) { NoteToInsert.ReminderAt = DateReminder; }
+            await StoreManager.NoteStore.InsertAsync(NoteToInsert);
+            await LoadNotes();
+
+        });
+       
+
+        void SubUnsub()
+        {
+            MessagingCenter.Subscribe<NewContactPageModel>(this, "ReloadDetailContact", async (obj) =>
+            {
+
+                await LoadContact();
+
+                MessagingCenter.Unsubscribe<NewContactPageModel>(this, "ReloadDetailContact");
+            });
         }
     }
 }
