@@ -3,58 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Mindurry.Pages.LeadDetailPage"
              xmlns:effect="clr-namespace:Mindurry.Effects"
-             xmlns:helpers="clr-namespace:Mindurry.Helpers"
              xmlns:converter="clr-namespace:Mindurry.Converters"
-             xmlns:selector="clr-namespace:Mindurry.ListTemplate;assembly=Mindurry"
              xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
 			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:DateToBgColorConverter x:Key="DateToBgColorConverter"/>
-            <DataTemplate x:Key="ContactNoteTemplate">
-                <ViewCell>
-                    <StackLayout Padding="0,10" HorizontalOptions="FillAndExpand" Orientation="Vertical">
-                        <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
-                                               HorizontalOptions="CenterAndExpand"/>
-                        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
-                            <Label Text="{Binding Contactname}" HorizontalOptions="StartAndExpand" FontSize="11" TextColor="#4A4A4A"/>
-                            <Grid HorizontalOptions="Start" BackgroundColor="#E7F3FF" WidthRequest="450" Padding="30,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Label Text="{Binding Content}" TextColor="#4A4A4A"/>
-                                <Label Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="23" TextColor="{StaticResource GrayPanelEdge}" Grid.Column="1" Margin="0,0,0,30"/>
-                            </Grid>
-                        </StackLayout>
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-            
-            <DataTemplate x:Key="CommercialNoteTemplate">
-                <ViewCell>
-                    <StackLayout Padding="0,10" HorizontalOptions="FillAndExpand">
-                        <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
-                                               HorizontalOptions="CenterAndExpand"/>
-                        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
-                            <Label Text="{Binding Username}" HorizontalOptions="EndAndExpand" FontSize="11" TextColor="#4A4A4A"/>
-                            <Grid HorizontalOptions="EndAndExpand" BackgroundColor="#F9F9F9" WidthRequest="450" Padding="30,10">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Label Text="{Binding Content}" TextColor="#4A4A4A"/>
-                                <Label Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="23" TextColor="{StaticResource GrayPanelEdge}" Grid.Column="1"
-                                                       Margin="0,0,0,30"/>
-                            </Grid>
-                        </StackLayout>
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-            
-           <selector:NoteListSelector x:Key="noteListSelector" ContactTemplate="{StaticResource ContactNoteTemplate}" CommercialTemplate="{StaticResource CommercialNoteTemplate}" />
-        </ResourceDictionary>
+            <converter:LeadRepeaterTemplateBoolConverter x:Key="LeadRepeaterTemplateBoolConverter"/>
+            <converter:NegateLeadRepeaterTemplateBoolConverter x:Key="NegateLeadRepeaterTemplateBoolConverter"/>
+           </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
@@ -63,18 +21,17 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
-
             <ScrollView>
                 <StackLayout>
                     <StackLayout Padding="30" Orientation="Vertical">
-                       <StackLayout.Resources>
+                        <StackLayout.Resources>
                             <ResourceDictionary>
                                 <Style TargetType="StackLayout">
                                     <Setter Property="Orientation" Value="Horizontal"/>
                                     <Setter Property="Spacing" Value="20"/>
                                 </Style>
                             </ResourceDictionary>
-                        </StackLayout.Resources> 
+                        </StackLayout.Resources>
                         <StackLayout HorizontalOptions="FillAndExpand">
                             <Label Text="{Binding Contact.Name}" FontSize="28" VerticalOptions="Center"/>
                             <Grid VerticalOptions="Center">
@@ -127,7 +84,7 @@
                                                 <Label Text="{Binding Reminder.Content}" FontSize="20"/>
                                                 <Grid BackgroundColor="{Binding Reminder.ReminderAt, Converter={StaticResource DateToBgColorConverter}}" Padding="10,5" WidthRequest="200" HorizontalOptions="Start">
                                                     <StackLayout Orientation="Horizontal">
-                                                       <!-- <Label Text="" FontSize="18" TextColor="White" FontFamily="Segoe MDL2 Assets"/> -->
+                                                        <!-- <Label Text="" FontSize="18" TextColor="White" FontFamily="Segoe MDL2 Assets"/> -->
                                                         <Label Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}" FontAttributes="Bold" FontSize="18" TextColor="White"/>
                                                     </StackLayout>
                                                 </Grid>
@@ -139,25 +96,7 @@
                                 </DataTemplate>
                             </repeater:RepeaterView.ItemTemplate>
                         </repeater:RepeaterView>
-                      <!--  <Grid BackgroundColor="{StaticResource GrayPanel}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="100"/>
-                            </Grid.ColumnDefinitions>
 
-                            <StackLayout Orientation="Horizontal" Padding="0,30" Grid.Column="1" Spacing="20">
-                                <Grid BackgroundColor="#334A90E2" Padding="10,5" WidthRequest="200" HorizontalOptions="Start">
-                                    <Label Text="Jeudi 8 Mars"  Style="{StaticResource BlueLabel}"/>
-                                </Grid>
-                                <Label Text="Demande de rendez-vous" FontSize="18" VerticalOptions="Center"/>
-
-                            </StackLayout>
-
-                            <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center"/>
-                            <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center"/>
-                        </Grid> -->
                         <Button Text="Envoyer une séquence" FontSize="18" TextColor="White" BackgroundColor="#9B9B9B" WidthRequest="250" HeightRequest="40" BorderWidth="0" HorizontalOptions="End" Command="{Binding SendSequenceCommand}"  Margin="0,20,0,20"/>
                         <Label Text="Ajouter une note" FontSize="18" Margin="0,0,0,10"/>
                         <Editor HorizontalOptions="Fill" HeightRequest="200" Margin="0,10" Text="{Binding TextNote, Mode=TwoWay}"/>
@@ -170,34 +109,60 @@
                         <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
                         <Label Text="Flux d'activité" FontSize="18" Margin="0,20,0,10"/>
 
-                      
-                            <ListView ItemsSource="{Binding Notes}" IsEnabled="False" ItemTemplate="{StaticResource noteListSelector}"/>
-                        <!-- <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackLayout Padding="0,10">
-                                    <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
-                                               HorizontalOptions="Center"/>
-                                    <Label Text="{Binding Username}" HorizontalOptions="{Binding HorizontalOptions}" FontSize="11" TextColor="#4A4A4A"/>
-                                    <Grid HorizontalOptions="{Binding HorizontalOptions}" BackgroundColor="#F9F9F9" WidthRequest="450" Padding="30,10">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Label Text="{Binding Content}" TextColor="#4A4A4A"/>
-                                         <Label Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="23" TextColor="{StaticResource GrayPanelEdge}" Grid.Column="1"
-                                                   Margin="0,0,0,30"/>
-                                    </Grid>
-                                </StackLayout>
-                            </DataTemplate>
-                        </ListView.ItemTemplate> -->
 
-                            <Button Text="Afficher plus d'historique" BackgroundColor="White" TextColor="{StaticResource BlueAccent}" 
-                                BorderColor="{StaticResource BlueAccent}" BorderWidth="1" HorizontalOptions="Center"/>
+                        <repeater:RepeaterView ItemsSource="{Binding Notes}" IsEnabled="False" >
+                            <repeater:RepeaterView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout>
+                                        <StackLayout Padding="0,10" HorizontalOptions="FillAndExpand" Orientation="Vertical" IsVisible="{Binding Kind, Converter={StaticResource LeadRepeaterTemplateBoolConverter}}">
+                                            <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
+                                               HorizontalOptions="CenterAndExpand"/>
+                                            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                                                <Label Text="{Binding Contactname}" HorizontalOptions="StartAndExpand" FontSize="11" TextColor="#4A4A4A"/>
+                                                <Grid HorizontalOptions="Start" BackgroundColor="#E7F3FF" WidthRequest="450" Padding="30,10">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Text="{Binding Content}" TextColor="#4A4A4A"/>
+                                                    <Label Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="23" TextColor="{StaticResource GrayPanelEdge}" Grid.Column="1" Margin="0,0,0,30"/>
+                                                </Grid>
+                                            </StackLayout>
+                                        </StackLayout>
+
+                                        <StackLayout Padding="0,10" HorizontalOptions="FillAndExpand" IsVisible="{Binding Kind, Converter={StaticResource NegateLeadRepeaterTemplateBoolConverter}}">
+                                            <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
+                                               HorizontalOptions="CenterAndExpand"/>
+                                            <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
+                                                <Label Text="{Binding Username}" HorizontalOptions="EndAndExpand" FontSize="11" TextColor="#4A4A4A"/>
+                                                <Grid HorizontalOptions="EndAndExpand" BackgroundColor="#F9F9F9" WidthRequest="450" Padding="30,10">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Label Text="{Binding Content}" TextColor="#4A4A4A"/>
+                                                    <Label Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="23" TextColor="{StaticResource GrayPanelEdge}" Grid.Column="1"
+                                                       Margin="0,0,0,30"/>
+                                                </Grid>
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </repeater:RepeaterView.ItemTemplate>
+                        </repeater:RepeaterView>
+
+                        <Button Text="Afficher plus d'historique" BackgroundColor="White" TextColor="{StaticResource BlueAccent}" 
+                                IsVisible="{Binding ButtonShowMoreIsDisplayed}" 
+                                BorderColor="{StaticResource BlueAccent}" BorderWidth="1" HorizontalOptions="Center"
+                                Command="{Binding DisplayMoreNotesCommand}"/>
+                        <Button Text="Réduire l'historique" BackgroundColor="White" TextColor="{StaticResource BlueAccent}" 
+                                IsVisible="{Binding ButtonShowLessIsDisplayed}" 
+                                BorderColor="{StaticResource BlueAccent}" BorderWidth="1" HorizontalOptions="Center"
+                                Command="{Binding DisplayLessNotesCommand}"/>
                     </StackLayout>
-                    
+
                 </StackLayout>
             </ScrollView>
-
             <ScrollView Grid.Column="1">
                 <StackLayout BackgroundColor="{StaticResource GrayPanel}" Padding="20,30" Spacing="20">
                     <Label Text="Informations" FontSize="22"/>
