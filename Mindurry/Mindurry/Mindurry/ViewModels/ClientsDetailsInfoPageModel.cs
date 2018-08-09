@@ -22,6 +22,9 @@ namespace Mindurry.ViewModels
 
         public ObservableCollection<RemindersCheckBoxListModel> Reminders { get; set; }
         public ObservableCollection<Note> Notes { get; set; }
+        private ObservableCollection<Note> OriginalNotes;
+        public Boolean ButtonShowMoreIsDisplayed { get; set; }
+        public Boolean ButtonShowLessIsDisplayed { get; set; } = false;
         public DateTimeOffset? DateReminder { get; set; } = null;
         public string TextNote { get; set; }
 
@@ -346,7 +349,17 @@ namespace Mindurry.ViewModels
             var notes = await StoreManager.NoteStore.GetNotesByContactIdAsync(ContactId);
             if (notes != null && notes.Any())
             {
-                Notes = new ObservableCollection<Note>(notes);
+                OriginalNotes = new ObservableCollection<Note>(notes);
+                if (OriginalNotes.Count > 3)
+                {
+                    Notes = new ObservableCollection<Note>(OriginalNotes.Take(3));
+                    ButtonShowMoreIsDisplayed = true;
+                }
+                else
+                {
+                    Notes = new ObservableCollection<Note>(OriginalNotes);
+                    ButtonShowMoreIsDisplayed = false;
+                }
             }
             else
             {
@@ -542,7 +555,7 @@ namespace Mindurry.ViewModels
 
         public Command UpdateContactCommand => new Command(async (obj) =>
         {
-            await CoreMethods.PushPageModel<NewContactPageModel>(Contact.Id);
+            await CoreMethods.PushPageModel<NewClientPageModel>(Contact.Id);
             SubUnsub();
 
         });
@@ -600,14 +613,29 @@ namespace Mindurry.ViewModels
 
         });
 
+        public Command DisplayMoreNotesCommand => new Command((obj) =>
+        {
+            Notes = OriginalNotes;
+            ButtonShowMoreIsDisplayed = false;
+            ButtonShowLessIsDisplayed = true;
+
+        });
+        public Command DisplayLessNotesCommand => new Command((obj) =>
+        {
+            Notes = new ObservableCollection<Note>(OriginalNotes.Take(3));
+            ButtonShowMoreIsDisplayed = true;
+            ButtonShowLessIsDisplayed = false;
+
+        });
+
         void SubUnsub()
         {
-            MessagingCenter.Subscribe<NewContactPageModel>(this, "ReloadDetailContact", async (obj) =>
+            MessagingCenter.Subscribe<NewClientPageModel>(this, "ReloadDetailContact", async (obj) =>
             {
 
                 await LoadContact();
 
-                MessagingCenter.Unsubscribe<NewContactPageModel>(this, "ReloadDetailContact");
+                MessagingCenter.Unsubscribe<NewClientPageModel>(this, "ReloadDetailContact");
             });
         }
 

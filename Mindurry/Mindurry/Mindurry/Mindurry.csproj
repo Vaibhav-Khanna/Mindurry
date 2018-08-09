@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ListTemplate\**" />
+    <EmbeddedResource Remove="ListTemplate\**" />
+    <None Remove="ListTemplate\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Converters\NegateBooleanConverter.cs" />
     <Compile Remove="Pages\AddressPickPage.xaml.cs" />
     <Compile Remove="Pages\ResidenceDetailPage.xaml.cs" />
     <Compile Remove="ViewModels\AddressPickPageModel.cs" />
