@@ -3,6 +3,8 @@ using Mindurry.DataModels;
 using Mindurry.Models;
 using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
+using Plugin.FilePicker;
+using Plugin.FilePicker.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -176,6 +178,11 @@ namespace Mindurry.ViewModels
         public ObservableCollection<string> ComboL3 { get; set; }
 
         public ObservableCollection<DateTitle> Documents { get; set; }
+        public string FileName { get; set; }
+        public bool RemoveButton { get; set; } = false;
+        public FileData myTask { get; set; }
+        public string DocumentName { get; set; }
+
         //public ObservableCollection<DataModels.Residence> Residences { get; set; }
 
         public int TabIndex { get; set; }
@@ -719,6 +726,50 @@ namespace Mindurry.ViewModels
             TabThreeLevel++;
 
         }
+
+
+            public Command PickFileCommand => new Command(async (obj) =>
+            {
+                var crossFilePicker = Plugin.FilePicker.CrossFilePicker.Current;
+
+                 myTask = await crossFilePicker.PickFile();
+
+                if (!string.IsNullOrEmpty(myTask.FileName))
+                   {
+                    FileName = myTask.FileName;
+                    RemoveButton = true;
+                } 
+
+            });
+        public Command RemovePickFileCommand => new Command( () =>
+        {
+            myTask = null;
+            FileName = null;
+            RemoveButton = false;
+
+        });
+
+        public Command UploadFileCommand => new Command(async (obj) => 
+        {
+
+            if (FileName != null )
+            {
+
+            
+                if (!string.IsNullOrEmpty(DocumentName))
+                {
+                    var is_uploaded = await StoreManager.DocumentMindurryStore.UploadDocument(myTask.DataArray, new DocumentMindurry() { Path = FileName, InternalName = Guid.NewGuid().ToString(), ReferenceKind = "customer", DocumentType = "autre", ReferenceId = ContactId, Name = DocumentName });
+                }
+                else
+                {
+                    await CoreMethods.DisplayAlert("Erreur", "Il faut remplir un nom de document", "Ok");
+                }
+            }
+            else
+            {
+                await CoreMethods.DisplayAlert("Erreur", "Il faut choisir un fichier", "Ok");
+            }
+        });
 
         private async Task LoadProperties()
         {
