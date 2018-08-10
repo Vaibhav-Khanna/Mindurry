@@ -2,7 +2,9 @@
 using Mindurry.Models.DataObjects;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -54,5 +56,41 @@ namespace Mindurry.DataStore.Implementation.Stores
                 return null;
             }
         }
+        public async Task<IEnumerable<DocumentMindurry>> GetPostDocumentsByContactId(string id)
+        {
+            await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
+
+            try
+            {
+                var items = await Table.Where(x => x.ReferenceKind == ReferenceKind.customer.ToString() && x.ReferenceId == id).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+
+                return items;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public async Task<bool> IsValidDocumentName(string DocumentName)
+        {
+            await InitializeStore().ConfigureAwait(false);
+            try
+            {
+                var items = await Table.Where(x => x.Name == DocumentName).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                if (items != null && items.Any())
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+
+
     }
 }
