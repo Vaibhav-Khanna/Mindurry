@@ -18,13 +18,13 @@ namespace Mindurry
 	{
         public static event EventHandler<string> TabbedPageRequested;
 
-        public static event EventHandler<Residence> TabbedPageApartmentRequested;
+        public static event EventHandler<ResidenceModel> TabbedPageApartmentRequested;
 
        // public static IAuthenticate AuthenticationProvider { get; private set; }
 
         public static UIParent UiParent = null;
 
-        public static StoreManager storeManager { get; set; }
+        public static IStoreManager storeManager { get; set; }
 
         public App ()
 		{
@@ -39,15 +39,26 @@ namespace Mindurry
 
         public async void Init()
         {
-            if (storeManager == null)
-                return;
-
-            if (!storeManager.IsInitialized)
-                await storeManager.InitializeAsync();
-            
-            if (!string.IsNullOrWhiteSpace(Settings.AuthToken))
+            try
             {
-                await storeManager.SyncAllAsync(true);
+                storeManager = FreshIOC.Container.Resolve<IStoreManager>() as StoreManager;
+
+                //bool authenticated = await storeManager.LoginAsync(true);
+ 
+                if (!string.IsNullOrWhiteSpace(Settings.AuthToken))
+                {
+                    Device.BeginInvokeOnMainThread(()=>
+                    {
+                        var page = new Pages.MasterDetailNavigationPage();
+                        MainPage = page;
+                    });
+                    
+                    storeManager.SyncAllAsync(true);
+                }
+            }
+            catch
+            {
+                // Do nothing - the user isn't logged in
             }
         }
 
@@ -70,7 +81,7 @@ namespace Mindurry
         {
             TabbedPageRequested?.Invoke(null, data);
         }
-        public static void RequestApartmentTabbedPage(Residence data)
+        public static void RequestApartmentTabbedPage(ResidenceModel data)
         {
             TabbedPageApartmentRequested?.Invoke(null, data);
         }

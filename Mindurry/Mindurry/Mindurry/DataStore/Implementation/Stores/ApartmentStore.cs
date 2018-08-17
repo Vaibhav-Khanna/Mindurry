@@ -10,6 +10,24 @@ namespace Mindurry.DataStore.Implementation.Stores
     {
         public override string Identifier => "Apartment";
 
+
+        public async Task<IEnumerable<Apartment>> GetApartmentsByResidenceId(string residenceId)
+        {            
+            try
+            {
+                await InitializeStore().ConfigureAwait(false);
+
+                var items = await Table.Where( a=> a.ResidenceId == residenceId).ToEnumerableAsync().ConfigureAwait(false);
+
+                return items;
+            }
+            catch (Exception)
+            {
+            }
+
+            return null;
+        }
+
         public async  Task<IEnumerable<Apartment>> GetItemsByResidenceId(string residenceId) {
 
             await InitializeStore().ConfigureAwait(false);
@@ -60,7 +78,6 @@ namespace Mindurry.DataStore.Implementation.Stores
                 return null;
             }
         }
-        
-
+       
     }
 }

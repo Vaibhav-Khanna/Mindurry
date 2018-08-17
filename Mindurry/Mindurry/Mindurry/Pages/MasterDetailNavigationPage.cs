@@ -64,7 +64,7 @@ namespace Mindurry.Pages
             Detail = tabbedNavigation;
         }
 
-        private void App_TabbedPageApartmentRequested(object sender, Residence e)
+        private void App_TabbedPageApartmentRequested(object sender, ResidenceModel e)
         {
             var tabbedNavigation = new FreshTabbedFONavigationContainer(e.NoArchi.ToString());
             //this causes weird 

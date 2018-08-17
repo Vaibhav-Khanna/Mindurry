@@ -8,13 +8,13 @@ namespace Mindurry.ViewModels
 {
     public class ResidencesDetailsGaragePageModel : BasePageModel
     {
-        public Residence Garage { get; set; }
+        public ResidenceModel Garage { get; set; }
 
         public override void Init(object initData)
         {
             base.Init(initData);
 
-            Garage = (Residence)initData;
+            Garage = (ResidenceModel)initData;
         }
     }
 }

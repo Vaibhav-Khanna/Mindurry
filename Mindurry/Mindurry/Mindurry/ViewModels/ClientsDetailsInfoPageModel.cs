@@ -176,6 +176,9 @@ namespace Mindurry.ViewModels
         public ObservableCollection<string> ComboL3 { get; set; }
 
         public ObservableCollection<DateTitle> Documents { get; set; }
+
+        //public ObservableCollection<DataModels.ResidenceModel> Residences { get; set; }
+
         //public ObservableCollection<DataModels.Residence> Residences { get; set; }
 
         public int TabIndex { get; set; }
@@ -295,6 +298,11 @@ namespace Mindurry.ViewModels
             };
 
             Documents = new ObservableCollection<DateTitle> { doc1, doc2, doc3, doc4 };
+
+            
+
+            Residences = new ObservableCollection<Residence> { };
+
 
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
