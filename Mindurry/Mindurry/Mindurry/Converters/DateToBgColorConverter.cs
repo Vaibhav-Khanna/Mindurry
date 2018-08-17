@@ -11,15 +11,15 @@ namespace Mindurry.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
 
-            var reminderDate = (DateTime)value;
+            var reminderDate = (DateTimeOffset)value;
 
             if (reminderDate != null)
             {
-                if (reminderDate.Date == DateTime.Now.Date)
+                if (reminderDate.Date == DateTimeOffset.Now.Date)
                     return Color.FromHex("f5a623");
-                else if (reminderDate.Date > DateTime.Now.Date)
-                    return Color.Red;
-                else return Color.White;
+                else if (reminderDate.Date > DateTimeOffset.Now.Date)
+                    return Color.FromHex("4A90E2");
+                else return Color.Red;
 
             }
             else

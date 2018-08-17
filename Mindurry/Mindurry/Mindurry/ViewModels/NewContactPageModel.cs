@@ -32,6 +32,8 @@ namespace Mindurry.ViewModels
 
         private string ContactId;
 
+        public string Title { get; set; }
+
         public List<CollectSource> CollectSources { get; set; }
 
         public CollectSource CollectSourcesSelected { get; set; }
@@ -186,6 +188,7 @@ namespace Mindurry.ViewModels
             base.Init(initData);
             if (initData != null)
             {
+                Title = "Modification Contact";
                 ContactId = (string)initData;
                 Contact = await StoreManager.ContactStore.GetItemAsync(ContactId);
 
@@ -200,8 +203,8 @@ namespace Mindurry.ViewModels
                 }
 
             }
-           
 
+            Title = "Nouveau Contact";
 
             IsVisibleListView = false;
 

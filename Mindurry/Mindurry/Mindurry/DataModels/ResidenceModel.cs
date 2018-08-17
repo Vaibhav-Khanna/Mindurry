@@ -6,7 +6,7 @@ using System.Text;
 namespace Mindurry.DataModels
 {
     public enum Status { Libre, Reserve, Vendu, Option}
-    public enum ResidenceType { Apartment, Garage, Cave }
+    public enum ResidenceType { Appartement, Garage, Cave }
 
     public class ResidenceModel
     {
@@ -15,7 +15,7 @@ namespace Mindurry.DataModels
             Statuses = new List<Status> { Status.Libre, Status.Option, Status.Reserve, Status.Vendu };
         }
 
-        public ResidenceModel(Models.DataObjects.Apartment apartment, Residence residence)
+        public ResidenceModel(Models.DataObjects.Apartment apartment, Mindurry.Models.DataObjects.Residence residence)
         {
             Apartment = apartment;
             Residence = residence;
@@ -40,7 +40,7 @@ namespace Mindurry.DataModels
             Statuses = new List<Status> { Status.Libre, Status.Option, Status.Reserve, Status.Vendu };
         }
 
-        public Residence Residence { get; set; }
+        public Mindurry.Models.DataObjects.Residence Residence { get; set; }
         public Models.DataObjects.Apartment Apartment { get; set; }
         public Garden _Garden { get; set; }
         public Terrace _Terrace { get; set; }

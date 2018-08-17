@@ -10,6 +10,7 @@ namespace Mindurry.DataStore.Implementation.Stores
     {
         public override string Identifier => "Apartment";
 
+
         public async Task<IEnumerable<Apartment>> GetApartmentsByResidenceId(string residenceId)
         {            
             try
@@ -26,5 +27,57 @@ namespace Mindurry.DataStore.Implementation.Stores
 
             return null;
         }
+
+        public async  Task<IEnumerable<Apartment>> GetItemsByResidenceId(string residenceId) {
+
+            await InitializeStore().ConfigureAwait(false);
+
+            
+            if (!String.IsNullOrEmpty(residenceId))
+            {
+                return await Table.Where(x => x.ResidenceId == residenceId).OrderBy(x => x.LotNumberArchitect).Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false); 
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public async Task<IEnumerable<Apartment>> GetItemsByContactId(string contactId)
+        {
+
+            await InitializeStore().ConfigureAwait(false);
+
+
+            if (!String.IsNullOrEmpty(contactId))
+            {
+                return await Table.Where(x => x.ContactId == contactId).OrderBy(x => x.ResidenceId).Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+               
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public async Task<Apartment> GetItemByRefenceAsync(string reference)
+        {
+            await InitializeStore().ConfigureAwait(false);
+
+
+            if (!String.IsNullOrEmpty(reference))
+            {
+                var items = await Table.Where(x => x.LotNumberArchitect == reference).ToListAsync().ConfigureAwait(false);
+
+                if (items == null || items.Count == 0)
+                    return null;
+
+                return items[0];
+
+            }
+            else
+            {
+                return null;
+            }
+        }
+       
     }
 }

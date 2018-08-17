@@ -99,7 +99,7 @@ namespace Mindurry.ViewModels.Base
             FreshIOC.Container.Register<IContactCustomFieldSourceStore, ContactCustomFieldSourceStore>();
             FreshIOC.Container.Register<IContactCustomFieldStore, ContactCustomFieldStore>();
             FreshIOC.Container.Register<IContactStore, ContactStore>();
-            FreshIOC.Container.Register<IDocumentStore, DocumentStore>();
+            FreshIOC.Container.Register<IDocumentMindurryStore, DocumentMindurryStore>();
             FreshIOC.Container.Register<IGarageStore, GarageStore>();
             FreshIOC.Container.Register<IGardenStore, GardenStore>();
             FreshIOC.Container.Register<INoteStore, NoteStore>();
