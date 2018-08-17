@@ -175,6 +175,7 @@ namespace Mindurry.ViewModels
         public ObservableCollection<ClientPropertyModel> PropertyList { get; set; }
 
 
+<<<<<<< HEAD
         public ObservableCollection<DocumentMindurry> Documents { get; set; }
         public string FileName { get; set; }
         public bool RemoveButton { get; set; } = false;
@@ -219,6 +220,11 @@ namespace Mindurry.ViewModels
             }
         }
 
+=======
+        public ObservableCollection<DateTitle> Documents { get; set; }
+
+        //public ObservableCollection<DataModels.ResidenceModel> Residences { get; set; }
+>>>>>>> origin/development
 
         //public ObservableCollection<DataModels.Residence> Residences { get; set; }
 

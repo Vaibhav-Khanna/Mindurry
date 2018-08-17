@@ -12,7 +12,7 @@ namespace Mindurry.ViewModels
     {
         public ObservableCollection<IconTitle> Items { get; set; }
 
-        public Residence SelectedItem
+        public ResidenceModel SelectedItem
         {
             get => null;
             set

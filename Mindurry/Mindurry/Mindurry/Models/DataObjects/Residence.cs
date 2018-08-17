@@ -9,7 +9,7 @@ namespace Mindurry.Models.DataObjects
         public string Name { get; set; }
 
         [JsonProperty("archived")]
-        public bool? Archived { get; set; }
+        public bool Archived { get; set; }
 
         [JsonProperty("address1")]
         public string Address1 { get; set; }
@@ -41,14 +41,13 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("sciZipCode")]
         public string SciZipCode { get; set; }
 
-        [JsonProperty("sciCountry")]
-        public string SciCountry { get; set; }
-
         [JsonProperty("sciLocality")]
         public string SciLocality { get; set; }
 
+        [JsonProperty("sciCountry")]
+        public string SciCountry { get; set; }
+
         [JsonProperty("sciFormattedAddress")]
         public string SciFormattedAddress { get; set; }
-
     }
 }

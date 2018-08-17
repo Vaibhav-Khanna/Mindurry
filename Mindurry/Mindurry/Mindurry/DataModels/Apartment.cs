@@ -20,7 +20,7 @@ namespace Mindurry.DataModels
         }
         public int NoArchi { get; set; }
         public string Type { get; set; }
-        public Statut Statut { get; set; }
+        public Status Statut { get; set; }
         public string Exposition { get; set; }
         public double Surface { get; set; }
         public double Terasse { get; set; }
@@ -35,12 +35,12 @@ namespace Mindurry.DataModels
         public List<string> Terasses { get; set; }
         public string JardinSurface { get; set; }
 
-        public List<Statut> Statuses { get; set; }
-        public Statut SelectedStatus { get; set; }
+        public List<Status> Statuses { get; set; }
+        public Status SelectedStatus { get; set; }
 
         public Apartment()
         {
-            Statuses = new List<Statut> { Statut.Libre, Statut.Option, Statut.Reserve, Statut.Vendu };
+            Statuses = new List<Status> { Status.Libre, Status.Option, Status.Reserve, Status.Vendu };
         }
     }
 }

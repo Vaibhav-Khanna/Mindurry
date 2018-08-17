@@ -33,16 +33,17 @@ namespace Mindurry.Models.DataObjects
         public string Exposure { get; set; }
 
         [JsonProperty("area")]
-        public double? Area { get; set; }
+        public long Area { get; set; }
 
         [JsonProperty("floor")]
-        public double? Floor { get; set; }
+        public long Floor { get; set; }
 
         [JsonProperty("price")]
-        public double? Price { get; set; }
+        public long Price { get; set; }
 
 
     }
+
     public enum CommandState { Libre, Optionné, Reservé, Vendu };
 
     public enum Exposure { East, NortWest, North, NorthEast, South, SouthEast, SouthWest, West };

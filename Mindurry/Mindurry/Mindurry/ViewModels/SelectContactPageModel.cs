@@ -14,7 +14,7 @@ namespace Mindurry.ViewModels
     {
         public ObservableCollection<CheckablePerson> Items { get; set; }
 
-        public Residence SelectedItem
+        public ResidenceModel SelectedItem
         {
             get => null;
             set

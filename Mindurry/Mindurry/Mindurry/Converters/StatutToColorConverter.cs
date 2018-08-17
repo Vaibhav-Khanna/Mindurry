@@ -12,16 +12,16 @@ namespace Mindurry.Converters
         {
             try
             {
-                var str = (DataModels.Statut)value;
+                var str = (DataModels.Status)value;
                 switch (str)
                 {
-                    case DataModels.Statut.Libre:
+                    case DataModels.Status.Libre:
                         return Color.FromRgb(126,211,33);
-                    case DataModels.Statut.Reserve:
+                    case DataModels.Status.Reserve:
                         return Color.FromRgb(245,166,35);
-                    case DataModels.Statut.Vendu:
+                    case DataModels.Status.Vendu:
                         return Color.FromRgb(159,24,24);
-                    case DataModels.Statut.Option:
+                    case DataModels.Status.Option:
                         return Color.FromRgb(255, 101, 101);
                     default:
                         return Color.Black;

@@ -1,4 +1,5 @@
 ﻿using Mindurry.DataModels;
+using Mindurry.Models.DataObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +21,9 @@ namespace Mindurry.Pages
         private void headerTapped(object sender, EventArgs e)
         {
             var element = sender as Xamarin.Forms.StackLayout;
-            var children = element.Children[0].BindingContext as IGrouping<string, Residence>;
+            var children = element.Children[0].BindingContext as IGrouping<Residence, ResidenceModel>;
             var key = children.Key;
-            App.RequestTabbedPage(key);
+            App.RequestTabbedPage(key.Name);
         }
     }
 }

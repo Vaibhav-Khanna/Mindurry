@@ -18,10 +18,10 @@ namespace Mindurry.Models.DataObjects
         public string LotNumberCopro { get; set; }
 
         [JsonProperty("area")]
-        public double? Area { get; set; }
+        public long Area { get; set; }
 
         [JsonProperty("price")]
-        public double? Price { get; set; }
+        public long Price { get; set; }
 
         [JsonProperty("contactId")]
         public string ContactId { get; set; }
