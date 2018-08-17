@@ -8,6 +8,9 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("residenceId")]
         public string ResidenceId { get; set; }
 
+        [JsonProperty("residenceName")]
+        public string ResidenceName { get; set; }
+
         [JsonProperty("apartmentId")]
         public string ApartmentId { get; set; }
 
@@ -18,7 +21,7 @@ namespace Mindurry.Models.DataObjects
         public string Exposure { get; set; }
 
         [JsonProperty("area")]
-        public double? Area { get; set; }
+        public long Area { get; set; }
 
     }
 

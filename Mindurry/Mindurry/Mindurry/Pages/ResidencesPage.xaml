@@ -29,7 +29,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <SearchBar Placeholder="Rechercher" WidthRequest="300" HorizontalOptions="Start"/>
+                <SearchBar Text="{Binding SearchText,Mode=TwoWay}" Placeholder="Rechercher" WidthRequest="300" HorizontalOptions="Start"/>
 
                 <StackLayout Orientation="Horizontal" Grid.Column="1" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsShareButtonVisible}">
                     <StackLayout.GestureRecognizers>
@@ -57,12 +57,12 @@
 
                                 <StackLayout BackgroundColor="#FCFCFC">
                                     <StackLayout Orientation="Vertical">
-                                    <Label x:Name="HeaderText" Text="{Binding Key}" FontSize="20" Margin="30,5">
+                                    <Label x:Name="HeaderText" Text="{Binding Key.Name}" VerticalOptions="Start" FontSize="20" Margin="30,5,0,5">
                                             <Label.Effects>
                                                 <effect:FontLightEffect/>
                                             </Label.Effects>
                                         </Label>
-                                        <Label Text="Parking en option à partir de 10000€" FontSize="10" Margin="30,5" >
+                                        <Label Text="{Binding Key.FormattedAddress}" FontSize="10" TranslationY="-10" VerticalOptions="Start" Margin="30,5,0,0" >
                                                 <Label.Effects>
                                                     <effect:FontLightEffect/>
                                                 </Label.Effects>
@@ -143,14 +143,15 @@
 
                                     <Label Text="{Binding NoArchi}" Grid.Column="1"/>
                                     <Label Text="{Binding Type}"  Grid.Column="2"/>
-                                    <Label Text="{Binding Exposition}" Grid.Column="3"/>
+                                    <Label Text="{Binding Exposure}" Grid.Column="3"/>
                                     <Label Text="{Binding Surface, StringFormat='{0}m2'}" Grid.Column="4"/>
-                                    <Label Text="{Binding Terasse, StringFormat='{0}m2'}" Grid.Column="5"/>
-                                    <Label Text="{Binding Jardin, StringFormat='{0}m2'}" Grid.Column="6"/>
+                                    <Label Text="{Binding Terace, StringFormat='{0}m2'}" Grid.Column="5"/>
+                                    <Label Text="{Binding Garden, StringFormat='{0}m2'}" Grid.Column="6"/>
                                     <Label Text="{Binding Client}" Grid.Column="7"/>
-                                    <Label Text="{Binding Stade}" Grid.Column="8"/>
-                                    <Label Text="{Binding Prix, StringFormat='{0:#,##0}€'}" Grid.Column="9"/>
+                                    <Label Text="{Binding Stadium}" Grid.Column="8"/>
+                                    <Label Text="{Binding Price, StringFormat='{0:#,##0}€'}" Grid.Column="9"/>
                                     <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="10"/>
+                                
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
@@ -172,13 +173,14 @@
                                 </Label.Effects>
                             </Label>
                             <Grid VerticalOptions="Center">
-                                <Button Text="" Style="{StaticResource IconButton}" HorizontalOptions="End" VerticalOptions="Center"/>
+                                <Button Text="" Command="{Binding ClearAllFilterCommand}" Style="{StaticResource IconButton}" HorizontalOptions="End" VerticalOptions="Center"/>
                                 <Label Text="" Font="Segoe MDL2 Assets" FontSize="9" HorizontalOptions="End" VerticalOptions="End" InputTransparent="True" Margin="2"/>
                             </Grid>
                         </Grid>
 
                         <ScrollView Grid.Row="1">
                             <StackLayout Spacing="20" Padding="20">
+                                
                                 <StackLayout Spacing="5">
                                     <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
                                         <StackLayout.GestureRecognizers>
@@ -205,7 +207,7 @@
                                             </Button.Effects>
                                         </Button>
                                     </StackLayout>
-
+                                    
                                 </StackLayout>
 
                                 <StackLayout Spacing="5">
@@ -266,12 +268,12 @@
 
                                 <StackLayout>
                                     <Label Text="Terrasse" TextColor="{StaticResource GrayPanelText}" Grid.ColumnSpan="2"/>
-                                    <Switch/>
+                                    <Switch IsToggled="{Binding TerraceChecked}"/>
                                 </StackLayout>
 
                                 <StackLayout>
                                     <Label Text="Jardin" TextColor="{StaticResource GrayPanelText}" Grid.ColumnSpan="2"/>
-                                    <Switch/>
+                                    <Switch IsToggled="{Binding GardenChecked}"/>
                                 </StackLayout>
 
                             </StackLayout>

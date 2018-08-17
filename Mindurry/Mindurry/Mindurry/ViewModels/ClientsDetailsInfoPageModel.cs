@@ -187,18 +187,9 @@ namespace Mindurry.ViewModels
 
             Documents = new ObservableCollection<DateTitle> { doc1, doc2, doc3, doc4 };
 
-            var residence1 = new DataModels.ResidenceModel()
-            {
-                NoArchi = 456,
-                Type = "T3",
-                Surface = 86,
-                Price = 126000,
-                Stade = "En attente des options",
-                ResidenceType = ResidenceType.Apartment,            
-                SelectedStatus = Status.Reserve
-            };
+            
 
-            Residences = new ObservableCollection<DataModels.ResidenceModel> { residence1 };
+            Residences = new ObservableCollection<DataModels.ResidenceModel> { };
 
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);

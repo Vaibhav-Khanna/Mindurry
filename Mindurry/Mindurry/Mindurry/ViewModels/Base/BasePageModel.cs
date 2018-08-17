@@ -107,9 +107,8 @@ namespace Mindurry.ViewModels.Base
             FreshIOC.Container.Register<ITerraceStore, TerraceStore>();
             FreshIOC.Container.Register<IUserFavoriteStore, UserFavoriteStore>();
             FreshIOC.Container.Register<IUserStore, UserStore>();
-            
-    }
-        protected IStoreManager StoreManager { get; } = FreshIOC.Container.Resolve<IStoreManager>();
+        }
 
+        protected IStoreManager StoreManager { get; } = FreshIOC.Container.Resolve<IStoreManager>();
     }
 }

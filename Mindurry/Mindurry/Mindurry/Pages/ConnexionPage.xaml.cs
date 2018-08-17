@@ -22,28 +22,6 @@ namespace Mindurry.Pages
             NavigationPage.SetHasNavigationBar(this, false);
 		}
 
-        protected override async void OnAppearing()
-        {
-            try
-            {
-                var storeManager = FreshIOC.Container.Resolve<IStoreManager>() as StoreManager;
-
-
-                bool authenticated = await storeManager.LoginAsync(true);
-                if (authenticated)
-                {
-                    var page = new Pages.MasterDetailNavigationPage();
-                    Application.Current.MainPage = page;
-                    storeManager.SyncAllAsync(true);
-                }
-            }
-            catch
-            {
-                // Do nothing - the user isn't logged in
-            }
-
-            base.OnAppearing();
-        }
 
         async void OnLoginButtonClicked(object sender, EventArgs e)
         {

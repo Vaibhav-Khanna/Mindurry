@@ -24,7 +24,7 @@ namespace Mindurry
 
         public static UIParent UiParent = null;
 
-        public static StoreManager storeManager { get; set; }
+        public static IStoreManager storeManager { get; set; }
 
         public App ()
 		{
@@ -39,15 +39,26 @@ namespace Mindurry
 
         public async void Init()
         {
-            if (storeManager == null)
-                return;
-
-            if (!storeManager.IsInitialized)
-                await storeManager.InitializeAsync();
-            
-            if (!string.IsNullOrWhiteSpace(Settings.AuthToken))
+            try
             {
-                await storeManager.SyncAllAsync(true);
+                storeManager = FreshIOC.Container.Resolve<IStoreManager>() as StoreManager;
+
+                //bool authenticated = await storeManager.LoginAsync(true);
+ 
+                if (!string.IsNullOrWhiteSpace(Settings.AuthToken))
+                {
+                    Device.BeginInvokeOnMainThread(()=>
+                    {
+                        var page = new Pages.MasterDetailNavigationPage();
+                        MainPage = page;
+                    });
+                    
+                    storeManager.SyncAllAsync(true);
+                }
+            }
+            catch
+            {
+                // Do nothing - the user isn't logged in
             }
         }
 

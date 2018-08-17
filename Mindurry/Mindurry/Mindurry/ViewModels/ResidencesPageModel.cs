@@ -9,14 +9,20 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using Mindurry.ViewModels.Base;
+using Mindurry.Models.DataObjects;
+using System.Diagnostics;
+using System.ComponentModel;
 
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class ResidencesPageModel : BasePageModel
     {
-        public IEnumerable<IGrouping<string, ResidenceModel>> GroupedItems { get; set; }
-       
+        public IEnumerable<IGrouping<Residence, ResidenceModel>> GroupedItems { get; set; }
+
+        private ObservableCollection<ResidenceModel> AllResidences { get; set; }
+        private ObservableCollection<ResidenceModel> FilteredResidences { get; set; }
+
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> ExpositionChecks { get; set; }
@@ -35,11 +41,20 @@ namespace Mindurry.ViewModels
             }
         }
 
+        private string _searchText;
+        public string SearchText { get { return _searchText; } set { _searchText = value; Search(); RaisePropertyChanged(); } }
+
         public bool IsShareButtonVisible { get; set; } = false;
         public bool IsFirstListVisible { get; set; } = true;
         public bool IsSecondListVisible { get; set; } = true;
         public bool IsThirdListVisible { get; set; } = true;
         public bool IsFilterOn { get; set; } = false;
+
+        bool _terraceChecked;
+        public bool TerraceChecked { get { return _terraceChecked; } set { _terraceChecked = value; Search(); RaisePropertyChanged(); } }
+
+        bool _gardenChecked;
+        public bool GardenChecked { get { return _gardenChecked; } set { _gardenChecked = value; Search(); RaisePropertyChanged(); } }
 
         public string ArrowOne
         {
@@ -60,209 +75,91 @@ namespace Mindurry.ViewModels
         public ICommand ShareCommand { get; set; }
         public ICommand ArrowOneCommand { get; set; }
         public ICommand ArrowTwoCommand { get; set; }
-        public ICommand ArrowThreeCommand { get; set; }
+        public ICommand ArrowThreeCommand { get; set; }      
+        public ICommand ClearAllResidencesCommand { get; set; }
+        public ICommand ClearAllTypesCommand { get; set; }
+        public ICommand ClearAllExpositionCommand { get; set; }
+        public ICommand ClearAllFilterCommand { get; set; }
 
-        public override void Init(object initData)
+        public async override void Init(object initData)
         {
             base.Init(initData);
 
-            var item1 = new ResidenceModel
+            AllResidences = new ObservableCollection<ResidenceModel>();
+
+            var residences = await StoreManager.ResidenceStore.GetAllActiveResidences();
+
+            foreach (var _res in residences)
             {
-                Parent = "Herrian",
-                NoArchi = 678,
-                Type = "T2",
-                Exposition = "Nord",
-                Surface = 89,
-                Terace = 14,
-                Garden = 0,
-                Client = "John Doe",
-                Stade = "-",
-                Price = 168000
-            };
+                var _apartments = await StoreManager.ApartmentStore.GetApartmentsByResidenceId(_res.Id);
 
-            var item2 = new ResidenceModel
+                if (_apartments != null)
+                    foreach (var _apt in _apartments)
+                    {
+                        var _terraces = await StoreManager.TerraceStore.GetTerracesByResidenceId(_res.Id, _apt.Id);
+                        var _gardens = await StoreManager.GardenStore.GetGardensByResidenceId(_res.Id, _apt.Id);
+
+                        var _res_model = new ResidenceModel(_apt, _res);
+
+                        if (_terraces != null && _terraces.Any())
+                            foreach (var t in _terraces)
+                            {
+                                _res_model.Terace += t.Area;
+                            }
+
+                        if (_gardens != null && _gardens.Any())
+                            foreach (var g in _gardens)
+                            {
+                                _res_model.Garden += g.Area;
+                            }
+
+                        AllResidences.Add(_res_model);
+                    }
+            }
+           
+            GroupedItems = AllResidences.GroupBy(x => x.Residence);
+
+            ResidencesChecks = new ObservableCollection<CheckBoxItem>();
+
+            // Residence checkbox Items
+            foreach (var _res in residences)
             {
-                Parent = "Herrian",
-                NoArchi = 456,
-                Type = "T2",
-                Exposition = "Nord",
-                Surface = 67,
-                Terace = 14,
-                Garden = 0,
-                Client = "Marc Duix",
-                Stade = "-",
-                Price = 130000
-            };
+                CheckBoxItem item;
+                ResidencesChecks.Add(item = new CheckBoxItem() { Content = _res.Name, Id = _res.Id, DataType = CheckBoxContainerDataType.Residence });
+                item.PropertyChanged += ResidenceFilterChanged;
+            }
 
-            var item3 = new ResidenceModel
+            TypesChecks = new ObservableCollection<CheckBoxItem>();
+            ExpositionChecks = new ObservableCollection<CheckBoxItem>();
+
+            // Type Checkbox Items
+            foreach (var item in AllResidences.DistinctBy(s=> s.Type).OrderBy(s=>s.Type).ToList())
             {
-                Parent = "Herrian",
-                NoArchi = 5678,
-                Type = "T3",
-                Exposition = "Nord",
-                Surface = 56,
-                Terace = 14,
-                Garden = 0,
-                Client = "Marie Marto",
-                Stade = "-",
-                Price = 156000
-            };
+                CheckBoxItem check;
+                TypesChecks.Add(check = new CheckBoxItem() { Content = item.Type, DataType = CheckBoxContainerDataType.Type });
+                check.PropertyChanged += TypeFilterChanged;
+            }
 
-            var item4 = new ResidenceModel
+            // Exposure Checkbox Items
+            foreach (var item in AllResidences.DistinctBy(s=>s.Exposure).OrderBy(s=>s.Exposure).ToList())
             {
-                Parent = "Herrian",
-                NoArchi = 567,
-                Type = "T4",
-                Exposition = "Nord",
-                Surface = 34,
-                Terace = 14,
-                Garden = 0,
-                Client = "Henri Lapuie",
-                Stade = "Opts validés",
-                Price = 110500
-            };
-
-            var item21 = new ResidenceModel
-            {
-                Parent = "Herri Ondo",
-                NoArchi = 5678,
-                Type = "T2",
-                Exposition = "Nord",
-                Surface = 109,
-                Terace = 14,
-                Garden = 0,
-                Client = "John Doe",
-                Stade = "-",
-                Price = 230000
-            };
-
-            var item22 = new ResidenceModel
-            {
-                Parent = "Herri Ondo",
-                NoArchi = 777,
-                Type = "T3",
-                Exposition = "Nord",
-                Surface = 87,
-                Terace = 14,
-                Garden = 0,
-                Client = "Marc Duix",
-                Stade = "-",
-                Price = 197000
-            };
-
-            var item31 = new ResidenceModel
-            {
-                Parent = "Miragarri",
-                NoArchi = 234,
-                Type = "T2",
-                Exposition = "Nord",
-                Surface = 89,
-                Terace = 14,
-                Garden = 25,
-                Client = "Marc Duix",
-                Stade = "-",
-                Price = 206000
-            };
-
-            var item32 = new ResidenceModel
-            {
-                Parent = "Miragarri",
-                NoArchi = 86,
-                Type = "T4",
-                Exposition = "Nord",
-                Surface = 48,
-                Terace = 14,
-                Garden = 0,
-                Client = "Marc Duix",
-                Stade = "-",
-                Price = 136000
-            };
-
-            var item33 = new ResidenceModel
-            {
-                Parent = "Miragarri",
-                NoArchi = 67,
-                Type = "T4",
-                Exposition = "Nord",
-                Surface = 44,
-                Terace = 14,
-                Garden = 0,
-                Client = "Marc Duix",
-                Stade = "-",
-                Price = 178000
-            };
-
-            var item34 = new ResidenceModel
-            {
-                Parent = "Miragarri",
-                NoArchi = 78,
-                Type = "T3",
-                Exposition = "Nord",
-                Surface = 67,
-                Terace = 14,
-                Garden = 0,
-                Client = "Marc Duix",
-                Stade = "-",
-                Price = 168000
-            };
-
-            var item41 = new ResidenceModel
-            {
-                Parent = "Villa Aguilera",
-                NoArchi = 657,
-                Type = "T3",
-                Exposition = "Nord",
-                Surface = 89,
-                Terace = 14,
-                Garden = 0,
-                Client = "Marc Duix",
-                Stade = "-",
-                Price = 198000
-            };
-
-            var item42 = new ResidenceModel
-            {
-                Parent = "Villa Aguilera",
-                NoArchi = 576,
-                Type = "T4",
-                Exposition = "Nord",
-                Surface = 78,
-                Terace = 14,
-                Garden = 0,
-                Client = "Marc Duix",
-                Stade = "-",
-                Price = 154000
-            };
-
-            var items = new ObservableCollection<ResidenceModel> { item1, item2, item21, item22, item3, item31, item32, item33, item34, item4, item41, item42 };
-            GroupedItems = items.GroupBy(x => x.Parent);
-
-            var check1 = new CheckBoxItem { Content = "Herrian" };
-            var check2 = new CheckBoxItem { Content = "Herri Ondo", IsChecked = true };
-            var check3 = new CheckBoxItem { Content = "Villa Aguiléra" };
-
-            ResidencesChecks = new ObservableCollection<CheckBoxItem> { check1, check2, check3 };
-
-            var check4 = new CheckBoxItem { Content = "Studio" };
-            var check5 = new CheckBoxItem { Content = "T2", IsChecked = true };
-            var check6 = new CheckBoxItem { Content = "T3" };
-
-            TypesChecks = new ObservableCollection<CheckBoxItem> { check4, check5, check6 };
-
-            var check7 = new CheckBoxItem { Content = "Nord" };
-            var check8 = new CheckBoxItem { Content = "Sud" };
-            var check9 = new CheckBoxItem { Content = "Est" };
-
-            ExpositionChecks = new ObservableCollection<CheckBoxItem> { check7, check8, check9 };
-
+                CheckBoxItem check;
+                ExpositionChecks.Add(check = new CheckBoxItem() { Content = item.Exposure, DataType = CheckBoxContainerDataType.Exposure });
+                check.PropertyChanged += TypeFilterChanged;
+            }
+            
             ShowFilterCommand = new Command(ShowFilter);
             ShareCommand = new Command(Share);
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
             ArrowThreeCommand = new Command(ChangeArrowThree);
+            ClearAllResidencesCommand = new Command(ClearResidenceChecks);
+            ClearAllTypesCommand = new Command(ClearTypeChecks);
+            ClearAllExpositionCommand = new Command(ClearExposureChecks);
+            ClearAllFilterCommand = new Command(ClearAllFilters);
 
             ViewModels.StaticViewModel.SelectionChanged += StaticViewModel_SelectionChanged;
-        }
+        }       
 
         public override void ReverseInit(object returnedData)
         {
@@ -311,5 +208,131 @@ namespace Mindurry.ViewModels
         {
             IsThirdListVisible = !IsThirdListVisible;
         }
+
+        void ClearResidenceChecks()
+        {
+            foreach (var item in ResidencesChecks)
+            {
+                item.IsChecked = false;
+            }
+        }
+
+        void ClearTypeChecks()
+        {
+            foreach (var item in TypesChecks)
+            {
+                item.IsChecked = false;
+            }
+        }
+
+        void ClearExposureChecks()
+        {
+            foreach (var item in ExpositionChecks)
+            {
+                item.IsChecked = false;
+            }
+        }
+
+        void ClearAllFilters()
+        {
+            ClearResidenceChecks();
+            ClearTypeChecks();
+            ClearExposureChecks();
+
+            TerraceChecked = false;
+            GardenChecked = false;
+        }
+
+        void Search()
+        {
+            Filter();
+
+            if (string.IsNullOrWhiteSpace(SearchText))
+                GroupedItems = FilteredResidences.GroupBy(x => x.Residence);
+            else
+                GroupedItems = FilteredResidences.Where(x => x.Parent.ToLower().Contains(SearchText.ToLower())).GroupBy(x => x.Residence);
+        }
+
+        void ResidenceFilterChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var residence = sender as CheckBoxItem;
+
+            Search();
+        }
+
+        void TypeFilterChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var type = sender as CheckBoxItem;
+
+            Search();
+        }
+
+        void ExposureFilterChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var exposure = sender as CheckBoxItem;
+
+            Search();
+        }
+
+        void Filter()
+        {
+            var filter_list = new List<ResidenceModel>();
+
+            // Filtered for residence
+            var residences_checked = ResidencesChecks.Where(r => r.IsChecked).ToList();
+            if (residences_checked.Any())
+            {
+                var temp_list = new List<ResidenceModel>();
+
+                foreach (var item in residences_checked)
+                {
+                    temp_list.AddRange(AllResidences.Where(r => r.Parent == item.Content));
+                }
+
+                filter_list = temp_list.Distinct().ToList();             
+            }
+            else
+                filter_list = AllResidences.ToList();
+
+            //Filtered for types
+            var types_checked = TypesChecks.Where(r => r.IsChecked).ToList();
+            if (types_checked.Any())
+            {
+                var temp_list = new List<ResidenceModel>();
+
+                foreach (var item in types_checked)
+                {
+                    temp_list.AddRange(filter_list.Where(r => r.Type == item.Content));
+                }
+
+                filter_list = temp_list;
+            }
+
+            //Filtered for exposure
+            var exposure_checked = ExpositionChecks.Where(r => r.IsChecked).ToList();
+            if (exposure_checked.Any())
+            {
+                var temp_list = new List<ResidenceModel>();
+
+                foreach (var item in exposure_checked)
+                {
+                    temp_list.AddRange(filter_list.Where(r => r.Exposure == item.Content));
+                }
+
+                filter_list = temp_list;
+            }
+
+            //Garden switch filter
+            if (GardenChecked)         
+                filter_list = filter_list.Where(r => r.Garden != 0).ToList();
+
+            //Terrace switch filter
+            if (TerraceChecked)
+                filter_list = filter_list.Where(r => r.Terace != 0).ToList();
+
+
+            FilteredResidences = new ObservableCollection<ResidenceModel>(filter_list);
+        }
+
     }
 }
