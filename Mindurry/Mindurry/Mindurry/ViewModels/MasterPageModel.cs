@@ -1,4 +1,5 @@
-﻿using Mindurry.ViewModels.Base;
+﻿using Mindurry.Models.DataObjects;
+using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -70,7 +71,7 @@ namespace Mindurry.ViewModels
             App.TabbedPageRequested += App_TabbedPageRequested;
         }
 
-        private void App_TabbedPageRequested(object sender, string e)
+        private void App_TabbedPageRequested(object sender, Residence e)
         {
             SelectedItem = null;
         }

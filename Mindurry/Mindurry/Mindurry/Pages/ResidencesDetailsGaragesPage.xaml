@@ -61,11 +61,11 @@
                                         </Style>
                                     </ResourceDictionary>
                                 </Grid.Resources>
-                                <Label Text="{Binding NoArchi}" Grid.Column="0"/>
+                                <Label Text="{Binding LotNumberArchitect}" Grid.Column="0"/>
                                 <Label Text="{Binding Type}"  Grid.Column="1"/>
-                                <Label Text="{Binding Surface, StringFormat='{0}m2'}" Grid.Column="2"/>
-                                <Label Text="{Binding Parent}" Grid.Column="3"/>
-                                <Label Text="{Binding Prix, StringFormat='{0:#,##0}€'}" Grid.Column="4"/>
+                                <Label Text="{Binding Area, StringFormat='{0} m2'}" Grid.Column="2"/>
+                                <Label Text="{Binding Client}" Grid.Column="3"/>
+                                <Label Text="{Binding Price, StringFormat='{0:#,##0}€'}" Grid.Column="4"/>
                                 <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="5"/>
                             </Grid>
                         </ViewCell>

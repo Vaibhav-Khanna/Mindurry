@@ -17,6 +17,9 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("lotNumberCopro")]
         public string LotNumberCopro { get; set; }
 
+        [JsonProperty("type")]
+        public string Type { get; set; }
+
         [JsonProperty("area")]
         public long Area { get; set; }
 
