@@ -4,6 +4,7 @@ using Mindurry.DataModels;
 using Mindurry.DataStore.Abstraction;
 using Mindurry.DataStore.Implementation;
 using Mindurry.Helpers;
+using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace Mindurry
 {
 	public partial class App : Application
 	{
-        public static event EventHandler<string> TabbedPageRequested;
+        public static event EventHandler<Residence> TabbedPageRequested;
 
         public static event EventHandler<ResidenceModel> TabbedPageApartmentRequested;
 
@@ -77,7 +78,7 @@ namespace Mindurry
 			// Handle when your app resumes
 		}
 
-        public static void RequestTabbedPage(string data)
+        public static void RequestTabbedPage(Residence data)
         {
             TabbedPageRequested?.Invoke(null, data);
         }

@@ -1,5 +1,6 @@
 ﻿using FreshMvvm;
 using Mindurry.DataModels;
+using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -50,15 +51,15 @@ namespace Mindurry.Pages
             Detail = Detail_navigation;
         }
 
-        private void App_TabbedPageRequested(object sender, string e)
+        private void App_TabbedPageRequested(object sender, Residence e)
         {
-            var tabbedNavigation = new FreshTabbedFONavigationContainer(e);
+            var tabbedNavigation = new FreshTabbedFONavigationContainer(e.Name);
             //this causes weird 
             //tabbedNavigation.Title = e;
             tabbedNavigation.AddTab<ViewModels.ResidenceDetailInfoPageModel>("Informations", null);
             tabbedNavigation.AddTab<ViewModels.ResidenceDetailApartmentPageModel>("Appartements", null);
-            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Garages", null, new Tuple<bool,string> (true, e));
-            tabbedNavigation.AddTab<ViewModels.ResidenceDetailsCellarsPageModel>("Caves", null, new Tuple<bool, string>(false, e));
+            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Garages", null,e.Id);
+           // tabbedNavigation.AddTab<ViewModels.ResidenceDetailsCellarsPageModel>("Caves", null,e.Id);
             tabbedNavigation.AddTab<ViewModels.AcquereursPageModel>("Acquéreurs", null);
             Detail_navigation = null;
             Detail = tabbedNavigation;

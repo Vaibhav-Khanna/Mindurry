@@ -1,76 +1,70 @@
 ﻿using Mindurry.DataModels;
+using Mindurry.Models;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class ResidencesDetailsGaragesPageModel : BasePageModel
     {
-        bool IsGarage;
+        public ObservableCollection<GaragesListModel> Garages { get; set; }
 
-        public ObservableCollection<ResidenceModel> Garages { get; set; }
-        public ResidenceModel SelectedGarage
+        private GaragesListModel selectedGarage;
+        public GaragesListModel SelectedGarage
         {
-            get => null;
+            get => selectedGarage;
             set
             {
                 if (value != null)
                     CoreMethods.PushPageModel<ViewModels.ResidencesDetailsGaragePageModel>(value);
+                selectedGarage = null;
             }
         }
-
-        public override void Init(object initData)
+        private string residenceId;
+        public async override void Init(object initData)
         {
             base.Init(initData);
 
-            var data = (Tuple<bool, string>)initData;
-            IsGarage = data.Item1;
+            var data = (string)initData;
+          
+            residenceId = data;
 
-            //var itemg1 = new ResidenceModel
-            //{
-            //    Parent = "John Doe",
-            //    NoArchi = 2,
-            //    Type = "Extérieur",
-            //    Surface = 13,
-            //    Price = 10000,
-            //    PlanFileName = "Plan-Version-Final06.pdf"
-            //};
+            await LoadGarages();
+        }
 
-            //var itemg2 = new ResidenceModel
-            //{
-            //    Parent = "Isabelle Soliu",
-            //    NoArchi = 2,
-            //    Type = "Aérien",
-            //    Surface = 12,
-            //    Price = 5000,
-            //    PlanFileName = "Plan-Version-Final06.pdf"
-            //};
+        public async Task LoadGarages()
+        {
+            Garages = new ObservableCollection<GaragesListModel>();
+            var garages = await StoreManager.GarageStore.GetItemsByResidenceId(residenceId);
+            if (garages != null && garages.Any())
+            {
+               foreach (var item in garages)
+                {
+                    var garagesListItem = new GaragesListModel
+                    {
+                        LotNumberArchitect = item.LotNumberArchitect,
+                        Type = item.Type,
+                        Area = item.Area,
+                        Price = item.Price,
+                        Id = item.Id,
+                        ResidenceName = item.ResidenceName
+                    };
+                    if (!String.IsNullOrEmpty(item.ContactId))
+                    {
+                        var acquereur = await StoreManager.ContactStore.GetItemAsync(item.ContactId);
+                        garagesListItem.Client = acquereur.Name;
+                    }
+                    Garages.Add(garagesListItem);
+                }
 
-            //var itemg3 = new ResidenceModel
-            //{
-            //    Parent = "Frank Rico",
-            //    NoArchi = 3,
-            //    Type = "Exterieur Couvert",
-            //    Surface = 12,
-            //    Price = 5000,
-            //    PlanFileName = "Plan-Version-Final06.pdf"
-            //};
+            }
 
-            //var itemg4 = new ResidenceModel
-            //{
-            //    Parent = "Aron Yoto",
-            //    NoArchi = 4,
-            //    Type = "Sous Sol",
-            //    Surface = 13,
-            //    Price = 11000,
-            //    PlanFileName = "Plan-Version-Final06.pdf"
-            //};
-
-            Garages = new ObservableCollection<ResidenceModel> { };
         }
     }
 }

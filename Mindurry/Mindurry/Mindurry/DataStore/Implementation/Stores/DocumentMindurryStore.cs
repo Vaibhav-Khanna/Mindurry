@@ -56,6 +56,24 @@ namespace Mindurry.DataStore.Implementation.Stores
                 return null;
             }
         }
+
+        public async Task<IEnumerable<DocumentMindurry>> GetItemsByKindAndReferenceIdAsync(string id, string kind)
+        {
+            await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
+
+            try
+            {
+                var items = await Table.Where(x => x.ReferenceKind == kind && x.ReferenceId == id).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+
+                return items;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
         public async Task<IEnumerable<DocumentMindurry>> GetPostDocumentsByContactId(string id)
         {
             await InitializeStore().ConfigureAwait(false);

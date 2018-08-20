@@ -23,7 +23,7 @@ namespace Mindurry.Pages
             var element = sender as Xamarin.Forms.StackLayout;
             var children = element.Children[0].BindingContext as IGrouping<Residence, ResidenceModel>;
             var key = children.Key;
-            App.RequestTabbedPage(key.Name);
+            App.RequestTabbedPage(key);
         }
     }
 }
