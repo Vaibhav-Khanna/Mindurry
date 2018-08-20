@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:effect="clr-namespace:Mindurry.Effects"
+             xmlns:converter="clr-namespace:Mindurry.Converters"
+             x:Class="Mindurry.Pages.ResidencesDetailsCellarPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:StringNullOrEmptyBoolConverter x:Key="StringNullOrEmptyBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Orientation="Vertical" WidthRequest="400" Spacing="0">
+                <StackLayout.Resources>
+                    <ResourceDictionary>
+                        <Style TargetType="Label">
+                            <Setter Property="FontSize" Value="14"/>
+                        </Style>
+                    </ResourceDictionary>
+                </StackLayout.Resources>
+                <StackLayout Orientation="Horizontal" Spacing="5" >
+                    <Label Text="{Binding Cellar.ResidenceName, StringFormat='{0} > Parking'}" FontSize="24" Margin="50,15" TextColor="Black" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Spacing="5" HeightRequest="30" Margin="50,15" IsVisible="{Binding Garage.Client, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                    <Label Text="Associé au contact">
+                        <Label.Effects>
+                            <effect:AccentColorEffect/>
+                        </Label.Effects>
+                    </Label>
+                    <Label Text="{Binding Cellar.Client}" FontAttributes="Bold">
+                        <Label.Effects>
+                            <effect:AccentColorEffect/>
+                        </Label.Effects>
+                    </Label>
+                </StackLayout>
+                <StackLayout HorizontalOptions="Start" WidthRequest="600" Margin="50,0,0,0">
+                    <Grid BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand" HeightRequest="50" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="N° Archi"  Grid.Column="0" FontAttributes="Bold" HorizontalOptions="End" Margin="0,0,50,0"  VerticalOptions="Center"/>
+                        <Label Text="{Binding Cellar.LotNumberArchitect}"  FontAttributes="Bold" Grid.Column="1" HorizontalOptions="Start"  VerticalOptions="Center" />
+                    </Grid>
+                    <Grid  BackgroundColor="#FFFFFF"  HorizontalOptions="FillAndExpand" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Surface"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                        <Label Text="{Binding Cellar.Area, StringFormat='{0} m2'}"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Acquéreur"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                        <Label Text="{Binding Cellar.Client}"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid  BackgroundColor="#FFFFFF"  HorizontalOptions="FillAndExpand" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Prix"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                        <Label Text="{Binding Cellar.Price, StringFormat='{0:#,##0}€'}"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid  BackgroundColor="#F5F4F3"  HorizontalOptions="FillAndExpand" HeightRequest="50" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Plan de référence"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                        <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="StartAndExpand" VerticalOptions="Center" IsVisible="{Binding ReferencePlan.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                            <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
+                            <Label Text="{Binding ReferencePlan.Name}" VerticalOptions="Center" TextColor="{StaticResource BlueText}"/>
+                        </StackLayout>
+                    </Grid>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

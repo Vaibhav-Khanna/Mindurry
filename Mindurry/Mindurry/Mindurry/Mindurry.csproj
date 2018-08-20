@@ -59,6 +59,12 @@
     <Compile Update="Pages\ContactsPage.xaml.cs">
       <DependentUpon>ContactsPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\ResidencesDetailsCellarPage.xaml.cs">
+      <DependentUpon>ResidencesDetailsCellarPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\ResidencesDetailsCellarsPage.xaml.cs">
+      <DependentUpon>ResidencesDetailsCellarsPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -110,7 +116,10 @@
     <EmbeddedResource Update="Pages\ResidenceDetailInfoPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Pages\ResidenceDetailsCellarsPage.xaml">
+    <EmbeddedResource Update="Pages\ResidencesDetailsCellarPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Pages\ResidencesDetailsCellarsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\ResidencesDetailsAppartementsInfosPage.xaml">

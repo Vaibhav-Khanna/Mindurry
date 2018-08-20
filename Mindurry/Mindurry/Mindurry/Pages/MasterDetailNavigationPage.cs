@@ -53,13 +53,14 @@ namespace Mindurry.Pages
 
         private void App_TabbedPageRequested(object sender, Residence e)
         {
-            var tabbedNavigation = new FreshTabbedFONavigationContainer(e.Name);
+            var tabbedNavigation = new FreshTabbedNavigationContainer(e.Name);
+            //var tabbedNavigation = new FreshTabbedFONavigationContainer(e.Name);
             //this causes weird 
             //tabbedNavigation.Title = e;
             tabbedNavigation.AddTab<ViewModels.ResidenceDetailInfoPageModel>("Informations", null);
             tabbedNavigation.AddTab<ViewModels.ResidenceDetailApartmentPageModel>("Appartements", null);
             tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Garages", null,e.Id);
-           // tabbedNavigation.AddTab<ViewModels.ResidenceDetailsCellarsPageModel>("Caves", null,e.Id);
+            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsCellarsPageModel>("Caves", null,e.Id);
             tabbedNavigation.AddTab<ViewModels.AcquereursPageModel>("Acquéreurs", null);
             Detail_navigation = null;
             Detail = tabbedNavigation;
