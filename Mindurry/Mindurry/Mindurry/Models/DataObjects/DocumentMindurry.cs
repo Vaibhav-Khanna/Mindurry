@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace Mindurry.Models.DataObjects
 {
@@ -22,12 +23,12 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("documentType")]
         public string DocumentType { get; set; }
 
-        [JsonProperty("documentVersion")]
-        public string DocumentVersion { get; set; }
+        [JsonProperty("documentDate")]
+        public DateTimeOffset? DocumentDate { get; set; }
 
     }
 
     public enum DocumentType { Autre, Choix, Cuisine, Definitif, Electrique, Initial, Masse, Niveau, Notice, Perspective, Plaquette, Plomberie, Signe };
 
-    public enum ReferenceKind { Apartment, Cellar, Customer, Garage, Residence };
+    public enum ReferenceKind { Apartment, Cellar, customer, Garage, Residence };
 }

@@ -185,7 +185,6 @@ namespace Mindurry.ViewModels
             base.Init(initData);
             if (initData != null)
             {
-                Title = "Modification Client";
                 ContactId = (string)initData;
                 Contact = await StoreManager.ContactStore.GetItemAsync(ContactId);
 
@@ -201,8 +200,15 @@ namespace Mindurry.ViewModels
                 }
 
             }
-
-            Title = "Nouveau Client";
+            if (initData != null)
+            {
+                Title = "Modification Client";
+            }
+            else
+            {
+                Title = "Nouveau Client";
+            }
+            
 
             IsVisibleListView = false;
 

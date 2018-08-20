@@ -3,6 +3,8 @@ using Mindurry.DataModels;
 using Mindurry.Models;
 using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
+using Plugin.FilePicker;
+using Plugin.FilePicker.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Mindurry.ViewModels
@@ -171,13 +174,52 @@ namespace Mindurry.ViewModels
         public double? Price { get; set; }
         public ObservableCollection<ClientPropertyModel> PropertyList { get; set; }
 
-        public ObservableCollection<string> ComboL1 { get; set; }
-        public ObservableCollection<string> ComboL2 { get; set; }
-        public ObservableCollection<string> ComboL3 { get; set; }
+        public ObservableCollection<DocumentMindurry> Documents { get; set; }
+        public string FileName { get; set; }
+        public bool RemoveButton { get; set; } = false;
+        public FileData myTask { get; set; }
+        public string DocumentName { get; set; }
 
-        public ObservableCollection<DateTitle> Documents { get; set; }
+        bool isSwitchOne;
+        public bool IsSwitchOne
+        {
+            get { return isSwitchOne; }
+            set
+            {
+                if (isSwitchOne != value)
+                {
+                    isSwitchOne = value;
+                }
+            }
+        }
+
+        bool isSwitchTwo;
+        public bool IsSwitchTwo
+        {
+            get { return isSwitchTwo; }
+            set
+            {
+                if (isSwitchTwo != value)
+                {
+                    isSwitchTwo = value;
+                }
+            }
+        }
+        bool isSwitchThree;
+        public bool IsSwitchThree
+        {
+            get { return isSwitchThree; }
+            set
+            {
+                if (isSwitchThree != value)
+                {
+                    isSwitchThree = value;
+                }
+            }
+        }
 
         //public ObservableCollection<DataModels.ResidenceModel> Residences { get; set; }
+
 
         //public ObservableCollection<DataModels.Residence> Residences { get; set; }
 
@@ -225,10 +267,6 @@ namespace Mindurry.ViewModels
         public bool IsTabThreeL2 => TabThreeLevel == 1;
        // public bool IsTabThreeL3 => TabThreeLevel == 2;
 
-        public string Combo1Selected { get; set; }
-        public string ComboL1Selected { get; set; }
-        public string ComboL2Selected { get; set; }
-        public string ComboL3Selected { get; set; }
         public string TypeSelected { get; set; }
         public bool IsFirstListVisible { get; set; } = true;
         public bool IsSecondListVisible { get; set; } = true;
@@ -257,8 +295,6 @@ namespace Mindurry.ViewModels
         public ICommand ClearAllResidencesCommand { get; set; }
         public ICommand ClearAllTypesCommand { get; set; }
 
-        public ObservableCollection<string> Combo4 { get; set; }
-        public string Combo4Selected { get; set; }
 
         public override async void Init(object initData)
         {
@@ -272,37 +308,6 @@ namespace Mindurry.ViewModels
             await LoadNotes();
 
             await LoadFilters();
-
-            var doc1 = new DateTitle
-            {
-                Date = new DateTime(2018, 2, 12),
-                Title = "Compromis de vente"
-            };
-
-            var doc2 = new DateTitle
-            {
-                Date = new DateTime(2018, 1, 10),
-                Title = "Plan séjour"
-            };
-
-            var doc3 = new DateTitle
-            {
-                Date = new DateTime(2018, 1, 8),
-                Title = "Plan global"
-            };
-
-            var doc4 = new DateTitle
-            {
-                Date = new DateTime(2018, 12, 12),
-                Title = "Contrat"
-            };
-
-            Documents = new ObservableCollection<DateTitle> { doc1, doc2, doc3, doc4 };
-
-            
-
-            Residences = new ObservableCollection<Residence> { };
-
 
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
@@ -570,8 +575,6 @@ namespace Mindurry.ViewModels
 
         public Command SelectReminderCommand => new Command<RemindersCheckBoxListModel>(async (obj) =>
         {
-
-
             if (obj.IsChecked)
             {
                 var result = await CoreMethods.DisplayAlert("Classer", "Etes vous sur de vouloir terminer ce rappel ?", "Oui", "Non");
@@ -678,9 +681,10 @@ namespace Mindurry.ViewModels
             TabIndex = 0;
         }
 
-        void TabTwo()
+        async void TabTwo()
         {
             TabIndex = 1;
+            await LoadDocuments();
         }
 
         async void TabThree()
@@ -727,6 +731,108 @@ namespace Mindurry.ViewModels
             TabThreeLevel++;
 
         }
+
+        private async Task LoadDocuments()
+        {
+            Documents = new ObservableCollection<DocumentMindurry>();
+            // Recherche Appartements
+            var documents = await StoreManager.DocumentMindurryStore.GetPostDocumentsByContactId(ContactId);
+            if (documents != null && documents.Any())
+            {
+                Documents = new ObservableCollection<DocumentMindurry>(documents);
+            }
+            else
+            {
+                Documents = new ObservableCollection<DocumentMindurry>();
+            }
+        }
+        public Command UpdateDocumentCommand => new Command(async (obj) => {
+
+
+
+
+        });
+
+        public Command DeleteDocumentCommand => new Command(async (obj) => {
+
+            var result = await CoreMethods.DisplayAlert("Suppression", "Etes vous sur de vouloir supprimer ce document ?", "Oui", "Non");
+            if (result)
+            {
+                await StoreManager.DocumentMindurryStore.RemoveAsync((DocumentMindurry)obj);
+                await LoadDocuments();
+            }
+
+        });
+
+        public Command DownloadDocumentCommand => new Command(async (obj) => {
+
+                
+           
+
+        });
+
+        public Command PickFileCommand => new Command(async (obj) =>
+        {
+                var crossFilePicker = Plugin.FilePicker.CrossFilePicker.Current;
+
+                 myTask = await crossFilePicker.PickFile();
+
+                if (!string.IsNullOrEmpty(myTask.FileName))
+                   {
+                    FileName = myTask.FileName;
+                    RemoveButton = true;
+                } 
+
+         });
+        public Command RemovePickFileCommand => new Command( () =>
+        {
+            myTask = null;
+            FileName = null;
+            RemoveButton = false;
+
+        });
+
+        public Command UploadFileCommand => new Command(async (obj) =>
+        {
+
+            var current = Connectivity.NetworkAccess;
+
+            if (current == NetworkAccess.Internet)
+            {
+                if (FileName != null)
+                {
+
+
+                    if (!string.IsNullOrEmpty(DocumentName))
+                    {
+                        var validName = await StoreManager.DocumentMindurryStore.IsValidDocumentName(DocumentName);
+                        if (validName) { 
+                        var is_uploaded = await StoreManager.DocumentMindurryStore.UploadDocument(myTask.DataArray, new DocumentMindurry() { Path = FileName, InternalName = Guid.NewGuid().ToString(), ReferenceKind = "customer", DocumentType = "autre", ReferenceId = ContactId, Name = DocumentName });
+                        await LoadDocuments();
+                        TabTwoBack();
+                        }
+                        else
+                        {
+                            await CoreMethods.DisplayAlert("Erreur", "Le nom entré est déjà utilisé pour un autre document", "Ok");
+                        }
+                    }
+                    else
+                    {
+                        await CoreMethods.DisplayAlert("Erreur", "Il faut remplir un nom de document", "Ok");
+                    }
+                }
+                else
+                {
+                    await CoreMethods.DisplayAlert("Erreur", "Il faut choisir un fichier", "Ok");
+                }
+            }
+            else
+            {
+                await CoreMethods.DisplayAlert("Erreur", "Il faut être connecté à internet pour pouvoir ajouter un fichier", "Ok");
+            }
+        }
+        
+        );
 
         private async Task LoadProperties()
         {
