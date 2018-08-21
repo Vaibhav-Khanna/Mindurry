@@ -9,9 +9,9 @@ using Xamarin.Forms.Xaml;
 
 namespace Mindurry.Pages
 {
-	public partial class ResidenceDetailApartmentPage : ContentPage
+	public partial class ResidencesDetailsApartmentsPage : ContentPage
 	{
-		public ResidenceDetailApartmentPage ()
+		public ResidencesDetailsApartmentsPage ()
 		{
 			InitializeComponent ();
 		}
