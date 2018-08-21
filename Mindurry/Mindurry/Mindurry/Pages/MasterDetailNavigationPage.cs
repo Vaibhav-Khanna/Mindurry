@@ -57,7 +57,7 @@ namespace Mindurry.Pages
             //var tabbedNavigation = new FreshTabbedFONavigationContainer(e.Name);
             //this causes weird 
             //tabbedNavigation.Title = e;
-            tabbedNavigation.AddTab<ViewModels.ResidenceDetailInfoPageModel>("Informations", null);
+            tabbedNavigation.AddTab<ViewModels.ResidenceDetailInfoPageModel>("Informations", null, e.Id);
             tabbedNavigation.AddTab<ViewModels.ResidenceDetailApartmentPageModel>("Appartements", null);
             tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Garages", null,e.Id);
             tabbedNavigation.AddTab<ViewModels.ResidencesDetailsCellarsPageModel>("Caves", null,e.Id);

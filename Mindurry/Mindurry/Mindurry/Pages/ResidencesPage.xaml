@@ -62,7 +62,7 @@
                                                 <effect:FontLightEffect/>
                                             </Label.Effects>
                                         </Label>
-                                        <Label Text="{Binding Key.FormattedAddress}" FontSize="10" TranslationY="-10" VerticalOptions="Start" Margin="30,5,0,0" >
+                                        <Label Text="{Binding Key.Description}" FontSize="10" TranslationY="-10" VerticalOptions="Start" Margin="30,5,0,0" >
                                                 <Label.Effects>
                                                     <effect:FontLightEffect/>
                                                 </Label.Effects>

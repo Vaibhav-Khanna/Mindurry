@@ -11,16 +11,13 @@
                     </Style>
                 </ResourceDictionary>
             </StackLayout.Resources>
-
-
-
             <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand" WidthRequest="600" HeightRequest="100">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="30*"/>
                     <ColumnDefinition Width="70*"/>
                 </Grid.ColumnDefinitions>
                 <Label Text="Nom"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0"  VerticalOptions="Center"/>
-                <Label Text="Herrian"  Grid.Column="1" HorizontalOptions="Start"  VerticalOptions="Center" />
+                <Label Text="{Binding Residence.Name}"  Grid.Column="1" HorizontalOptions="Start"  VerticalOptions="Center" />
             </Grid>
             <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="100">
                 <Grid.ColumnDefinitions>
@@ -28,7 +25,7 @@
                     <ColumnDefinition Width="70*"/>
                 </Grid.ColumnDefinitions>
                 <Label Text="Description"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
-                <Label  Text="Parking en option à partir de 10000 €" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" />
+                <Label  Text="{Binding Residence.Description}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" />
             </Grid>
             <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="100">
                 <Grid.ColumnDefinitions>
@@ -36,7 +33,7 @@
                     <ColumnDefinition Width="70*"/>
                 </Grid.ColumnDefinitions>
                 <Label Text="Adresse"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
-                <Label Text="3 impasse Beau Site, 64480 Ustarritz"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                <Label Text="{Binding Residence.FormattedAddress}"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
             </Grid>
             <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="100">
                 <Grid.ColumnDefinitions>
@@ -47,7 +44,7 @@
                     <Label Text="Nom de société" HorizontalOptions="End" />
                     <Label Text="propriétaire" HorizontalOptions="End"/>
                 </StackLayout>
-                <Label  Text="Mindurry Promotion" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" />
+                <Label  Text="{Binding Residence.SciName}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" />
             </Grid>
             <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="600" >
                 <Grid.ColumnDefinitions>
@@ -55,13 +52,13 @@
                     <ColumnDefinition Width="70*"/>
                 </Grid.ColumnDefinitions>
                 <Label Text="Document(s)"  Grid.Column="0" HorizontalOptions="End" Margin="0,10,50,0"/>
-                <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" Grid.Column="1" HorizontalOptions="StartAndExpand" VerticalOptions="Center" >
+                <ListView ItemsSource="{Binding FilesList}" SelectedItem="{Binding SelectedFile, Mode=TwoWay}" Grid.Column="1" HorizontalOptions="StartAndExpand" VerticalOptions="Center" >
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
                                 <StackLayout Orientation="Horizontal" Spacing="5" Padding="0,5">
-                                    <Image Source="{Binding Icon}" WidthRequest="30" HeightRequest="30" Aspect="AspectFit"/>
-                                    <Label Text="{Binding Title}" TextColor="#4A90E2" VerticalOptions="Center"/>
+                                    <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit"/>
+                                    <Label Text="{Binding Name}" TextColor="#4A90E2" VerticalOptions="Center"/>
                                 </StackLayout>
                             </ViewCell>
                         </DataTemplate>
