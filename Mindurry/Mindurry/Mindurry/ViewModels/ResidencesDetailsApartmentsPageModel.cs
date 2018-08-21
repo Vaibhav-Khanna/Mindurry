@@ -59,7 +59,8 @@ namespace Mindurry.ViewModels
         public ICommand ShowFilterCommand { get; set; }
         public ICommand ArrowTwoCommand { get; set; }
         public ICommand ArrowThreeCommand { get; set; }
-
+        public ICommand ClearAllFilterCommand { get; set; }
+        
 
         public async override void Init(object initData)
         {
@@ -76,6 +77,7 @@ namespace Mindurry.ViewModels
             ShowFilterCommand = new Command(ShowFilter);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
             ArrowThreeCommand = new Command(ChangeArrowThree);
+            ClearAllFilterCommand = new Command(ClearAllFilters);
         }
 
         public async Task LoadApartments()
@@ -108,16 +110,16 @@ namespace Mindurry.ViewModels
                         }
                         apartmentsListItem.GardenArea = gardenArea;
                     }
-                    // Terrasse
-                    var terrasses = await StoreManager.TerraceStore.GetTerracesByResidenceId(residenceId, item.Id);
-                    if (terrasses != null && terrasses.Any())
+                    // Terrace
+                    var terraces = await StoreManager.TerraceStore.GetTerracesByResidenceId(residenceId, item.Id);
+                    if (terraces != null && terraces.Any())
                     {
-                        long terrasseArea = 0;
-                        foreach (var terrasse in terrasses)
+                        long terraceArea = 0;
+                        foreach (var terrace in terraces)
                         {
-                            terrasseArea += terrasse.Area;
+                            terraceArea += terrace.Area;
                         }
-                        apartmentsListItem.TerrasseArea = terrasseArea;
+                        apartmentsListItem.TerraceArea = terraceArea;
                     }
 
                     Apartments.Add(apartmentsListItem);
@@ -161,7 +163,15 @@ namespace Mindurry.ViewModels
                 item.IsChecked = false;
             }
         }
-        
+        void ClearAllFilters()
+        {
+            ClearTypeChecks();
+            ClearExposureChecks();
+
+            TerraceChecked = false;
+            GardenChecked = false;
+        }
+
         void TypeFilterChanged(object sender, PropertyChangedEventArgs e)
         {
             var type = sender as CheckBoxItem;
@@ -215,7 +225,7 @@ namespace Mindurry.ViewModels
 
             //Terrace switch filter
             if (TerraceChecked)
-                filter_list = filter_list.Where(r => r.TerrasseArea != 0).ToList();
+                filter_list = filter_list.Where(r => r.TerraceArea != 0).ToList();
 
 
             Apartments = new ObservableCollection<ApartmentsListModel>(filter_list);
