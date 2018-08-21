@@ -34,7 +34,7 @@ namespace Mindurry.ViewModels
             set
             {
                 if (value != null)
-                App.RequestApartmentTabbedPage(value);
+                App.RequestApartmentTabbedPage(value.Apartment);
 
                 //CoreMethods.PushPageModel<ResidencesDetailsAppartementsInfosPageModel>(value);
                 selectedItem = null;

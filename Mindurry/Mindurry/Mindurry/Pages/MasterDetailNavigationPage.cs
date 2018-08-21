@@ -58,7 +58,7 @@ namespace Mindurry.Pages
             //this causes weird 
             //tabbedNavigation.Title = e;
             tabbedNavigation.AddTab<ViewModels.ResidenceDetailInfoPageModel>("Informations", null, e.Id);
-            tabbedNavigation.AddTab<ViewModels.ResidenceDetailApartmentPageModel>("Appartements", null);
+            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsApartmentsPageModel>("Appartements", null,e.Id);
             tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Garages", null,e.Id);
             tabbedNavigation.AddTab<ViewModels.ResidencesDetailsCellarsPageModel>("Caves", null,e.Id);
             tabbedNavigation.AddTab<ViewModels.AcquereursPageModel>("Acquéreurs", null);
@@ -66,9 +66,9 @@ namespace Mindurry.Pages
             Detail = tabbedNavigation;
         }
 
-        private void App_TabbedPageApartmentRequested(object sender, ResidenceModel e)
+        private void App_TabbedPageApartmentRequested(object sender, Mindurry.Models.DataObjects.Apartment e)
         {
-            var tabbedNavigation = new FreshTabbedFONavigationContainer(e.NoArchi.ToString());
+            var tabbedNavigation = new FreshTabbedFONavigationContainer(e.LotNumberArchitect.ToString());
             //this causes weird 
             //tabbedNavigation.Title = e;
             tabbedNavigation.AddTab<ViewModels.ApartmentDetailInfoPageModel>("Informations", null,e);

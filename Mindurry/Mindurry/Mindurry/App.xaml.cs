@@ -19,7 +19,7 @@ namespace Mindurry
 	{
         public static event EventHandler<Residence> TabbedPageRequested;
 
-        public static event EventHandler<ResidenceModel> TabbedPageApartmentRequested;
+        public static event EventHandler<Models.DataObjects.Apartment> TabbedPageApartmentRequested;
 
        // public static IAuthenticate AuthenticationProvider { get; private set; }
 
@@ -82,7 +82,7 @@ namespace Mindurry
         {
             TabbedPageRequested?.Invoke(null, data);
         }
-        public static void RequestApartmentTabbedPage(ResidenceModel data)
+        public static void RequestApartmentTabbedPage(Models.DataObjects.Apartment data)
         {
             TabbedPageApartmentRequested?.Invoke(null, data);
         }
