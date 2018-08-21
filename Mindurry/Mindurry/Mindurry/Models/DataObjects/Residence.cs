@@ -8,6 +8,9 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("name")]
         public string Name { get; set; }
 
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
         [JsonProperty("archived")]
         public bool Archived { get; set; }
 

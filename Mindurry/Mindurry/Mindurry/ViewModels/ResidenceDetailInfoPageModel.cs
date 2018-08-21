@@ -1,35 +1,65 @@
 ﻿using Mindurry.DataModels;
+using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Mindurry.ViewModels
 {
     [PropertyChanged.AddINotifyPropertyChangedInterface]
     public class ResidenceDetailInfoPageModel : BasePageModel
     {
-        public ObservableCollection<IconTitle> Items { get; set; }
+        public Residence Residence { get; set; }
 
-        public ResidenceModel SelectedItem
+        public ObservableCollection<DocumentMindurry> FilesList { get; set; }
+
+        private DocumentMindurry selectedFile;
+        public DocumentMindurry SelectedFile
         {
-            get => null;
+            get => selectedFile;
             set
-            { }
+            {
+                if (value != null)
+                   // CoreMethods.PushPageModel<ViewModels.ResidencesDetailsCellarPageModel>(value);
+                selectedFile = null;
+            }
         }
 
-        public override void Init(object initData)
+        private string residenceId;
+
+        public async override void Init(object initData)
         {
             base.Init(initData);
 
-            var item1 = new IconTitle { Icon = "icon_PDF.png", Title = "Plaquette" };
-            var item2 = new IconTitle { Icon = "icon_PDF.png", Title = "Plan de masse" };
-            var item3 = new IconTitle { Icon = "icon_PDF.png", Title = "Notice" };
-            var item4 = new IconTitle { Icon = "icon_PDF.png", Title = "Plan / Niveau" };
-            var item5 = new IconTitle { Icon = "icon_PDF.png", Title = "Plan en perspective" };
+            var data = (string)initData;
 
-            Items = new ObservableCollection<IconTitle> { item1, item2, item3, item4, item5 };
+            residenceId = data;
+
+            await LoadResidence();
+
+            await LoadFiles();
+        }
+        public async Task LoadResidence()
+        {
+            Residence = await StoreManager.ResidenceStore.GetItemAsync(residenceId);
+        }
+
+        public async Task LoadFiles()
+        {
+            var files = await StoreManager.DocumentMindurryStore.GetItemsByKindAndReferenceIdAsync(residenceId, ReferenceKind.Residence.ToString().ToLower());
+            if (files != null && files.Any())
+            {
+                files.OrderBy(x => x.Name);
+                FilesList = new ObservableCollection<DocumentMindurry>(files);
+            }
+            else
+            {
+                FilesList = new ObservableCollection<DocumentMindurry>();
+            }
         }
     }
 }
