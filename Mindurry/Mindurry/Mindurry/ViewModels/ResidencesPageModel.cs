@@ -34,7 +34,15 @@ namespace Mindurry.ViewModels
             set
             {
                 if (value != null)
-                App.RequestApartmentTabbedPage(value.Apartment);
+                {
+                    // var tabbedNavigation = new FreshTabbedNavigationContainer("secondNavPage");
+                    // tabbedNavigation.AddTab<ViewModels.ApartmentDetailInfoPageModel>("Informations", null, value.Apartment);
+                    // tabbedNavigation.AddTab<ViewModels.ApartmentPlansPageModel>("Plans", null, value.Apartment);
+
+                     // CoreMethods.PushNewNavigationServiceModal(tabbedNavigation);
+                    App.RequestApartmentTabbedPage(value.Apartment);
+                }
+               
 
                 //CoreMethods.PushPageModel<ResidencesDetailsAppartementsInfosPageModel>(value);
                 selectedItem = null;

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:effect="clr-namespace:Mindurry.Effects"
+             xmlns:syncfusion="clr-namespace:Syncfusion.SfPdfViewer.XForms;assembly=Syncfusion.SfPdfViewer.XForms"
+             x:Class="Mindurry.Pages.PdfDisplayPage"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <StackLayout Margin="50,0" Orientation="Horizontal" VerticalOptions="CenterAndExpand" BackgroundColor="Transparent"  HorizontalOptions="StartAndExpand" HeightRequest="100">
+                <Label Text="&#xE72B;" FontFamily="Segoe MDL2 Assets" FontSize="15" VerticalOptions="CenterAndExpand" >
+                    <Label.Effects>
+                        <effect:AccentColorEffect/>
+                    </Label.Effects>
+                </Label>
+                <Label Text="Revenir vers les plans" FontSize="15" VerticalOptions="CenterAndExpand"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseCommand}" />
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                <syncfusion:SfPdfViewer  x:Name="pdfViewerControl" InputFileStream="{Binding PdfDocumentStream}"/>
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
