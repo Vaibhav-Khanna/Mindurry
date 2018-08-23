@@ -61,7 +61,7 @@ namespace Mindurry.Pages
             tabbedNavigation.AddTab<ViewModels.ResidencesDetailsApartmentsPageModel>("Appartements", null,e.Id);
             tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Garages", null,e.Id);
             tabbedNavigation.AddTab<ViewModels.ResidencesDetailsCellarsPageModel>("Caves", null,e.Id);
-            tabbedNavigation.AddTab<ViewModels.AcquereursPageModel>("Acquéreurs", null);
+            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsAcquereursPageModel>("Acquéreurs", null,e.Id);
             Detail_navigation = null;
             Detail = tabbedNavigation;
         }

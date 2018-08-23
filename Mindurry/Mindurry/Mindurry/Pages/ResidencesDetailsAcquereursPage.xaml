@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Mindurry.Pages.AcquereursPage">
+             x:Class="Mindurry.Pages.ResidencesDetailsAcquereursPage">
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding Acquereurs}" InputTransparent="True" Margin="0,15,0,0">
+        <ListView ItemsSource="{Binding Acquereurs}" SelectedItem="{Binding SelectedAcquereur, Mode=TwoWay}" Margin="0,15,0,0">
             <ListView.Header>
                 <Grid BackgroundColor="White">
                     <Grid Padding="30,10,0,10" >
@@ -51,11 +51,11 @@
                                     </Style>
                                 </ResourceDictionary>
                             </Grid.Resources>
-                            <Label Text="{Binding No}" Grid.Column="0"/>
+                            <Label Text="{Binding LotNumberArchitect}" Grid.Column="0"/>
                             <Label Text="{Binding Type}" Grid.Column="1"/>
-                            <Label Text="{Binding Client}" Grid.Column="2"/>
-                            <Label Text="{Binding Stade}" Grid.Column="3"/>
-                            <Label Text="{Binding Prix, StringFormat='{0:#,##0}€'}" Grid.Column="4"/>
+                            <Label Text="{Binding Contact.Name}" Grid.Column="2"/>
+                            <Label Text="{Binding Stage}" Grid.Column="3"/>
+                            <Label Text="{Binding Price, StringFormat='{0:#,##0}€'}" Grid.Column="4"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

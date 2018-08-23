@@ -10,9 +10,9 @@ using Xamarin.Forms.Xaml;
 namespace Mindurry.Pages
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class AcquereursPage : ContentPage
+	public partial class ResidencesDetailsAcquereursPage : ContentPage
 	{
-		public AcquereursPage ()
+		public ResidencesDetailsAcquereursPage()
 		{
 			InitializeComponent ();
 		}
