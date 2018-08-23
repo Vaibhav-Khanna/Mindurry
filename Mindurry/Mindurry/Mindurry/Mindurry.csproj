@@ -58,6 +58,9 @@
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="App.xaml.cs">
       <DependentUpon>*.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\ResidencesDetailsAcquereursPage.xaml.cs">
+      <DependentUpon>ResidencesDetailsAcquereursPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\ContactsPage.xaml.cs">
       <DependentUpon>ContactsPage.xaml</DependentUpon>
     </Compile>
@@ -73,7 +76,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Pages\AcquereursPage.xaml">
+    <EmbeddedResource Update="Pages\ResidencesDetailsAcquereursPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Pages\ApartmentDetailInfoPage.xaml">

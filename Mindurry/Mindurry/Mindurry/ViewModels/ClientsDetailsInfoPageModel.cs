@@ -921,6 +921,7 @@ namespace Mindurry.ViewModels
                 var refs = await StoreManager.ApartmentStore.GetItemsByResidenceId(residenceId);
                 if (refs != null && refs.Any())
                 {
+                    refs = refs.Where(x => string.IsNullOrEmpty(x.ContactId));
                     References = new ObservableCollection<string>();
                      
                     foreach (var item in refs)
@@ -936,6 +937,7 @@ namespace Mindurry.ViewModels
                 var refs = await StoreManager.CellarStore.GetItemsByResidenceId(residenceId);
                 if (refs != null && refs.Any())
                 {
+                    refs = refs.Where(x => string.IsNullOrEmpty(x.ContactId));
                     References = new ObservableCollection<string>();
                     foreach (var item in refs)
                     {
@@ -950,6 +952,7 @@ namespace Mindurry.ViewModels
                 var refs = await StoreManager.GarageStore.GetItemsByResidenceId(residenceId);
                 if (refs != null && refs.Any())
                 {
+                    refs = refs.Where(x => string.IsNullOrEmpty(x.ContactId));
                     References = new ObservableCollection<string>();
                     foreach (var item in refs)
                     {
