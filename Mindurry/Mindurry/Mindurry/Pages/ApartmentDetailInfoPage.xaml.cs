@@ -15,7 +15,8 @@ namespace Mindurry.Pages
 		public ApartmentDetailInfoPage ()
 		{
 			InitializeComponent();
-           
+            pdfViewerControl.Toolbar.Enabled = false;
+
         }
 	}
 }

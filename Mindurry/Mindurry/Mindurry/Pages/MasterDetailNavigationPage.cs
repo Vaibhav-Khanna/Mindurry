@@ -68,9 +68,11 @@ namespace Mindurry.Pages
 
         private void App_TabbedPageApartmentRequested(object sender, Mindurry.Models.DataObjects.Apartment e)
         {
-            var tabbedNavigation = new FreshTabbedFONavigationContainer(e.LotNumberArchitect.ToString());
+            var title = e.ResidenceName + " > " + "Appartement " + e.LotNumberArchitect.ToString();
+            var tabbedNavigation = new FreshTabbedNavigationContainer(title);
             //this causes weird 
             //tabbedNavigation.Title = e;
+           
             tabbedNavigation.AddTab<ViewModels.ApartmentDetailInfoPageModel>("Informations", null,e);
             tabbedNavigation.AddTab<ViewModels.ApartmentPlansPageModel>("Plans", null,e);
             

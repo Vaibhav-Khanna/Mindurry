@@ -1,5 +1,6 @@
 ﻿using FreshMvvm;
 using Mindurry.DataModels;
+using Mindurry.Helpers;
 using Mindurry.Models;
 using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
@@ -8,6 +9,7 @@ using Plugin.FilePicker.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -740,17 +742,32 @@ namespace Mindurry.ViewModels
             if (documents != null && documents.Any())
             {
                 Documents = new ObservableCollection<DocumentMindurry>(documents);
+                //pull document to localStorage
+                var current = Connectivity.NetworkAccess;
+                if (current == NetworkAccess.Internet)
+                {                 
+                        await StoreManager.DocumentMindurryStore.PullLatest(ContactId, ReferenceKind.Customer.ToString().ToLower());
+                }
             }
             else
             {
                 Documents = new ObservableCollection<DocumentMindurry>();
             }
         }
-        public Command UpdateDocumentCommand => new Command(async (obj) => {
+        public Command DownloadDocumentCommand => new Command<DocumentMindurry>(async (obj) => {
 
+            var fileName = obj.InternalName + "." + obj.Extension;
+            var docDownloaded = await PclStorage.LoadFileLocal(fileName, ReferenceKind.Customer.ToString().ToLower(), obj.ReferenceId);
+            
+            var stream = new MemoryStream(docDownloaded);
+            var name = obj.Name + "." + obj.Extension;
 
-
-
+           var folder = await DependencyService.Get<ISave>().Save(stream, name);
+            var result = await CoreMethods.DisplayAlert("Téléchargement", "Le téléchargement du document est terminé", "Ouvrir le répertoire", "Fermer");
+            if (result)
+            {
+                await DependencyService.Get<ISave>().LaunchFolder(folder);
+            }
         });
 
         public Command DeleteDocumentCommand => new Command(async (obj) => {
@@ -761,13 +778,6 @@ namespace Mindurry.ViewModels
                 await StoreManager.DocumentMindurryStore.RemoveAsync((DocumentMindurry)obj);
                 await LoadDocuments();
             }
-
-        });
-
-        public Command DownloadDocumentCommand => new Command(async (obj) => {
-
-                
-           
 
         });
 

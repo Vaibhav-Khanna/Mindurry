@@ -1,4 +1,5 @@
 ﻿using Mindurry.DataStore.Abstraction.Stores;
+using Mindurry.Helpers;
 using Mindurry.Models.DataObjects;
 using Newtonsoft.Json;
 using System;
@@ -81,7 +82,7 @@ namespace Mindurry.DataStore.Implementation.Stores
 
             try
             {
-                var items = await Table.Where(x => x.ReferenceKind == ReferenceKind.customer.ToString() && x.ReferenceId == id).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                var items = await Table.Where(x => x.ReferenceKind == ReferenceKind.Customer.ToString().ToLower() && x.ReferenceId == id).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
 
                 return items;
             }
@@ -108,7 +109,57 @@ namespace Mindurry.DataStore.Implementation.Stores
             }
         }
 
+        private async Task<Byte[]> DownLoadDocument(string id)
+        {
+            var uri = new Uri($"{Constants.ApplicationURL}/api/documentMindurry/{id}/file?token={StoreManager.MobileService.CurrentUser.MobileServiceAuthenticationToken}");
 
+            try
+            {
+                var _client = new HttpClient();
+
+                var response = await _client.GetAsync(uri);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var stream = await response.Content.ReadAsStreamAsync();
+
+                    if (stream != null)
+                        return StoreManager.ReadFully(stream);
+                    else
+                        return null;
+                }
+                else
+                    return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+                Debug.WriteLine(@"ERROR {0}", ex.Message);
+            }
+        }
+
+
+        public async Task PullLatest(string KindId, string Kind)
+        {
+            await InitializeStore().ConfigureAwait(false);
+
+            var items = await GetItemsByKindAndReferenceIdAsync(KindId, Kind);
+            foreach (var item in items)
+            {
+                var fileName = item.InternalName + "." + item.Extension;
+                var IsExist = await PclStorage.IsFileExistAsync(fileName, item.ReferenceKind, item.ReferenceId);
+
+                if (!IsExist && !string.IsNullOrEmpty(item.Path)) // Only download files who have some value in the path field.
+                {
+                    var document = await DownLoadDocument(item.Id);
+
+                    if (document != null)
+                    {                      
+                        var response = await PclStorage.SaveFileLocal(document, fileName, item.ReferenceKind, item.ReferenceId);
+                    }
+                }
+            }
+        }
 
     }
 }

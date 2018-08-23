@@ -15,13 +15,13 @@ namespace Mindurry.ViewModels
 	{
         public Apartment Apartment { get; set; }
 
-        public DocumentMindurry Initial { get; set; }
-        public DocumentMindurry Sign { get; set; }
-        public DocumentMindurry Final { get; set; }
-        public DocumentMindurry Electric { get; set; }
-        public DocumentMindurry Kitchen { get; set; }
-        public DocumentMindurry Choice { get; set; }
-        public ObservableCollection<DocumentMindurry>  Others { get; set; }
+        public DocumentMindurry Initial { get; set; } = new DocumentMindurry();
+        public DocumentMindurry Sign { get; set; } = new DocumentMindurry();
+        public DocumentMindurry Final { get; set; } = new DocumentMindurry();
+        public DocumentMindurry Electric { get; set; } = new DocumentMindurry();
+        public DocumentMindurry Kitchen { get; set; } = new DocumentMindurry();
+        public DocumentMindurry Choice { get; set; } = new DocumentMindurry();
+        public ObservableCollection<DocumentMindurry>  Others { get; set; } 
 
     public async override void Init(object initData)
         {
@@ -34,20 +34,51 @@ namespace Mindurry.ViewModels
             if (docs != null && docs.Any())
             {
 
-                Initial = docs.Where(x => x.DocumentType == DocumentType.Initial.ToString().ToLower()).First();
+                var initials = docs.Where(x => x.DocumentType == DocumentType.Initial.ToString().ToLower());
+                if (initials != null && initials.Any())
+                {
+                    Initial = initials.First();
+                }
 
-                Sign = docs.Where(x => x.DocumentType == DocumentType.Signe.ToString().ToLower()).First();
+                var signs = docs.Where(x => x.DocumentType == DocumentType.Signe.ToString().ToLower());
+                if (signs != null && signs.Any())
+                {
+                    Sign = signs.First();
+                }
 
-                Final = docs.Where(x => x.DocumentType == DocumentType.Definitif.ToString().ToLower()).First();
+                var finals = docs.Where(x => x.DocumentType == DocumentType.Definitif.ToString().ToLower());
+                if (finals != null && finals.Any())
+                {
+                    Final = finals.First();
+                }
 
-                Electric = docs.Where(x => x.DocumentType == DocumentType.Electrique.ToString().ToLower()).First();
+                var electrics = docs.Where(x => x.DocumentType == DocumentType.Electrique.ToString().ToLower());
+                if (electrics != null && electrics.Any())
+                {
+                    Electric = electrics.First();
+                }
 
-                Kitchen = docs.Where(x => x.DocumentType == DocumentType.Cuisine.ToString().ToLower()).First();
+                var kitchens = docs.Where(x => x.DocumentType == DocumentType.Cuisine.ToString().ToLower());
+                if (kitchens != null && kitchens.Any())
+                {
+                    Kitchen = kitchens.First();
+                }
 
-                Choice = docs.Where(x => x.DocumentType == DocumentType.Choix.ToString().ToLower()).First();
+                var choices = docs.Where(x => x.DocumentType == DocumentType.Choix.ToString().ToLower());
+                if (choices != null && choices.Any())
+                {
+                    Choice = choices.First();
+                }
 
                 Others = new ObservableCollection<DocumentMindurry>(docs.Where(x => x.DocumentType == DocumentType.Autre.ToString().ToLower()));
             }
         }
+
+        public Command DisplayPlanCommand => new Command<DocumentMindurry>(async (obj) =>
+        {
+            await CoreMethods.PushPageModel<PdfDisplayPageModel>(obj, true);
+
+
+        });
     }
 }

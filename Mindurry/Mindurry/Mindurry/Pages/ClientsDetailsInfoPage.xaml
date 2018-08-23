@@ -383,14 +383,14 @@
                                 <Label Text="Nom"/>
                                 <Entry Placeholder="Nom du document" Text="{Binding DocumentName, Mode=TwoWay}"/>
 
-                                <StackLayout Margin="0,20">
+                               <!-- <StackLayout Margin="0,20">
                                     <Label Text="Catégories"/>
                                     <win:RadioButton GroupName="FirstGroup" Content="Plan"  IsChecked="{Binding Path=IsSwitchOne, Mode=TwoWay}" />
                                     <win:RadioButton GroupName="FirstGroup" Content="Justificatif"   IsChecked="{Binding Path=IsSwitchTwo, Mode=TwoWay}"/>
                                     <win:RadioButton GroupName="FirstGroup" Content="Autres"   IsChecked="{Binding Path=IsSwitchThree, Mode=TwoWay}"/>
-                                </StackLayout>
+                                </StackLayout> 
 
-                                <BoxView HeightRequest="1" BackgroundColor="{StaticResource GrayPanelEdge}" HorizontalOptions="FillAndExpand"/>
+                                <BoxView HeightRequest="1" BackgroundColor="{StaticResource GrayPanelEdge}" HorizontalOptions="FillAndExpand"/>-->
 
                               <!--  <Grid Margin="0,15">
                                     <win:CheckBox Content="Notifier le service technique"  IsChecked="{Binding NotifyService, Mode=TwoWay, UpdateSourceEventName=Click}"/>

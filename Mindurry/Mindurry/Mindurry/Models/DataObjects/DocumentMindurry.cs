@@ -26,9 +26,12 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("documentDate")]
         public DateTimeOffset? DocumentDate { get; set; }
 
+        [JsonProperty("extension")]
+        public string Extension { get; set; }
+
     }
 
     public enum DocumentType { Autre, Choix, Cuisine, Definitif, Electrique, Initial, Masse, Niveau, Notice, Perspective, Plaquette, Plomberie, Signe };
 
-    public enum ReferenceKind { Apartment, Cellar, customer, Garage, Residence };
+    public enum ReferenceKind { Apartment, Cellar, Customer, Garage, Residence };
 }

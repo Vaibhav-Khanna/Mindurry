@@ -2,8 +2,14 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:effect="clr-namespace:Mindurry.Effects"
+             xmlns:converter="clr-namespace:Mindurry.Converters"
              xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
              x:Class="Mindurry.Pages.ApartmentPlansPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:StringNullOrEmptyBoolConverter x:Key="StringNullOrEmptyBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Orientation="Vertical" WidthRequest="600" HorizontalOptions="Start">
@@ -20,7 +26,10 @@
                         <ColumnDefinition Width="70*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="Plan de vente initial" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
-                    <Label Text="{Binding Initial.Name}" FontAttributes="Bold"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding Initial.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                        <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
+                        <Label Text="{Binding Initial.Name}" VerticalOptions="Center"/>
+                    </StackLayout>
                 </Grid>
 
                 <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="50">
@@ -29,7 +38,11 @@
                         <ColumnDefinition Width="70*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="Plan signé" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
-                    <Label Text="{Binding Sign.Name}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding Sign.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                        <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
+                        <Label Text="{Binding Sign.Name}" VerticalOptions="Center"/>
+                    </StackLayout>
+                    
                 </Grid>
 
                 <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="50">
@@ -38,7 +51,13 @@
                         <ColumnDefinition Width="70*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="Plan définitif" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
-                    <Label Text="{Binding Final.Name}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding Final.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                        <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
+                        <Label Text="{Binding Final.Name}" VerticalOptions="Center"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DisplayPlanCommand}" CommandParameter="{Binding Final}"/>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
                 </Grid>
 
                 <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="50">
@@ -47,7 +66,10 @@
                         <ColumnDefinition Width="70*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="Plan electrique" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
-                    <Label Text="{Binding Electric.Name}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding Electric.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                        <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
+                        <Label Text="{Binding Electric.Name}" VerticalOptions="Center"/>
+                    </StackLayout>
                 </Grid>
 
                 <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="50">
@@ -56,7 +78,10 @@
                         <ColumnDefinition Width="70*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="Plan cuisine" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
-                    <Label Text="{Binding Kitchen.Name}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding Kitchen.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                        <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
+                        <Label Text="{Binding Kitchen.Name}" VerticalOptions="Center"/>
+                    </StackLayout>
                 </Grid>
 
                 <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="50">
@@ -65,7 +90,10 @@
                         <ColumnDefinition Width="70*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="Plan des choix" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
-                    <Label Text="{Binding Choice.Name, StringFormat='{0} m2'}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding Choice.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                        <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
+                        <Label Text="{Binding Choice.Name}" VerticalOptions="Center"/>
+                    </StackLayout>
                 </Grid>
 
                 <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="600" HeightRequest="50">
@@ -78,8 +106,9 @@
                         <repeater:RepeaterView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label Text="{Binding Name}" TextColor="{StaticResource GrayPanelText}"/>
+                                    <StackLayout Orientation="Horizontal" IsVisible="{Binding Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                                        <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
+                                        <Label Text="{Binding Name}" VerticalOptions="Center"/>
                                     </StackLayout>
                                 </ViewCell>
                             </DataTemplate>
