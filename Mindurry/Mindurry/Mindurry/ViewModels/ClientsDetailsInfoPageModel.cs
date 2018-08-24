@@ -220,11 +220,6 @@ namespace Mindurry.ViewModels
             }
         }
 
-        //public ObservableCollection<DataModels.ResidenceModel> Residences { get; set; }
-
-
-        //public ObservableCollection<DataModels.Residence> Residences { get; set; }
-
         public int TabIndex { get; set; }
         public int TabTwoLevel { get; set; }
         public int TabThreeLevel { get; set; }
@@ -763,10 +758,12 @@ namespace Mindurry.ViewModels
             var name = obj.Name + "." + obj.Extension;
 
            var folder = await DependencyService.Get<ISave>().Save(stream, name);
-            var result = await CoreMethods.DisplayAlert("Téléchargement", "Le téléchargement du document est terminé", "Ouvrir le répertoire", "Fermer");
-            if (result)
-            {
-                await DependencyService.Get<ISave>().LaunchFolder(folder);
+            if (folder != null) { 
+                var result = await CoreMethods.DisplayAlert("Téléchargement", "Le téléchargement du document est terminé", "Ouvrir le répertoire", "Fermer");
+                if (result)
+                {
+                    await DependencyService.Get<ISave>().LaunchFolder(folder);
+                }
             }
         });
 

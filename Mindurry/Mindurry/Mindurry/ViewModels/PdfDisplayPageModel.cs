@@ -20,15 +20,15 @@ namespace Mindurry.ViewModels
             base.Init(initData);
 
             documentToDisplay = (DocumentMindurry)initData;
+
             Title = documentToDisplay.Name;
-            var docDownloaded = await PclStorage.LoadFileLocal(documentToDisplay.InternalName + ".pdf", ReferenceKind.Apartment.ToString().ToLower(), documentToDisplay.ReferenceId);
+            var docDownloaded = await PclStorage.LoadFileLocal(documentToDisplay.InternalName + ".pdf", documentToDisplay.ReferenceKind, documentToDisplay.ReferenceId);
             PdfDocumentStream = new MemoryStream(docDownloaded);
 
         }
         public Command CloseCommand => new Command(async () =>
         {
             await CoreMethods.PopPageModel(true);
-
 
         });
     }
