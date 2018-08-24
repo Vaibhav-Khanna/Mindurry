@@ -7,6 +7,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace Mindurry.ViewModels
 {
@@ -16,19 +18,7 @@ namespace Mindurry.ViewModels
         public Residence Residence { get; set; }
 
         public ObservableCollection<DocumentMindurry> FilesList { get; set; }
-
-        private DocumentMindurry selectedFile;
-        public DocumentMindurry SelectedFile
-        {
-            get => selectedFile;
-            set
-            {
-                if (value != null)
-                   // CoreMethods.PushPageModel<ViewModels.ResidencesDetailsCellarPageModel>(value);
-                selectedFile = null;
-            }
-        }
-
+    
         private string residenceId;
 
         public async override void Init(object initData)
@@ -60,6 +50,19 @@ namespace Mindurry.ViewModels
             {
                 FilesList = new ObservableCollection<DocumentMindurry>();
             }
+            //Pull document from Azure Storage to  Locastorage if internet
+            var current = Connectivity.NetworkAccess;
+            if (current == NetworkAccess.Internet)
+            {
+                await StoreManager.DocumentMindurryStore.PullLatest(residenceId, ReferenceKind.Residence.ToString().ToLower());
+                // var str = await PclStorage.ReturnFolderPath(ReferenceKind.Apartment.ToString().ToLower());
+            }
         }
+        public Command DisplayPlanCommand => new Command<DocumentMindurry>(async (obj) =>
+        {
+            await CoreMethods.PushPageModel<PdfDisplayPageModel>(obj, true);
+
+
+        });
     }
 }

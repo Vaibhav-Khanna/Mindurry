@@ -28,7 +28,10 @@
                     <Label Text="Plan de vente initial" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
                     <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding Initial.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
                         <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
-                        <Label Text="{Binding Initial.Name}" VerticalOptions="Center"/>
+                        <Label Text="{Binding Initial.Name}" TextColor="#4A90E2" VerticalOptions="Center"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DisplayPlanCommand}" CommandParameter="{Binding Initial}"/>
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                 </Grid>
 
@@ -40,7 +43,10 @@
                     <Label Text="Plan signé" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
                     <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding Sign.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
                         <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
-                        <Label Text="{Binding Sign.Name}" VerticalOptions="Center"/>
+                        <Label Text="{Binding Sign.Name}" TextColor="#4A90E2" VerticalOptions="Center"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DisplayPlanCommand}" CommandParameter="{Binding Sign}"/>
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                     
                 </Grid>
@@ -53,7 +59,7 @@
                     <Label Text="Plan définitif" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
                     <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding Final.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
                         <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
-                        <Label Text="{Binding Final.Name}" VerticalOptions="Center"/>
+                        <Label Text="{Binding Final.Name}" TextColor="#4A90E2" VerticalOptions="Center"/>
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer Command="{Binding DisplayPlanCommand}" CommandParameter="{Binding Final}"/>
                         </StackLayout.GestureRecognizers>
@@ -68,7 +74,10 @@
                     <Label Text="Plan electrique" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
                     <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding Electric.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
                         <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
-                        <Label Text="{Binding Electric.Name}" VerticalOptions="Center"/>
+                        <Label Text="{Binding Electric.Name}" TextColor="#4A90E2" VerticalOptions="Center"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DisplayPlanCommand}" CommandParameter="{Binding Electric}"/>
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                 </Grid>
 
@@ -80,7 +89,10 @@
                     <Label Text="Plan cuisine" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
                     <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding Kitchen.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
                         <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
-                        <Label Text="{Binding Kitchen.Name}" VerticalOptions="Center"/>
+                        <Label Text="{Binding Kitchen.Name}" TextColor="#4A90E2" VerticalOptions="Center"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DisplayPlanCommand}" CommandParameter="{Binding Kitchen}"/>
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                 </Grid>
 
@@ -92,7 +104,10 @@
                     <Label Text="Plan des choix" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
                     <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" IsVisible="{Binding Choice.Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
                         <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
-                        <Label Text="{Binding Choice.Name}" VerticalOptions="Center"/>
+                        <Label Text="{Binding Choice.Name}" TextColor="#4A90E2" VerticalOptions="Center"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DisplayPlanCommand}" CommandParameter="{Binding Choice}"/>
+                        </StackLayout.GestureRecognizers>
                     </StackLayout>
                 </Grid>
 
@@ -102,13 +117,16 @@
                         <ColumnDefinition Width="70*"/>
                     </Grid.ColumnDefinitions>
                     <Label Text="Les autres plans" Grid.Column="0" HorizontalOptions="End" Margin="0,0,40,0" VerticalOptions="Center"/>
-                    <repeater:RepeaterView ItemsSource="{Binding Others}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center">
+                    <repeater:RepeaterView ItemsSource="{Binding Others}" x:Name="OthersList" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center">
                         <repeater:RepeaterView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
-                                    <StackLayout Orientation="Horizontal" IsVisible="{Binding Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                                    <StackLayout  x:Name="Item" Orientation="Horizontal" IsVisible="{Binding Name, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
                                         <Image Source="icon_PDF.png" WidthRequest="30" HeightRequest="30" Aspect="AspectFit" />
-                                        <Label Text="{Binding Name}" VerticalOptions="Center"/>
+                                        <Label Text="{Binding Name}" TextColor="#4A90E2" VerticalOptions="Center"/>
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding DisplayPlanCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference OthersList}, Path=BindingContext}" />
+                                        </StackLayout.GestureRecognizers>
                                     </StackLayout>
                                 </ViewCell>
                             </DataTemplate>

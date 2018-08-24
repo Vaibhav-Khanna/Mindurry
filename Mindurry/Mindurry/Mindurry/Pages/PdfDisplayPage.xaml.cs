@@ -27,11 +27,12 @@ namespace Mindurry.Pages
         {
             var name = ((PdfDisplayPageModel)BindingContext)?.documentToDisplay.Name + ".pdf";
             var folder = await DependencyService.Get<ISave>().Save(args.SaveStream as MemoryStream, name);
-
-            var result = await DisplayAlert("Téléchargement", "Le téléchargement du document est terminé", "Ouvrir le répertoire", "Fermer");
-            if (result)
-            {
-                await DependencyService.Get<ISave>().LaunchFolder(folder);
+            if (folder != null) { 
+                var result = await DisplayAlert("Téléchargement", "Le téléchargement du document est terminé", "Ouvrir le répertoire", "Fermer");
+                if (result)
+                {
+                    await DependencyService.Get<ISave>().LaunchFolder(folder);
+                }
             }
         }
     }
