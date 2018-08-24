@@ -11,6 +11,7 @@ namespace Mindurry.Models
     {
         public Note Reminder { get; set; }
         public bool IsChecked { get; set; }
+        public bool IsVisible { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

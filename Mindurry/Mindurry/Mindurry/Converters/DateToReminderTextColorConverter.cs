@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace Mindurry.Converters
 {
-    public class DateToBgColorConverter : IValueConverter
+    public class DateToReminderTextColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -15,19 +15,16 @@ namespace Mindurry.Converters
 
             if (reminderDate != null)
             {
-                if (reminderDate.Date == DateTimeOffset.Now.Date)
-                    return Color.FromHex("f5a623");
-                else if (reminderDate.Date > DateTimeOffset.Now.Date)
-                    //return Color.FromHex("4A90E2");
-                    return Color.White;
-                else return Color.Red;
-
+                if (reminderDate.Date >= DateTimeOffset.Now.Date)
+                { return Color.Black; }
+                else
+                { return Color.White; }
             }
             else
             {
-                return Color.White;
+                return Color.Black;
             }
-            
+
 
         }
 
