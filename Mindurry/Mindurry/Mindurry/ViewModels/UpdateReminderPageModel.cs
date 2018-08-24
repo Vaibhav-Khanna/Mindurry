@@ -22,6 +22,13 @@ namespace Mindurry.ViewModels
             ReminderDate = _note.ReminderAt;
         }
 
+        public Command CloseCommand => new Command(async () =>
+        {
+            await CoreMethods.PopPageModel(true);
+
+
+        });
+
         public Command SaveReminderCommand => new Command(async (obj) =>
         {
             _note.Content = Content;

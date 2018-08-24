@@ -1,15 +1,29 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
     <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-              x:Class="Mindurry.Pages.UpdateReminderPage"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:effect="clr-namespace:Mindurry.Effects"
+                 x:Class="Mindurry.Pages.UpdateReminderPage"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
-			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
+			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows"
+                 Title="Modifier le contenu du rappel">
 
 
         <ContentPage.Content>
-        <StackLayout Orientation="Vertical" Margin="50">
-            <Label Text="Modifier le contenu du rappel" FontSize="18" Margin="0,0,0,10"/>
-            <Editor HorizontalOptions="Fill" HeightRequest="200" Margin="0,10" Text="{Binding Content}" />
+        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <StackLayout Margin="50,0" Orientation="Horizontal" VerticalOptions="Start" BackgroundColor="Transparent"  HorizontalOptions="StartAndExpand" HeightRequest="50">
+                <Label Text="&#xE72B;" FontFamily="Segoe MDL2 Assets" FontSize="15" VerticalOptions="CenterAndExpand" >
+                    <Label.Effects>
+                        <effect:AccentColorEffect/>
+                    </Label.Effects>
+                </Label>
+                <Label Text="Revenir" FontSize="15" VerticalOptions="CenterAndExpand"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseCommand}" />
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            
+
+            <Editor HorizontalOptions="Fill" HeightRequest="200" Margin="50,10" Text="{Binding Content}" />
 
             <StackLayout HorizontalOptions="End" Orientation="Horizontal">
                 <Label Text="🛈" VerticalOptions="End" FontSize="24"/>
