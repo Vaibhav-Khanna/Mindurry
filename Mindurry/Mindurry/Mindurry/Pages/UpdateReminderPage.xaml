@@ -27,7 +27,7 @@
 
             <StackLayout HorizontalOptions="End" Orientation="Horizontal">
                 <Label Text="🛈" VerticalOptions="End" FontSize="24"/>
-                <win:CalendarDatePicker Header="Modifier la date du rappel" Width="300" Date="{Binding ReminderDate, Mode=TwoWay}"/>
+                <win:CalendarDatePicker Header="Modifier la date du rappel" Width="300" Date="{Binding ReminderDate, Mode=TwoWay}" MinDate="{Binding MinDate}"/>
                 <Button Text="Valider" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="200" HeightRequest="40" VerticalOptions="End" Command="{Binding SaveReminderCommand}"/>
             </StackLayout>
         </StackLayout>

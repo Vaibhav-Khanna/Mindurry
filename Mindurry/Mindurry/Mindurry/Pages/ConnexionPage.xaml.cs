@@ -1,4 +1,5 @@
-﻿using FreshMvvm;
+﻿using Acr.UserDialogs;
+using FreshMvvm;
 using Microsoft.Identity.Client;
 using Mindurry.DataStore.Abstraction;
 using Mindurry.DataStore.Implementation;
@@ -28,16 +29,19 @@ namespace Mindurry.Pages
             try
             {
                 var storeManager = FreshIOC.Container.Resolve<IStoreManager>() as StoreManager;
-                bool authenticated = await storeManager.LoginAsync();
-                if (authenticated)
+                using (UserDialogs.Instance.Loading("Chargement", null, null, true))
                 {
-                    var page = new Pages.MasterDetailNavigationPage();
-                    Application.Current.MainPage = page;
-                    storeManager.SyncAllAsync(true);
-                }
-                else
-                {
-                    await DisplayAlert("Erreur", "Erreur d'authentification, veuillez recommencer s'il vous plaît", "OK");
+                    bool authenticated = await storeManager.LoginAsync();
+                    if (authenticated)
+                    {
+                        var page = new Pages.MasterDetailNavigationPage();
+                        Application.Current.MainPage = page;
+                        storeManager.SyncAllAsync(true);
+                    }
+                    else
+                    {
+                        await DisplayAlert("Erreur", "Erreur d'authentification, veuillez recommencer s'il vous plaît", "OK");
+                    }
                 }
             }
             catch (MsalException ex)

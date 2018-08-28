@@ -10,6 +10,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:DateToBgColorConverter x:Key="DateToBgColorConverter"/>
+            <converter:DateToReminderTextColorConverter x:Key="DateToReminderTextColorConverter"/>
             <converter:LeadRepeaterTemplateBoolConverter x:Key="LeadRepeaterTemplateBoolConverter"/>
             <converter:NegateLeadRepeaterTemplateBoolConverter x:Key="NegateLeadRepeaterTemplateBoolConverter"/>
            </ResourceDictionary>
@@ -80,14 +81,13 @@
                                                 <!--  Checked="HandleCheck"-->
                                             </Grid>
 
-                                            <StackLayout Orientation="Vertical" Padding="0,30" Grid.Column="1">
-                                                <Label Text="{Binding Reminder.Content}" FontSize="20"/>
+                                            <StackLayout Orientation="Horizontal" Padding="0,30" Grid.Column="1" Spacing="10">
                                                 <Grid BackgroundColor="{Binding Reminder.ReminderAt, Converter={StaticResource DateToBgColorConverter}}" Padding="10,5" WidthRequest="200" HorizontalOptions="Start">
                                                     <StackLayout Orientation="Horizontal">
-                                                        <!-- <Label Text="" FontSize="18" TextColor="White" FontFamily="Segoe MDL2 Assets"/> -->
-                                                        <Label Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}" FontAttributes="Bold" FontSize="18" TextColor="White"/>
+                                                        <Label Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}"  FontSize="18" TextColor="{Binding  Reminder.ReminderAt, Converter={StaticResource DateToReminderTextColorConverter}}"/>
                                                     </StackLayout>
                                                 </Grid>
+                                                <Label Text="{Binding Reminder.Content}" FontSize="20"/>
                                             </StackLayout>
                                             <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center" Command="{Binding UpdateReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
                                             <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center" Command="{Binding DeleteReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
@@ -103,7 +103,7 @@
 
                         <StackLayout HorizontalOptions="End" Orientation="Horizontal">
                             <Label Text="🛈" VerticalOptions="End" FontSize="24"/>
-                            <win:CalendarDatePicker Header="Ajouter un rappel" Width="300" Date="{Binding DateReminder, Mode=TwoWay}"/>
+                            <win:CalendarDatePicker Header="Ajouter un rappel" Width="300" Date="{Binding DateReminder, Mode=TwoWay}" MinDate="{Binding MinDate}" />
                             <Button Text="Valider" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="200" HeightRequest="40" VerticalOptions="End" Command="{Binding AddNoteCommand}"/>
                         </StackLayout>
                         <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
