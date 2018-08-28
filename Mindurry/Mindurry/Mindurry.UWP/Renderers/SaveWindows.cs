@@ -1,4 +1,5 @@
-﻿using Mindurry.Helpers;
+﻿using Acr.UserDialogs;
+using Mindurry.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -44,19 +45,22 @@ namespace Mindurry.UWP.Renderers
             StorageFolder folder = await picker.PickSingleFolderAsync();
             if (folder != null)
             {
-                file = await folder.CreateFileAsync(name, CreationCollisionOption.GenerateUniqueName);
-                if (file != null)
+                using (UserDialogs.Instance.Loading("Téléchargement du document", null, null, true))
                 {
-                    Windows.Storage.Streams.IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.ReadWrite);
-                    Stream st = fileStream.AsStreamForWrite();
-                    st.SetLength(0);
-                    st.Write((stream as MemoryStream).ToArray(), 0, (int)stream.Length);
-                    st.Flush();
-                    st.Dispose();
-                    fileStream.Dispose();
-                    return folder;
+                    file = await folder.CreateFileAsync(name, CreationCollisionOption.GenerateUniqueName);
+                    if (file != null)
+                    {
+                        Windows.Storage.Streams.IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.ReadWrite);
+                        Stream st = fileStream.AsStreamForWrite();
+                        st.SetLength(0);
+                        st.Write((stream as MemoryStream).ToArray(), 0, (int)stream.Length);
+                        st.Flush();
+                        st.Dispose();
+                        fileStream.Dispose();
+                        return folder;
+                    }
+                    else { return null; }
                 }
-                else { return null; }
             }
             else { return null; }
         }

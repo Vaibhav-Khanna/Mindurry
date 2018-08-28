@@ -1,4 +1,5 @@
-﻿using FreshMvvm;
+﻿using Acr.UserDialogs;
+using FreshMvvm;
 using Mindurry.DataModels;
 using Mindurry.Helpers;
 using Mindurry.Models;
@@ -14,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.Storage;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -30,7 +32,8 @@ namespace Mindurry.ViewModels
         private ObservableCollection<Note> OriginalNotes;
         public Boolean ButtonShowMoreIsDisplayed { get; set; }
         public Boolean ButtonShowLessIsDisplayed { get; set; } = false;
-        public DateTimeOffset? DateReminder { get; set; } = null;
+        public DateTimeOffset? DateReminder { get; set; }
+        public DateTimeOffset MinDate { get; set; } = new DateTimeOffset(DateTimeOffset.Now.Date);
         public string TextNote { get; set; }
 
         public ObservableCollection<CollectSource> CollectSources { get; set; }
@@ -577,13 +580,16 @@ namespace Mindurry.ViewModels
                 var result = await CoreMethods.DisplayAlert("Classer", "Etes vous sur de vouloir terminer ce rappel ?", "Oui", "Non");
                 if (result)
                 {
-                    RemindersCheckBoxListModel reminderObj = obj as RemindersCheckBoxListModel;
-                    Note _note = reminderObj.Reminder;
-                    _note.DoneAt = DateTimeOffset.Now;
-                    _note.ActivityStreamDate = DateTimeOffset.Now;
-                    await StoreManager.NoteStore.UpdateAsync(_note);
-                    await LoadReminders();
-                    await LoadNotes();
+                    using (UserDialogs.Instance.Loading("Classement du rappel", null, null, true))
+                    {
+                        RemindersCheckBoxListModel reminderObj = obj as RemindersCheckBoxListModel;
+                        Note _note = reminderObj.Reminder;
+                        _note.DoneAt = DateTimeOffset.Now;
+                        _note.ActivityStreamDate = DateTimeOffset.Now;
+                        await StoreManager.NoteStore.UpdateAsync(_note);
+                        await LoadReminders();
+                        await LoadNotes();
+                    }
                 }
                 else { obj.IsChecked = false; }
             }
@@ -600,8 +606,11 @@ namespace Mindurry.ViewModels
             var result = await CoreMethods.DisplayAlert("Suppression", "Etes vous sur de vouloir supprimer ce rappel ?", "Oui", "Non");
             if (result)
             {
-                await StoreManager.NoteStore.RemoveAsync((Note)obj.Reminder);
-                await LoadReminders();
+                using (UserDialogs.Instance.Loading("Suppression du rappel", null, null, true))
+                {
+                    await StoreManager.NoteStore.RemoveAsync((Note)obj.Reminder);
+                    await LoadReminders();
+                }
             }
         });
 
@@ -614,11 +623,32 @@ namespace Mindurry.ViewModels
                 Kind = "note",
                 Content = TextNote
             };
-            if (DateReminder != null) { NoteToInsert.ReminderAt = DateReminder; }
-            await StoreManager.NoteStore.InsertAsync(NoteToInsert);
-            TextNote = null;
-            await LoadNotes();
+            string title;
+            if (DateReminder != null)
+            {
 
+                NoteToInsert.ReminderAt = DateReminder;
+                title = "Ajout du rappel";
+            }
+            else
+            {
+                title = "Ajout de la note";
+            }
+            using (UserDialogs.Instance.Loading(title, null, null, true))
+            {
+                await StoreManager.NoteStore.InsertAsync(NoteToInsert);
+                TextNote = null;
+                if (DateReminder != null)
+                {
+                    await LoadReminders();
+                    DateReminder = null;
+                }
+                else
+                {
+                    await LoadNotes();
+                }
+
+            }
         });
 
         public Command DisplayMoreNotesCommand => new Command((obj) =>
@@ -750,14 +780,15 @@ namespace Mindurry.ViewModels
             }
         }
         public Command DownloadDocumentCommand => new Command<DocumentMindurry>(async (obj) => {
+        StorageFolder folder;
+           
+                var fileName = obj.InternalName + "." + obj.Extension;
+                var docDownloaded = await PclStorage.LoadFileLocal(fileName, ReferenceKind.Customer.ToString().ToLower(), obj.ReferenceId);
 
-            var fileName = obj.InternalName + "." + obj.Extension;
-            var docDownloaded = await PclStorage.LoadFileLocal(fileName, ReferenceKind.Customer.ToString().ToLower(), obj.ReferenceId);
-            
-            var stream = new MemoryStream(docDownloaded);
-            var name = obj.Name + "." + obj.Extension;
+                var stream = new MemoryStream(docDownloaded);
+                var name = obj.Name + "." + obj.Extension;
 
-           var folder = await DependencyService.Get<ISave>().Save(stream, name);
+                folder = await DependencyService.Get<ISave>().Save(stream, name);
             if (folder != null) { 
                 var result = await CoreMethods.DisplayAlert("Téléchargement", "Le téléchargement du document est terminé", "Ouvrir le répertoire", "Fermer");
                 if (result)
@@ -772,8 +803,11 @@ namespace Mindurry.ViewModels
             var result = await CoreMethods.DisplayAlert("Suppression", "Etes vous sur de vouloir supprimer ce document ?", "Oui", "Non");
             if (result)
             {
-                await StoreManager.DocumentMindurryStore.RemoveAsync((DocumentMindurry)obj);
-                await LoadDocuments();
+                using (UserDialogs.Instance.Loading("Suppression du document", null, null, true))
+                {
+                    await StoreManager.DocumentMindurryStore.RemoveAsync((DocumentMindurry)obj);
+                    await LoadDocuments();
+                }
             }
 
         });
@@ -813,10 +847,13 @@ namespace Mindurry.ViewModels
                     if (!string.IsNullOrEmpty(DocumentName))
                     {
                         var validName = await StoreManager.DocumentMindurryStore.IsValidDocumentName(DocumentName);
-                        if (validName) { 
-                        var is_uploaded = await StoreManager.DocumentMindurryStore.UploadDocument(myTask.DataArray, new DocumentMindurry() { Path = FileName, InternalName = Guid.NewGuid().ToString(), ReferenceKind = "customer", DocumentType = "autre", ReferenceId = ContactId, Name = DocumentName });
-                        await LoadDocuments();
-                        TabTwoBack();
+                        if (validName) {
+                            using (UserDialogs.Instance.Loading("Upload du document", null, null, true))
+                            {
+                                var is_uploaded = await StoreManager.DocumentMindurryStore.UploadDocument(myTask.DataArray, new DocumentMindurry() { Path = FileName, InternalName = Guid.NewGuid().ToString(), ReferenceKind = "customer", DocumentType = "autre", ReferenceId = ContactId, Name = DocumentName });
+                                await LoadDocuments();
+                                TabTwoBack();
+                            }
                         }
                         else
                         {
@@ -853,7 +890,7 @@ namespace Mindurry.ViewModels
                     var ClientProperty = new ClientPropertyModel
                     {
                         ResidenceName = item.ResidenceName,
-                        PropertyType = ResidenceType.Appartement.ToString(),
+                        PropertyType = ResidenceType.Appartement.ToString().ToLower(),
                         PropertyNumber = item.LotNumberArchitect,
                         ApartmentType = item.Kind,
                         Area = item.Area.ToString(),
@@ -875,7 +912,7 @@ namespace Mindurry.ViewModels
                     var ClientProperty = new ClientPropertyModel
                     {
                         ResidenceName = item.ResidenceName,
-                        PropertyType = ResidenceType.Cave.ToString(),
+                        PropertyType = ResidenceType.Cave.ToString().ToLower(),
                         PropertyNumber = item.LotNumberArchitect,
                         Area = item.Area.ToString(),
                         CommandState = item.CommandState,
@@ -896,7 +933,7 @@ namespace Mindurry.ViewModels
                     var ClientProperty = new ClientPropertyModel
                     {
                         ResidenceName = item.ResidenceName,
-                        PropertyType = ResidenceType.Garage.ToString(),
+                        PropertyType = ResidenceType.Garage.ToString().ToLower(),
                         PropertyNumber = item.LotNumberArchitect,
                         Area = item.Area.ToString(),
                         CommandState = item.CommandState,
@@ -989,35 +1026,74 @@ namespace Mindurry.ViewModels
 
         public Command AddPropertyCommand => new Command(async (obj) =>
         {
-            if (TypeBienSelected == "Appartement")
+            using (UserDialogs.Instance.Loading("Ajout du bien", null, null, true))
             {
-                var apt = await StoreManager.ApartmentStore.GetItemByRefenceAsync(ReferenceSelected);
-                if (apt != null)
+                if (TypeBienSelected == "Appartement")
                 {
-                    apt.ContactId = ContactId;
-                    await StoreManager.ApartmentStore.UpdateAsync(apt);
+                    var apt = await StoreManager.ApartmentStore.GetItemByRefenceAsync(ReferenceSelected);
+                    if (apt != null)
+                    {
+                        apt.ContactId = ContactId;
+                        await StoreManager.ApartmentStore.UpdateAsync(apt);
+                    }
                 }
-            }
-            if (TypeBienSelected == "Cave")
-            {
-                var cellar = await StoreManager.CellarStore.GetItemByRefenceAsync(ReferenceSelected);
-                if (cellar != null)
+                if (TypeBienSelected == "Cave")
                 {
-                    cellar.ContactId = ContactId;
-                    await StoreManager.CellarStore.UpdateAsync(cellar);
+                    var cellar = await StoreManager.CellarStore.GetItemByRefenceAsync(ReferenceSelected);
+                    if (cellar != null)
+                    {
+                        cellar.ContactId = ContactId;
+                        await StoreManager.CellarStore.UpdateAsync(cellar);
+                    }
                 }
-            }
-            if (TypeBienSelected == "Parking")
-            {
-                var parking = await StoreManager.GarageStore.GetItemByRefenceAsync(ReferenceSelected);
-                if (parking != null)
+                if (TypeBienSelected == "Parking")
                 {
-                    parking.ContactId = ContactId;
-                    await StoreManager.GarageStore.UpdateAsync(parking);
+                    var parking = await StoreManager.GarageStore.GetItemByRefenceAsync(ReferenceSelected);
+                    if (parking != null)
+                    {
+                        parking.ContactId = ContactId;
+                        await StoreManager.GarageStore.UpdateAsync(parking);
+                    }
                 }
+                await LoadProperties();
             }
-            await LoadProperties();
             TabThreeLevel--;
+        });
+        public Command LinkToPropertyCommand => new Command<ClientPropertyModel>(async (obj) =>
+        {
+            if (obj.PropertyType == ResidenceType.Appartement.ToString().ToLower())
+            {
+                Models.DataObjects.Apartment apt = await StoreManager.ApartmentStore.GetItemAsync(obj.PropertyId);
+                App.RequestApartmentTabbedPage(apt);
+            }
+            if (obj.PropertyType == ResidenceType.Garage.ToString().ToLower())
+            {
+                Garage item = await StoreManager.GarageStore.GetItemAsync(obj.PropertyId);
+                var garagesListItem = new GaragesListModel
+                {
+                    LotNumberArchitect = item.LotNumberArchitect,
+                    Type = item.Type,
+                    Area = item.Area,
+                    Price = item.Price,
+                    Id = item.Id,
+                    ResidenceName = item.ResidenceName
+                };
+                await CoreMethods.PushPageModel<ViewModels.ResidencesDetailsGaragePageModel>(garagesListItem);
+            }
+            if (obj.PropertyType == ResidenceType.Cave.ToString().ToLower())
+            {
+                Cellar item = await StoreManager.CellarStore.GetItemAsync(obj.PropertyId);
+                var cellarsListItem = new CellarsListModel
+                {
+                    LotNumberArchitect = item.LotNumberArchitect,
+                    Area = item.Area,
+                    Price = item.Price,
+                    Id = item.Id,
+                    ResidenceName = item.ResidenceName
+                };
+                await CoreMethods.PushPageModel<ViewModels.ResidencesDetailsCellarPageModel>(cellarsListItem);
+            }
+
         });
     }
 }

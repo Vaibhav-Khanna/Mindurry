@@ -1,4 +1,5 @@
-﻿using FreshMvvm;
+﻿using Acr.UserDialogs;
+using FreshMvvm;
 using Mindurry.DataModels;
 using Mindurry.Models;
 using Mindurry.Models.DataObjects;
@@ -25,7 +26,8 @@ namespace Mindurry.ViewModels
         private ObservableCollection<Note> OriginalNotes;
         public Boolean ButtonShowMoreIsDisplayed { get; set; }
         public Boolean ButtonShowLessIsDisplayed { get; set; } = false;
-        public DateTimeOffset? DateReminder { get; set; } = null;
+        public DateTimeOffset? DateReminder { get; set; }
+        public DateTimeOffset MinDate { get; set; } = new DateTimeOffset(DateTimeOffset.Now.Date);
         public string TextNote { get; set; }
 
         public ObservableCollection<CollectSource> CollectSources { get; set; }
@@ -447,8 +449,11 @@ namespace Mindurry.ViewModels
            var result = await CoreMethods.DisplayAlert("Suppression", "Etes vous sur de vouloir supprimer ce rappel ?", "Oui", "Non");
             if (result)
             {
-                await StoreManager.NoteStore.RemoveAsync((Note)obj.Reminder);
-                await LoadReminders();
+                using (UserDialogs.Instance.Loading("Suppression du rappel", null, null, true))
+                {
+                    await StoreManager.NoteStore.RemoveAsync((Note)obj.Reminder);
+                    await LoadReminders();
+                }
             }
         });
 
@@ -461,11 +466,32 @@ namespace Mindurry.ViewModels
                 Kind = "note",
                 Content = TextNote
             };
-            if (DateReminder != null) { NoteToInsert.ReminderAt = DateReminder; }
-            await StoreManager.NoteStore.InsertAsync(NoteToInsert);
-            TextNote = null;
-            await LoadNotes();
+            string title;
+            if (DateReminder != null)
+            {
 
+                NoteToInsert.ReminderAt = DateReminder;
+                title = "Ajout du rappel";
+            }
+            else
+            {
+                title = "Ajout de la note";
+            }
+            using (UserDialogs.Instance.Loading(title, null, null, true))
+            {
+                await StoreManager.NoteStore.InsertAsync(NoteToInsert);
+                TextNote = null;
+                if (DateReminder != null)
+                {
+                    await LoadReminders();
+                    DateReminder = null;
+                }
+                else
+                {
+                    await LoadNotes();
+                }
+
+            }
         });
 
         public Command DisplayMoreNotesCommand => new Command( (obj) =>

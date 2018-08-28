@@ -1,4 +1,5 @@
-﻿using Mindurry.DataModels;
+﻿using Acr.UserDialogs;
+using Mindurry.DataModels;
 using Mindurry.Models;
 using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
@@ -112,13 +113,15 @@ namespace Mindurry.ViewModels
                 var result = await CoreMethods.DisplayAlert("Classer", "Etes vous sur de vouloir terminer ce rappel ?", "Oui", "Non");
                 if (result)
                 {
-                    RemindersCheckBoxListModel reminderObj = obj as RemindersCheckBoxListModel;
-                    Note _note = reminderObj.Reminder;
-                    _note.DoneAt = DateTimeOffset.Now;
-                    _note.ActivityStreamDate = DateTimeOffset.Now;
-                    await StoreManager.NoteStore.UpdateAsync(_note);
-                    await LoadReminders("Done");
-                    
+                    using (UserDialogs.Instance.Loading("Classement du rappel", null, null, true))
+                    {
+                        RemindersCheckBoxListModel reminderObj = obj as RemindersCheckBoxListModel;
+                        Note _note = reminderObj.Reminder;
+                        _note.DoneAt = DateTimeOffset.Now;
+                        _note.ActivityStreamDate = DateTimeOffset.Now;
+                        await StoreManager.NoteStore.UpdateAsync(_note);
+                        await LoadReminders("Done");
+                    }
                 }
                 else { obj.IsChecked = false; }
             }
@@ -135,17 +138,20 @@ namespace Mindurry.ViewModels
             var result = await CoreMethods.DisplayAlert("Suppression", "Etes vous sur de vouloir supprimer ce rappel ?", "Oui", "Non");
             if (result)
             {
-                await StoreManager.NoteStore.RemoveAsync((Note)obj.Reminder);
-                string action;
-                if (obj.Reminder.DoneAt != null)
+                using (UserDialogs.Instance.Loading("Suppression du rappel", null, null, true))
                 {
-                    action = "Done";
+                    await StoreManager.NoteStore.RemoveAsync((Note)obj.Reminder);
+                    string action;
+                    if (obj.Reminder.DoneAt != null)
+                    {
+                        action = "Done";
+                    }
+                    else
+                    {
+                        action = "ToDo";
+                    }
+                    await LoadReminders(action);
                 }
-                else
-                {
-                    action = "ToDo";
-                }
-                await LoadReminders(action);
             }
         });
     }

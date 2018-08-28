@@ -1,4 +1,5 @@
-﻿using Mindurry.Models.DataObjects;
+﻿using Acr.UserDialogs;
+using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,7 @@ namespace Mindurry.ViewModels
         private Note _note;
         public string Content { get; set; }
         public DateTimeOffset? ReminderDate { get; set; }
+        public DateTimeOffset MinDate { get; set; } = new DateTimeOffset(DateTimeOffset.Now.Date);
 
         public  override void Init(object initData)
         {
@@ -31,9 +33,13 @@ namespace Mindurry.ViewModels
 
         public Command SaveReminderCommand => new Command(async (obj) =>
         {
-            _note.Content = Content;
-            _note.ReminderAt = ReminderDate;
-            var updated = await StoreManager.NoteStore.UpdateAsync(_note);
+            bool updated;
+            using (UserDialogs.Instance.Loading("Modification du rappel", null, null, true))
+            {
+                _note.Content = Content;
+                _note.ReminderAt = ReminderDate;
+                 updated = await StoreManager.NoteStore.UpdateAsync(_note);
+            }
             if (updated)
             {
                 await CoreMethods.PopPageModel(_note, true, false);

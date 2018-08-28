@@ -10,6 +10,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:DateToBgColorConverter x:Key="DateToBgColorConverter"/>
+            <converter:DateToReminderTextColorConverter x:Key="DateToReminderTextColorConverter"/>
             <converter:StringNullOrEmptyBoolConverter x:Key="StringNullOrEmptyBoolConverter"/>
             <converter:LeadRepeaterTemplateBoolConverter x:Key="LeadRepeaterTemplateBoolConverter"/>
             <converter:NegateLeadRepeaterTemplateBoolConverter x:Key="NegateLeadRepeaterTemplateBoolConverter"/>
@@ -82,14 +83,13 @@
                                                 <!--  Checked="HandleCheck"-->
                                             </Grid>
 
-                                            <StackLayout Orientation="Vertical" Padding="0,30" Grid.Column="1">
-                                                <Label Text="{Binding Reminder.Content}" FontSize="20"/>
+                                            <StackLayout Orientation="Horizontal" Padding="0,30" Grid.Column="1" Spacing="10">
                                                 <Grid BackgroundColor="{Binding Reminder.ReminderAt, Converter={StaticResource DateToBgColorConverter}}" Padding="10,5" WidthRequest="200" HorizontalOptions="Start">
                                                     <StackLayout Orientation="Horizontal">
-                                                        <!-- <Label Text="" FontSize="18" TextColor="White" FontFamily="Segoe MDL2 Assets"/> -->
-                                                        <Label Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}" FontAttributes="Bold" FontSize="18" TextColor="White"/>
+                                                        <Label Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}"  FontSize="18" TextColor="{Binding  Reminder.ReminderAt, Converter={StaticResource DateToReminderTextColorConverter}}"/>
                                                     </StackLayout>
                                                 </Grid>
+                                                <Label Text="{Binding Reminder.Content}" FontSize="20"/>
                                             </StackLayout>
                                             <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center" Command="{Binding UpdateReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
                                             <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center" Command="{Binding DeleteReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
@@ -105,7 +105,7 @@
 
                         <StackLayout HorizontalOptions="End" Orientation="Horizontal">
                             <Label Text="🛈" VerticalOptions="End" FontSize="24"/>
-                            <win:CalendarDatePicker Header="Ajouter un rappel" Width="300" Date="{Binding DateReminder, Mode=TwoWay}"/>
+                            <win:CalendarDatePicker Header="Ajouter un rappel" Width="300" Date="{Binding DateReminder, Mode=TwoWay}" MinDate="{Binding MinDate}" />
                             <Button Text="Valider" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="200" HeightRequest="40" VerticalOptions="End" Command="{Binding AddNoteCommand}"/>
                         </StackLayout>
                         <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
@@ -374,7 +374,7 @@
                                     </repeater:RepeaterView.ItemTemplate>
                                 </repeater:RepeaterView>
                             </Grid>
-                            
+
                             <StackLayout IsVisible="{Binding IsTabTwoL2}">
                                 <Label Text="Nouveau document" FontSize="16" FontAttributes="Bold" Margin="0,20"/>
 
@@ -387,13 +387,13 @@
                                 <Label Text="Nom"/>
                                 <Entry Placeholder="Nom du document" Text="{Binding DocumentName, Mode=TwoWay}"/>
 
-                              
+
                                 <StackLayout Orientation="Horizontal" Margin="0,30">
                                     <Button Text="Enregistrer" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="120" Command="{Binding UploadFileCommand}"/>
                                     <Button Text="Annuler" WidthRequest="120" Command="{Binding TabTwoBackCommand}"/>
                                 </StackLayout>
                             </StackLayout>
-
+                            <!--
                             <StackLayout IsVisible="{Binding IsTabTwoL3}">
                                 <Label Text="Aucun document" FontSize="16" FontAttributes="Bold" Margin="0,20"/>
 
@@ -427,17 +427,17 @@
                                     <Button Text="Enregistrer" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="120"/>
                                     <Button Text="Annuler" WidthRequest="120" Command="{Binding TabTwoBackCommand}"/>
                                 </StackLayout>
-                            </StackLayout>
+                            </StackLayout> -->
                         </Grid>
 
                         <Grid IsVisible="{Binding IsTabThreeVisible}" Padding="0,0,0,20">
 
-                          <!--  <StackLayout IsVisible="{Binding IsTabThreeL1}">
+                            <!--  <StackLayout IsVisible="{Binding IsTabThreeL1}">
                                 <Label Text="🛈   Ici vous pouvez associer des biens à l'acquéreur" TextColor="{StaticResource GrayPanelText}" Margin="0,10"/>
                                 <Button Text="+ Ajouter un bien" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
                                         Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding TabThreeForwardCommand}"/>
                             </StackLayout> -->
-                            
+
                             <StackLayout IsVisible="{Binding IsTabThreeL2}">
                                 <Button Text="" FontSize="25" FontFamily="Segoe MDL2 Assets" BackgroundColor="Transparent" HorizontalOptions="Start"
                                         Command="{Binding TabThreeBackCommand}"/>
@@ -467,23 +467,23 @@
                             </StackLayout>
 
                             <StackLayout IsVisible="{Binding IsTabThreeL1}">
-                              <!--  <Button Text="" FontSize="25" FontFamily="Segoe MDL2 Assets" BackgroundColor="Transparent" HorizontalOptions="Start"
+                                <!--  <Button Text="" FontSize="25" FontFamily="Segoe MDL2 Assets" BackgroundColor="Transparent" HorizontalOptions="Start"
                                         Command="{Binding TabThreeBackCommand}"/> -->
-                                <repeater:RepeaterView ItemsSource="{Binding PropertyList}" VerticalOptions="Start" Spacing="10">
+                                <repeater:RepeaterView ItemsSource="{Binding PropertyList}" VerticalOptions="Start" Spacing="10" x:Name="PropertiesList">
                                     <repeater:RepeaterView.ItemTemplate>
                                         <DataTemplate>
                                             <ViewCell>
-                                                <StackLayout Padding="10" BackgroundColor="#e9e9e9">
+                                                <StackLayout Padding="10" BackgroundColor="#e9e9e9" x:Name="ItemProperty">
                                                     <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
                                                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                                                             <Label Text="{Binding ResidenceName, StringFormat='Résidence {0}'}" FontSize="22" >
-                                                            <Label.Effects>
-                                                                <effect:SemiBoldEffect/>
-                                                            </Label.Effects>
-                                                        </Label>
-                                                      <!--  <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/> -->
-                                                    </StackLayout>
-                                                    <StackLayout Orientation="Horizontal">
+                                                                <Label.Effects>
+                                                                    <effect:SemiBoldEffect/>
+                                                                </Label.Effects>
+                                                            </Label>
+                                                            <!--  <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/> -->
+                                                        </StackLayout>
+                                                        <StackLayout Orientation="Horizontal">
                                                             <Label Text="{Binding PropertyType}" FontSize="16">
                                                                 <Label.Effects>
                                                                     <effect:SemiBoldEffect/>
@@ -504,11 +504,15 @@
 
 
                                                     <Label Text="{Binding CommandState, StringFormat='Statut: {0}'}" FontSize="12"/>
-                                                   <!-- <Picker ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"/>
+                                                    <!-- <Picker ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"/>
                                                     <Button Text="Supprimer" TextColor="{StaticResource RedAccent}" BackgroundColor="Transparent"/> -->
                                                     <Label Text="{Binding Price, StringFormat='Prix: {0} €'}" FontSize="12"/>
                                                     <Label Text="{Binding Stage, StringFormat='Stade: {0}'}" FontSize="12" IsVisible="{Binding Stage, Converter={StaticResource StringNullOrEmptyBoolConverter}}"/>
-                                                    <Label Text="Voir le bien ->" FontSize="12" TextColor="#9f182c" HorizontalOptions="End"/>
+                                                    <Label Text="Voir le bien ->"  FontSize="12" TextColor="#9f182c" HorizontalOptions="End">
+                                                        <Label.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding LinkToPropertyCommand}" CommandParameter="{Binding Source={x:Reference ItemProperty}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference PropertiesList}, Path=BindingContext}"/>
+                                                        </Label.GestureRecognizers>
+                                                    </Label>
                                                 </StackLayout>
                                             </ViewCell>
                                         </DataTemplate>
@@ -519,7 +523,6 @@
                             </StackLayout>
                         </Grid>
                     </Grid>
-                   
                 </ScrollView>
             </Grid>
 

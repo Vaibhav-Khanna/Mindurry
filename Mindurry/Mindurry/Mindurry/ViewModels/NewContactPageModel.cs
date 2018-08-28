@@ -1,4 +1,5 @@
-﻿using FreshMvvm;
+﻿using Acr.UserDialogs;
+using FreshMvvm;
 using Mindurry.Models;
 using Mindurry.Models.DataObjects;
 using Mindurry.Services.Abstraction;
@@ -257,41 +258,44 @@ namespace Mindurry.ViewModels
                 //Save contact 
                 //Insert if new Contact
                 if (String.IsNullOrEmpty(ContactId)) {
+                    using (UserDialogs.Instance.Loading("Enregistrement du nouveau contact", null, null, true))
+                    {
+                        //save custom Field
+                        ContactCustomField contactCustomFieldToSave = new ContactCustomField();
+                        contactCustomFieldToSave.ContactId = ContactToSave.Id;
+                        contactCustomFieldToSave.ContactCustomFieldSourceEntryId = CustomFieldsSelected.Id;
+                        contactCustomFieldToSave.ContactCustomFieldSourceId = CustomFieldsSelected.ContactCustomFieldSourceId;
+                        await StoreManager.ContactCustomFieldStore.InsertAsync(contactCustomFieldToSave);
 
-                    //save custom Field
-                    ContactCustomField contactCustomFieldToSave = new ContactCustomField();
-                    contactCustomFieldToSave.ContactId = ContactToSave.Id;
-                    contactCustomFieldToSave.ContactCustomFieldSourceEntryId = CustomFieldsSelected.Id;
-                    contactCustomFieldToSave.ContactCustomFieldSourceId = CustomFieldsSelected.ContactCustomFieldSourceId;
-                    await StoreManager.ContactCustomFieldStore.InsertAsync(contactCustomFieldToSave);
+                        //Calcul contact customField field
+                        var customs = await StoreManager.ContactStore.RewriteCustomFields(ContactToSave.Id);
+                        ContactToSave.CustomFields = customs;
 
-                    //Calcul contact customField field
-                    var customs = await StoreManager.ContactStore.RewriteCustomFields(ContactToSave.Id);
-                    ContactToSave.CustomFields = customs;
-
-                    //Update contact
-                    bool isInsertedContact =  await StoreManager.ContactStore.InsertAsync(ContactToSave);
+                        //Update contact
+                        bool isInsertedContact = await StoreManager.ContactStore.InsertAsync(ContactToSave);
 
                         MessagingCenter.Send(this, "ReloadCollection");
                         await CoreMethods.PopPageModel(false, false);
-                    
+                    }
                 }
                 else // Update if existed contact
                 {
-                    //update ContactCustom if necessary
-                    if (_customF.ContactCustomFieldSourceEntryId != CustomFieldsSelected.Id)
-                    {
-                        _customF.ContactCustomFieldSourceEntryId = CustomFieldsSelected.Id;
-                        await StoreManager.ContactCustomFieldStore.UpdateAsync(_customF);
+                    using (UserDialogs.Instance.Loading("Modification du contact", null, null, true))
+                    { //update ContactCustom if necessary
+                        if (_customF.ContactCustomFieldSourceEntryId != CustomFieldsSelected.Id)
+                        {
+                            _customF.ContactCustomFieldSourceEntryId = CustomFieldsSelected.Id;
+                            await StoreManager.ContactCustomFieldStore.UpdateAsync(_customF);
 
-                        //Recalculate Contact CustomFields field to update it
-                       var customs = await StoreManager.ContactStore.RewriteCustomFields(ContactToSave.Id);
-                        ContactToSave.CustomFields = customs;
+                            //Recalculate Contact CustomFields field to update it
+                            var customs = await StoreManager.ContactStore.RewriteCustomFields(ContactToSave.Id);
+                            ContactToSave.CustomFields = customs;
+                        }
+                        //  update contact
+                        await StoreManager.ContactStore.UpdateAsync(ContactToSave);
+                        MessagingCenter.Send(this, "ReloadDetailContact");
+                        await CoreMethods.PopPageModel(false, false);
                     }
-                    //  update contact
-                    await StoreManager.ContactStore.UpdateAsync(ContactToSave);
-                    MessagingCenter.Send(this, "ReloadDetailContact");
-                    await CoreMethods.PopPageModel(false, false);
                 }
                   
             } else
