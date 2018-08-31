@@ -1,4 +1,5 @@
-﻿using Mindurry.DataModels;
+﻿using FreshMvvm;
+using Mindurry.DataModels;
 using Mindurry.Models;
 using Mindurry.ViewModels.Base;
 using System;
@@ -29,8 +30,8 @@ namespace Mindurry.ViewModels
             set
             {
                 if (value != null)
-                     
-                    App.RequestApartmentTabbedPage(value.Apartment);
+
+                    RequestTabbedPage(value.Apartment);
                 selectedApartment = null;
             }
         }
@@ -245,6 +246,24 @@ namespace Mindurry.ViewModels
         void ChangeArrowThree()
         {
             IsThirdListVisible = !IsThirdListVisible;
+        }
+
+        private async void RequestTabbedPage(Models.DataObjects.Apartment apt)
+        {
+            var title = apt.ResidenceName + " > " + "Appartement " + apt.LotNumberArchitect.ToString();
+
+            var page_1 = FreshPageModelResolver.ResolvePageModel<ApartmentDetailInfoPageModel>(apt);
+            page_1.Title = "Informations";
+
+            var page_2 = FreshPageModelResolver.ResolvePageModel<ApartmentPlansPageModel>(apt);
+            page_2.Title = "Plans";
+
+            var tabbed_page = new TabbedPage() { Title = title };
+
+            tabbed_page.Children.Add(page_1);
+            tabbed_page.Children.Add(page_2);
+
+            await this.CurrentPage.Navigation.PushAsync(tabbed_page);
         }
     }
 }

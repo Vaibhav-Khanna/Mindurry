@@ -17,9 +17,6 @@ namespace Mindurry
 {
 	public partial class App : Application
 	{
-        public static event EventHandler<Residence> TabbedPageRequested;
-
-        public static event EventHandler<Models.DataObjects.Apartment> TabbedPageApartmentRequested;
 
        // public static IAuthenticate AuthenticationProvider { get; private set; }
 
@@ -77,14 +74,5 @@ namespace Mindurry
 		{
 			// Handle when your app resumes
 		}
-
-        public static void RequestTabbedPage(Residence data)
-        {
-            TabbedPageRequested?.Invoke(null, data);
-        }
-        public static void RequestApartmentTabbedPage(Models.DataObjects.Apartment data)
-        {
-            TabbedPageApartmentRequested?.Invoke(null, data);
-        }
     }
 }

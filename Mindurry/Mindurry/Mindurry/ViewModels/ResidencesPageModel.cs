@@ -35,16 +35,9 @@ namespace Mindurry.ViewModels
             {
                 if (value != null)
                 {
-                    // var tabbedNavigation = new FreshTabbedNavigationContainer("secondNavPage");
-                    // tabbedNavigation.AddTab<ViewModels.ApartmentDetailInfoPageModel>("Informations", null, value.Apartment);
-                    // tabbedNavigation.AddTab<ViewModels.ApartmentPlansPageModel>("Plans", null, value.Apartment);
-
-                     // CoreMethods.PushNewNavigationServiceModal(tabbedNavigation);
-                    App.RequestApartmentTabbedPage(value.Apartment);
+                    RequestTabbedPage(value.Apartment);
                 }
                
-
-                //CoreMethods.PushPageModel<ResidencesDetailsAppartementsInfosPageModel>(value);
                 selectedItem = null;
             }
         }
@@ -342,5 +335,22 @@ namespace Mindurry.ViewModels
             FilteredResidences = new ObservableCollection<ResidenceModel>(filter_list);
         }
 
+        private async void RequestTabbedPage(Models.DataObjects.Apartment apt)
+        {
+            var title = apt.ResidenceName + " > " + "Appartement " + apt.LotNumberArchitect.ToString();
+
+            var page_1 = FreshPageModelResolver.ResolvePageModel<ApartmentDetailInfoPageModel>(apt);
+            page_1.Title = "Informations";
+
+            var page_2 = FreshPageModelResolver.ResolvePageModel<ApartmentPlansPageModel>(apt);
+            page_2.Title = "Plans";
+
+            var tabbed_page = new TabbedPage() { Title = title };
+
+            tabbed_page.Children.Add(page_1);
+            tabbed_page.Children.Add(page_2);
+
+            await this.CurrentPage.Navigation.PushAsync(tabbed_page);
+        }
     }
 }

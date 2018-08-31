@@ -1059,13 +1059,16 @@ namespace Mindurry.ViewModels
             }
             TabThreeLevel--;
         });
+
         public Command LinkToPropertyCommand => new Command<ClientPropertyModel>(async (obj) =>
         {
             if (obj.PropertyType == ResidenceType.Appartement.ToString().ToLower())
             {
                 Models.DataObjects.Apartment apt = await StoreManager.ApartmentStore.GetItemAsync(obj.PropertyId);
-                App.RequestApartmentTabbedPage(apt);
+
+                RequestTabbedPage(apt);
             }
+
             if (obj.PropertyType == ResidenceType.Garage.ToString().ToLower())
             {
                 Garage item = await StoreManager.GarageStore.GetItemAsync(obj.PropertyId);
@@ -1095,5 +1098,24 @@ namespace Mindurry.ViewModels
             }
 
         });
+
+        private async void RequestTabbedPage(Models.DataObjects.Apartment apt)
+        {
+            var title = apt.ResidenceName + " > " + "Appartement " + apt.LotNumberArchitect.ToString();
+
+            var page_1 = FreshPageModelResolver.ResolvePageModel<ApartmentDetailInfoPageModel>(apt);
+            page_1.Title = "Informations";
+
+            var page_2 = FreshPageModelResolver.ResolvePageModel<ApartmentPlansPageModel>(apt);
+            page_2.Title = "Plans";
+
+            var tabbed_page = new TabbedPage() { Title = title };
+
+            tabbed_page.Children.Add(page_1);
+            tabbed_page.Children.Add(page_2);        
+
+            await this.CurrentPage.Navigation.PushAsync(tabbed_page);
+        }
+
     }
 }

@@ -26,10 +26,6 @@ namespace Mindurry.Pages
             {
                 context.MenuItemSelected += Context_MenuItemSelected;
             }
-
-            App.TabbedPageRequested += App_TabbedPageRequested;
-
-            App.TabbedPageApartmentRequested += App_TabbedPageApartmentRequested;
             
             #region Setup
 
@@ -51,35 +47,7 @@ namespace Mindurry.Pages
             Detail = Detail_navigation;
         }
 
-        private void App_TabbedPageRequested(object sender, Residence e)
-        {
-            var tabbedNavigation = new FreshTabbedNavigationContainer(e.Name);
-            //var tabbedNavigation = new FreshTabbedFONavigationContainer(e.Name);
-            //this causes weird 
-            //tabbedNavigation.Title = e;
-            tabbedNavigation.AddTab<ViewModels.ResidenceDetailInfoPageModel>("Informations", null, e.Id);
-            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsApartmentsPageModel>("Appartements", null,e.Id);
-            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsGaragesPageModel>("Garages", null,e.Id);
-            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsCellarsPageModel>("Caves", null,e.Id);
-            tabbedNavigation.AddTab<ViewModels.ResidencesDetailsAcquereursPageModel>("Acquéreurs", null,e.Id);
-            Detail_navigation = null;
-            Detail = tabbedNavigation;
-        }
-
-        private void App_TabbedPageApartmentRequested(object sender, Mindurry.Models.DataObjects.Apartment e)
-        {
-            var title = e.ResidenceName + " > " + "Appartement " + e.LotNumberArchitect.ToString();
-            var tabbedNavigation = new FreshTabbedNavigationContainer(title);
-            //this causes weird 
-            //tabbedNavigation.Title = e;
-           
-            tabbedNavigation.AddTab<ViewModels.ApartmentDetailInfoPageModel>("Informations", null,e);
-            tabbedNavigation.AddTab<ViewModels.ApartmentPlansPageModel>("Plans", null,e);
-            
-            Detail_navigation = null;
-            Detail = tabbedNavigation;
-        }
-
+       
         void Context_MenuItemSelected(MasterMenuEventArgs args)
         {
             if (Detail_navigation != null)
