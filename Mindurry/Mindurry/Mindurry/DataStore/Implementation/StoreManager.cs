@@ -292,6 +292,9 @@ namespace Mindurry.DataStore.Implementation
                 await InitializeAsync();
 
 
+
+
+
             var taskList = new List<Task<bool>>();
 
             taskList.Add(ApartmentStore.SyncAsync());
@@ -313,24 +316,21 @@ namespace Mindurry.DataStore.Implementation
 
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await ToastService.ShowSyncing("The app is currently syncing... This might take a few minutes");
+                Acr.UserDialogs.UserDialogs.Instance.Toast(new Acr.UserDialogs.ToastConfig("The app is currently syncing... This might take a few minutes")
+                {
+                    BackgroundColor = System.Drawing.Color.Maroon,
+                    MessageTextColor = System.Drawing.Color.White,
+                    Position = Acr.UserDialogs.ToastPosition.Top,
+                    Duration = new TimeSpan(0, 0, 10)
+                });               
             });
-
-
-            //TODO add all other stores
 
             var successes = await Task.WhenAll(taskList).ConfigureAwait(false);
 
-             if (syncUserSpecific)
+            if (syncUserSpecific)
             {
-                // add stores that are user specific data
-                // await DocumentStore.OfflineUploadSync(); 
-            }
-
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                await ToastService.Hide();
-            });
+                // add stores that are user specific data                       
+            } 
 
             return successes.Any(x => !x); //if any were a failure.
 
