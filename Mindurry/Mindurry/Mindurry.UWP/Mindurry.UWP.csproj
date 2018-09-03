@@ -21,8 +21,8 @@
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>A6487A69AEBC07C5EB3392DFB140987F768E400E</PackageCertificateThumbprint>
+    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>7DB8E6F10406A44635BD695936EF1393D24FA91D</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -178,6 +178,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Identity.Client">
       <Version>1.1.2-preview0008</Version>
+    </PackageReference>
+    <PackageReference Include="Rg.Plugins.Popup">
+      <Version>1.1.4.168</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Essentials">
       <Version>0.9.1-preview</Version>

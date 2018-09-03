@@ -55,8 +55,10 @@ namespace Mindurry.UWP
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                Xamarin.Forms.Forms.Init(e);
+                Rg.Plugins.Popup.Popup.Init();
 
+                Xamarin.Forms.Forms.Init(e);        
+               
                 var titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
                 // Set the color of the Title Bar content
