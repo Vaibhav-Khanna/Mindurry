@@ -313,7 +313,7 @@ namespace Mindurry.DataStore.Implementation
 
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await ToastService.ShowSyncing("The app is currently syncing... This might take a few minutes");
+               // await ToastService.Show("The app is currently syncing... This might take a few minutes");
             });
 
 
@@ -321,15 +321,17 @@ namespace Mindurry.DataStore.Implementation
 
             var successes = await Task.WhenAll(taskList).ConfigureAwait(false);
 
-             if (syncUserSpecific)
+            if (syncUserSpecific)
             {
                 // add stores that are user specific data
-                // await DocumentStore.OfflineUploadSync(); 
+                // await DocumentStore.OfflineUploadSync();
+
+               
             }
 
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await ToastService.Hide();
+                //await ToastService.Hide();
             });
 
             return successes.Any(x => !x); //if any were a failure.
