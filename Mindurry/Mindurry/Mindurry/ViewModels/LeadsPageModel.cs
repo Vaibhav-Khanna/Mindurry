@@ -1,4 +1,5 @@
-﻿using Mindurry.DataModels;
+﻿using Microsoft.WindowsAzure.MobileServices;
+using Mindurry.DataModels;
 using Mindurry.Models;
 using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
@@ -17,6 +18,7 @@ namespace Mindurry.ViewModels
     {
         private IEnumerable<Contact> _contacts;
         public ObservableCollection<ContactsListModel> Contacts { get; set; }
+        private List<ContactsListModel> contactsLoadData;
         private string Filter = null;
         private string SortName = null;
         private bool SortBy = false;
@@ -36,8 +38,10 @@ namespace Mindurry.ViewModels
             set
             {
                 if (value != null)
+
                     CoreMethods.PushPageModel<LeadDetailPageModel>(value.ContactId);
-                selectedItem = null;
+                    SubUnsubDetail();
+                    selectedItem = null;
             }
         }
 
@@ -116,20 +120,37 @@ namespace Mindurry.ViewModels
 
         public async Task LoadData()
         {
-            Contacts = new ObservableCollection<ContactsListModel>();
+            //if subscription for refreshing list
+            MessagingCenter.Unsubscribe<LeadDetailPageModel>(this, "ReloadCollection");
+
+            _contacts = null;
+            Contacts = null;
+            long totalCount;
+
             if (!filterType.Any() && !filterRes.Any())
             {
                 _contacts = await StoreManager.ContactStore.GetItemsByTypeAsync("Lead", Filter);
+                totalCount = (_contacts as IQueryResultEnumerable<Contact>).TotalCount;
             }
             else
             {
-                _contacts = await StoreManager.ContactStore.GetItemsByTypeFilterAsync("Lead", filterType, filterRes);
+                var result = await StoreManager.ContactStore.GetItemsByTypeFilterAsync("Lead", filterType, filterRes);
+                _contacts = result.results;
+                totalCount = (long)result.count;
             }
 
             if ((_contacts != null) || (!_contacts.Any()))
             {
+                var list = _contacts.ToList();
+                list.AddRange(_contacts);
 
-                
+                //  var totalCount = (_contacts as IQueryResultEnumerable<Contact>).TotalCount;
+                if (Convert.ToInt32(totalCount) - list.Count() > 0)
+                    IsLoadMore = true;
+                else
+                    IsLoadMore = false;
+
+                Contacts = new ObservableCollection<ContactsListModel>();
                 var indexValue = 0; //to calculate Index to the backgroundColor
                 foreach (var item in _contacts)
                 {
@@ -150,16 +171,16 @@ namespace Mindurry.ViewModels
                         string residenceFormat = "";
                         string typeFormat = "";
 
-                        if (customFields.Contains("residence="))
+                        if (customFields.Contains("Résidences="))
                         {
 
                             string[] substrings = customFields.Split(',');
                             for (int i = 0; i < substrings.Length; i++)
                             {
-                                if (substrings[i].Contains("residence="))
+                                if (substrings[i].Contains("Résidences="))
                                 {
                                     // string[]  = substring.Split('residence=');
-                                    string[] stringSeparators = new string[] { "residence=" };
+                                    string[] stringSeparators = new string[] { "Résidences=" };
                                     string[] result;
                                     result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
                                     ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
@@ -171,16 +192,16 @@ namespace Mindurry.ViewModels
                         }
                         contactListItem.Residence = residenceFormat;
                         //Type d'appartement
-                        if (customFields.Contains("type="))
+                        if (customFields.Contains("Type d'appartement="))
                         {
 
                             string[] substrings = customFields.Split(',');
                             for (int i = 0; i < substrings.Length; i++)
                             {
-                                if (substrings[i].Contains("type="))
+                                if (substrings[i].Contains("Type d'appartement="))
                                 {
                                    
-                                    string[] stringSeparators = new string[] { "type=" };
+                                    string[] stringSeparators = new string[] { "Type d'appartement=" };
                                     string[] result;
                                     result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
                                     ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
@@ -213,12 +234,145 @@ namespace Mindurry.ViewModels
                     indexValue++; //increment to change Backgroung Color
                     Contacts.Add(contactListItem);
                 }
+                contactsLoadData = Contacts.ToList();
             }
             else
             {
                 await CoreMethods.DisplayAlert("Erreur", "Impossibilité de charger les données", "OK");
             }
         }
+
+        bool Loadingmore = false;
+        //Fetch more contacts for infinite scroll
+
+        public Command LoadMore => new Command(async () =>
+        {
+            if (!IsLoadMore || Loadingmore)
+                return;
+
+            Loadingmore = true;
+            long totalCount;
+
+            if (!filterType.Any() && !filterRes.Any())
+            {
+                _contacts = await StoreManager.ContactStore.GetNextItemsByTypeAsync(Contacts.Count,"Lead", Filter);
+                totalCount = (_contacts as IQueryResultEnumerable<Contact>).TotalCount;
+            }
+            else
+            {
+                var result = await StoreManager.ContactStore.GetNextItemsByTypeFilterAsync(Contacts.Count,"Lead", filterType, filterRes);
+                _contacts = result.results;
+                totalCount = (long)result.count;
+            }
+
+            if ((_contacts != null) || (!_contacts.Any()))
+            {
+                
+                Contacts = new ObservableCollection<ContactsListModel>();
+                var indexValue = 0; //to calculate Index to the backgroundColor
+                foreach (var item in _contacts)
+                {
+
+                    var contactListItem = new ContactsListModel();
+                    contactListItem.Index = indexValue; // to alternante background Color
+                    contactListItem.ContactId = item.Id;
+                    contactListItem.Date = item.ContactCreatedAt;
+                    contactListItem.Name = item.Firstname + " " + item.Lastname;
+                    contactListItem.Email = item.Email;
+                    contactListItem.Telephone = item.Phone;
+                    contactListItem.Commercial = item.UserFirstname + " " + item.UserLastname;
+
+                    string customFields = item.CustomFields;
+
+                    if (!String.IsNullOrEmpty(customFields))
+                    {
+                        string residenceFormat = "";
+                        string typeFormat = "";
+
+                        if (customFields.Contains("Résidences="))
+                        {
+
+                            string[] substrings = customFields.Split(',');
+                            for (int i = 0; i < substrings.Length; i++)
+                            {
+                                if (substrings[i].Contains("Résidences="))
+                                {
+                                    // string[]  = substring.Split('residence=');
+                                    string[] stringSeparators = new string[] { "Résidences=" };
+                                    string[] result;
+                                    result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
+                                    ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                    residenceFormat += residence.Value + "-";
+
+                                }
+                            }
+
+                        }
+                        contactListItem.Residence = residenceFormat;
+                        //Type d'appartement
+                        if (customFields.Contains("Type="))
+                        {
+
+                            string[] substrings = customFields.Split(',');
+                            for (int i = 0; i < substrings.Length; i++)
+                            {
+                                if (substrings[i].Contains("Type="))
+                                {
+
+                                    string[] stringSeparators = new string[] { "Type=" };
+                                    string[] result;
+                                    result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
+                                    ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                    typeFormat += residence.Value + "-";
+
+                                }
+                            }
+
+                        }
+                        contactListItem.Type = typeFormat;
+                    }
+
+                    /*
+                    // Custom Field Residence
+                    var residences = (await StoreManager.ContactCustomFieldStore.GetItemsByContactCustomFieldSourceName("Résidences", item.Id)).ToList();
+                   
+                    if ((residences != null) && (residences.Any()))
+                    {
+                        string residenceFormat="";
+                        for (var i = 0; i < residences.Count(); i++)
+                        {
+                            residenceFormat += residences[i].ContactCustomFieldSourceEntryValue; 
+                            if ((residences.Count() > 1) && (i < residences.Count() - 1))
+                            {
+                                residenceFormat += ", ";
+                            }
+                        }
+                        contactListItem.Residence = residenceFormat;                     
+                    } */
+                    indexValue++; //increment to change Backgroung Color
+                    Contacts.Add(contactListItem);
+                }
+
+                var list = contactsLoadData;
+                list.AddRange(Contacts);
+
+                
+                if (Convert.ToInt32(totalCount) - list.Count() > 0)
+                {
+                    IsLoadMore = true;
+                }
+                else
+                {
+                    IsLoadMore = false;
+                }
+            }
+            else
+            {
+                IsLoadMore = false;
+                await CoreMethods.DisplayAlert("Erreur", "Impossibilité de charger les données", "OK");
+            }
+            Loadingmore = false;
+        });
 
         public Command SelectResidenceCommand => new Command<CheckBoxItem>(async (obj) =>
         {
@@ -328,7 +482,15 @@ namespace Mindurry.ViewModels
             IsSecondListVisible = !IsSecondListVisible;
         }
 
-       
+        void SubUnsubDetail()
+        {
+            MessagingCenter.Subscribe<LeadDetailPageModel>(this, "ReloadCollection", async (obj) =>
+            {
+                await LoadData();
+
+                //    MessagingCenter.Unsubscribe<LeadDetailPageModel>(this, "ReloadCollection");
+            });
+        }
 
     }
 }

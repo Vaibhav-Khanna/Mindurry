@@ -3,6 +3,7 @@ using FreshMvvm;
 using Mindurry.DataModels;
 using Mindurry.Models;
 using Mindurry.Models.DataObjects;
+using Mindurry.Pages;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -77,7 +78,7 @@ namespace Mindurry.ViewModels
             }
             set
             {
-                if (value != selectedType && value != null)
+                if (value != selectedType && value != null && selectedType != null)
                 {
                     SaveTypeContact(value.Id);
                 }
@@ -148,6 +149,21 @@ namespace Mindurry.ViewModels
             {
                 await LoadReminders();
             }
+        }
+
+        protected  override void ViewIsDisappearing(object sender, EventArgs e)
+        {
+            base.ViewIsDisappearing(sender, e);
+            PageWasPopped += LeadDetailPageModel_PageWasPopped;
+            if ((PreviousPageModel is ContactsPageModel))
+            {
+
+            }
+        }
+
+        private void LeadDetailPageModel_PageWasPopped(object sender, EventArgs e)
+        {
+            MessagingCenter.Send(this, "ReloadCollection");
         }
 
         private async Task LoadContact()
@@ -332,51 +348,86 @@ namespace Mindurry.ViewModels
         
         private async void SaveCollect(string collectId)
         {
-            Contact.CollectSourceId = collectId;
-            await StoreManager.ContactStore.UpdateAsync(Contact);
+            if (Contact.CollectSourceId != collectId)
+            {
+                using (UserDialogs.Instance.Loading("Sauvegarde de la source", null, null, true))
+                {
+                    Contact.CollectSourceId = collectId;
+                    await StoreManager.ContactStore.UpdateAsync(Contact);
+                }
+            }
         }
 
         private async void SaveQualification(string qualification)
         {
-            Contact.Qualification = qualification;
-            await StoreManager.ContactStore.UpdateAsync(Contact);
+            if (Contact.Qualification != qualification)
+            {
+                using (UserDialogs.Instance.Loading("Sauvegarde du type de contact", null, null, true))
+                {
+                    Contact.Qualification = qualification;
+                    await StoreManager.ContactStore.UpdateAsync(Contact);
+                }
+            }
+            
         }
         private async void SaveTypeContact(string contactCustomEntryId)
-        {
-           List<ContactCustomField> customField = (await StoreManager.ContactCustomFieldStore.GetItemsByContactCustomFieldSourceNameAndContactIdAsync("Type", ContactId)).ToList();
+        { 
+            List<ContactCustomField> customField = (await StoreManager.ContactCustomFieldStore.GetItemsByContactCustomFieldSourceNameAndContactIdAsync("Type", ContactId)).ToList();
             if (customField != null && customField.Any())
             {
-                customField[0].ContactCustomFieldSourceEntryId = contactCustomEntryId;
-                await StoreManager.ContactCustomFieldStore.UpdateAsync(customField[0]);
-            }
+                using (UserDialogs.Instance.Loading("Sauvegarde du type", null, null, true))
+                {
+                    customField[0].ContactCustomFieldSourceEntryId = contactCustomEntryId;
+                    await StoreManager.ContactCustomFieldStore.UpdateAsync(customField[0]);
+                }
+            }          
         }
 
         public Command SaveChecksCommand => new Command<CheckBoxItem>(async (obj) =>
         {
-            if (obj.IsChecked)
+            using (UserDialogs.Instance.Loading("Sauvegarde/Suppression d'un intérêt(", null, null, true))
             {
-                var ccfSourceEntry = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(obj.Id);
-
-                ContactCustomField customToInsert = new ContactCustomField
+                if (obj.IsChecked)
                 {
-                    ContactId = ContactId,
-                    ContactCustomFieldSourceEntryId = obj.Id,
-                    ContactCustomFieldSourceId = ccfSourceEntry.ContactCustomFieldSourceId
-                };
+                    var ccfSourceEntry = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(obj.Id);
 
-                await StoreManager.ContactCustomFieldStore.InsertAsync(customToInsert);
+                    ContactCustomField customToInsert = new ContactCustomField
+                    {
+                        ContactId = ContactId,
+                        ContactCustomFieldSourceEntryId = obj.Id,
+                        ContactCustomFieldSourceId = ccfSourceEntry.ContactCustomFieldSourceId
+                    };
+
+                    await StoreManager.ContactCustomFieldStore.InsertAsync(customToInsert);
+                }
+                else
+                {
+                    var customField = await StoreManager.ContactCustomFieldStore.GetItemByContactIdAndSourceEntryIdAsync(ContactId, obj.Id);
+                    await StoreManager.ContactCustomFieldStore.RemoveAsync(customField);
+                }
+                //Calcul contact customField field
+                var customs = await StoreManager.ContactStore.RewriteCustomFields(ContactId);
+                Contact.CustomFields = customs;
+
+                //Update contact
+                bool isInsertedContact = await StoreManager.ContactStore.UpdateAsync(Contact);
             }
-            else
-            {
-                var customField = await StoreManager.ContactCustomFieldStore.GetItemByContactIdAndSourceEntryIdAsync(ContactId, obj.Id);
-                await StoreManager.ContactCustomFieldStore.RemoveAsync(customField);
-            }
+
+          //  MessagingCenter.Send(this, "ReloadCollection");
         });
 
         private async void SaveCommercial(string commercialId)
         {
-            Contact.UserId = commercialId;
-            await StoreManager.ContactStore.UpdateAsync(Contact);
+            if (commercialId != Contact.UserId)
+            {
+                using (UserDialogs.Instance.Loading("Sauvegarde du commercial", null, null, true))
+                {
+                    Contact.UserId = commercialId;
+                    await StoreManager.ContactStore.UpdateAsync(Contact);
+                    //     MessagingCenter.Send(this, "ReloadCollection");
+                }
+            }
+                
         }
 
         void ChangeArrowOne()
