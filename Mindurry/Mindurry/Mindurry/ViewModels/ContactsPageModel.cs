@@ -18,6 +18,7 @@ namespace Mindurry.ViewModels
     {
         private IEnumerable<Contact> _contacts;
         public ObservableCollection<ContactsListModel> Contacts { get; set; }
+        private List<ContactsListModel> contactsLoadData;
         private string Filter = null;
         private string SortName = null;
         private bool SortBy = false;
@@ -38,6 +39,7 @@ namespace Mindurry.ViewModels
             {
                 if (value != null)
                     CoreMethods.PushPageModel<LeadDetailPageModel>(value.ContactId);
+                    SubUnsubDetail();
                 selectedItem = null;
             }
         }
@@ -70,17 +72,18 @@ namespace Mindurry.ViewModels
         public async override void Init(object initData)
         {
             base.Init(initData);
+
             await LoadData();
 
             await LoadFilter();
            
-
             ShowFilterCommand = new Command(ShowFilter);
             //CloseFilterCommand = new Command(CloseFilter);
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
             AddCommand = new Command(AddContact);
         }
+
         public async Task LoadFilter()
         {
             // Chargement filtre 
@@ -119,16 +122,33 @@ namespace Mindurry.ViewModels
 
         public async Task LoadData()
         {
+            //if subscription for refreshing list
+            MessagingCenter.Unsubscribe<LeadDetailPageModel>(this, "ReloadCollection");
+
+            _contacts = null;
+            Contacts = null;
+            long totalCount;
             if (!filterCommercial.Any() && !filterRes.Any()) {
                 _contacts = await StoreManager.ContactStore.GetItemsByTypeAsync("Contact", Filter);
+                 totalCount = (_contacts as IQueryResultEnumerable<Contact>).TotalCount;
             }
             else {
-                _contacts = await StoreManager.ContactStore.GetItemsByCommercialFilterAsync("Contact",filterCommercial, filterRes);
+               var  result = await StoreManager.ContactStore.GetItemsByCommercialFilterAsync("Contact",filterCommercial, filterRes);
+                _contacts = result.results;
+                totalCount = (long)result.count;
             }
 
                 if ((_contacts != null) || (!_contacts.Any()))
             {
-                
+                var list = _contacts.ToList();
+                list.AddRange(_contacts);
+
+              //  var totalCount = (_contacts as IQueryResultEnumerable<Contact>).TotalCount;
+                if (Convert.ToInt32(totalCount) - list.Count() > 0)
+                    IsLoadMore = true;
+                else
+                    IsLoadMore = false;
+
                 Contacts = new ObservableCollection<ContactsListModel>();
                 var indexValue = 0; //to calculate Index to the backgroundColor
                 foreach (var item in _contacts)
@@ -154,16 +174,16 @@ namespace Mindurry.ViewModels
                     if (!String.IsNullOrEmpty(customFields))
                     {
                             string residenceFormat = "";
-                            if (customFields.Contains("residence="))
+                            if (customFields.Contains("Résidences="))
                             {
 
                                 string[] substrings = customFields.Split(',');
                                 for (int i = 0; i < substrings.Length; i++)
                                 {
-                                    if (substrings[i].Contains("residence="))
+                                    if (substrings[i].Contains("Résidences="))
                                     {
                                         // string[]  = substring.Split('residence=');
-                                        string[] stringSeparators = new string[] { "residence=" };
+                                        string[] stringSeparators = new string[] { "Résidences=" };
                                         string[] result;
                                         result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
                                         ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
@@ -176,32 +196,117 @@ namespace Mindurry.ViewModels
                         contactListItem.Residence = residenceFormat;
                     }
                     
-                    /*
-                    // Custom Field Residence
-                    var residences = (await StoreManager.ContactCustomFieldStore.GetItemsByContactCustomFieldSourceName("Résidences", item.Id)).ToList();
-                   
-                    if ((residences != null) && (residences.Any()))
-                    {
-                        string residenceFormat="";
-                        for (var i = 0; i < residences.Count(); i++)
-                        {
-                            residenceFormat += residences[i].ContactCustomFieldSourceEntryValue; 
-                            if ((residences.Count() > 1) && (i < residences.Count() - 1))
-                            {
-                                residenceFormat += ", ";
-                            }
-                        }
-                        contactListItem.Residence = residenceFormat;                     
-                    } */
                     indexValue++; //increment to change Backgroung Color
                     Contacts.Add(contactListItem);                  
                 }
+                contactsLoadData = Contacts.ToList();
             }
             else
             {
                 await CoreMethods.DisplayAlert("Erreur", "Impossibilité de charger les données", "OK");
             }
         }
+
+        bool Loadingmore = false;
+        //Fetch more contacts for infinite scroll
+        public Command LoadMore => new Command(async () =>
+        {
+            if (!IsLoadMore || Loadingmore)
+                return;
+
+            Loadingmore = true;
+            long totalCount;
+
+            if (!filterCommercial.Any() && !filterRes.Any())
+            {
+                _contacts = await StoreManager.ContactStore.GetNextItemsByTypeAsync(Contacts.Count,"Contact", Filter);
+                totalCount = (_contacts as IQueryResultEnumerable<Contact>).TotalCount;
+            }
+            else
+            {
+                var result = await StoreManager.ContactStore.GetNextItemsByCommercialFilterAsync(Contacts.Count,"Contact", filterCommercial, filterRes);
+                _contacts = result.results;
+                totalCount = (long)result.count;
+
+            }
+
+            if ((_contacts != null) || (!_contacts.Any()))
+            {
+                
+
+                Contacts = new ObservableCollection<ContactsListModel>();
+                var indexValue = 0; //to calculate Index to the backgroundColor
+                foreach (var item in _contacts)
+                {
+
+                    var contactListItem = new ContactsListModel();
+                    contactListItem.Index = indexValue; // to alternante background Color
+                    contactListItem.ContactId = item.Id;
+                    contactListItem.Date = item.ContactCreatedAt;
+                    contactListItem.Name = item.Firstname + " " + item.Lastname;
+                    contactListItem.Email = item.Email;
+                    contactListItem.Telephone = item.Phone;
+                    contactListItem.Commercial = item.UserFirstname + " " + item.UserLastname;
+
+                    // Calcul de dernier relance (derniere Note sur le contact)
+                    DateTimeOffset? lastNoteDate = await StoreManager.NoteStore.GetLastNoteDateAsync(item.Id);
+                    contactListItem.LastRelaunch = lastNoteDate;
+                    // Calcul du prochain Reminder (Note avec ReminderAt de set)
+                    DateTimeOffset? nextReminderDate = await StoreManager.NoteStore.GetNextNoteReminderDateAsync(item.Id);
+                    contactListItem.NextRelaunch = nextReminderDate;
+                    string customFields = item.CustomFields;
+
+                    if (!String.IsNullOrEmpty(customFields))
+                    {
+                        string residenceFormat = "";
+                        if (customFields.Contains("Résidences="))
+                        {
+
+                            string[] substrings = customFields.Split(',');
+                            for (int i = 0; i < substrings.Length; i++)
+                            {
+                                if (substrings[i].Contains("Résidences="))
+                                {
+                                    // string[]  = substring.Split('residence=');
+                                    string[] stringSeparators = new string[] { "Résidences=" };
+                                    string[] result;
+                                    result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
+                                    ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                    residenceFormat += residence.Value + "-";
+
+                                }
+                            }
+
+                        }
+                        contactListItem.Residence = residenceFormat;
+                    }
+
+                    indexValue++; //increment to change Backgroung Color
+                    Contacts.Add(contactListItem);
+                }
+
+                var list = contactsLoadData;
+                list.AddRange(Contacts);
+
+                 
+                if (Convert.ToInt32(totalCount) - list.Count() > 0)
+                {
+                    IsLoadMore = true;
+                }
+                else
+                {
+                    IsLoadMore = false;
+                }
+            }
+            else
+            {
+                IsLoadMore = false;
+                await CoreMethods.DisplayAlert("Erreur", "Impossibilité de charger les données", "OK");
+            }
+            Loadingmore = false;
+        });
+
+
 
         public Command SelectResidenceCommand => new Command<CheckBoxItem>(async (obj) =>
         {
@@ -319,11 +424,19 @@ namespace Mindurry.ViewModels
         void SubUnsub()
         {
             MessagingCenter.Subscribe<NewContactPageModel>(this, "ReloadCollection", async (obj) =>
-            {
-                      
-                      await LoadData();
+            {     
+                await LoadData();
 
                 MessagingCenter.Unsubscribe<NewContactPageModel>(this, "ReloadCollection");
+            });
+        }
+        void SubUnsubDetail()
+        {
+            MessagingCenter.Subscribe<LeadDetailPageModel>(this, "ReloadCollection", async (obj) =>
+            {
+                await LoadData();
+
+            //    MessagingCenter.Unsubscribe<LeadDetailPageModel>(this, "ReloadCollection");
             });
         }
     }

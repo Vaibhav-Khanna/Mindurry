@@ -313,19 +313,22 @@ namespace Mindurry.DataStore.Implementation
             taskList.Add(UserStore.SyncAsync());
             taskList.Add(UserFavoriteStore.SyncAsync());
 
-
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                Acr.UserDialogs.UserDialogs.Instance.Toast(new Acr.UserDialogs.ToastConfig("The app is currently syncing... This might take a few minutes")
+            bool[] successes;
+           
+                using (Acr.UserDialogs.UserDialogs.Instance.Toast(new Acr.UserDialogs.ToastConfig("The app is currently syncing... This might take a few minutes")
                 {
                     BackgroundColor = System.Drawing.Color.Maroon,
                     MessageTextColor = System.Drawing.Color.White,
                     Position = Acr.UserDialogs.ToastPosition.Top,
-                    Duration = new TimeSpan(0, 0, 10)
-                });               
-            });
+                   // Duration = new TimeSpan(0, 0, 10)
+                }))
+                {
+                     successes = await Task.WhenAll(taskList).ConfigureAwait(false);
 
-            var successes = await Task.WhenAll(taskList).ConfigureAwait(false);
+                }           
+           
+
+           
 
             if (syncUserSpecific)
             {
