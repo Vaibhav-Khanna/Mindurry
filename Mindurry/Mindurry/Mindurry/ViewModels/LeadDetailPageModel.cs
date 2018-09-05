@@ -27,7 +27,7 @@ namespace Mindurry.ViewModels
         private ObservableCollection<Note> OriginalNotes;
         public Boolean ButtonShowMoreIsDisplayed { get; set; }
         public Boolean ButtonShowLessIsDisplayed { get; set; } = false;
-        public DateTimeOffset? DateReminder { get; set; }
+        public DateTimeOffset? DateReminder { get; set; } = null;
         public DateTimeOffset MinDate { get; set; } = new DateTimeOffset(DateTimeOffset.Now.Date);
         public string TextNote { get; set; }
 
@@ -146,7 +146,6 @@ namespace Mindurry.ViewModels
             {
                 SequenceTitle = "Envoyer une séquence";
             }
-
 
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
@@ -362,11 +361,8 @@ namespace Mindurry.ViewModels
         {
             if (Contact.CollectSourceId != collectId)
             {
-                using (UserDialogs.Instance.Loading("Sauvegarde de la source", null, null, true))
-                {
                     Contact.CollectSourceId = collectId;
-                    await StoreManager.ContactStore.UpdateAsync(Contact);
-                }
+                    await StoreManager.ContactStore.UpdateAsync(Contact);                 
             }
         }
 
@@ -374,11 +370,11 @@ namespace Mindurry.ViewModels
         {
             if (Contact.Qualification != qualification)
             {
-                using (UserDialogs.Instance.Loading("Sauvegarde du type de contact", null, null, true))
-                {
+                //using (UserDialogs.Instance.Loading("Sauvegarde du type de contact", null, null, true))
+                //{
                     Contact.Qualification = qualification;
                     await StoreManager.ContactStore.UpdateAsync(Contact);
-                }
+                //}
             }
             
         }
@@ -387,11 +383,11 @@ namespace Mindurry.ViewModels
             List<ContactCustomField> customField = (await StoreManager.ContactCustomFieldStore.GetItemsByContactCustomFieldSourceNameAndContactIdAsync("Type", ContactId)).ToList();
             if (customField != null && customField.Any())
             {
-                using (UserDialogs.Instance.Loading("Sauvegarde du type", null, null, true))
-                {
+               // using (UserDialogs.Instance.Loading("Sauvegarde du type", null, null, true))
+               // {
                     customField[0].ContactCustomFieldSourceEntryId = contactCustomEntryId;
                     await StoreManager.ContactCustomFieldStore.UpdateAsync(customField[0]);
-                }
+               // }
             }          
         }
 
@@ -404,8 +400,8 @@ namespace Mindurry.ViewModels
 
         public Command SaveChecksCommand => new Command<CheckBoxItem>(async (obj) =>
         {
-            using (UserDialogs.Instance.Loading("Sauvegarde/Suppression d'un intérêt(", null, null, true))
-            {
+            //using (UserDialogs.Instance.Loading("Sauvegarde/Suppression d'un intérêt", null, null, true))
+           // {
                 if (obj.IsChecked)
                 {
                     var ccfSourceEntry = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(obj.Id);
@@ -430,7 +426,7 @@ namespace Mindurry.ViewModels
 
                 //Update contact
                 bool isInsertedContact = await StoreManager.ContactStore.UpdateAsync(Contact);
-            }
+            //}
 
           //  MessagingCenter.Send(this, "ReloadCollection");
         });
@@ -439,12 +435,12 @@ namespace Mindurry.ViewModels
         {
             if (commercialId != Contact.UserId)
             {
-                using (UserDialogs.Instance.Loading("Sauvegarde du commercial", null, null, true))
-                {
+                //using (UserDialogs.Instance.Loading("Sauvegarde du commercial", null, null, true))
+               // {
                     Contact.UserId = commercialId;
                     await StoreManager.ContactStore.UpdateAsync(Contact);
                     //     MessagingCenter.Send(this, "ReloadCollection");
-                }
+               // }
             }
                 
         }
@@ -497,13 +493,16 @@ namespace Mindurry.ViewModels
                 var result = await CoreMethods.DisplayAlert("Classer", "Etes vous sur de vouloir terminer ce rappel ?", "Oui", "Non");
                 if (result)
                 {
-                    RemindersCheckBoxListModel  reminderObj= obj as RemindersCheckBoxListModel;
-                    Note _note = reminderObj.Reminder;
-                    _note.DoneAt = DateTimeOffset.Now;
-                    _note.ActivityStreamDate = DateTimeOffset.Now;
-                    await StoreManager.NoteStore.UpdateAsync(_note);
-                    await LoadReminders();
-                    await LoadNotes();
+                    using (UserDialogs.Instance.Loading("Terminaison du rappel", null, null, true))
+                    {
+                        RemindersCheckBoxListModel reminderObj = obj as RemindersCheckBoxListModel;
+                        Note _note = reminderObj.Reminder;
+                        _note.DoneAt = DateTimeOffset.Now;
+                        _note.ActivityStreamDate = DateTimeOffset.Now;
+                        await StoreManager.NoteStore.UpdateAsync(_note);
+                        await LoadReminders();
+                        await LoadNotes();
+                    }
                 }
                 else { obj.IsChecked = false; }
             }

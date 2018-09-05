@@ -32,7 +32,7 @@ namespace Mindurry.ViewModels
         private ObservableCollection<Note> OriginalNotes;
         public Boolean ButtonShowMoreIsDisplayed { get; set; }
         public Boolean ButtonShowLessIsDisplayed { get; set; } = false;
-        public DateTimeOffset? DateReminder { get; set; }
+        public DateTimeOffset? DateReminder { get; set; } = null;
         public DateTimeOffset MinDate { get; set; } = new DateTimeOffset(DateTimeOffset.Now.Date);
         public string TextNote { get; set; }
 
