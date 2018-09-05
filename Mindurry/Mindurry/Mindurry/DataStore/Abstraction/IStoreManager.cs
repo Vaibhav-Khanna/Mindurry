@@ -13,7 +13,8 @@ namespace Mindurry.DataStore.Abstraction
         IContactCustomFieldSourceEntryStore ContactCustomFieldSourceEntryStore { get; }
         IContactCustomFieldSourceStore ContactCustomFieldSourceStore { get; }
         IContactCustomFieldStore ContactCustomFieldStore { get; }
-        IContactStore ContactStore { get; }       
+        IContactStore ContactStore { get; }
+        IContactSequenceStore ContactSequenceStore { get; }
         ICollectSourceStore CollectSourceStore { get; }
         IDocumentMindurryStore DocumentMindurryStore { get; }
         IGarageStore GarageStore { get; }

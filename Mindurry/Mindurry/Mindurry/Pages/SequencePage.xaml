@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:effect="clr-namespace:Mindurry.Effects"
+             xmlns:webview="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions"
+             x:Class="Mindurry.Pages.SequencePage">
+    <ContentPage.Content>
+        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <StackLayout Margin="50,0" Orientation="Horizontal" VerticalOptions="Start" BackgroundColor="Transparent"  HorizontalOptions="StartAndExpand" HeightRequest="50">
+                <Label Text="&#xE72B;" FontFamily="Segoe MDL2 Assets" FontSize="15" VerticalOptions="CenterAndExpand" >
+                    <Label.Effects>
+                        <effect:AccentColorEffect/>
+                    </Label.Effects>
+                </Label>
+                <Label Text="Revenir" FontSize="15" VerticalOptions="CenterAndExpand"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CloseCommand}" />
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+            <webview:FormsWebView x:Name="internetContent" ContentType="Internet"
+                      Source="{Binding Url}" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -33,6 +33,8 @@ namespace Mindurry.ViewModels
 
         private string ContactId;
 
+        private string contactType;
+
         public string Title { get; set; }
 
         public List<CollectSource> CollectSources { get; set; }
@@ -192,6 +194,8 @@ namespace Mindurry.ViewModels
                 ContactId = (string)initData;
                 Contact = await StoreManager.ContactStore.GetItemAsync(ContactId);
 
+                contactType = Contact.Qualification;
+
                 if (!String.IsNullOrEmpty(Contact.PlaceId) && !String.IsNullOrEmpty(Contact.PlaceLocation)) { 
                     //affichage adresse  (si adresse saisie)
                     var itemPl = new PlaceLocation
@@ -206,7 +210,7 @@ namespace Mindurry.ViewModels
 
             if (initData != null)
             {
-                Title = "Modification Contact";
+                Title = "Modification du " + contactType;
             }
             else
             {
@@ -280,7 +284,13 @@ namespace Mindurry.ViewModels
                 }
                 else // Update if existed contact
                 {
-                    using (UserDialogs.Instance.Loading("Modification du contact", null, null, true))
+                    var updateTitle = "Modification du " + contactType.ToLower();
+                    if (contactType == Qualification.Lead.ToString())
+                    {
+                        ContactToSave.Qualification = Qualification.Lead.ToString();
+                    }
+                    
+                    using (UserDialogs.Instance.Loading(updateTitle, null, null, true))
                     { //update ContactCustom if necessary
                         if (_customF.ContactCustomFieldSourceEntryId != CustomFieldsSelected.Id)
                         {
