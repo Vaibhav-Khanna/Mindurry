@@ -106,6 +106,7 @@ namespace Mindurry.ViewModels
                 selectedCommercial = value;
             }
         }
+        public string SequenceTitle { get; set; }
 
         public bool IsFirstListVisible { get; set; } = true;
         public bool IsSecondListVisible { get; set; } = true;
@@ -134,6 +135,17 @@ namespace Mindurry.ViewModels
             await LoadNotes();
 
             await LoadFilters();
+
+            //Sequence
+            var result = await StoreManager.ContactSequenceStore.IsContactSequence(ContactId);
+            if (result)
+            {
+                SequenceTitle = "Voir une séquence en cours";
+            }
+            else
+            {
+                SequenceTitle = "Envoyer une séquence";
+            }
 
 
             ArrowOneCommand = new Command(ChangeArrowOne);
@@ -383,6 +395,13 @@ namespace Mindurry.ViewModels
             }          
         }
 
+        public Command SequenceCommand => new Command(async () => { 
+
+           await CoreMethods.PushPageModel<SequencePageModel>(ContactId, true);
+
+        });
+        
+
         public Command SaveChecksCommand => new Command<CheckBoxItem>(async (obj) =>
         {
             using (UserDialogs.Instance.Loading("Sauvegarde/Suppression d'un intérêt(", null, null, true))
@@ -510,38 +529,45 @@ namespace Mindurry.ViewModels
 
         public Command AddNoteCommand => new Command(async (obj) =>
         {
-            Note NoteToInsert = new Note()
-            {
-                ContactId = ContactId,
-                UserId = Contact.UserId,
-                Kind = "note",
-                Content = TextNote
-            };
-            string title;
-            if (DateReminder != null)
-            {
+            if (!string.IsNullOrEmpty(TextNote)) {
+                Note NoteToInsert = new Note()
+                {
+                    ContactId = ContactId,
+                    UserId = Contact.UserId,
+                    Kind = "note",
+                    Content = TextNote
+                };
+                string title;
 
-                NoteToInsert.ReminderAt = DateReminder;
-                title = "Ajout du rappel";
-            }
-            else
-            {
-                title = "Ajout de la note";
-            }
-            using (UserDialogs.Instance.Loading(title, null, null, true))
-            {
-                await StoreManager.NoteStore.InsertAsync(NoteToInsert);
-                TextNote = null;
                 if (DateReminder != null)
                 {
-                    await LoadReminders();
-                    DateReminder = null;
+
+                    NoteToInsert.ReminderAt = DateReminder;
+                    title = "Ajout du rappel";
                 }
                 else
                 {
-                    await LoadNotes();
+                    title = "Ajout de la note";
                 }
+                using (UserDialogs.Instance.Loading(title, null, null, true))
+                {
+                    await StoreManager.NoteStore.InsertAsync(NoteToInsert);
+                    TextNote = null;
+                    if (DateReminder != null)
+                    {
+                        await LoadReminders();
+                        DateReminder = null;
+                    }
+                    else
+                    {
+                        await LoadNotes();
+                    }
 
+                }
+            }
+            else
+            {
+                await CoreMethods.DisplayAlert("Erreur", "Il faut remplir un détail pour pouvoir enregistrer", "Ok");
             }
         });
 

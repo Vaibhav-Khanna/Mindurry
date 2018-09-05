@@ -46,6 +46,9 @@ namespace Mindurry.DataStore.Implementation
         IContactCustomFieldStore contactCustomFieldStore;
         public IContactCustomFieldStore ContactCustomFieldStore => contactCustomFieldStore ?? (contactCustomFieldStore = FreshIOC.Container.Resolve<IContactCustomFieldStore>());
 
+        IContactSequenceStore contactSequenceStore;
+        public IContactSequenceStore ContactSequenceStore => contactSequenceStore ?? (contactSequenceStore = FreshIOC.Container.Resolve<IContactSequenceStore>());
+
         IContactStore contactStore;
         public IContactStore ContactStore => contactStore ?? (contactStore = FreshIOC.Container.Resolve<IContactStore>());
 
@@ -60,7 +63,6 @@ namespace Mindurry.DataStore.Implementation
 
         INoteStore noteStore;
         public INoteStore NoteStore => noteStore ?? (noteStore = FreshIOC.Container.Resolve<INoteStore>());
-
 
         IResidenceStore residenceStore;
         public IResidenceStore ResidenceStore => residenceStore ?? (residenceStore = FreshIOC.Container.Resolve<IResidenceStore>());
@@ -219,6 +221,7 @@ namespace Mindurry.DataStore.Implementation
             await ContactCustomFieldSourceStore.DropTable();
             await ContactCustomFieldStore.DropTable();
             await ContactStore.DropTable();
+            await ContactSequenceStore.DropTable();
             await DocumentMindurryStore.DropTable();
             await GarageStore.DropTable();
             await GardenStore.DropTable();
@@ -268,6 +271,7 @@ namespace Mindurry.DataStore.Implementation
                 store.DefineTable<ContactCustomFieldSource>();
                 store.DefineTable<ContactCustomFieldSourceEntry>();
                 store.DefineTable<Contact>();
+                store.DefineTable<ContactSequence>();
                 store.DefineTable<DocumentMindurry>();
                 store.DefineTable<Garage>();
                 store.DefineTable<Garden>();
@@ -304,6 +308,7 @@ namespace Mindurry.DataStore.Implementation
             taskList.Add(ContactCustomFieldSourceStore.SyncAsync());
             taskList.Add(ContactCustomFieldStore.SyncAsync());
             taskList.Add(ContactStore.SyncAsync());
+            taskList.Add(ContactSequenceStore.SyncAsync());
             taskList.Add(DocumentMindurryStore.SyncAsync());
             taskList.Add(GarageStore.SyncAsync());
             taskList.Add(GardenStore.SyncAsync());
@@ -313,19 +318,30 @@ namespace Mindurry.DataStore.Implementation
             taskList.Add(UserStore.SyncAsync());
             taskList.Add(UserFavoriteStore.SyncAsync());
 
-            bool[] successes;
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                Acr.UserDialogs.UserDialogs.Instance.Toast(new Acr.UserDialogs.ToastConfig("The app is currently syncing... This might take a few minutes")
+                {
+                    BackgroundColor = System.Drawing.Color.Maroon,
+                    MessageTextColor = System.Drawing.Color.White,
+                    Position = Acr.UserDialogs.ToastPosition.Top,
+                    Duration = new TimeSpan(0, 0, 10),
+
+                });
+
+            });
            
-                using (Acr.UserDialogs.UserDialogs.Instance.Toast(new Acr.UserDialogs.ToastConfig("The app is currently syncing... This might take a few minutes")
+               /* using (Acr.UserDialogs.UserDialogs.Instance.Toast(new Acr.UserDialogs.ToastConfig("The app is currently syncing... This might take a few minutes")
                 {
                     BackgroundColor = System.Drawing.Color.Maroon,
                     MessageTextColor = System.Drawing.Color.White,
                     Position = Acr.UserDialogs.ToastPosition.Top,
                    // Duration = new TimeSpan(0, 0, 10)
                 }))
-                {
-                     successes = await Task.WhenAll(taskList).ConfigureAwait(false);
+                { */
+             var  successes = await Task.WhenAll(taskList).ConfigureAwait(false);
 
-                }           
+             //   }           
            
 
            
