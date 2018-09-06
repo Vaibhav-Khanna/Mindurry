@@ -46,6 +46,9 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("contactLastname")]
         public string ContactLastname { get; set; }
 
+        [JsonProperty("contactQualification")]
+        public string ContactQualification { get; set; }
+
         [JsonIgnore]
         public string Contactname
         {

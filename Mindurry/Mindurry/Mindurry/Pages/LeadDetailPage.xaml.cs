@@ -8,7 +8,7 @@ using Xamarin.Forms.Xaml;
 
 namespace Mindurry.Pages
 {
-	public partial class LeadDetailPage : ContentPage
+    public partial class LeadDetailPage : ContentPage
 	{
 		public LeadDetailPage ()
 		{

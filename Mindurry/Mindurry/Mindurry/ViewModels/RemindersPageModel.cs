@@ -61,10 +61,25 @@ namespace Mindurry.ViewModels
             IEnumerable<Note> remindersDone;
             // ToDO
             remindersToDo = await StoreManager.NoteStore.GetRemindersToDoAsync();
-            RemindersToDoCount = remindersToDo.Count();
+            if (remindersToDo != null)
+            {
+                RemindersToDoCount = remindersToDo.Count();
+            }
+            else
+            {
+                RemindersToDoCount = 0;
+            }
             // Done
             remindersDone = await StoreManager.NoteStore.GetRemindersDoneAsync();
-            RemindersDoneCount = remindersDone.Count();
+            if (remindersDone != null)
+            {
+                RemindersDoneCount = remindersDone.Count();
+            }
+            else
+            {
+                RemindersDoneCount = 0;
+            }
+
             if (action == "ToDo")
             {
                 reminders = remindersToDo;
@@ -94,6 +109,19 @@ namespace Mindurry.ViewModels
                 }
             }
         }
+        public Command GoToContactCommand => new Command(async (obj) =>
+        {
+
+            RemindersCheckBoxListModel reminderObj = obj as RemindersCheckBoxListModel;
+            if (reminderObj.Reminder.ContactQualification == Qualification.Client.ToString())
+            {
+                await CoreMethods.PushPageModel<ClientsDetailsInfoPageModel>(reminderObj.Reminder.ContactId);
+            }
+            else
+            {
+                await CoreMethods.PushPageModel<LeadDetailPageModel>(reminderObj.Reminder.ContactId);
+            }
+        });
         public Command RemindersToDoCommand => new Command( async() =>
         {
             IsToDo = true;
@@ -120,7 +148,7 @@ namespace Mindurry.ViewModels
                         _note.DoneAt = DateTimeOffset.Now;
                         _note.ActivityStreamDate = DateTimeOffset.Now;
                         await StoreManager.NoteStore.UpdateAsync(_note);
-                        await LoadReminders("Done");
+                        await LoadReminders("ToDo");
                     }
                 }
                 else { obj.IsChecked = false; }

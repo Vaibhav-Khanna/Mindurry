@@ -20,7 +20,6 @@
         <Grid RowSpacing="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -28,30 +27,29 @@
                     <SearchBar Placeholder="Rechercher" WidthRequest="300" HorizontalOptions="Start"/>
                 </StackLayout> -->
             
-                <StackLayout Spacing="20" Padding="40,20" Grid.Row="1" Orientation="Horizontal">
-                <StackLayout.Resources>
-                    <ResourceDictionary>
-                        <Style TargetType="Label">
-                            <Setter Property="FontSize" Value="22"/>
-                        </Style>
-                    </ResourceDictionary>
-                </StackLayout.Resources>
-                <Label Text="{Binding RemindersToDoCount, StringFormat='A Faire ({0})'}" HorizontalOptions="Start" TextColor="{Binding BGToDoColor}" IsEnabled="{Binding IsToDo,Converter={StaticResource NegateBoolConverter}}">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding RemindersToDoCommand}"/>
-                    </Label.GestureRecognizers>
-                </Label>
+                <StackLayout Spacing="20" Padding="40,20" Grid.Row="0" Orientation="Horizontal">
+                    <StackLayout.Resources>
+                        <ResourceDictionary>
+                            <Style TargetType="Label">
+                                <Setter Property="FontSize" Value="22"/>
+                            </Style>
+                        </ResourceDictionary>
+                    </StackLayout.Resources>
+                    <Label Text="{Binding RemindersToDoCount, StringFormat='A Faire ({0})'}" HorizontalOptions="Start" TextColor="{Binding BGToDoColor}" IsEnabled="{Binding IsToDo,Converter={StaticResource NegateBoolConverter}}">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RemindersToDoCommand}"/>
+                        </Label.GestureRecognizers>
+                    </Label>
                 <Label Text="{Binding RemindersDoneCount, StringFormat='Terminer ({0})'}" HorizontalOptions="Start" TextColor="{Binding BGDoneColor}" IsEnabled="{Binding IsToDo}">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding RemindersDoneCommand}"/>
                     </Label.GestureRecognizers>
                 </Label>
-                    
             </StackLayout>
 
 
-            <Grid Grid.Row="2">
-                <Grid.RowDefinitions>
+           
+             <!--   <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="1"/>
                     <RowDefinition Height="Auto"/>
@@ -76,9 +74,45 @@
                 <Label Text="Contact" Grid.Column="2" Grid.Row="0" />
                 <Label Text="Rappel" Grid.Column="3" Grid.Row="0" />
 
-                <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E4E2DF" Grid.Row="1" Grid.ColumnSpan="6"/>
-                <repeater:RepeaterView ItemsSource="{Binding Reminders}" Spacing="15" Margin="0,15,0,0" x:Name="RemindersList" SelectedItemCommand="{Binding SelectReminderCommand}" Grid.Row="2" Grid.ColumnSpan="6">
-                    <repeater:RepeaterView.ItemTemplate>
+                <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E4E2DF" Grid.Row="1" Grid.ColumnSpan="6"/> -->
+            <repeater:RepeaterView ItemsSource="{Binding Reminders}" Spacing="15" Margin="30,15,30,0" x:Name="RemindersList" SelectedItemCommand="{Binding SelectReminderCommand}" Grid.Row="1">
+                <repeater:RepeaterView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid  x:Name="Item" BackgroundColor="#F9F9F9" Margin="0,0,0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="50"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid HorizontalOptions="Center" VerticalOptions="Center"  Margin="5,5,0,5" Grid.Column="0">
+                                    <win:CheckBox  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                </Grid>
+
+                                <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="1">
+
+                                    <Label   Text="{Binding Reminder.Content}" FontSize="14" VerticalOptions="Center"/>
+                                    <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Spacing="5">
+                                        <Grid HorizontalOptions="Start" BackgroundColor="{Binding Reminder.ReminderAt, Converter={StaticResource DateToBgColorConverter}}"  Padding="10,0" VerticalOptions="Center" Margin="0,4,0,0" WidthRequest="80">
+                                            <Label HorizontalOptions="Center" Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}"  FontSize="12" TextColor="{Binding  Reminder.ReminderAt, Converter={StaticResource DateToReminderTextColorConverter}}" VerticalOptions="End"/>
+                                        </Grid>
+                                        <Label Text="{Binding Reminder.Contactname}"  VerticalOptions="Center" Style="{StaticResource BlueLabel}" FontSize="12">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding GoToContactCommand}"/>
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                    </StackLayout>
+                                </StackLayout>
+                                <Button Text="" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center" Command="{Binding UpdateReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
+                                <Button Text="" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center" Command="{Binding DeleteReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </repeater:RepeaterView.ItemTemplate>
+
+                <!--<repeater:RepeaterView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
                                 <Grid  x:Name="Item">
@@ -126,9 +160,8 @@
                                 </Grid>
                             </ViewCell>
                         </DataTemplate>
-                    </repeater:RepeaterView.ItemTemplate>
-                </repeater:RepeaterView>
-            </Grid>
+                    </repeater:RepeaterView.ItemTemplate> -->
+            </repeater:RepeaterView>
         </Grid> 
     </ContentPage.Content>
 </ContentPage>

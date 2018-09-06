@@ -27,7 +27,7 @@ namespace Mindurry.ViewModels
         private ObservableCollection<Note> OriginalNotes;
         public Boolean ButtonShowMoreIsDisplayed { get; set; }
         public Boolean ButtonShowLessIsDisplayed { get; set; } = false;
-        public DateTimeOffset? DateReminder { get; set; } = null;
+        public DateTimeOffset? DateReminder { get; set; }
         public DateTimeOffset MinDate { get; set; } = new DateTimeOffset(DateTimeOffset.Now.Date);
         public string TextNote { get; set; }
 
@@ -121,7 +121,9 @@ namespace Mindurry.ViewModels
         public ICommand ClearAllResidencesCommand { get; set; }
         public ICommand ClearAllTypesCommand { get; set; }
 
-       
+        public bool IsReminders { get; set; }
+        public bool IsSequence { get; set; }
+        public bool IsTextNote { get; set; }
 
         public async override void Init(object initData)
         {
@@ -140,12 +142,22 @@ namespace Mindurry.ViewModels
             var result = await StoreManager.ContactSequenceStore.IsContactSequence(ContactId);
             if (result)
             {
-                SequenceTitle = "Voir une séquence en cours";
+                IsSequence = true;
+                
             }
             else
             {
-                SequenceTitle = "Envoyer une séquence";
+                IsSequence = false;
             }
+            if (string.IsNullOrEmpty(TextNote)) {
+                IsTextNote = true; 
+            }
+            else {
+                IsTextNote = false;
+            }
+
+            //Reminder
+            DateReminder = null;
 
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
@@ -197,6 +209,11 @@ namespace Mindurry.ViewModels
                     };
                     Reminders.Add(reminderList);
                 }
+                IsReminders = true;
+            }
+            else
+            {
+                IsReminders = false;
             }
         }
 
@@ -529,7 +546,8 @@ namespace Mindurry.ViewModels
         public Command AddNoteCommand => new Command(async (obj) =>
         {
             if (!string.IsNullOrEmpty(TextNote)) {
-                Note NoteToInsert = new Note()
+
+                 Note NoteToInsert = new Note()
                 {
                     ContactId = ContactId,
                     UserId = Contact.UserId,

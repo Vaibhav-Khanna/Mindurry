@@ -295,10 +295,6 @@ namespace Mindurry.DataStore.Implementation
             if (!IsInitialized)
                 await InitializeAsync();
 
-
-
-
-
             var taskList = new List<Task<bool>>();
 
             taskList.Add(ApartmentStore.SyncAsync());
@@ -320,7 +316,7 @@ namespace Mindurry.DataStore.Implementation
 
             Device.BeginInvokeOnMainThread(async () =>
             {
-                Acr.UserDialogs.UserDialogs.Instance.Toast(new Acr.UserDialogs.ToastConfig("The app is currently syncing... This might take a few minutes")
+                Acr.UserDialogs.UserDialogs.Instance.Toast(new Acr.UserDialogs.ToastConfig("L'application est en cours de synchronisation...Ceci pourrait prendre quelques minutes")
                 {
                     BackgroundColor = System.Drawing.Color.Maroon,
                     MessageTextColor = System.Drawing.Color.White,

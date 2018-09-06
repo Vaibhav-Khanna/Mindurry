@@ -6,14 +6,16 @@
              xmlns:converter="clr-namespace:Mindurry.Converters"
              xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
-			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
+			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows"
+             Title="{Binding Contact.Name}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:DateToBgColorConverter x:Key="DateToBgColorConverter"/>
             <converter:DateToReminderTextColorConverter x:Key="DateToReminderTextColorConverter"/>
             <converter:LeadRepeaterTemplateBoolConverter x:Key="LeadRepeaterTemplateBoolConverter"/>
             <converter:NegateLeadRepeaterTemplateBoolConverter x:Key="NegateLeadRepeaterTemplateBoolConverter"/>
-           </ResourceDictionary>
+            <converter:NegateBoolConverter x:Key="NegateBoolConverter" />
+        </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.Content>
@@ -24,90 +26,94 @@
             </Grid.ColumnDefinitions>
             <ScrollView>
                 <StackLayout>
-                    <StackLayout Padding="30" Orientation="Vertical">
+                    <StackLayout Padding="30,0,30,0" Orientation="Vertical">
                         <StackLayout.Resources>
                             <ResourceDictionary>
                                 <Style TargetType="StackLayout">
                                     <Setter Property="Orientation" Value="Horizontal"/>
-                                    <Setter Property="Spacing" Value="20"/>
+                                    <Setter Property="Spacing" Value="4"/>
                                 </Style>
                             </ResourceDictionary>
                         </StackLayout.Resources>
-                        <StackLayout HorizontalOptions="FillAndExpand">
-                            <Label Text="{Binding Contact.Name}" FontSize="28" VerticalOptions="Center"/>
-                            <Grid VerticalOptions="Center">
-                                <Grid HeightRequest="20" HorizontalOptions="Fill" BackgroundColor="{StaticResource BlueAccent}" VerticalOptions="Center"/>
-                                <Label Text="{Binding Contact.Qualification}" TextColor="White" FontSize="14" VerticalOptions="Center" Margin="10,0"/>
-                            </Grid>
-                            <Button Text="Modifier" Command="{Binding UpdateContactCommand}" FontSize="18" TextColor="White" BackgroundColor="#9B9B9B" WidthRequest="120" HeightRequest="40" BorderWidth="0" HorizontalOptions="EndAndExpand" Margin="0,20,0,20"/>
-
+                        <StackLayout HorizontalOptions="FillAndExpand" Margin="0">
+                           
+                            <StackLayout Orientation="Vertical" HorizontalOptions="Start">
+                                <Label Text="{Binding Contact.PlaceLocation}" />
+                                <Label Text="{Binding Contact.Email}" Style="{StaticResource BlueLabel}"/>
+                                <Label Text="{Binding Contact.Phone}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand" Spacing="20">
+                                <Button Text="Arrêter la séquence" IsVisible="{Binding IsSequence}" FontSize="16" TextColor="White" BackgroundColor="Red" WidthRequest="220" HeightRequest="30" BorderWidth="0" HorizontalOptions="EndAndExpand" />
+                                <StackLayout IsVisible="{Binding IsSequence, Converter={StaticResource NegateBoolConverter}}" Orientation="Horizontal" Spacing="5" HorizontalOptions="EndAndExpand" VerticalOptions="Start">
+                                    <Label Text="&#xE724;" FontFamily="Segoe MDL2 Assets" FontSize="16" TextColor="{StaticResource GrayPanelEdge}" Margin="0,0,0,0" HorizontalOptions="EndAndExpand" />
+                                    <Label Text="Séquence" FontSize="16" Margin="0,0,0,0" HorizontalOptions="EndAndExpand" VerticalOptions="Center" />
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding SequenceCommand}"/>
+                                    </StackLayout.GestureRecognizers>
+                                </StackLayout>
+                                <StackLayout Orientation="Horizontal" Spacing="5"  HorizontalOptions="EndAndExpand" VerticalOptions="Start">
+                                    <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="16" TextColor="{StaticResource GrayPanelEdge}" Margin="0,0,0,0" HorizontalOptions="EndAndExpand" />
+                                    <Label Text="Modifier" FontSize="16" Margin="0,0,0,0" HorizontalOptions="EndAndExpand" VerticalOptions="Center" />
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding UpdateContactCommand}"/>
+                                    </StackLayout.GestureRecognizers>
+                                </StackLayout>
+                            </StackLayout>
                         </StackLayout>
 
-                        <StackLayout>
-                            <Label Text="" Style="{StaticResource TextIconStyle}"/>
-                            <Label Text="{Binding Contact.Email}" Style="{StaticResource BlueLabel}"/>
-                        </StackLayout>
-
-                        <StackLayout>
-                            <Label Text="" Style="{StaticResource TextIconStyle}"/>
-                            <Label Text="{Binding Contact.Phone}" Style="{StaticResource BlueLabel}"/>
-                        </StackLayout>
-
-                        <StackLayout>
-                            <Label Text="" Style="{StaticResource TextIconStyle}"/>
-                            <Label Text="{Binding Contact.PlaceLocation}" Style="{StaticResource BlueLabel}"/>
-                        </StackLayout>
                     </StackLayout>
-
-                    <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
-
-                    <StackLayout Orientation="Vertical" Padding="30">
-                        <Label Text="Rappel à venir" FontSize="18" Margin="0,0,0,10"/>
-                        <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
-                        <repeater:RepeaterView ItemsSource="{Binding Reminders}" x:Name="RemindersList" SelectedItemCommand="{Binding SelectReminderCommand}">
+                    <StackLayout Orientation="Vertical" Padding="30" Spacing="10">
+                      
+                        <StackLayout IsVisible="{Binding IsReminders}">
+                            <Label Text="Rappel à venir" FontSize="18" Margin="0,0,0,0"/>
+                            <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="#CCCCCC"/>
+                            <repeater:RepeaterView ItemsSource="{Binding Reminders}" x:Name="RemindersList" SelectedItemCommand="{Binding SelectReminderCommand}">
                             <repeater:RepeaterView.ItemTemplate>
                                 <DataTemplate>
-                                    <ViewCell>
-                                        <Grid  x:Name="Item">
+                                        <ViewCell>
+                                            <Grid  x:Name="Item" BackgroundColor="#F9F9F9" Margin="0,0,0,5">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="50"/>
                                                 <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="100"/>
-                                                <ColumnDefinition Width="100"/>
+                                                <ColumnDefinition Width="50"/>
+                                                <ColumnDefinition Width="50"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Grid HorizontalOptions="End" Margin="0,30">
-                                                <win:CheckBox  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
-                                                <!--  Checked="HandleCheck"-->
-                                            </Grid>
+                                            <Grid HorizontalOptions="Center" VerticalOptions="Center"  Margin="5,5,0,5" Grid.Column="0">
+                                                    <win:CheckBox  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                             </Grid>
 
-                                            <StackLayout Orientation="Horizontal" Padding="0,30" Grid.Column="1" Spacing="10">
-                                                <Grid BackgroundColor="{Binding Reminder.ReminderAt, Converter={StaticResource DateToBgColorConverter}}" Padding="10,5" WidthRequest="200" HorizontalOptions="Start">
-                                                    <StackLayout Orientation="Horizontal">
-                                                        <Label Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}"  FontSize="18" TextColor="{Binding  Reminder.ReminderAt, Converter={StaticResource DateToReminderTextColorConverter}}"/>
-                                                    </StackLayout>
-                                                </Grid>
-                                                <Label Text="{Binding Reminder.Content}" FontSize="20"/>
-                                            </StackLayout>
-                                            <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center" Command="{Binding UpdateReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
-                                            <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center" Command="{Binding DeleteReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
+                                                <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="1">
+                                                    
+                                                    <Label   Text="{Binding Reminder.Content}" FontSize="14" VerticalOptions="Center"/>
+                                                    <Grid HorizontalOptions="Start" BackgroundColor="{Binding Reminder.ReminderAt, Converter={StaticResource DateToBgColorConverter}}"  Padding="10,0" VerticalOptions="Center" Margin="0,4,0,0" WidthRequest="80">
+                                                        <Label HorizontalOptions="Center" Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}"  FontSize="12" TextColor="{Binding  Reminder.ReminderAt, Converter={StaticResource DateToReminderTextColorConverter}}" VerticalOptions="End"/>
+                                                    </Grid>
+                                                </StackLayout>
+                                                <Button Text="" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center" Command="{Binding UpdateReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
+                                                <Button Text="" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center" Command="{Binding DeleteReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
                                         </Grid>
                                     </ViewCell>
                                 </DataTemplate>
                             </repeater:RepeaterView.ItemTemplate>
                         </repeater:RepeaterView>
-
-                        <Button Text="{Binding SequenceTitle}" FontSize="18" TextColor="White" BackgroundColor="#9B9B9B" WidthRequest="250" HeightRequest="40" BorderWidth="0" HorizontalOptions="End" Command="{Binding SequenceCommand}"  Margin="0,20,0,20"/>
-                        <Label Text="Ajouter une note" FontSize="18" Margin="0,0,0,10"/>
-                        <Editor HorizontalOptions="Fill" HeightRequest="200" Margin="0,10" Text="{Binding TextNote, Mode=TwoWay}"/>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal"  Margin="0,20,0,0">
+                            <StackLayout Orientation="Horizontal" Spacing="5" WidthRequest="150" HorizontalOptions="Start">
+                                <Label Text="&#xE70F;" FontFamily="Segoe MDL2 Assets" FontSize="14" TextColor="{StaticResource GrayPanelEdge}"  Margin="0,0,0,0"/>
+                                <Label Text="Note" FontSize="14" Margin="0,0,0,0"/>
+                            </StackLayout>
+                        </StackLayout>
+                        <Editor HorizontalOptions="Fill" HeightRequest="100" Margin="0,0,0,5"  Text="{Binding TextNote, Mode=TwoWay}"/>
 
                         <StackLayout HorizontalOptions="End" Orientation="Horizontal">
-                            <Label Text="🛈" VerticalOptions="End" FontSize="24"/>
-                            <win:CalendarDatePicker Header="Ajouter un rappel" Width="300" Date="{Binding DateReminder, Mode=TwoWay}" MinDate="{Binding MinDate}" />
-                            <Button Text="Valider" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="200" HeightRequest="40" VerticalOptions="End" Command="{Binding AddNoteCommand}"/>
+                            <win:CalendarDatePicker Width="300"   Date="{Binding DateReminder, Mode=TwoWay}" MinDate="{Binding MinDate}" PlaceholderText="Ajouter un rappel" />
+                            <Button Text="Ajouter" IsEnabled="{Binding IsTextNote}" FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="120" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="End" Command="{Binding AddNoteCommand}"/>
+                            
                         </StackLayout>
-                        <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="{StaticResource GrayDivider}"/>
-                        <Label Text="Flux d'activité" FontSize="18" Margin="0,20,0,10"/>
+                       
+                        <Label Text="Flux d'activité" FontSize="18" Margin="0,20,0,0"/>
+                        <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="#CCCCCC"/>
 
 
                         <repeater:RepeaterView ItemsSource="{Binding Notes}" IsEnabled="False" >
@@ -154,11 +160,11 @@
                         <Button Text="Afficher plus d'historique" BackgroundColor="White" TextColor="{StaticResource BlueAccent}" 
                                 IsVisible="{Binding ButtonShowMoreIsDisplayed}" 
                                 BorderColor="{StaticResource BlueAccent}" BorderWidth="1" HorizontalOptions="Center"
-                                Command="{Binding DisplayMoreNotesCommand}"/>
+                                Command="{Binding DisplayMoreNotesCommand}" Margin="0,0,0,30"/>
                         <Button Text="Réduire l'historique" BackgroundColor="White" TextColor="{StaticResource BlueAccent}" 
                                 IsVisible="{Binding ButtonShowLessIsDisplayed}" 
                                 BorderColor="{StaticResource BlueAccent}" BorderWidth="1" HorizontalOptions="Center"
-                                Command="{Binding DisplayLessNotesCommand}"/>
+                                Command="{Binding DisplayLessNotesCommand}" Margin="0,0,0,30"/>
                     </StackLayout>
 
                 </StackLayout>
