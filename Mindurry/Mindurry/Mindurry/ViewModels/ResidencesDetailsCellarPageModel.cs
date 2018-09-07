@@ -21,7 +21,7 @@ namespace Mindurry.ViewModels
             Cellar = (CellarsListModel)initData;
             ReferencePlan = new DocumentMindurry();
 
-            IEnumerable<DocumentMindurry> docs = await StoreManager.DocumentMindurryStore.GetItemsByKindAndReferenceIdAsync(Cellar.Id, ReferenceKind.Cellar.ToString().ToLower());
+            IEnumerable<DocumentMindurry> docs = await StoreManager.DocumentMindurryStore.GetItemsByKindAndReferenceIdAsync(Cellar.Cellar.Id, ReferenceKind.Cellar.ToString().ToLower());
             if (docs != null && docs.Any())
             {
                 IEnumerable<DocumentMindurry> referencePlanList = docs.Where(x => x.DocumentType == DocumentType.Initial.ToString().ToLower());

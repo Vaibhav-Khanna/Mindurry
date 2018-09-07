@@ -44,7 +44,7 @@ namespace Mindurry.Models.DataObjects
 
     }
 
-    public enum CommandState { Libre, Optionné, Reservé, Vendu };
+    public enum CommandState { Libre, Optionné, Reservé, Signé, Problème };
 
     public enum Exposure { East, NortWest, North, NorthEast, South, SouthEast, SouthWest, West };
 

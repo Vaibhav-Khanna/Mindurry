@@ -12,6 +12,7 @@
         <ResourceDictionary>
             <converter:BoolToStringConverter x:Key="BoolToStringConverter"/>
             <converter:StatutToColorConverter x:Key="StatutToColorConverter"/>
+            <converter:CommandStateToBgColorConverter x:Key="CommandStateToBgColorConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     
@@ -114,7 +115,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <Grid Padding="30,10,0,10">
+                                <Grid Padding="30,10,0,10" BackgroundColor="{Binding Apartment.CommandState, Converter={StaticResource CommandStateToBgColorConverter}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="60"/>
                                         <ColumnDefinition Width="*"/>

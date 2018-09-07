@@ -952,10 +952,10 @@ namespace Mindurry.ViewModels
                         ResidenceName = item.ResidenceName,
                         PropertyType = ResidenceType.Appartement.ToString().ToLower(),
                         PropertyNumber = item.LotNumberArchitect,
-                        ApartmentType = item.Kind,
+                        ApartmentType = item.Kind, 
                         Area = item.Area.ToString(),
                         CommandState = item.CommandState,
-                        Price = item.Price,
+                        ItemPrice = item.Price,
                         Stage = item.Stage,
                         PropertyId = item.Id
                     };
@@ -976,7 +976,7 @@ namespace Mindurry.ViewModels
                         PropertyNumber = item.LotNumberArchitect,
                         Area = item.Area.ToString(),
                         CommandState = item.CommandState,
-                        Price = item.Price,
+                        ItemPrice = item.Price,
                         Stage = item.Stage,
                         PropertyId = item.Id
                     };
@@ -997,7 +997,7 @@ namespace Mindurry.ViewModels
                         PropertyNumber = item.LotNumberArchitect,
                         Area = item.Area.ToString(),
                         CommandState = item.CommandState,
-                        Price = item.Price,
+                        ItemPrice = item.Price,
                         Stage = item.Stage,
                         PropertyId = item.Id
                     };
@@ -1088,12 +1088,32 @@ namespace Mindurry.ViewModels
         {
             using (UserDialogs.Instance.Loading("Ajout du bien", null, null, true))
             {
+               
+                string CState = CommandState.Libre.ToString();
+                if (StatutSelected == "Option")
+                {
+                    CState = CommandState.Optionné.ToString();
+                }
+                if (StatutSelected == "Réservation")
+                {
+                    CState = CommandState.Reservé.ToString();
+                }
+                if (StatutSelected == "Signature")
+                {
+                    CState = CommandState.Signé.ToString();
+                }
+                if (StatutSelected == "Option")
+                {
+                    CState = CommandState.Optionné.ToString();
+                }
+
                 if (TypeBienSelected == "Appartement")
                 {
                     var apt = await StoreManager.ApartmentStore.GetItemByRefenceAsync(ReferenceSelected);
                     if (apt != null)
                     {
                         apt.ContactId = ContactId;
+                        apt.CommandState = CState;
                         await StoreManager.ApartmentStore.UpdateAsync(apt);
                     }
                 }
@@ -1103,6 +1123,7 @@ namespace Mindurry.ViewModels
                     if (cellar != null)
                     {
                         cellar.ContactId = ContactId;
+                        cellar.CommandState = CState;
                         await StoreManager.CellarStore.UpdateAsync(cellar);
                     }
                 }
@@ -1112,6 +1133,7 @@ namespace Mindurry.ViewModels
                     if (parking != null)
                     {
                         parking.ContactId = ContactId;
+                        parking.CommandState = CState;
                         await StoreManager.GarageStore.UpdateAsync(parking);
                     }
                 }
@@ -1134,12 +1156,7 @@ namespace Mindurry.ViewModels
                 Garage item = await StoreManager.GarageStore.GetItemAsync(obj.PropertyId);
                 var garagesListItem = new GaragesListModel
                 {
-                    LotNumberArchitect = item.LotNumberArchitect,
-                    Type = item.Type,
-                    Area = item.Area,
-                    Price = item.Price,
-                    Id = item.Id,
-                    ResidenceName = item.ResidenceName
+                    Garage = item
                 };
                 await CoreMethods.PushPageModel<ViewModels.ResidencesDetailsGaragePageModel>(garagesListItem);
             }
@@ -1148,11 +1165,7 @@ namespace Mindurry.ViewModels
                 Cellar item = await StoreManager.CellarStore.GetItemAsync(obj.PropertyId);
                 var cellarsListItem = new CellarsListModel
                 {
-                    LotNumberArchitect = item.LotNumberArchitect,
-                    Area = item.Area,
-                    Price = item.Price,
-                    Id = item.Id,
-                    ResidenceName = item.ResidenceName
+                    Cellar = item
                 };
                 await CoreMethods.PushPageModel<ViewModels.ResidencesDetailsCellarPageModel>(cellarsListItem);
             }

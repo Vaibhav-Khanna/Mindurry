@@ -7,6 +7,7 @@
         <ResourceDictionary>
             <converter:BoolToStringConverter x:Key="BoolToStringConverter"/>
             <converter:StatutToColorConverter x:Key="StatutToColorConverter"/>
+            <converter:CommandStateToBgColorConverter x:Key="CommandStateToBgColorConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -42,7 +43,7 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Padding="30,10,0,10">
+                            <Grid Padding="30,10,0,10" BackgroundColor="{Binding Cellar.CommandState, Converter={StaticResource CommandStateToBgColorConverter}}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
@@ -58,10 +59,10 @@
                                         </Style>
                                     </ResourceDictionary>
                                 </Grid.Resources>
-                                <Label Text="{Binding LotNumberArchitect}" Grid.Column="0"/>
-                                <Label Text="{Binding Area, StringFormat='{0} m2'}" Grid.Column="1"/>
+                                <Label Text="{Binding Cellar.LotNumberArchitect}" Grid.Column="0"/>
+                                <Label Text="{Binding Cellar.Area, StringFormat='{0} m2'}" Grid.Column="1"/>
                                 <Label Text="{Binding Client}" Grid.Column="2"/>
-                                <Label Text="{Binding Price, StringFormat='{0:#,##0}€'}" Grid.Column="3"/>
+                                <Label Text="{Binding Cellar.Price, StringFormat='{0:#,##0}€'}" Grid.Column="3"/>
                                 <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="4"/>
                             </Grid>
                         </ViewCell>

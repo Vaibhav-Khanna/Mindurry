@@ -14,7 +14,7 @@ namespace Mindurry.Models
         public string ApartmentType { get; set; }
         public string Area { get; set; }
         public string CommandState { get; set; }
-        public double? Price { get; set; }
+        public long? ItemPrice { get; set; }
         public string Stage { get; set; }
         public string PropertyId { get; set; }
 

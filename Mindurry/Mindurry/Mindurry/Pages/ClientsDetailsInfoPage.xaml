@@ -15,6 +15,7 @@
             <converter:LeadRepeaterTemplateBoolConverter x:Key="LeadRepeaterTemplateBoolConverter"/>
             <converter:NegateLeadRepeaterTemplateBoolConverter x:Key="NegateLeadRepeaterTemplateBoolConverter"/>
             <converter:NegateBoolConverter x:Key="NegateBoolConverter" />
+            <converter:StringNullOrEmptyBoolConverter x:Key="StringNullOrEmptyBoolConverter" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -107,7 +108,7 @@
                         <Editor  HorizontalOptions="Fill" HeightRequest="100" Margin="0,0,0,5"  Text="{Binding TextNote, Mode=TwoWay}"/>
 
                         <StackLayout HorizontalOptions="End" Orientation="Horizontal">
-                            <win:CalendarDatePicker BorderThickness="1" Width="300"   Date="{Binding DateReminder, Mode=TwoWay}" MinDate="{Binding MinDate}" PlaceholderText="Ajouter un rappel" />
+                            <win:CalendarDatePicker  Width="300"   Date="{Binding DateReminder, Mode=TwoWay}" MinDate="{Binding MinDate}" PlaceholderText="Ajouter un rappel" />
                             <Button Text="Ajouter" IsEnabled="{Binding IsTextNote}" FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="120" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="End" Command="{Binding AddNoteCommand}"/>
 
                         </StackLayout>
@@ -477,16 +478,16 @@
                                         <DataTemplate>
                                             <ViewCell>
                                                 <StackLayout Padding="10" BackgroundColor="#e9e9e9" x:Name="ItemProperty">
+
                                                     <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
-                                                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                                       <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                                                             <Label Text="{Binding ResidenceName, StringFormat='Résidence {0}'}" FontSize="22" >
                                                                 <Label.Effects>
                                                                     <effect:SemiBoldEffect/>
                                                                 </Label.Effects>
                                                             </Label>
-                                                            <!--  <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" HorizontalOptions="EndAndExpand" VerticalOptions="Center"/> -->
-                                                        </StackLayout>
-                                                        <StackLayout Orientation="Horizontal">
+                                                        </StackLayout> 
+                                                      <StackLayout Orientation="Horizontal">
                                                             <Label Text="{Binding PropertyType}" FontSize="16">
                                                                 <Label.Effects>
                                                                     <effect:SemiBoldEffect/>
@@ -498,24 +499,22 @@
                                                                 </Label.Effects>
                                                             </Label>
                                                         </StackLayout>
-                                                        <StackLayout Orientation="Horizontal">
-                                                            <Label Text="{Binding ApartmentType}" IsVisible="{Binding ApartmentType, Converter={StaticResource StringNullOrEmptyBoolConverter}}" FontSize="12"/>
+                                                        <StackLayout Orientation="Horizontal" >
+                                                            <Label Text="{Binding ApartmentType}"  FontSize="12" IsVisible="{Binding ApartmentType, Converter={StaticResource StringNullOrEmptyBoolConverter}}"/>
                                                             <Label Text=" - " FontSize="12" IsVisible="{Binding ApartmentType, Converter={StaticResource StringNullOrEmptyBoolConverter}}" />
                                                             <Label Text="{Binding Area, StringFormat='{0} m2'}" FontSize="12" IsVisible="{Binding Area, Converter={StaticResource StringNullOrEmptyBoolConverter}}" />
                                                         </StackLayout>
+
+                                                        
+                                                        <Label Text="{Binding CommandState, StringFormat='Statut: {0}'}" FontSize="12"/>
+                                                        <Label Text="{Binding ItemPrice, StringFormat='Prix: {0} €'}" FontSize="12"/>
+                                                        <Label Text="{Binding Stage, StringFormat='Stade: {0}'}" FontSize="12" IsVisible="{Binding Stage, Converter={StaticResource StringNullOrEmptyBoolConverter}}"/>
+                                                        <Label Text="Voir le bien ->"  FontSize="12" TextColor="#9f182c" HorizontalOptions="End">
+                                                            <Label.GestureRecognizers>
+                                                                <TapGestureRecognizer Command="{Binding LinkToPropertyCommand}" CommandParameter="{Binding Source={x:Reference ItemProperty}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference PropertiesList}, Path=BindingContext}"/>
+                                                            </Label.GestureRecognizers>
+                                                        </Label> 
                                                     </StackLayout>
-
-
-                                                    <Label Text="{Binding CommandState, StringFormat='Statut: {0}'}" FontSize="12"/>
-                                                    <!-- <Picker ItemsSource="{Binding Statuses}" SelectedItem="{Binding SelectedStatus, Mode=TwoWay}"/>
-                                                    <Button Text="Supprimer" TextColor="{StaticResource RedAccent}" BackgroundColor="Transparent"/> -->
-                                                    <Label Text="{Binding Price, StringFormat='Prix: {0} €'}" FontSize="12"/>
-                                                    <Label Text="{Binding Stage, StringFormat='Stade: {0}'}" FontSize="12" IsVisible="{Binding Stage, Converter={StaticResource StringNullOrEmptyBoolConverter}}"/>
-                                                    <Label Text="Voir le bien ->"  FontSize="12" TextColor="#9f182c" HorizontalOptions="End">
-                                                        <Label.GestureRecognizers>
-                                                            <TapGestureRecognizer Command="{Binding LinkToPropertyCommand}" CommandParameter="{Binding Source={x:Reference ItemProperty}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference PropertiesList}, Path=BindingContext}"/>
-                                                        </Label.GestureRecognizers>
-                                                    </Label>
                                                 </StackLayout>
                                             </ViewCell>
                                         </DataTemplate>

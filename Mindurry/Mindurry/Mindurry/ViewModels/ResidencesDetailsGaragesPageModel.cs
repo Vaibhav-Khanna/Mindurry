@@ -48,12 +48,7 @@ namespace Mindurry.ViewModels
                 {
                     var garagesListItem = new GaragesListModel
                     {
-                        LotNumberArchitect = item.LotNumberArchitect,
-                        Type = item.Type,
-                        Area = item.Area,
-                        Price = item.Price,
-                        Id = item.Id,
-                        ResidenceName = item.ResidenceName
+                        Garage = item
                     };
                     if (!String.IsNullOrEmpty(item.ContactId))
                     {

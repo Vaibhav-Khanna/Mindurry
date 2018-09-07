@@ -75,38 +75,40 @@
                 <Label Text="Rappel" Grid.Column="3" Grid.Row="0" />
 
                 <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E4E2DF" Grid.Row="1" Grid.ColumnSpan="6"/> -->
-            <repeater:RepeaterView ItemsSource="{Binding Reminders}" Spacing="15" Margin="30,15,30,0" x:Name="RemindersList" SelectedItemCommand="{Binding SelectReminderCommand}" Grid.Row="1">
+            <repeater:RepeaterView ItemsSource="{Binding Reminders}" Spacing="5" Margin="30,15,30,0" x:Name="RemindersList" SelectedItemCommand="{Binding SelectReminderCommand}" Grid.Row="1">
                 <repeater:RepeaterView.ItemTemplate>
                     <DataTemplate>
-                        <ViewCell>
-                            <Grid  x:Name="Item" BackgroundColor="#F9F9F9" Margin="0,0,0,5">
+                        <ViewCell >
+                            <Grid  x:Name="Item" BackgroundColor="#F9F9F9" Margin="0,0,0,5" >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="50"/>
                                     <ColumnDefinition Width="50"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Grid HorizontalOptions="Center" VerticalOptions="Center"  Margin="5,5,0,5" Grid.Column="0">
-                                    <win:CheckBox  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                <Grid HorizontalOptions="Center" VerticalOptions="Center"  Margin="5,5,0,5" Grid.Column="0" IsVisible="{Binding IsVisible}" >
+                                    <win:CheckBox  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}" />
                                 </Grid>
+                              <Grid HorizontalOptions="Start" IsVisible="{Binding IsVisible}" BackgroundColor="{Binding Reminder.ReminderAt, Converter={StaticResource DateToBgColorConverter}}"  Padding="10,0" VerticalOptions="Center" Margin="0,4,0,0" WidthRequest="80" Grid.Column="1">
+                                    <Label HorizontalOptions="Center" Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}"  FontSize="12" TextColor="{Binding  Reminder.ReminderAt, Converter={StaticResource DateToReminderTextColorConverter}}" VerticalOptions="End"/>
+                                </Grid>
+                                <Grid HorizontalOptions="Start" IsVisible="{Binding IsVisible,Converter={StaticResource NegateBoolConverter}}" BackgroundColor="White"  Padding="10,0" VerticalOptions="Center" Margin="0,4,0,0" WidthRequest="80" Grid.Column="1">
+                                    <Label HorizontalOptions="Center" Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}"  FontSize="12" TextColor="Black" VerticalOptions="End"/>
+                                </Grid>
+                                <StackLayout Grid.Column="2" VerticalOptions="Center">
+                                    <Label Text="{Binding Reminder.Contactname}" HorizontalOptions="Start" VerticalOptions="Center" Style="{StaticResource BlueLabel}" FontSize="12" />
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding GoToContactCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}" />
+                                    </StackLayout.GestureRecognizers>
 
-                                <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="1">
-
-                                    <Label   Text="{Binding Reminder.Content}" FontSize="14" VerticalOptions="Center"/>
-                                    <StackLayout Orientation="Horizontal" HorizontalOptions="Start" Spacing="5">
-                                        <Grid HorizontalOptions="Start" BackgroundColor="{Binding Reminder.ReminderAt, Converter={StaticResource DateToBgColorConverter}}"  Padding="10,0" VerticalOptions="Center" Margin="0,4,0,0" WidthRequest="80">
-                                            <Label HorizontalOptions="Center" Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}"  FontSize="12" TextColor="{Binding  Reminder.ReminderAt, Converter={StaticResource DateToReminderTextColorConverter}}" VerticalOptions="End"/>
-                                        </Grid>
-                                        <Label Text="{Binding Reminder.Contactname}"  VerticalOptions="Center" Style="{StaticResource BlueLabel}" FontSize="12">
-                                            <Label.GestureRecognizers>
-                                                <TapGestureRecognizer Command="{Binding GoToContactCommand}"/>
-                                            </Label.GestureRecognizers>
-                                        </Label>
-                                    </StackLayout>
                                 </StackLayout>
-                                <Button Text="" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center" Command="{Binding UpdateReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
-                                <Button Text="" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center" Command="{Binding DeleteReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
+                                <Label   Text="{Binding Reminder.Content}" FontSize="14" HorizontalOptions="Start" VerticalOptions="Center" Grid.Column="3"/>
+
+                                <Button Text="" IsVisible="{Binding IsVisible}" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource BlueAccent}" Grid.Column="4" VerticalOptions="Center" Command="{Binding UpdateReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}" Margin="0,10"/>
+                                <Button Text="" IsVisible="{Binding IsVisible}" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource RedAccent}" Grid.Column="5" VerticalOptions="Center" Command="{Binding DeleteReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}" Margin="0,10"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

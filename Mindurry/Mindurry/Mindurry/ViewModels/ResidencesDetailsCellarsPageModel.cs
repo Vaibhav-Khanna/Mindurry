@@ -50,11 +50,7 @@ namespace Mindurry.ViewModels
                 {
                     var cellarsListItem = new CellarsListModel
                     {
-                        LotNumberArchitect = item.LotNumberArchitect,
-                        Area = item.Area,
-                        Price = item.Price,
-                        Id = item.Id,
-                        ResidenceName = item.ResidenceName
+                        Cellar = item
                     };
                     if (!String.IsNullOrEmpty(item.ContactId))
                     {

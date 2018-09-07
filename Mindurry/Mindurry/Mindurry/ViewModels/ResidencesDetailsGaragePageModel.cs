@@ -22,7 +22,7 @@ namespace Mindurry.ViewModels
             Garage = (GaragesListModel)initData;
             ReferencePlan = new DocumentMindurry();
            
-            IEnumerable<DocumentMindurry> docs = await StoreManager.DocumentMindurryStore.GetItemsByKindAndReferenceIdAsync(Garage.Id, ReferenceKind.Garage.ToString().ToLower());
+            IEnumerable<DocumentMindurry> docs = await StoreManager.DocumentMindurryStore.GetItemsByKindAndReferenceIdAsync(Garage.Garage.Id, ReferenceKind.Garage.ToString().ToLower());
             if (docs != null && docs.Any())
             {
                 IEnumerable<DocumentMindurry> referencePlanList = docs.Where(x => x.DocumentType == DocumentType.Initial.ToString().ToLower());
