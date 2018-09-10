@@ -20,7 +20,6 @@ namespace Mindurry.ViewModels
         public ObservableCollection<ContactsListModel> Contacts { get; set; }
         private List<ContactsListModel> contactsLoadData;
         private string Filter = null;
-        private string SortName = null;
         private bool SortBy = false;
 
         public string SearchText { get; set; }
@@ -65,8 +64,6 @@ namespace Mindurry.ViewModels
         public ICommand ShowFilterCommand { get; set; }
         public ICommand ArrowOneCommand { get; set; }
         public ICommand ArrowTwoCommand { get; set; }
-        public ICommand AddCommand { get; set; }
-
 
         public async override void Init(object initData)
         {
@@ -459,6 +456,22 @@ namespace Mindurry.ViewModels
                 Contacts = new ObservableCollection<ContactsListModel>(Contacts.OrderByDescending(x => x.NextRelaunch).ToList());
             }
         });
+
+        public Command AddCommand => new Command(() =>
+        {
+        CoreMethods.PushPageModel<NewContactPageModel>(Qualification.Lead);
+            SubUnsub();
+        });
+        void SubUnsub()
+        {
+            MessagingCenter.Subscribe<NewContactPageModel>(this, "ReloadCollection", async (obj) =>
+            {
+                await LoadData();
+
+                MessagingCenter.Unsubscribe<NewContactPageModel>(this, "ReloadCollection");
+            });
+        }
+
 
         void ShowFilter()
         {

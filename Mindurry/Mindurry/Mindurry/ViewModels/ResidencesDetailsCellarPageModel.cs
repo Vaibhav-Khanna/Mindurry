@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Xamarin.Forms;
 
 namespace Mindurry.ViewModels
 {
@@ -30,8 +31,21 @@ namespace Mindurry.ViewModels
                     ReferencePlan = (referencePlanList.ToList())[0];
                 }
             }
+        }
+        public Command LinkToContactCommand => new Command(async () =>
+        {
+            var contact =await StoreManager.ContactStore.GetItemAsync(Cellar.Cellar.ContactId);
 
+            if (contact.Qualification == Qualification.Client.ToString())
+            {
+                await CoreMethods.PushPageModel<ClientsDetailsInfoPageModel>(Cellar.Cellar.ContactId);
+            }
+            else
+            {
+                await CoreMethods.PushPageModel<LeadDetailPageModel>(Cellar.Cellar.ContactId);
+            }
 
         }
-    }
+        );
+    }    
 }

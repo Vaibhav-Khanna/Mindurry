@@ -410,13 +410,13 @@ namespace Mindurry.ViewModels
 
         void AddContact()
         {
-            CoreMethods.PushPageModel<NewClientPageModel>();
+            CoreMethods.PushPageModel<NewContactPageModel>(Qualification.Client);
             SubUnsub();
         }
 
         void SubUnsub()
         {
-            MessagingCenter.Subscribe<NewClientPageModel>(this, "ReloadCollection", async (obj) =>
+            MessagingCenter.Subscribe<NewContactPageModel>(this, "ReloadCollection", async (obj) =>
             {
 
                 await LoadData();

@@ -24,11 +24,18 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <SearchBar Placeholder="Rechercher nom, prénom, email, téléphone" WidthRequest="450" HorizontalOptions="Start" Text="{Binding SearchText, Mode=TwoWay}" TextChanged="SearchPlace_OnTextChanged"/>
-
-                <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="End"  VerticalOptions="CenterAndExpand" BackgroundColor="Transparent">
+                <StackLayout Orientation="Horizontal" Grid.Column="1" VerticalOptions="CenterAndExpand">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AddCommand}"/>
+                    </StackLayout.GestureRecognizers>
+                    <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="16" VerticalOptions="Center"/>
+                    <Label Text="Ajouter un Lead" FontSize="16" VerticalOptions="Center"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal" Grid.Column="2" HorizontalOptions="End"  VerticalOptions="CenterAndExpand" BackgroundColor="Transparent">
                     <StackLayout.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding ShowFilterCommand}"/>
                     </StackLayout.GestureRecognizers>

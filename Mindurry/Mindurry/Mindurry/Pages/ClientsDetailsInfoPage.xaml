@@ -192,14 +192,14 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <StackLayout Orientation="Vertical" Grid.Column="0">
-                            <Label Text="&#xE779;"  FontSize="16" VerticalOptions="Center" TextColor="{Binding TabOneColor}" FontFamily="Segoe MDL2 Assets"/>
-                            <Label Text="Informations" FontSize="16" TextColor="{Binding TabOneColor}">
+                            <Label Text="&#xE8D7;"  FontSize="16" VerticalOptions="Center" TextColor="{Binding TabThreeColor}" FontFamily="Segoe MDL2 Assets"/>
+                            <Label Text="Logements"  FontSize="16" TextColor="{Binding TabThreeColor}">
                                 <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding TabOneCommand}"/>
+                                    <TapGestureRecognizer Command="{Binding TabThreeCommand}"/>
                                 </Label.GestureRecognizers>
                             </Label>
                         </StackLayout>
-
+                       
                         <StackLayout Orientation="Vertical" Grid.Column="1">
                             <Label Text="&#xE7C3;"  FontSize="16" VerticalOptions="Center" TextColor="{Binding TabTwoColor}" FontFamily="Segoe MDL2 Assets"/>
                             <Label Text="Documents" FontSize="16" TextColor="{Binding TabTwoColor}">
@@ -210,13 +210,14 @@
                         </StackLayout>
 
                         <StackLayout Orientation="Vertical" Grid.Column="2">
-                            <Label Text="&#xE8D7;"  FontSize="16" VerticalOptions="Center" TextColor="{Binding TabThreeColor}" FontFamily="Segoe MDL2 Assets"/>
-                            <Label Text="Logements"  FontSize="16" TextColor="{Binding TabThreeColor}">
+                            <Label Text="&#xE779;"  FontSize="16" VerticalOptions="Center" TextColor="{Binding TabOneColor}" FontFamily="Segoe MDL2 Assets"/>
+                            <Label Text="Informations" FontSize="16" TextColor="{Binding TabOneColor}">
                                 <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding TabThreeCommand}"/>
+                                    <TapGestureRecognizer Command="{Binding TabOneCommand}"/>
                                 </Label.GestureRecognizers>
                             </Label>
                         </StackLayout>
+
                     </Grid>
                     
                     <BoxView HeightRequest="1" HorizontalOptions="FillAndExpand" BackgroundColor="#E8E6E3"/>
@@ -339,7 +340,9 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
 
-                                <Button Text="+ Ajouter un document" HorizontalOptions="End" Margin="0,20" Command="{Binding TabTwoForwardCommand}"/>
+                                <!--<Button Text="+ Ajouter un document" HorizontalOptions="End" Margin="0,20" Command="{Binding TabTwoForwardCommand}"/> -->
+                                <Button Text="+ Ajouter un document" HorizontalOptions="End" FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="180" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="Center" Command="{Binding TabTwoForwardCommand}"/>
+
 
                                 <repeater:RepeaterView  ItemsSource="{Binding Documents}" Grid.Row="1" x:Name="DocumentsList">
                                     <repeater:RepeaterView.ItemTemplate>
@@ -384,17 +387,25 @@
 
                                 <StackLayout Orientation="Horizontal" Spacing="20" Margin="0,10">
                                     <Label Text="{Binding FileName}" FontSize="15" VerticalOptions="Center"/>
-                                    <Button Text="Choisir le fichier" Command="{Binding PickFileCommand}" BackgroundColor="Transparent" TextColor="{StaticResource BlueAccent}" IsVisible="{Binding RemoveButton, Converter={StaticResource NegateBoolConverter}}"/>
-                                    <Button Text="Supprimer" BackgroundColor="Transparent" TextColor="{StaticResource BlueAccent}" Command="{Binding RemovePickFileCommand}" IsVisible="{Binding RemoveButton}"/>
+                                    <!--<Button Text="Choisir le fichier" Command="{Binding PickFileCommand}" BackgroundColor="Transparent" TextColor="{StaticResource BlueAccent}" IsVisible="{Binding RemoveButton, Converter={StaticResource NegateBoolConverter}}"/> -->
+                                    <Button Text="Choisir le fichier"  FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="180" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="Center" IsVisible="{Binding RemoveButton, Converter={StaticResource NegateBoolConverter}}" Command="{Binding PickFileCommand}"/>
+
+                                  <!--  <Button Text="Supprimer" BackgroundColor="Transparent" TextColor="{StaticResource BlueAccent}" Command="{Binding RemovePickFileCommand}" IsVisible="{Binding RemoveButton}"/> -->
+                                    <Button Text="Supprimer"  FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="120" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="Center" Command="{Binding RemovePickFileCommand}" IsVisible="{Binding RemoveButton}"/>
+
                                 </StackLayout>
 
                                 <Label Text="Nom"/>
-                                <Entry Placeholder="Nom du document" Text="{Binding DocumentName, Mode=TwoWay}"/>
+                                <Entry Placeholder="Nom du document" Text="{Binding DocumentName, Mode=TwoWay}" />
 
 
                                 <StackLayout Orientation="Horizontal" Margin="0,30">
-                                    <Button Text="Enregistrer" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="120" Command="{Binding UploadFileCommand}"/>
-                                    <Button Text="Annuler" WidthRequest="120" Command="{Binding TabTwoBackCommand}"/>
+                                    <Button Text="Enregistrer"  FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="120" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="Center" Command="{Binding UploadFileCommand}"/>
+
+                                   <!-- <Button Text="Enregistrer" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="120" Command="{Binding UploadFileCommand}"/> -->
+                                    <Button Text="Annuler"  FontSize="14"  WidthRequest="120" HeightRequest="30"  VerticalOptions="Center" Command="{Binding TabTwoBackCommand}"/>
+
+                                   <!--  <Button Text="Annuler" WidthRequest="120" Command="{Binding TabTwoBackCommand}"/> -->
                                 </StackLayout>
                             </StackLayout>
                             <!--
@@ -466,8 +477,10 @@
                                     <Label Text="Prix en €"/>
                                     <Entry WidthRequest="300" Text="{Binding Price}" IsEnabled="False" HorizontalOptions="Start"/>
                                 </StackLayout>
-                                <Button Text="Ajouter" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
-                                        Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding AddPropertyCommand}"/>
+                                <!--<Button Text="Ajouter" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
+                                        Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding AddPropertyCommand}"/> -->
+                                <Button Text="Ajouter" HorizontalOptions="Start" FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="120" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="Center" Command="{Binding AddPropertyCommand}"/>
+
                             </StackLayout>
 
                             <StackLayout IsVisible="{Binding IsTabThreeL1}">
@@ -520,8 +533,10 @@
                                         </DataTemplate>
                                     </repeater:RepeaterView.ItemTemplate>
                                 </repeater:RepeaterView>
-                                <Button Text="+  Ajouter un bien" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
-                                        Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding TabThreeForwardCommand}"/>
+                              <!--  <Button Text="+  Ajouter un bien" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
+                                        Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding TabThreeForwardCommand}"/> -->
+                                <Button Text="+  Ajouter un bien" HorizontalOptions="Start" FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="180" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="Center" Command="{Binding TabThreeForwardCommand}"/>
+
                             </StackLayout>
                         </Grid>
                     </Grid>

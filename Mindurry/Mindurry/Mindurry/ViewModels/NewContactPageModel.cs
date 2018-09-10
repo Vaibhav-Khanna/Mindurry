@@ -191,30 +191,38 @@ namespace Mindurry.ViewModels
             base.Init(initData);
             if (initData != null)
             {
-                ContactId = (string)initData;
-                Contact = await StoreManager.ContactStore.GetItemAsync(ContactId);
+                if (initData is string)
+                { 
+                    ContactId = (string)initData;
+                    Contact = await StoreManager.ContactStore.GetItemAsync(ContactId);
 
-                contactType = Contact.Qualification;
+                    contactType = Contact.Qualification;
 
-                if (!String.IsNullOrEmpty(Contact.PlaceId) && !String.IsNullOrEmpty(Contact.PlaceLocation)) { 
-                    //affichage adresse  (si adresse saisie)
-                    var itemPl = new PlaceLocation
-                    {
-                        Id = Contact.PlaceId,
-                        Location = Contact.PlaceLocation
-                    };
-                    await ExecutePickPlaceCommandAsync(itemPl);
+                    if (!String.IsNullOrEmpty(Contact.PlaceId) && !String.IsNullOrEmpty(Contact.PlaceLocation)) { 
+                        //affichage adresse  (si adresse saisie)
+                        var itemPl = new PlaceLocation
+                        {
+                            Id = Contact.PlaceId,
+                            Location = Contact.PlaceLocation
+                        };
+                        await ExecutePickPlaceCommandAsync(itemPl);
+                    }
                 }
+                if (initData is Qualification)
+                {
+                    Qualification _qualification = (Qualification)initData;
+                    contactType = _qualification.ToString();
 
+                }
             }
 
-            if (initData != null)
+            if (initData != null && initData is string)
             {
                 Title = "Modification du " + contactType;
             }
             else
             {
-                Title = "Nouveau Contact";
+                Title = "Nouveau "+ contactType;
             }
 
             IsVisibleListView = false;
@@ -255,14 +263,16 @@ namespace Mindurry.ViewModels
                 ContactToSave.JobTitle = Contact.JobTitle;
                 ContactToSave.Email = Contact.Email;
                 ContactToSave.Phone = Contact.Phone;
-                ContactToSave.Qualification = Qualification.Contact.ToString();
+                // ContactToSave.Qualification = Qualification.Contact.ToString();
+                ContactToSave.Qualification = contactType;
+
                 ContactToSave.CollectSourceId = CollectSourcesSelected.Id;
                 
 
                 //Save contact 
                 //Insert if new Contact
                 if (String.IsNullOrEmpty(ContactId)) {
-                    using (UserDialogs.Instance.Loading("Enregistrement du nouveau contact", null, null, true))
+                    using (UserDialogs.Instance.Loading("Enregistrement du nouveau "+ contactType.ToLower(), null, null, true))
                     {
                         //save custom Field
                         ContactCustomField contactCustomFieldToSave = new ContactCustomField();

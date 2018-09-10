@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:effect="clr-namespace:Mindurry.Effects"
              xmlns:converter="clr-namespace:Mindurry.Converters"
-             x:Class="Mindurry.Pages.ResidencesDetailsGaragePage">
+             x:Class="Mindurry.Pages.ResidencesDetailsGaragePage"
+             Title="{Binding Garage.Garage.ResidenceName, StringFormat='{0} >Parking'}">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:StringNullOrEmptyBoolConverter x:Key="StringNullOrEmptyBoolConverter"/>
@@ -19,10 +20,7 @@
                         </Style>
                     </ResourceDictionary>
                 </StackLayout.Resources>
-                <StackLayout Orientation="Horizontal" Spacing="5" >
-                    <Label Text="{Binding Garage.ResidenceName, StringFormat='{0} > Parking'}" FontSize="24" Margin="50,15" TextColor="Black" />
-                </StackLayout>
-                <StackLayout Orientation="Horizontal" Spacing="5" HeightRequest="30" Margin="50,15" IsVisible="{Binding Garage.Client, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+               <!-- <StackLayout Orientation="Horizontal" Spacing="5" HeightRequest="30" Margin="50,15" IsVisible="{Binding Garage.Client, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
                     <Label Text="Associé au contact">
                         <Label.Effects>
                             <effect:AccentColorEffect/>
@@ -33,50 +31,53 @@
                             <effect:AccentColorEffect/>
                         </Label.Effects>
                     </Label>
-                </StackLayout>
+                </StackLayout> -->
                 <StackLayout HorizontalOptions="Start" WidthRequest="600" Margin="50,0,0,0">
-                <Grid BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand" HeightRequest="50" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="30*"/>
-                        <ColumnDefinition Width="70*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="N° Archi"  Grid.Column="0" FontAttributes="Bold" HorizontalOptions="End" Margin="0,0,50,0"  VerticalOptions="Center"/>
-                    <Label Text="{Binding Garage.LotNumberArchitect}"  FontAttributes="Bold" Grid.Column="1" HorizontalOptions="Start"  VerticalOptions="Center" />
-                </Grid>
-
-                <Grid  BackgroundColor="#FFFFFF"  HorizontalOptions="FillAndExpand" HeightRequest="50">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="30*"/>
-                        <ColumnDefinition Width="70*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="Type"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
-                    <Label  Text="{Binding Garage.Type}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" />
-                </Grid>
-                <Grid  BackgroundColor="#F5F4F3"  HorizontalOptions="FillAndExpand" HeightRequest="50">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="30*"/>
-                        <ColumnDefinition Width="70*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="Surface"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
-                    <Label Text="{Binding Garage.Area, StringFormat='{0} m2'}"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
-                </Grid>
-                <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand" HeightRequest="50">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="30*"/>
-                        <ColumnDefinition Width="70*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="Acquéreur"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
-                    <Label Text="{Binding Garage.Client}"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
-                </Grid>
-                <Grid  BackgroundColor="#FFFFFF"  HorizontalOptions="FillAndExpand" HeightRequest="50">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="30*"/>
-                        <ColumnDefinition Width="70*"/>
-                    </Grid.ColumnDefinitions>
-                    <Label Text="Prix"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
-                    <Label Text="{Binding Garage.Price, StringFormat='{0:#,##0}€'}"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
-                </Grid>
-                    <Grid  BackgroundColor="#F5F4F3"  HorizontalOptions="FillAndExpand" HeightRequest="50" >
+                    <Grid BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand" HeightRequest="50" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="N° Archi"  Grid.Column="0" FontAttributes="Bold" HorizontalOptions="End" Margin="0,0,50,0"  VerticalOptions="Center"/>
+                        <Label Text="{Binding Garage.Garage.LotNumberArchitect}"  FontAttributes="Bold" Grid.Column="1" HorizontalOptions="Start"  VerticalOptions="Center" />
+                    </Grid>
+                    <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Acquéreur"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                        <Label Text="{Binding Cellar.Client}" TextColor="{StaticResource BlueText}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding LinkToContactCommand}"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+                    <Grid  BackgroundColor="#F5F4F3"  HorizontalOptions="FillAndExpand" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Surface"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                        <Label Text="{Binding Garage.Garage.Area, StringFormat='{0} m2'}"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid  BackgroundColor="#FFFFFF"  HorizontalOptions="FillAndExpand" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Prix"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                        <Label Text="{Binding Garage.Garage.Price, StringFormat='{0:#,##0}€'}"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                    </Grid>
+                    <Grid  BackgroundColor="#F5F4F3"  HorizontalOptions="FillAndExpand" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30*"/>
+                            <ColumnDefinition Width="70*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Type"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                        <Label  Text="{Binding Garage.Garage.Type}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" />
+                    </Grid>
+                    <Grid  BackgroundColor="#FFFFFF"  HorizontalOptions="FillAndExpand" HeightRequest="50" >
                         <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30*"/>
                         <ColumnDefinition Width="70*"/>

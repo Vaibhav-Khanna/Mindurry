@@ -90,8 +90,6 @@ namespace Mindurry.ViewModels
                 selectedType = value;
             }
         }
-
-
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
         public ObservableCollection<User> Commercials { get; set; }
@@ -111,8 +109,6 @@ namespace Mindurry.ViewModels
                 selectedCommercial = value;
             }
         }
-
-
         public ObservableCollection<Activity> Activities { get; set; }
 
         public ObservableCollection<Models.DataObjects.Residence> Residences { get; set; }
@@ -185,44 +181,6 @@ namespace Mindurry.ViewModels
         public FileData myTask { get; set; }
         public string DocumentName { get; set; }
 
-        bool isSwitchOne;
-        public bool IsSwitchOne
-        {
-            get { return isSwitchOne; }
-            set
-            {
-                if (isSwitchOne != value)
-                {
-                    isSwitchOne = value;
-                }
-            }
-        }
-
-        bool isSwitchTwo;
-        public bool IsSwitchTwo
-        {
-            get { return isSwitchTwo; }
-            set
-            {
-                if (isSwitchTwo != value)
-                {
-                    isSwitchTwo = value;
-                }
-            }
-        }
-        bool isSwitchThree;
-        public bool IsSwitchThree
-        {
-            get { return isSwitchThree; }
-            set
-            {
-                if (isSwitchThree != value)
-                {
-                    isSwitchThree = value;
-                }
-            }
-        }
-
         public string SequenceTitle { get; set; }
 
         public int TabIndex { get; set; }
@@ -233,7 +191,7 @@ namespace Mindurry.ViewModels
 
         public bool IsTabOneVisible
         {
-            get => TabIndex == 0;
+            get => TabIndex == 2;
         }
 
         public bool IsTabTwoVisible
@@ -243,12 +201,12 @@ namespace Mindurry.ViewModels
 
         public bool IsTabThreeVisible
         {
-            get => TabIndex == 2;
+            get => TabIndex == 0;
         }
 
         public Color TabOneColor
         {
-            get => TabIndex == 0 ? Color.FromHex("9f182c") : Color.FromRgb(101, 101, 101);
+            get => TabIndex == 2 ? Color.FromHex("9f182c") : Color.FromRgb(101, 101, 101);
         }
 
         public Color TabTwoColor
@@ -258,7 +216,7 @@ namespace Mindurry.ViewModels
 
         public Color TabThreeColor
         {
-            get => TabIndex == 2 ? Color.FromHex("9f182c") : Color.FromRgb(101, 101, 101);
+            get => TabIndex == 0 ? Color.FromHex("9f182c") : Color.FromRgb(101, 101, 101);
         }
 
         public bool IsTabTwoL1 => TabTwoLevel == 0;
@@ -282,14 +240,6 @@ namespace Mindurry.ViewModels
             get => IsSecondListVisible ? "" : "";
         }
 
-        public ICommand TabOneCommand { get; set; }
-        public ICommand TabTwoCommand { get; set; }
-        public ICommand TabThreeCommand { get; set; }
-        public ICommand TabThreeBackCommand { get; set; }
-        public ICommand TabThreeForwardCommand { get; set; }
-        public ICommand TabTwoBackCommand { get; set; }
-        public ICommand TabTwoForwardCommand { get; set; }
-
         public ICommand AddDocumentCommand { get; set; }
 
         public ICommand ArrowOneCommand { get; set; }
@@ -305,6 +255,10 @@ namespace Mindurry.ViewModels
         {
             base.Init(initData);
             ContactId = (string)initData;
+
+            TabIndex = 0;
+            TabThreeLevel = 0;
+            await LoadProperties();
 
             await LoadContact();
 
@@ -343,15 +297,6 @@ namespace Mindurry.ViewModels
             ClearAllResidencesCommand = new Command(ClearAllResidences);
             ClearAllTypesCommand = new Command(ClearAllTypes);
 
-            TabOneCommand = new Command(TabOne);
-            TabTwoCommand = new Command(TabTwo);
-            TabThreeCommand = new Command(TabThree);
-
-            TabThreeBackCommand = new Command(TabThreeBack);
-            TabThreeForwardCommand = new Command(TabThreeForward);
-
-            TabTwoBackCommand = new Command(TabTwoBack);
-            TabTwoForwardCommand = new Command(TabTwoForward);
         }
 
         public async override void ReverseInit(object reverseData)
@@ -584,6 +529,64 @@ namespace Mindurry.ViewModels
                 await StoreManager.ContactCustomFieldStore.UpdateAsync(customField[0]);
             }
         }
+        private async void SaveCommercial(string commercialId)
+        {
+            Contact.UserId = commercialId;
+            await StoreManager.ContactStore.UpdateAsync(Contact);
+        }
+
+        public Command TabOneCommand => new Command(() =>
+        {
+            TabIndex = 2;
+        });
+
+        public Command TabTwoCommand => new Command(async () =>
+        {
+            TabIndex = 1;
+            await LoadDocuments();
+        });
+
+        public Command TabThreeCommand => new Command(async () =>
+        {
+            TabIndex = 0;
+
+            // Trouver les biens immobiliers de ce contacts
+            await LoadProperties();
+
+            // init formulaire (Ajouter un bien)
+            var res = await StoreManager.ResidenceStore.GetItemsAsync();
+            if (res != null && res.Any())
+            {
+                Residences = new ObservableCollection<Models.DataObjects.Residence>(res);
+                ResidenceSelected = Residences[0];
+
+                Statuts = new ObservableCollection<string> { "Option", "Réservation", "Signature" };
+                StatutSelected = Statuts[0];
+                TypeBiens = new ObservableCollection<string> { "Appartement", "Cave", "Parking" };
+                TypeBienSelected = TypeBiens[0];
+
+            }
+        });
+
+        public Command TabTwoBackCommand => new Command(() =>
+
+        {
+            TabTwoLevel--;
+        });
+
+        public Command TabTwoForwardCommand => new Command(() =>
+        {
+            TabTwoLevel++;
+        });
+        public Command TabThreeBackCommand => new Command(() =>
+        {
+            TabThreeLevel--;
+        });
+        public Command TabThreeForwardCommand => new Command(() =>
+        {
+            TabThreeLevel++;
+
+        });
 
         public Command SequenceCommand => new Command(async () => {
 
@@ -614,12 +617,6 @@ namespace Mindurry.ViewModels
 
 
         });
-
-        private async void SaveCommercial(string commercialId)
-        {
-            Contact.UserId = commercialId;
-            await StoreManager.ContactStore.UpdateAsync(Contact);
-        }
 
         public Command UpdateContactCommand => new Command(async (obj) =>
         {
@@ -763,61 +760,7 @@ namespace Mindurry.ViewModels
             }
         }
 
-        void TabOne()
-        {
-            TabIndex = 0;
-        }
-
-        async void TabTwo()
-        {
-            TabIndex = 1;
-            await LoadDocuments();
-        }
-
-        async void TabThree()
-        {
-            TabIndex = 2;
-
-            // Trouver les biens immobiliers de ce contacts
-            await LoadProperties();
-
-            // init formulaire (Ajouter un bien)
-            var res = await StoreManager.ResidenceStore.GetItemsAsync();
-            if (res != null && res.Any())
-            {
-                Residences = new ObservableCollection<Models.DataObjects.Residence>(res);
-                ResidenceSelected = Residences[0];
-
-                Statuts = new ObservableCollection<string> { "Option", "Réservation", "Signature" };
-                StatutSelected = Statuts[0];
-                TypeBiens = new ObservableCollection<string> { "Appartement", "Cave", "Parking" };
-                TypeBienSelected = TypeBiens[0];
-
-            }
-
-
-        }
-
-        void TabTwoBack()
-        {
-            TabTwoLevel--;
-        }
-
-        void TabTwoForward()
-        {
-            TabTwoLevel++;
-        }
-
-        void TabThreeBack()
-        {
-            TabThreeLevel--;
-        }
-
-         void TabThreeForward()
-        {
-            TabThreeLevel++;
-
-        }
+        
 
         private async Task LoadDocuments()
         {
@@ -912,7 +855,7 @@ namespace Mindurry.ViewModels
                             {
                                 var is_uploaded = await StoreManager.DocumentMindurryStore.UploadDocument(myTask.DataArray, new DocumentMindurry() { Path = FileName, InternalName = Guid.NewGuid().ToString(), ReferenceKind = "customer", DocumentType = "autre", ReferenceId = ContactId, Name = DocumentName });
                                 await LoadDocuments();
-                                TabTwoBack();
+                                TabTwoLevel--;
                             }
                         }
                         else

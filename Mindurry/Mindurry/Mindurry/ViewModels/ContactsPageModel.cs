@@ -417,7 +417,7 @@ namespace Mindurry.ViewModels
 
         void AddContact()
         {
-            CoreMethods.PushPageModel<NewContactPageModel>();
+            CoreMethods.PushPageModel<NewContactPageModel>(Qualification.Contact);
             SubUnsub();
         }
 

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Xamarin.Forms;
 
 namespace Mindurry.ViewModels
 {
@@ -34,5 +35,20 @@ namespace Mindurry.ViewModels
 
             
         }
+        public Command LinkToContactCommand => new Command(async () =>
+        {
+            var contact = await StoreManager.ContactStore.GetItemAsync(Garage.Garage.ContactId);
+
+            if (contact.Qualification == Qualification.Client.ToString())
+            {
+                await CoreMethods.PushPageModel<ClientsDetailsInfoPageModel>(Garage.Garage.ContactId);
+            }
+            else
+            {
+                await CoreMethods.PushPageModel<LeadDetailPageModel>(Garage.Garage.ContactId);
+            }
+
+        }
+        );
     }
 }

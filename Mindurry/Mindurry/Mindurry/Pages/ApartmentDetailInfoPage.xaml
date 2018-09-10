@@ -2,9 +2,15 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"         
              xmlns:effect="clr-namespace:Mindurry.Effects"
+             xmlns:converter="clr-namespace:Mindurry.Converters"
              xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
              xmlns:syncfusion="clr-namespace:Syncfusion.SfPdfViewer.XForms;assembly=Syncfusion.SfPdfViewer.XForms"
              x:Class="Mindurry.Pages.ApartmentDetailInfoPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:StringNullOrEmptyBoolConverter x:Key="StringNullOrEmptyBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout  Spacing="10" Orientation="Horizontal">
             <StackLayout WidthRequest="450">
@@ -17,18 +23,18 @@
                                 </Style>
                             </ResourceDictionary>
                         </StackLayout.Resources>
-                        <StackLayout Orientation="Horizontal" Spacing="5">
+                     <!--   <StackLayout Orientation="Horizontal" Spacing="5" IsVisible="{Binding ContactName, Converter={StaticResource StringNullOrEmptyBoolConverter}}">
                             <Label Text="Associé au contact">
                                 <Label.Effects>
                                     <effect:AccentColorEffect/>
                                 </Label.Effects>
                             </Label>
-                            <Label Text="{Binding Apartment.Parent}" FontAttributes="Bold">
+                            <Label Text="{Binding ContactName}" FontAttributes="Bold">
                                 <Label.Effects>
                                     <effect:AccentColorEffect/>
                                 </Label.Effects>
                             </Label>
-                        </StackLayout>
+                        </StackLayout> -->
 
                         <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
                             <Grid.ColumnDefinitions>
@@ -38,8 +44,19 @@
                             <Label Text="N° Archi" Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" FontAttributes="Bold"/>
                             <Label Text="{Binding Apartment.LotNumberArchitect}" FontAttributes="Bold"  Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
                         </Grid>
-
-                        <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
+                        <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand" HeightRequest="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="70*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Acquéreur"  Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center" />
+                            <Label Text="{Binding ContactName}" TextColor="{StaticResource BlueText}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding LinkToContactCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+                        <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30*"/>
                                 <ColumnDefinition Width="70*"/>
@@ -47,8 +64,8 @@
                             <Label Text="N° Co-pro " Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center"/>
                             <Label Text="{Binding Apartment.LotNumberCopro}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
                         </Grid>
-
-                        <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
+                        
+                        <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30*"/>
                                 <ColumnDefinition Width="70*"/>
@@ -57,7 +74,7 @@
                             <Label Text="{Binding Apartment.Kind}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
                         </Grid>
 
-                        <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
+                        <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30*"/>
                                 <ColumnDefinition Width="70*"/>
@@ -66,7 +83,7 @@
                             <Label Text="{Binding Apartment.Floor}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
                         </Grid>
 
-                        <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
+                        <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30*"/>
                                 <ColumnDefinition Width="70*"/>
@@ -75,7 +92,7 @@
                             <Label Text="{Binding Apartment.Exposure}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
                         </Grid>
 
-                        <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
+                        <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30*"/>
                                 <ColumnDefinition Width="70*"/>
@@ -84,7 +101,7 @@
                             <Label Text="{Binding Apartment.Area, StringFormat='{0} m2'}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
                         </Grid>
 
-                        <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
+                        <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30*"/>
                                 <ColumnDefinition Width="70*"/>
@@ -105,7 +122,7 @@
                             </repeater:RepeaterView>
                         </Grid>
 
-                        <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
+                        <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30*"/>
                                 <ColumnDefinition Width="70*"/>
@@ -125,7 +142,7 @@
                                 </repeater:RepeaterView.ItemTemplate>
                             </repeater:RepeaterView>
                         </Grid>
-                        <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
+                        <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30*"/>
                                 <ColumnDefinition Width="70*"/>

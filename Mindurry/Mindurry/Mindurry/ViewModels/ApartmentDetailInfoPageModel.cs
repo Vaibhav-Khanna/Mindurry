@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace Mindurry.ViewModels
 {
@@ -12,6 +13,8 @@ namespace Mindurry.ViewModels
     public class ApartmentDetailInfoPageModel : BasePageModel
     {
         public Apartment Apartment { get; set; }
+
+        public string ContactName { get; set; }
 
         public ObservableCollection<Terrace> Terraces { get; set; }
 
@@ -24,6 +27,13 @@ namespace Mindurry.ViewModels
             base.Init(initData);
 
             Apartment = (Apartment)initData;
+
+            if (!string.IsNullOrEmpty(Apartment.ContactId))
+            {
+                Contact Contact = await StoreManager.ContactStore.GetItemAsync(Apartment.ContactId);
+                ContactName = Contact.Name;
+            }
+
             // terraces list
             var terraces = await StoreManager.TerraceStore.GetTerracesByResidenceId(Apartment.ResidenceId, Apartment.Id);
             if (terraces != null && terraces.Any())
@@ -91,5 +101,20 @@ namespace Mindurry.ViewModels
             }
 
         }
+        public Command LinkToContactCommand => new Command(async () =>
+        {
+            var contact = await StoreManager.ContactStore.GetItemAsync(Apartment.ContactId);
+
+            if (contact.Qualification == Qualification.Client.ToString())
+            {
+                await CoreMethods.PushPageModel<ClientsDetailsInfoPageModel>(Apartment.ContactId);
+            }
+            else
+            {
+                await CoreMethods.PushPageModel<LeadDetailPageModel>(Apartment.ContactId);
+            }
+
+        }
+        );
     }
 }
