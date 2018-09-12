@@ -28,7 +28,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <SearchBar Placeholder="Rechercher" WidthRequest="300" HorizontalOptions="Start"/>
+                <SearchBar Placeholder="Rechercher" WidthRequest="300" HorizontalOptions="Start" Text="{Binding SearchText, Mode=TwoWay}" TextChanged="SearchBar_TextChanged"/>
 
                 <StackLayout Orientation="Horizontal" Grid.Column="1" VerticalOptions="CenterAndExpand" BackgroundColor="Transparent">
                     <StackLayout.GestureRecognizers>

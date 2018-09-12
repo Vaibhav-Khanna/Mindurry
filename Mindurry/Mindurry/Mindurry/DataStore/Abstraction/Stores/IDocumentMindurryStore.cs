@@ -11,6 +11,6 @@ namespace Mindurry.DataStore.Abstraction.Stores
         Task<IEnumerable<DocumentMindurry>> GetItemsByKindAndReferenceIdAsync(string id, string kind);
         Task<IEnumerable<DocumentMindurry>> GetPostDocumentsByContactId(string id);
         Task<bool> IsValidDocumentName(string DocumentName);
-        Task PullLatest(string KindId, string Kind);
+        Task<IEnumerable<bool>> PullLatest(string KindId, string Kind);
     }
 }

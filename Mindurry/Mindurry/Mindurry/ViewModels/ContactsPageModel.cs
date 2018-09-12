@@ -151,6 +151,9 @@ namespace Mindurry.ViewModels
 
                 Contacts = new ObservableCollection<ContactsListModel>();
                 var indexValue = 0; //to calculate Index to the backgroundColor
+                // residences Names
+                var residences = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
+
                 foreach (var item in _contacts)
                 {
                     
@@ -186,15 +189,22 @@ namespace Mindurry.ViewModels
                                         string[] stringSeparators = new string[] { "Résidences=" };
                                         string[] result;
                                         result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
-                                        ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
-                                        residenceFormat += residence.Value + "-";
-
+                                       // ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                           foreach (var resItem in residences)
+                                        {
+                                            if (result[0] == resItem.Id)
+                                            {
+                                                residenceFormat += resItem.Value + ", ";
+                                                break;
+                                            }
+                                        }
+                                       
                                     }
                                 }
 
                             }
                         contactListItem.Residence = residenceFormat;
-                    }
+                    } 
                     
                     indexValue++; //increment to change Backgroung Color
                     Contacts.Add(contactListItem);                  
@@ -236,6 +246,10 @@ namespace Mindurry.ViewModels
 
                 Contacts = new ObservableCollection<ContactsListModel>();
                 var indexValue = 0; //to calculate Index to the backgroundColor
+
+                // residences Names
+                var residences = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
+
                 foreach (var item in _contacts)
                 {
 
@@ -271,9 +285,15 @@ namespace Mindurry.ViewModels
                                     string[] stringSeparators = new string[] { "Résidences=" };
                                     string[] result;
                                     result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
-                                    ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
-                                    residenceFormat += residence.Value + "-";
-
+                                    //ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                    foreach (var resItem in residences)
+                                    {
+                                        if (result[0] == resItem.Id)
+                                        {
+                                            residenceFormat += resItem.Value + ", ";
+                                            break;
+                                        }
+                                    }
                                 }
                             }
 

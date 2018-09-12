@@ -149,6 +149,13 @@ namespace Mindurry.ViewModels
 
                 Contacts = new ObservableCollection<ContactsListModel>();
                 var indexValue = 0; //to calculate Index to the backgroundColor
+
+                // residences Names
+                var residences = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
+
+                //Type Name
+                var types = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Type d'appartement");
+
                 foreach (var item in _contacts)
                 {
 
@@ -180,8 +187,15 @@ namespace Mindurry.ViewModels
                                     string[] stringSeparators = new string[] { "Résidences=" };
                                     string[] result;
                                     result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
-                                    ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
-                                    residenceFormat += residence.Value + "-";
+                                    // ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                    foreach (var resItem in residences)
+                                    {
+                                        if (result[0] == resItem.Id)
+                                        {
+                                            residenceFormat += resItem.Value + ", ";
+                                            break;
+                                        }
+                                    }
 
                                 }
                             }
@@ -201,8 +215,16 @@ namespace Mindurry.ViewModels
                                     string[] stringSeparators = new string[] { "Type d'appartement=" };
                                     string[] result;
                                     result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
-                                    ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
-                                    typeFormat += residence.Value + "-";
+                                    //ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                    //typeFormat += residence.Value + ", ";
+                                    foreach (var typeItem in types)
+                                    {
+                                        if (result[0] == typeItem.Id)
+                                        {
+                                            typeFormat += typeItem.Value + ", ";
+                                            break;
+                                        }
+                                    }
 
                                 }
                             }
@@ -267,6 +289,13 @@ namespace Mindurry.ViewModels
                 
                 Contacts = new ObservableCollection<ContactsListModel>();
                 var indexValue = 0; //to calculate Index to the backgroundColor
+
+                // residences Names
+                var residences = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
+
+                //Type Name
+                var types = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Type d'appartement");
+
                 foreach (var item in _contacts)
                 {
 
@@ -298,8 +327,15 @@ namespace Mindurry.ViewModels
                                     string[] stringSeparators = new string[] { "Résidences=" };
                                     string[] result;
                                     result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
-                                    ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
-                                    residenceFormat += residence.Value + "-";
+                                    // ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                    foreach (var resItem in residences)
+                                    {
+                                        if (result[0] == resItem.Id)
+                                        {
+                                            residenceFormat += resItem.Value + ", ";
+                                            break;
+                                        }
+                                    }
 
                                 }
                             }
@@ -307,20 +343,29 @@ namespace Mindurry.ViewModels
                         }
                         contactListItem.Residence = residenceFormat;
                         //Type d'appartement
-                        if (customFields.Contains("Type="))
+                        //Type d'appartement
+                        if (customFields.Contains("Type d'appartement="))
                         {
 
                             string[] substrings = customFields.Split(',');
                             for (int i = 0; i < substrings.Length; i++)
                             {
-                                if (substrings[i].Contains("Type="))
+                                if (substrings[i].Contains("Type d'appartement="))
                                 {
 
-                                    string[] stringSeparators = new string[] { "Type=" };
+                                    string[] stringSeparators = new string[] { "Type d'appartement=" };
                                     string[] result;
                                     result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
-                                    ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
-                                    typeFormat += residence.Value + "-";
+                                    //ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                    //typeFormat += residence.Value + ", ";
+                                    foreach (var typeItem in types)
+                                    {
+                                        if (result[0] == typeItem.Id)
+                                        {
+                                            typeFormat += typeItem.Value + ", ";
+                                            break;
+                                        }
+                                    }
 
                                 }
                             }

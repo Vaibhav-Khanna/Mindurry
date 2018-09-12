@@ -40,6 +40,7 @@ namespace Mindurry.ViewModels
             {
                 if (value != null)
                     CoreMethods.PushPageModel<ClientsDetailsInfoPageModel>(value.ContactId);
+                    SubUnsubDetail();
                 selectedItem = null;
             }
         }
@@ -119,6 +120,9 @@ namespace Mindurry.ViewModels
 
         public async Task LoadData()
         {
+            //if subscription for refreshing list
+            MessagingCenter.Unsubscribe<ClientsDetailsInfoPageModel>(this, "ReloadCollection");
+
             _contacts = null;
             Contacts = null;
             long totalCount;
@@ -149,6 +153,10 @@ namespace Mindurry.ViewModels
 
                 Contacts = new ObservableCollection<ContactsListModel>();
                 var indexValue = 0; //to calculate Index to the backgroundColor
+
+                // residences Names
+                var residences = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
+
                 foreach (var item in _contacts)
                 {
 
@@ -184,8 +192,15 @@ namespace Mindurry.ViewModels
                                     string[] stringSeparators = new string[] { "Résidences=" };
                                     string[] result;
                                     result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
-                                    ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
-                                    residenceFormat += residence.Value + "-";
+                                    //ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                    foreach (var resItem in residences)
+                                    {
+                                        if (result[0] == resItem.Id)
+                                        {
+                                            residenceFormat += resItem.Value + ", ";
+                                            break;
+                                        }
+                                    }
 
                                 }
                             }
@@ -233,6 +248,10 @@ namespace Mindurry.ViewModels
 
                 Contacts = new ObservableCollection<ContactsListModel>();
                 var indexValue = 0; //to calculate Index to the backgroundColor
+
+                // residences Names
+                var residences = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
+
                 foreach (var item in _contacts)
                 {
 
@@ -268,9 +287,15 @@ namespace Mindurry.ViewModels
                                     string[] stringSeparators = new string[] { "Résidences=" };
                                     string[] result;
                                     result = substrings[i].Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries);
-                                    ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
-                                    residenceFormat += residence.Value + "-";
-
+                                    //ContactCustomFieldSourceEntry residence = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemAsync(result[0]);
+                                    foreach (var resItem in residences)
+                                    {
+                                        if (result[0] == resItem.Id)
+                                        {
+                                            residenceFormat += resItem.Value + ", ";
+                                            break;
+                                        }
+                                    }
                                 }
                             }
 
@@ -422,6 +447,15 @@ namespace Mindurry.ViewModels
                 await LoadData();
 
                 MessagingCenter.Unsubscribe<NewClientPageModel>(this, "ReloadCollection");
+            });
+        }
+        void SubUnsubDetail()
+        {
+            MessagingCenter.Subscribe<ClientsDetailsInfoPageModel>(this, "ReloadCollection", async (obj) =>
+            {
+                await LoadData();
+
+                //    MessagingCenter.Unsubscribe<LeadDetailPageModel>(this, "ReloadCollection");
             });
         }
     }

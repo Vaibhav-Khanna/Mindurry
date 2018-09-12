@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mindurry.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,10 @@ namespace Mindurry.Pages
 		{
 			InitializeComponent ();
 		}
-	}
+
+        private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ((ResidencesDetailsApartmentsPageModel)BindingContext)?.SearchCommand.Execute(e.NewTextValue);
+        }
+    }
 }

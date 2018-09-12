@@ -15,6 +15,8 @@ namespace Mindurry.ViewModels
 
         public Stream PdfDocumentStream { get; set; }
         public string Title { get; set; }
+        public string Message { get; set; }
+        public bool Visibility { get; set; }
         public async override void Init(object initData)
         {
             base.Init(initData);
@@ -23,7 +25,16 @@ namespace Mindurry.ViewModels
 
             Title = documentToDisplay.Name;
             var docDownloaded = await PclStorage.LoadFileLocal(documentToDisplay.InternalName + ".pdf", documentToDisplay.ReferenceKind, documentToDisplay.ReferenceId);
-            PdfDocumentStream = new MemoryStream(docDownloaded);
+            if (docDownloaded!= null)
+            {
+                PdfDocumentStream = new MemoryStream(docDownloaded);
+                Visibility = true;
+            }
+            else
+            {
+                 Message = "Une erreur est survenue, Merci de réessayer.";
+                Visibility = false;
+            }
 
         }
         public Command CloseCommand => new Command(async () =>

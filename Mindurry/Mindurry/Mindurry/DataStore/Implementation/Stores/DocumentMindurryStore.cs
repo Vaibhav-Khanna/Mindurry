@@ -139,11 +139,12 @@ namespace Mindurry.DataStore.Implementation.Stores
         }
 
 
-        public async Task PullLatest(string KindId, string Kind)
+        public async Task<IEnumerable<bool>> PullLatest(string KindId, string Kind)
         {
             await InitializeStore().ConfigureAwait(false);
 
             var items = await GetItemsByKindAndReferenceIdAsync(KindId, Kind);
+            List<bool> returnBool = new List<bool>();
             foreach (var item in items)
             {
                 var fileName = item.InternalName + "." + item.Extension;
@@ -156,9 +157,26 @@ namespace Mindurry.DataStore.Implementation.Stores
                     if (document != null)
                     {                      
                         var response = await PclStorage.SaveFileLocal(document, fileName, item.ReferenceKind, item.ReferenceId);
+                        if (response==true)
+                        {
+                            returnBool.Add(true);
+                        } 
+                        else
+                        {
+                            returnBool.Add(false);
+                        }
+                    }
+                    else
+                    {
+                         returnBool.Add(false);
                     }
                 }
+                else
+                {
+                    returnBool.Add(true);
+                }
             }
+            return returnBool;
         }
 
     }

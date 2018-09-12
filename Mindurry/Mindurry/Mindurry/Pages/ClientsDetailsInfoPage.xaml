@@ -454,24 +454,25 @@
                             </StackLayout> -->
 
                             <StackLayout IsVisible="{Binding IsTabThreeL2}">
-                                <Button Text="" FontSize="25" FontFamily="Segoe MDL2 Assets" BackgroundColor="Transparent" HorizontalOptions="Start"
-                                        Command="{Binding TabThreeBackCommand}"/>
-                                <Label Text="🛈   Ici vous pouvez associer des biens à l'acquéreur" TextColor="{StaticResource GrayPanelText}" Margin="0,10"/>
-                                <StackLayout Spacing="5" Margin="0,20,0,0">
-                                    <Label Text="Statut"/>
-                                    <Picker WidthRequest="300" ItemsSource="{Binding Statuts}" SelectedItem="{Binding StatutSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
+                                <StackLayout Orientation="Horizontal" Spacing="5" VerticalOptions="Center">
+                                    <Button Text="" FontSize="20" FontFamily="Segoe MDL2 Assets" BackgroundColor="Transparent" HorizontalOptions="Start"
+                                        Command="{Binding TabThreeBackCommand}" VerticalOptions="Center"/>
+                                    <Label Text="Ici vous pouvez associer des biens à l'acquéreur" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center"/>
                                 </StackLayout>
                                 <StackLayout Spacing="5" Margin="0,20,0,0">
-                                    <Label Text="Résidence"/>
-                                    <Picker WidthRequest="300" ItemsSource="{Binding Residences}" SelectedItem="{Binding ResidenceSelected, Mode=TwoWay}" ItemDisplayBinding="{Binding Name}" HorizontalOptions="Start"/>
+                                    <Picker WidthRequest="300" Title="Statuts"  ItemsSource="{Binding Statuts}" SelectedItem="{Binding StatutSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
+                                </StackLayout>
+                                <StackLayout Spacing="5" Margin="0,20,0,0">
+
+                                    <Picker WidthRequest="300" Title="Résidences" ItemsSource="{Binding Residences}" SelectedItem="{Binding ResidenceSelected, Mode=TwoWay}" ItemDisplayBinding="{Binding Name}" HorizontalOptions="Start"/>
                                 </StackLayout>
                                 <StackLayout Spacing="5">
-                                    <Label Text="Type"/>
-                                    <Picker WidthRequest="300" ItemsSource="{Binding TypeBiens}" SelectedItem="{Binding TypeBienSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
+                                    
+                                    <Picker WidthRequest="300" Title="Type de biens" ItemsSource="{Binding TypeBiens}" SelectedItem="{Binding TypeBienSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
                                 </StackLayout>
                                 <StackLayout Spacing="5">
-                                    <Label Text="Référence"/>
-                                    <Picker WidthRequest="300" ItemsSource="{Binding References}" SelectedItem="{Binding ReferenceSelected}" HorizontalOptions="Start"/>
+                                    
+                                    <Picker WidthRequest="300" Title="Références" ItemsSource="{Binding References}" SelectedItem="{Binding ReferenceSelected}" HorizontalOptions="Start"/>
                                 </StackLayout>
                                 <StackLayout Spacing="5">
                                     <Label Text="Prix en €"/>

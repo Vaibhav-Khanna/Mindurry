@@ -260,6 +260,8 @@ namespace Mindurry.ViewModels
             TabThreeLevel = 0;
             await LoadProperties();
 
+            await InitForm();
+            
             await LoadContact();
 
             await LoadReminders();
@@ -298,7 +300,23 @@ namespace Mindurry.ViewModels
             ClearAllTypesCommand = new Command(ClearAllTypes);
 
         }
+        private async Task InitForm()
+        {
+            // init formulaire (Ajouter un bien)
+            var res = await StoreManager.ResidenceStore.GetItemsAsync();
+            if (res != null && res.Any())
+            {
+                Residences = new ObservableCollection<Models.DataObjects.Residence>(res);
+                //  ResidenceSelected = Residences[0];
 
+                Statuts = new ObservableCollection<string> { "Option", "Réservation", "Signature" };
+                // StatutSelected = Statuts[0];
+                TypeBiens = new ObservableCollection<string> { "Appartement", "Cave", "Parking" };
+                // TypeBienSelected = TypeBiens[0];
+                References = new ObservableCollection<string>();
+                Price = null;
+            }
+        }
         public async override void ReverseInit(object reverseData)
         {
             if (reverseData is Note)
@@ -554,18 +572,8 @@ namespace Mindurry.ViewModels
             await LoadProperties();
 
             // init formulaire (Ajouter un bien)
-            var res = await StoreManager.ResidenceStore.GetItemsAsync();
-            if (res != null && res.Any())
-            {
-                Residences = new ObservableCollection<Models.DataObjects.Residence>(res);
-                ResidenceSelected = Residences[0];
-
-                Statuts = new ObservableCollection<string> { "Option", "Réservation", "Signature" };
-                StatutSelected = Statuts[0];
-                TypeBiens = new ObservableCollection<string> { "Appartement", "Cave", "Parking" };
-                TypeBienSelected = TypeBiens[0];
-
-            }
+            await InitForm();
+                
         });
 
         public Command TabTwoBackCommand => new Command(() =>
@@ -578,9 +586,11 @@ namespace Mindurry.ViewModels
         {
             TabTwoLevel++;
         });
-        public Command TabThreeBackCommand => new Command(() =>
+        public Command TabThreeBackCommand => new Command(async () =>
         {
             TabThreeLevel--;
+            await InitForm();
+
         });
         public Command TabThreeForwardCommand => new Command(() =>
         {
@@ -614,7 +624,12 @@ namespace Mindurry.ViewModels
                 var customField = await StoreManager.ContactCustomFieldStore.GetItemByContactIdAndSourceEntryIdAsync(ContactId, obj.Id);
                 await StoreManager.ContactCustomFieldStore.RemoveAsync(customField);
             }
+            //Calcul contact customField field
+            var customs = await StoreManager.ContactStore.RewriteCustomFields(ContactId);
+            Contact.CustomFields = customs;
 
+            //Update contact
+            bool isInsertedContact = await StoreManager.ContactStore.UpdateAsync(Contact);
 
         });
 
@@ -782,6 +797,7 @@ namespace Mindurry.ViewModels
                 Documents = new ObservableCollection<DocumentMindurry>();
             }
         }
+
         public Command DownloadDocumentCommand => new Command<DocumentMindurry>(async (obj) => {
         StorageFolder folder;
            
@@ -965,8 +981,8 @@ namespace Mindurry.ViewModels
                     {
                         References.Add(item.LotNumberArchitect);
                     }
-                    ReferenceSelected = References[0];
-                    CalculPrice(ReferenceSelected);
+                   // ReferenceSelected = References[0];
+                   // CalculPrice(ReferenceSelected);
                 }
             }
             if (typeBien == "Cave")
@@ -980,8 +996,8 @@ namespace Mindurry.ViewModels
                     {
                         References.Add(item.LotNumberArchitect);
                     }
-                    ReferenceSelected = References[0];
-                    CalculPrice(ReferenceSelected);
+                   // ReferenceSelected = References[0];
+                   // CalculPrice(ReferenceSelected);
                 }
             }
             if (typeBien == "Parking")
@@ -995,8 +1011,8 @@ namespace Mindurry.ViewModels
                     {
                         References.Add(item.LotNumberArchitect);
                     }
-                    ReferenceSelected = References[0];
-                    CalculPrice(ReferenceSelected);
+                   // ReferenceSelected = References[0];
+                   // CalculPrice(ReferenceSelected);
                 }
             }
             

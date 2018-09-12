@@ -149,6 +149,20 @@ namespace Mindurry.ViewModels
                 check.PropertyChanged += TypeFilterChanged;
             }
         }
+
+        public Command SearchCommand => new Command<string>(async (searchString) =>
+        {
+
+            if (searchString?.Length > 0)
+            {
+                searchString = searchString.ToLower();
+                Apartments = new ObservableCollection<ApartmentsListModel>(OriginalApartments.Where(x => x.Apartment.LotNumberArchitect.Contains(searchString)));
+            }
+            else
+            {
+                Apartments = new ObservableCollection<ApartmentsListModel>(OriginalApartments);
+            }
+        });
         void ClearTypeChecks()
         {
             foreach (var item in TypesChecks)

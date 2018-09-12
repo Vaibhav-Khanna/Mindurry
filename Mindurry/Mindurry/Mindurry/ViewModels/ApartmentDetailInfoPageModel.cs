@@ -50,7 +50,8 @@ namespace Mindurry.ViewModels
             var current = Connectivity.NetworkAccess;
             if (current == NetworkAccess.Internet)
             {
-                await StoreManager.DocumentMindurryStore.PullLatest(Apartment.Id, ReferenceKind.Apartment.ToString().ToLower());
+                var resultPull = await StoreManager.DocumentMindurryStore.PullLatest(Apartment.Id, ReferenceKind.Apartment.ToString().ToLower());
+
                // var str = await PclStorage.ReturnFolderPath(ReferenceKind.Apartment.ToString().ToLower());
             }
             //Documents
