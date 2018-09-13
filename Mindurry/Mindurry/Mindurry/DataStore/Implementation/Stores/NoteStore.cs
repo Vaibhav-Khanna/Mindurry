@@ -24,7 +24,7 @@ namespace Mindurry.DataStore.Implementation.Stores
                 } else
                 {
                     return null;
-                }  
+                }
             }
             catch (Exception)
             {
@@ -134,5 +134,44 @@ namespace Mindurry.DataStore.Implementation.Stores
                 return null;
             }
         }
+
+        public async Task<IEnumerable<StatForm>> GetContactStat(Qualification typeContact, DateTime dateDeb, DateTime dateFin)
+        {
+            await InitializeStore().ConfigureAwait(false);
+            try
+            {
+                var ttt = await Table.IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+
+                var collection = await Table.Where(x => ((x.Extra1 == typeContact.ToString()) && (x.DatabaseInsertAt >= dateDeb) && (x.DatabaseInsertAt <= dateFin))).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                if (collection != null && collection.Any())
+                {
+
+                    var tri = collection.GroupBy(x => x.DatabaseInsertAt.Date)
+                        .Select(g => new StatForm
+                        {
+                            Total = g.Count(),
+                            DateStat = g.Key.Date
+                        })
+                        .OrderBy(g => g.DateStat);
+                    
+                    return tri; 
+                                
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            { 
+                return null;
+            }
+        }
+    }
+    public class StatForm
+    {
+        public DateTime DateStat { get; set; }
+        public long Total { get; set; }
+
     }
 }

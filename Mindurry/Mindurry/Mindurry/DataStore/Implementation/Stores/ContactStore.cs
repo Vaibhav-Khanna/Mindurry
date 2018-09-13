@@ -479,7 +479,24 @@ namespace Mindurry.DataStore.Implementation.Stores
                 return customs;
             }
             else return null;
-            
+
+        }
+        public async Task<long> GetTotalCountByCollectSourceId (string collectSourceId)
+        {
+            await InitializeStore().ConfigureAwait(false);
+            try
+            { //
+                var result = await Table.Where(x => (x.CollectSourceId == collectSourceId)).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                if (result != null && result.Any())
+                {
+                    return (result as IQueryResultEnumerable<Contact>).TotalCount;
+                }
+                else return 0;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
 
         }
 

@@ -1,4 +1,5 @@
-﻿using Mindurry.DataModels;
+﻿using Microsoft.WindowsAzure.MobileServices;
+using Mindurry.DataModels;
 using Mindurry.DataStore.Abstraction.Stores;
 using Mindurry.Models.DataObjects;
 using Newtonsoft.Json;
@@ -85,6 +86,24 @@ namespace Mindurry.DataStore.Implementation.Stores
             catch (Exception)
             {
                 return null;
+            }
+
+        }
+        public async Task<long> GetTotalCountByContactCustomFieldSourceEntryId( string ContactCustomFieldSourceEntryId, DateTime dateBegin, DateTime dateEnd)
+        {
+            await InitializeStore().ConfigureAwait(false);
+            try
+            { //
+                var result = await Table.Where(x => ((x.ContactCustomFieldSourceEntryId == ContactCustomFieldSourceEntryId) && (x.InsertedDate >= dateBegin) && (x.InsertedDate <= dateEnd))).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                if (result != null && result.Any())
+                {
+                    return (result as IQueryResultEnumerable<ContactCustomField>).TotalCount;
+                }
+                else return 0;
+            }
+            catch (Exception e)
+            {
+                return 0;
             }
 
         }

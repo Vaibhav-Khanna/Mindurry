@@ -13,5 +13,6 @@ namespace Mindurry.DataStore.Abstraction.Stores
         Task<ContactCustomField> GetItemByContactIdAndSourceIdAsync(string ContactId, string ContactCustomFieldSourceId);
         Task<IEnumerable<ContactCustomField>> GetItemsByContactIdAsync(string ContactId);
         Task<ContactCustomField> GetItemByContactIdAndSourceEntryIdAsync(string ContactId, string ContactCustomFieldSourceEntryId);
+        Task<long> GetTotalCountByContactCustomFieldSourceEntryId(string ContactCustomFieldSourceEntryId, DateTime dateDebut, DateTime dateFin);
         }
 }

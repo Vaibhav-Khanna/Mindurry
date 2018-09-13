@@ -28,5 +28,9 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("contactCustomFieldSourceEntryValue")]
         public string ContactCustomFieldSourceEntryValue { get; set; }
 
+        [JsonProperty("insertedDate")]
+        public DateTime InsertedDate { get; set; }
+       
+
     }
 }

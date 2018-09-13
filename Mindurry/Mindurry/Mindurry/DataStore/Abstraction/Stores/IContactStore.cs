@@ -17,5 +17,6 @@ namespace Mindurry.DataStore.Abstraction.Stores
         Task<JObjectManualQuery> GetItemsByTypeFilterAsync(string ContactType, List<CheckBoxItem> SelectedTypes = null, List<CheckBoxItem> SelectedResidences = null, bool forceRefresh = false);
         Task<JObjectManualQuery> GetNextItemsByTypeFilterAsync(int currentitemCount, string ContactType, List<CheckBoxItem> SelectedTypes = null, List<CheckBoxItem> SelectedResidences = null, bool forceRefresh = false);
         Task<string> RewriteCustomFields(string contactId);
+        Task<long> GetTotalCountByCollectSourceId(string collectSourceId);
     }
 }

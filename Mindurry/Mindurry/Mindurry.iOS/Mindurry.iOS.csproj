@@ -128,8 +128,11 @@
     <PackageReference Include="Microsoft.Identity.Client">
       <Version>1.1.2-preview0008</Version>
     </PackageReference>
+    <PackageReference Include="Syncfusion.Xamarin.SfChart">
+      <Version>16.1.0.37</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Essentials">
-      <Version>0.8.0-preview</Version>
+      <Version>0.9.1-preview</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="2.5.0.280555" />
     <PackageReference Include="Newtonsoft.Json">

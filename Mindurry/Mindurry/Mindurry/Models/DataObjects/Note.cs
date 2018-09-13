@@ -11,7 +11,7 @@ namespace Mindurry.Models.DataObjects
         public DateTimeOffset? DoneAt { get; set; }
 
         [JsonProperty("databaseInsertAt")]
-        public DateTimeOffset? DatabaseInsertAt { get; set; }
+        public DateTime DatabaseInsertAt { get; set; }
 
         [JsonProperty("reminderAt")]
         public DateTimeOffset? ReminderAt { get; set; }

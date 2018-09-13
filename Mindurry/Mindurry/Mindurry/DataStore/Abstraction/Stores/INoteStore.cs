@@ -1,4 +1,5 @@
-﻿using Mindurry.Models.DataObjects;
+﻿using Mindurry.DataStore.Implementation.Stores;
+using Mindurry.Models.DataObjects;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,5 +14,6 @@ namespace Mindurry.DataStore.Abstraction.Stores
         Task<IEnumerable<Note>> GetNotesByContactIdAsync(string contactId);
         Task<IEnumerable<Note>> GetRemindersToDoAsync();
         Task<IEnumerable<Note>> GetRemindersDoneAsync();
+        Task<IEnumerable<StatForm>> GetContactStat(Qualification typeContact, DateTime dateDeb, DateTime dateFin);
     }
 }
