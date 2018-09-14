@@ -2,12 +2,18 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Mindurry.Pages.DashboardPage"
+             xmlns:converter="clr-namespace:Mindurry.Converters"
              xmlns:microcharts="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms" 
              xmlns:chart="clr-namespace:Syncfusion.SfChart.XForms;assembly=Syncfusion.SfChart.XForms"
              xmlns:effect="clr-namespace:Mindurry.Effects"
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
 			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows"
              Title="TABLEAU DE BORD">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:NegateBoolConverter x:Key="NegateBoolConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <ScrollView>
         <Grid>
@@ -19,9 +25,9 @@
 
                 <StackLayout Style="{StaticResource SubheaderStackStyle}" Orientation="Horizontal" Grid.Row="0">
                 <Label Text="Date de début" Style="{StaticResource SubHeaderLabelStyle}"/>
-                    <win:CalendarDatePicker Width="200" Date="{Binding StartDate, Mode=TwoWay}"/>
+                    <win:CalendarDatePicker Width="200" Date="{Binding StartDate, Mode=TwoWay}" IsOutOfScopeEnabled="true"/>
                 <Label Text="Date de fin" Margin="20,0,0,0" Style="{StaticResource SubHeaderLabelStyle}"/>
-                    <win:CalendarDatePicker Width="200" Date="{Binding EndDate, Mode=TwoWay}"/>
+                    <win:CalendarDatePicker Width="200" Date="{Binding EndDate, Mode=TwoWay}" MaxDate="{Binding MaxDate}" IsOutOfScopeEnabled="true"/>
             </StackLayout>
             
                 <StackLayout Orientation="Horizontal" Spacing="10"  Grid.Row="1" HorizontalOptions="FillAndExpand" Padding="5" >
@@ -44,7 +50,8 @@
                                         <effect:SemiBoldEffect/>
                                     </Label.Effects>
                                 </Label>
-                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart2}" Grid.Row="1"/>
+                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Text="Pas de données" TextColor="{StaticResource GrayPanelText}" FontSize="12" Grid.Row="1" IsVisible="{Binding Chart1Visible,Converter={StaticResource NegateBoolConverter}}" />
+                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart1}" Grid.Row="1" IsVisible="{Binding Chart1Visible}"/>
                             </Grid>
                         </Frame>
                         <Frame OutlineColor="#F5F4F3" HorizontalOptions="FillAndExpand" Grid.Column="1">
@@ -58,33 +65,21 @@
                                         <effect:SemiBoldEffect/>
                                     </Label.Effects>
                                 </Label>
-                                <!-- <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart3}" Grid.Row="1"/> -->
-                                <chart:SfChart IsVisible="{Binding ChartLeadVisible}" Margin="0,10,0,0" Grid.Row="1">
-
+                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Text="Pas de données" TextColor="{StaticResource GrayPanelText}" FontSize="12" Grid.Row="1" IsVisible="{Binding Chart3Visible,Converter={StaticResource NegateBoolConverter}}" />
+                                <chart:SfChart IsVisible="{Binding Chart3Visible}" Margin="0,10,0,0" Grid.Row="1">
                                     <chart:SfChart.PrimaryAxis>
-                                        <chart:DateTimeAxis RangePadding="None"  LabelsIntersectAction="MultipleRows"  Minimum="{Binding DateDeb}" Maximum="{Binding DateFin}" IntervalType="{Binding IntervalType}" Interval="{Binding Interval}">
+                                        <chart:DateTimeAxis RangePadding="None"  LabelsIntersectAction="MultipleRows"  Minimum="{Binding DateDebDisplay}" Maximum="{Binding DateFinDisplay}" IntervalType="{Binding IntervalType}" Interval="{Binding Interval}">
                                             <chart:DateTimeAxis.LabelStyle>
                                                 <chart:ChartAxisLabelStyle LabelFormat="dd/MM"/>
                                             </chart:DateTimeAxis.LabelStyle>
                                         </chart:DateTimeAxis>
                                     </chart:SfChart.PrimaryAxis>
-
                                     <chart:SfChart.SecondaryAxis>
                                         <chart:NumericalAxis Minimum="0">
                                         </chart:NumericalAxis>
-
                                     </chart:SfChart.SecondaryAxis>
-                                    <chart:LineSeries EnableTooltip="True" Color="#9F182D"  Opacity="0.5" ItemsSource ="{Binding DataLead}" XBindingPath="DateStat" YBindingPath="Total">
 
-                                        <chart:LineSeries.DataMarker>
-                                            <chart:ChartDataMarker/>
-                                        </chart:LineSeries.DataMarker>
-                                        
-                                    </chart:LineSeries>
-                                    <!-- <chart:SfChart.Series>
-
-                                    <chart:ColumnSeries ItemsSource="{Binding Data}" XBindingPath="DateStat" YBindingPath="Total" />
-                                </chart:SfChart.Series> -->
+                                    <chart:AreaSeries Color="#F5CAD0" StrokeWidth="2" StrokeColor="#9F182C" ItemsSource ="{Binding Chart3}" XBindingPath="DateStat" YBindingPath="Total"/>
                                 </chart:SfChart>
                             </Grid>
                         </Frame>
@@ -99,7 +94,25 @@
                                         <effect:SemiBoldEffect/>
                                     </Label.Effects>
                                 </Label>
-                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart1}" Grid.Row="1"/>
+                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Text="Pas de données" TextColor="{StaticResource GrayPanelText}" FontSize="12" IsVisible="{Binding Chart5Visible,Converter={StaticResource NegateBoolConverter}}" Grid.Row="1" />
+                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart5}" Grid.Row="1" IsVisible="{Binding Chart5Visible}"/> 
+                               <!-- <chart:SfChart Margin="0,10,0,0"  Grid.Row="1" BackgroundColor="Transparent">
+
+                                    <chart:DoughnutSeries DoughnutCoefficient="0.7" DataMarkerPosition = "OutsideExtended" IsVisibleOnLegend="True" LegendIcon="Circle"  ItemsSource ="{Binding DataLeadsSources}" XBindingPath="SourceName" YBindingPath="Total">
+                                        <chart:DoughnutSeries.DataMarker>
+                                            <chart:ChartDataMarker ShowLabel="True">
+                                                <chart:ChartDataMarker.LabelStyle>
+                                                    <chart:DataMarkerLabelStyle LabelFormat ="##%"/>
+                                                </chart:ChartDataMarker.LabelStyle>
+                                            </chart:ChartDataMarker>
+                                        </chart:DoughnutSeries.DataMarker>
+                                        <chart:DoughnutSeries.ColorModel>
+                                            <chart:ChartColorModel Palette="Custom" CustomBrushes="{Binding CustomBrushes}">
+                                              
+                                            </chart:ChartColorModel>
+                                        </chart:DoughnutSeries.ColorModel>
+                                    </chart:DoughnutSeries>
+                                </chart:SfChart> -->
                             </Grid>
                         </Frame>
                     </Grid>
@@ -123,7 +136,8 @@
                                         <effect:SemiBoldEffect/>
                                     </Label.Effects>
                                 </Label>
-                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart1}" Grid.Row="1"/>
+                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Text="Pas de données" TextColor="{StaticResource GrayPanelText}" FontSize="12" IsVisible="{Binding Chart2Visible,Converter={StaticResource NegateBoolConverter}}" Grid.Row="1" />
+                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart2}" Grid.Row="1" IsVisible="{Binding Chart2Visible}"/>
                             </Grid>
                         </Frame>
                         <Frame OutlineColor="#F5F4F3"  HorizontalOptions="FillAndExpand" Grid.Column="1">
@@ -137,33 +151,21 @@
                                         <effect:SemiBoldEffect/>
                                     </Label.Effects>
                                 </Label>
-                                <!-- <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart3}" Grid.Row="1"/> -->
-                                <chart:SfChart IsVisible="{Binding ChartClientVisible}" Margin="0,10,0,0" Grid.Row="1">
-
+                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Text="Pas de données" TextColor="{StaticResource GrayPanelText}" FontSize="12" IsVisible="{Binding Chart4Visible,Converter={StaticResource NegateBoolConverter}}" Grid.Row="1" />
+                                <chart:SfChart IsVisible="{Binding Chart4Visible}" Margin="0,10,0,0" Grid.Row="1">
                                     <chart:SfChart.PrimaryAxis>
-                                        <chart:DateTimeAxis RangePadding="None"  LabelsIntersectAction="MultipleRows"  Minimum="{Binding DateDeb}" Maximum="{Binding DateFin}" IntervalType="{Binding IntervalType}" Interval="{Binding Interval}">
+                                        <chart:DateTimeAxis RangePadding="None"  LabelsIntersectAction="MultipleRows"  Minimum="{Binding DateDebDisplay}" Maximum="{Binding DateFinDisplay}" IntervalType="{Binding IntervalType}" Interval="{Binding Interval}">
                                             <chart:DateTimeAxis.LabelStyle>
                                                 <chart:ChartAxisLabelStyle LabelFormat="dd/MM"/>
                                             </chart:DateTimeAxis.LabelStyle>
                                         </chart:DateTimeAxis>
                                     </chart:SfChart.PrimaryAxis>
-
                                     <chart:SfChart.SecondaryAxis>
                                         <chart:NumericalAxis Minimum="0">
                                         </chart:NumericalAxis>
-
                                     </chart:SfChart.SecondaryAxis>
-                                    <chart:LineSeries EnableTooltip="True" Color="#9F182D"  Opacity="0.5" ItemsSource ="{Binding DataClient}" XBindingPath="DateStat" YBindingPath="Total">
+                                    <chart:AreaSeries Color="#F5CAD0" StrokeWidth="2" StrokeColor="#9F182C" ItemsSource ="{Binding Chart4}" XBindingPath="DateStat" YBindingPath="Total"/>
 
-                                        <chart:LineSeries.DataMarker>
-                                            <chart:ChartDataMarker/>
-                                        </chart:LineSeries.DataMarker>
-
-                                    </chart:LineSeries>
-                                    <!-- <chart:SfChart.Series>
-
-                                    <chart:ColumnSeries ItemsSource="{Binding Data}" XBindingPath="DateStat" YBindingPath="Total" />
-                                </chart:SfChart.Series> -->
                                 </chart:SfChart>
                             </Grid>
                         </Frame>
@@ -178,7 +180,8 @@
                                         <effect:SemiBoldEffect/>
                                     </Label.Effects>
                                 </Label>
-                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart1}" Grid.Row="1"/>
+                                <Label VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Text="Pas de données" TextColor="{StaticResource GrayPanelText}" FontSize="12" IsVisible="{Binding Chart6Visible,Converter={StaticResource NegateBoolConverter}}" Grid.Row="1" />
+                                <microcharts:ChartView WidthRequest="300" Chart="{Binding Chart6}" Grid.Row="1" IsVisible="{Binding Chart6Visible}"/>
                             </Grid>
                         </Frame>
                     </Grid>

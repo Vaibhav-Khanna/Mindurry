@@ -55,7 +55,11 @@ namespace Mindurry.Models.DataObjects
 
         [JsonProperty("collectSourceId")]
         public string CollectSourceId { get; set; }
+
+        [JsonProperty("collectSourceName")]
+        public string CollectSourceName { get; set; }
         
+
         [JsonProperty("userId")]
         public string UserId { get; set; }
 

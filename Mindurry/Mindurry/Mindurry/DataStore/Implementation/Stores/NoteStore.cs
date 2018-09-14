@@ -1,4 +1,6 @@
-﻿using Mindurry.DataStore.Abstraction.Stores;
+﻿using FreshMvvm;
+using Mindurry.DataStore.Abstraction;
+using Mindurry.DataStore.Abstraction.Stores;
 using Mindurry.Models.DataObjects;
 using System;
 using System.Collections.Generic;
@@ -135,19 +137,18 @@ namespace Mindurry.DataStore.Implementation.Stores
             }
         }
 
-        public async Task<IEnumerable<StatForm>> GetContactStat(Qualification typeContact, DateTime dateDeb, DateTime dateFin)
+        public async Task<IEnumerable<PicsStats>> GetContactStat(Qualification typeContact, DateTime dateDeb, DateTime dateFin)
         {
             await InitializeStore().ConfigureAwait(false);
             try
             {
-                var ttt = await Table.IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
-
-                var collection = await Table.Where(x => ((x.Extra1 == typeContact.ToString()) && (x.DatabaseInsertAt >= dateDeb) && (x.DatabaseInsertAt <= dateFin))).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+               
+                var collection = await Table.Where(x => ((x.Extra1 == typeContact.ToString()) && (x.DatabaseInsertAt >= dateDeb) && (x.DatabaseInsertAt < dateFin))).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
                 if (collection != null && collection.Any())
                 {
 
                     var tri = collection.GroupBy(x => x.DatabaseInsertAt.Date)
-                        .Select(g => new StatForm
+                        .Select(g => new PicsStats
                         {
                             Total = g.Count(),
                             DateStat = g.Key.Date
@@ -167,11 +168,57 @@ namespace Mindurry.DataStore.Implementation.Stores
                 return null;
             }
         }
+
+        public async Task<IEnumerable<SourcesStats>> GetSourcesStat(Qualification typeContact, DateTime dateDeb, DateTime dateFin)
+        {
+            await InitializeStore().ConfigureAwait(false);
+            try
+            {
+
+                var collection = await Table.Where(x => ((x.Extra1 == typeContact.ToString()) && (x.DatabaseInsertAt >= dateDeb) && (x.DatabaseInsertAt < dateFin))).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                if (collection != null && collection.Any())
+                {
+                    //List de contact
+                    List<Contact> contactList = new List<Contact>();
+                    var storeManager = FreshIOC.Container.Resolve<IStoreManager>();
+                    foreach (var item in collection)
+                    {
+                        var contact = await storeManager.ContactStore.GetItemAsync(item.ContactId);
+                        contactList.Add(contact);
+                    }
+                    long totalContact = contactList.Count();
+                    var tri = contactList.GroupBy(x => x.CollectSourceName)
+                        .Select(g => new SourcesStats
+                        {
+                            Total = (g.Count() * 100) / totalContact,
+                            SourceName = g.Key
+                        })
+                        .OrderBy(g => g.SourceName);
+
+                    return tri;
+
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
     }
-    public class StatForm
+    public class PicsStats
     {
         public DateTime DateStat { get; set; }
         public long Total { get; set; }
+
+    }
+    public class SourcesStats
+    {
+        public string SourceName { get; set; }
+        public float Total { get; set; }
 
     }
 }

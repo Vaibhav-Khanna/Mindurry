@@ -94,7 +94,7 @@ namespace Mindurry.DataStore.Implementation.Stores
             await InitializeStore().ConfigureAwait(false);
             try
             { //
-                var result = await Table.Where(x => ((x.ContactCustomFieldSourceEntryId == ContactCustomFieldSourceEntryId) && (x.InsertedDate >= dateBegin) && (x.InsertedDate <= dateEnd))).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                var result = await Table.Where(x => ((x.ContactCustomFieldSourceEntryId == ContactCustomFieldSourceEntryId) && (x.InsertedDate >= dateBegin) && (x.InsertedDate < dateEnd))).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
                 if (result != null && result.Any())
                 {
                     return (result as IQueryResultEnumerable<ContactCustomField>).TotalCount;
