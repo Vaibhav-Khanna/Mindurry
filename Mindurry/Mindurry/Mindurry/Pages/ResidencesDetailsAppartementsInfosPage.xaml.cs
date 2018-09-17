@@ -9,7 +9,7 @@ using Xamarin.Forms.Xaml;
 
 namespace Mindurry.Pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+	
 	public partial class ResidencesDetailsAppartementsInfosPage : ContentPage
 	{
 		public ResidencesDetailsAppartementsInfosPage ()

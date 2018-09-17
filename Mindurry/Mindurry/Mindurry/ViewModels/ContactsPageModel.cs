@@ -1,14 +1,18 @@
 ﻿using Microsoft.WindowsAzure.MobileServices;
 using Mindurry.DataModels;
+using Mindurry.Helpers;
 using Mindurry.Models;
 using Mindurry.Models.DataObjects;
 using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Windows.Storage;
 using Xamarin.Forms;
 
 namespace Mindurry.ViewModels
@@ -164,6 +168,7 @@ namespace Mindurry.ViewModels
                     contactListItem.Name = item.Firstname + " " + item.Lastname;
                     contactListItem.Email = item.Email;
                     contactListItem.Telephone = item.Phone;
+                    contactListItem.Address = item.Street1 + " " + item.ZipCode + " " + item.City + " " + item.Country;
                     contactListItem.Commercial = item.UserFirstname + " " + item.UserLastname;
 
                     // Calcul de dernier relance (derniere Note sur le contact)
@@ -260,6 +265,7 @@ namespace Mindurry.ViewModels
                     contactListItem.Name = item.Firstname + " " + item.Lastname;
                     contactListItem.Email = item.Email;
                     contactListItem.Telephone = item.Phone;
+                    contactListItem.Address = item.Street1 + " " + item.ZipCode + " " + item.City + " " + item.Country;
                     contactListItem.Commercial = item.UserFirstname + " " + item.UserLastname;
 
                     // Calcul de dernier relance (derniere Note sur le contact)
@@ -326,7 +332,61 @@ namespace Mindurry.ViewModels
             Loadingmore = false;
         });
 
+        public Command CsvExportCommand => new Command(async () =>
+        {
 
+            List<List<string>> dataList = new List<List<string>>();
+            // title firstline in csv
+            List<string> column = new List<string> { "Date de création", "Nom", "Email", "Téléphone", "Adresse", "Commercial en charge", "Dernière relance", "Prochaine relance", "Intêret résidence" };
+            dataList.Add(column);
+            //iterate through list items
+            foreach (var item in Contacts)
+            {
+                //get properties and values 
+                PropertyInfo[] props = item.GetType().GetProperties();
+
+                List<string> itemValues = new List<string>(); 
+
+                //iterate through properties
+                foreach (var prop in props) 
+                {
+                    if (prop.Name != "ContactId" && prop.Name != "Lastname" && prop.Name != "Index" && prop.Name != "Type")
+                    {
+                        var valueProp = prop.GetValue(item, null);
+                        string val;
+                        if (valueProp == null)
+                        {
+                            val = "";
+                        }
+                        else
+                        {
+                            val = valueProp.ToString();
+                        }
+                        itemValues.Add(val);
+                    }
+                }
+                dataList.Add(itemValues);
+            }
+            string csv = string.Join(Environment.NewLine, dataList.Select(i => string.Join(",", i)));
+
+            var bytes = System.Text.Encoding.Unicode.GetBytes(csv);
+            StorageFolder folder;
+            
+            var stream = new MemoryStream(bytes);
+            var dateNow = DateTime.Now.ToString("ddMMyyyy");
+            var name = "export_Contacts_"+ dateNow+".csv";
+
+            folder = await DependencyService.Get<ISave>().Save(stream, name);
+            if (folder != null)
+            {
+                var result = await CoreMethods.DisplayAlert("Téléchargement", "Le téléchargement du document " + name + " est terminé", "Ouvrir le répertoire", "Fermer");
+                if (result)
+                {
+                    await DependencyService.Get<ISave>().LaunchFolder(folder);
+                }
+            }
+        }
+);
 
         public Command SelectResidenceCommand => new Command<CheckBoxItem>(async (obj) =>
         {

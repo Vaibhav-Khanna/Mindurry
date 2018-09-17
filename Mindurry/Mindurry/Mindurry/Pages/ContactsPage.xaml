@@ -41,7 +41,10 @@
                     <StackLayout Orientation="Horizontal" Grid.Column="2" VerticalOptions="CenterAndExpand">
                         <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="16" TextColor="#417505" VerticalOptions="Center"/>
                         <Label Text="Exporter en CSV" FontSize="16" TextColor="#417505" VerticalOptions="Center"/>
-                    </StackLayout>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding CsvExportCommand}"/>
+                        </StackLayout.GestureRecognizers>   
+                </StackLayout>
 
                     <StackLayout Orientation="Horizontal" Grid.Column="3" VerticalOptions="CenterAndExpand" BackgroundColor="Transparent">
                         <StackLayout.GestureRecognizers>

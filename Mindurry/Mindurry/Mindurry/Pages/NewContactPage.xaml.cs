@@ -10,7 +10,7 @@ using Xamarin.Forms.Xaml;
 
 namespace Mindurry.Pages
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+	
 	public partial class NewContactPage : ContentPage
 	{
 		public NewContactPage ()

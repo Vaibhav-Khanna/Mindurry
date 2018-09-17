@@ -34,6 +34,6 @@ namespace Mindurry.DataModels
 
     public enum CheckBoxContainerDataType
     {
-        Residence, Type, Exposure
+        Residence, Type, Exposure, CommandState
     }
 }

@@ -40,7 +40,7 @@
                             <TapGestureRecognizer Command="{Binding RemindersToDoCommand}"/>
                         </Label.GestureRecognizers>
                     </Label>
-                <Label Text="{Binding RemindersDoneCount, StringFormat='Terminer ({0})'}" HorizontalOptions="Start" TextColor="{Binding BGDoneColor}" IsEnabled="{Binding IsToDo}">
+                <Label Text="{Binding RemindersDoneCount, StringFormat='Terminés ({0})'}" HorizontalOptions="Start" TextColor="{Binding BGDoneColor}" IsEnabled="{Binding IsToDo}">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding RemindersDoneCommand}"/>
                     </Label.GestureRecognizers>
