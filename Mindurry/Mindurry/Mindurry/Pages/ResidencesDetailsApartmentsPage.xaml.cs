@@ -21,5 +21,10 @@ namespace Mindurry.Pages
         {
             ((ResidencesDetailsApartmentsPageModel)BindingContext)?.SearchCommand.Execute(e.NewTextValue);
         }
+
+        private void Slider_ValueChanged(object sender, ValueChangedEventArgs e)
+        {
+
+        }
     }
 }

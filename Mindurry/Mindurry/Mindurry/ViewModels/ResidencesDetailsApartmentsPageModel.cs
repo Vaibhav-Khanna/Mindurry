@@ -62,6 +62,82 @@ namespace Mindurry.ViewModels
         public ICommand ArrowThreeCommand { get; set; }
         public ICommand ClearAllFilterCommand { get; set; }
         
+        public float MaximumPrice { get; set; }
+        public float MinimumPrice { get; set; }
+
+        public float MaximumArea { get; set; }
+        public float MinimumArea { get; set; }
+
+        float _upperAreaValue;
+        public float UpperAreaValue
+        {
+            get
+            {
+                return _upperAreaValue;
+            }
+            set
+            {
+                _upperAreaValue = value;
+                if (_upperAreaValue <= MaximumArea && _upperAreaValue > 0)
+                {
+                    Filter();
+                }
+
+                RaisePropertyChanged();
+            }
+        }
+        float _lowerAreaValue;
+        public float LowerAreaValue
+        {
+            get
+            {
+                return _lowerAreaValue;
+            }
+            set
+            {
+                _lowerAreaValue = value;
+                if (_lowerAreaValue >= MinimumArea)
+                {
+                    Filter();
+                }
+                RaisePropertyChanged();
+            }
+        }
+
+        float _upperPriceValue;
+        public float UpperPriceValue
+        {
+            get
+            {
+                return _upperPriceValue;
+            }
+            set {
+                _upperPriceValue = value;
+                if (_upperPriceValue <= MaximumPrice && _upperPriceValue > 0)
+                {
+                    Filter();
+                }
+                
+                RaisePropertyChanged();
+            }
+        }
+        float _lowerPriceValue;
+        public float LowerPriceValue
+        {
+            get
+            {
+                return _lowerPriceValue;
+            }
+            set
+            {
+                _lowerPriceValue = value;
+                if (_lowerPriceValue >= MinimumPrice) 
+                {
+                    Filter();
+                }
+                RaisePropertyChanged();
+            }
+        }
 
         public async override void Init(object initData)
         {
@@ -131,6 +207,24 @@ namespace Mindurry.ViewModels
 
         public void LoadFilters()
         {
+            if (OriginalApartments != null && OriginalApartments.Any())
+            {
+                //Price Filter
+                MaximumPrice = OriginalApartments.OrderByDescending(a => a.Apartment.Price).First().Apartment.Price;
+                MinimumPrice = OriginalApartments.OrderBy(a => a.Apartment.Price).First().Apartment.Price;
+                LowerPriceValue = MinimumPrice;
+                UpperPriceValue = MaximumPrice;
+            }
+
+            if (OriginalApartments != null && OriginalApartments.Any())
+            {
+                //Area Filter
+                MaximumArea = OriginalApartments.OrderByDescending(b => b.Apartment.Area).First().Apartment.Area;
+                MinimumArea = OriginalApartments.OrderBy(b => b.Apartment.Area).First().Apartment.Area;
+                LowerAreaValue = MinimumArea;
+                UpperAreaValue = MaximumArea;
+            }
+
             TypesChecks = new ObservableCollection<CheckBoxItem>();
             ExpositionChecks = new ObservableCollection<CheckBoxItem>();
             // Type Checkbox Items
@@ -207,33 +301,39 @@ namespace Mindurry.ViewModels
             filter_list = OriginalApartments;
 
             //Filtered for types
-            var types_checked = TypesChecks.Where(r => r.IsChecked).ToList();
-            if (types_checked.Any())
+            if (TypesChecks != null)
             {
-                var temp_list = new List<ApartmentsListModel>();
-
-                foreach (var item in types_checked)
+                var types_checked = TypesChecks.Where(r => r.IsChecked).ToList();
+                if (types_checked.Any())
                 {
-                    temp_list.AddRange(filter_list.Where(x => x.Apartment.Kind == item.Content));
-                }
+                    var temp_list = new List<ApartmentsListModel>();
 
-                filter_list = temp_list;
+                    foreach (var item in types_checked)
+                    {
+                        temp_list.AddRange(filter_list.Where(x => x.Apartment.Kind == item.Content));
+                    }
+
+                    filter_list = temp_list;
+                }
             }
-            
+
+
             //Filtered for exposure
-            var exposure_checked = ExpositionChecks.Where(x => x.IsChecked).ToList();
-            if (exposure_checked.Any())
+            if (ExpositionChecks != null)
             {
-                var temp_list = new List<ApartmentsListModel>();
-
-                foreach (var item in exposure_checked)
+                var exposure_checked = ExpositionChecks.Where(x => x.IsChecked).ToList();
+                if (exposure_checked.Any())
                 {
-                    temp_list.AddRange(filter_list.Where(x => x.Apartment.Exposure == item.Content));
+                    var temp_list = new List<ApartmentsListModel>();
+
+                    foreach (var item in exposure_checked)
+                    {
+                        temp_list.AddRange(filter_list.Where(x => x.Apartment.Exposure == item.Content));
+                    }
+
+                    filter_list = temp_list;
                 }
-
-                filter_list = temp_list;
             }
-
             //Garden switch filter
             if (GardenChecked)
                 filter_list = filter_list.Where(r => r.GardenArea != 0).ToList();
@@ -242,6 +342,9 @@ namespace Mindurry.ViewModels
             if (TerraceChecked)
                 filter_list = filter_list.Where(r => r.TerraceArea != 0).ToList();
 
+            filter_list = filter_list.Where(a => (a.Apartment.Area >= LowerAreaValue && a.Apartment.Area <= UpperAreaValue)).ToList();
+
+            filter_list = filter_list.Where(a => (a.Apartment.Price >= LowerPriceValue && a.Apartment.Price <= UpperPriceValue)).ToList();
 
             Apartments = new ObservableCollection<ApartmentsListModel>(filter_list);
         }

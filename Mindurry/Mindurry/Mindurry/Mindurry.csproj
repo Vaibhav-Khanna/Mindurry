@@ -55,6 +55,7 @@
     <PackageReference Include="Xamarin.Essentials" Version="0.9.1-preview" />
     <PackageReference Include="Xamarin.Forms" Version="2.5.0.280555" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Xamarin.Forms.RangeSlider" Version="0.7.36" />
   </ItemGroup>
 
   <ItemGroup>
