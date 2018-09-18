@@ -56,6 +56,22 @@
                                 </Label.GestureRecognizers>
                             </Label>
                         </Grid>
+                        <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50" IsVisible="{Binding ContactName,Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="70*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Statut" Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center"/>
+                            <Label Text="{Binding Apartment.CommandState}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        </Grid>
+                        <Grid  BackgroundColor="#FFFFFF" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50" IsVisible="{Binding ContactName,Converter={StaticResource StringNullOrEmptyBoolConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30*"/>
+                                <ColumnDefinition Width="70*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Stade" Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center"/>
+                            <Label Text="{Binding Apartment.Stage}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                        </Grid>
                         <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30*"/>

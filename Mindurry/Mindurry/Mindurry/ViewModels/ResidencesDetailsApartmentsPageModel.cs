@@ -277,6 +277,12 @@ namespace Mindurry.ViewModels
             ClearTypeChecks();
             ClearExposureChecks();
 
+            LowerAreaValue = MinimumArea;
+            UpperAreaValue = MaximumArea;
+
+            LowerPriceValue = MinimumPrice;
+            UpperPriceValue = MaximumPrice;
+
             TerraceChecked = false;
             GardenChecked = false;
         }
