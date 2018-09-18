@@ -211,18 +211,20 @@ namespace Mindurry.ViewModels
             {
                 //Price Filter
                 MaximumPrice = OriginalApartments.OrderByDescending(a => a.Apartment.Price).First().Apartment.Price;
+                UpperPriceValue = MaximumPrice;
                 MinimumPrice = OriginalApartments.OrderBy(a => a.Apartment.Price).First().Apartment.Price;
                 LowerPriceValue = MinimumPrice;
-                UpperPriceValue = MaximumPrice;
+                
             }
 
             if (OriginalApartments != null && OriginalApartments.Any())
             {
                 //Area Filter
                 MaximumArea = OriginalApartments.OrderByDescending(b => b.Apartment.Area).First().Apartment.Area;
+                UpperAreaValue = MaximumArea;
                 MinimumArea = OriginalApartments.OrderBy(b => b.Apartment.Area).First().Apartment.Area;
                 LowerAreaValue = MinimumArea;
-                UpperAreaValue = MaximumArea;
+                
             }
 
             TypesChecks = new ObservableCollection<CheckBoxItem>();

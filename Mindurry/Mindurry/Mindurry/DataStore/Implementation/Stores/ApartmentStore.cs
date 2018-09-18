@@ -17,7 +17,7 @@ namespace Mindurry.DataStore.Implementation.Stores
             {
                 await InitializeStore().ConfigureAwait(false);
 
-                var items = await Table.Where( a=> a.ResidenceId == residenceId).ToEnumerableAsync().ConfigureAwait(false);
+                var items = await Table.Where( a=> a.ResidenceId == residenceId).OrderBy(a => a.LotNumberArchitect).ToEnumerableAsync().ConfigureAwait(false);
 
                 return items;
             }

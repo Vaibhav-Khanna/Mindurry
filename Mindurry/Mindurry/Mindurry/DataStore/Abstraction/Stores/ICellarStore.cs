@@ -9,5 +9,6 @@ namespace Mindurry.DataStore.Abstraction.Stores
         Task<IEnumerable<Cellar>> GetItemsByResidenceId(string residenceId);
         Task<IEnumerable<Cellar>> GetItemsByContactId(string contactId);
         Task<Cellar> GetItemByRefenceAsync(string reference);
+        Task<bool> IsStillCellarInResidence(string residenceId);
     }
 }

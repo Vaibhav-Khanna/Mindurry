@@ -26,6 +26,7 @@ namespace Mindurry.ViewModels
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> ExpositionChecks { get; set; }
+        public ObservableCollection<CheckBoxItem> CommandStatesChecks { get; set; }
 
         private ResidenceModel selectedItem;
         public ResidenceModel SelectedItem
@@ -49,6 +50,7 @@ namespace Mindurry.ViewModels
         public bool IsFirstListVisible { get; set; } = true;
         public bool IsSecondListVisible { get; set; } = true;
         public bool IsThirdListVisible { get; set; } = true;
+        public bool IsFourListVisible { get; set; } = true;
         public bool IsFilterOn { get; set; } = false;
 
         bool _terraceChecked;
@@ -56,6 +58,13 @@ namespace Mindurry.ViewModels
 
         bool _gardenChecked;
         public bool GardenChecked { get { return _gardenChecked; } set { _gardenChecked = value; Search(); RaisePropertyChanged(); } }
+
+        bool _garageChecked;
+        public bool GarageChecked { get { return _garageChecked; } set { _garageChecked = value; Search(); RaisePropertyChanged(); } }
+
+        bool _cellarChecked;
+        public bool CellarChecked { get { return _cellarChecked; } set { _cellarChecked = value; Search(); RaisePropertyChanged(); } }
+
 
         public string ArrowOne
         {
@@ -72,15 +81,102 @@ namespace Mindurry.ViewModels
             get => IsThirdListVisible ? "" : "";
         }
 
+        public string ArrowFor
+        {
+            get => IsFourListVisible ? "" : "";
+        }
+
+        public float ResMaximumPrice { get; set; }
+        public float ResMinimumPrice { get; set; }
+
+        public float ResMaximumArea { get; set; }
+        public float ResMinimumArea { get; set; }
+
+        float _resUpperAreaValue;
+        public float ResUpperAreaValue
+        {
+            get
+            {
+                return _resUpperAreaValue;
+            }
+            set
+            {
+                _resUpperAreaValue = value;
+                if (_resUpperAreaValue <= ResMaximumArea && _resUpperAreaValue > 0)
+                {
+                    Search();
+                }
+
+                RaisePropertyChanged();
+            }
+        }
+        float _resLowerAreaValue;
+        public float ResLowerAreaValue
+        {
+            get
+            {
+                return _resLowerAreaValue;
+            }
+            set
+            {
+                _resLowerAreaValue = value;
+                if (_resLowerAreaValue >= ResMinimumArea)
+                {
+                    Search();
+                }
+                RaisePropertyChanged();
+            }
+        }
+
+        float _resUpperPriceValue;
+        public float ResUpperPriceValue
+        {
+            get
+            {
+                return _resUpperPriceValue;
+            }
+            set
+            {
+                _resUpperPriceValue = value;
+                if (_resUpperPriceValue <= ResMaximumPrice && _resUpperPriceValue > 0)
+                {
+                    Search();
+                }
+
+                RaisePropertyChanged();
+            }
+        }
+        float _resLowerPriceValue;
+        public float ResLowerPriceValue
+        {
+            get
+            {
+                return _resLowerPriceValue;
+            }
+            set
+            {
+                _resLowerPriceValue = value;
+                if (_resLowerPriceValue >= ResMinimumPrice)
+                {
+                    Search();
+                }
+                RaisePropertyChanged();
+            }
+        }
+
+
         public ICommand ShowFilterCommand { get; set; }
         public ICommand ShareCommand { get; set; }
         public ICommand ArrowOneCommand { get; set; }
         public ICommand ArrowTwoCommand { get; set; }
-        public ICommand ArrowThreeCommand { get; set; }      
+        public ICommand ArrowThreeCommand { get; set; }
+        public ICommand ArrowFourCommand { get; set; }
         public ICommand ClearAllResidencesCommand { get; set; }
         public ICommand ClearAllTypesCommand { get; set; }
         public ICommand ClearAllExpositionCommand { get; set; }
         public ICommand ClearAllFilterCommand { get; set; }
+
+        IEnumerable<Residence> residences;
 
         public async override void Init(object initData)
         {
@@ -88,13 +184,13 @@ namespace Mindurry.ViewModels
 
             AllResidences = new ObservableCollection<ResidenceModel>();
 
-            var residences = await StoreManager.ResidenceStore.GetAllActiveResidences();
+             residences = await StoreManager.ResidenceStore.GetAllActiveResidences();
 
             foreach (var _res in residences)
             {
                 var _apartments = await StoreManager.ApartmentStore.GetApartmentsByResidenceId(_res.Id);
-
-                if (_apartments != null)
+                
+                if (_apartments != null) { 
                     foreach (var _apt in _apartments)
                     {
                         var _terraces = await StoreManager.TerraceStore.GetTerracesByResidenceId(_res.Id, _apt.Id);
@@ -116,6 +212,7 @@ namespace Mindurry.ViewModels
 
                         AllResidences.Add(_res_model);
                     }
+                }
             }
            
             GroupedItems = AllResidences.GroupBy(x => x.Residence);
@@ -132,6 +229,7 @@ namespace Mindurry.ViewModels
 
             TypesChecks = new ObservableCollection<CheckBoxItem>();
             ExpositionChecks = new ObservableCollection<CheckBoxItem>();
+            CommandStatesChecks = new ObservableCollection<CheckBoxItem>();
 
             // Type Checkbox Items
             foreach (var item in AllResidences.DistinctBy(s=> s.Type).OrderBy(s=>s.Type).ToList())
@@ -148,12 +246,37 @@ namespace Mindurry.ViewModels
                 ExpositionChecks.Add(check = new CheckBoxItem() { Content = item.Exposure, DataType = CheckBoxContainerDataType.Exposure });
                 check.PropertyChanged += TypeFilterChanged;
             }
-            
+
+            // CommandState Checkbox Items
+            foreach (var item in AllResidences.DistinctBy(s => s.State).OrderBy(s => s.State).ToList())
+            {
+                CheckBoxItem check;
+                CommandStatesChecks.Add(check = new CheckBoxItem() { Content = item.State, DataType = CheckBoxContainerDataType.CommandState });
+                check.PropertyChanged += TypeFilterChanged;
+            }
+
+            if (AllResidences != null && AllResidences.Any())
+            {
+                //Price Filter
+                ResMaximumPrice = AllResidences.OrderByDescending(a => a.Apartment.Price).First().Apartment.Price;
+                ResUpperPriceValue = ResMaximumPrice;
+                ResMinimumPrice = AllResidences.OrderBy(a => a.Apartment.Price).First().Apartment.Price;
+                ResLowerPriceValue = ResMinimumPrice;            
+
+                //Area Filter
+                ResMaximumArea = AllResidences.OrderByDescending(b => b.Apartment.Area).First().Apartment.Area;
+                ResUpperAreaValue = ResMaximumArea;
+                ResMinimumArea = AllResidences.OrderBy(b => b.Apartment.Area).First().Apartment.Area;
+                ResLowerAreaValue = ResMinimumArea;
+                
+            }
+
             ShowFilterCommand = new Command(ShowFilter);
             ShareCommand = new Command(Share);
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
             ArrowThreeCommand = new Command(ChangeArrowThree);
+            ArrowFourCommand = new Command(ChangeArrowFour);
             ClearAllResidencesCommand = new Command(ClearResidenceChecks);
             ClearAllTypesCommand = new Command(ClearTypeChecks);
             ClearAllExpositionCommand = new Command(ClearExposureChecks);
@@ -210,6 +333,11 @@ namespace Mindurry.ViewModels
             IsThirdListVisible = !IsThirdListVisible;
         }
 
+        void ChangeArrowFour()
+        {
+            IsFourListVisible = !IsFourListVisible;
+        }
+
         void ClearResidenceChecks()
         {
             foreach (var item in ResidencesChecks)
@@ -240,13 +368,19 @@ namespace Mindurry.ViewModels
             ClearTypeChecks();
             ClearExposureChecks();
 
+            ResLowerAreaValue = ResMinimumArea;
+            ResUpperAreaValue = ResMaximumArea;
+
+            ResLowerPriceValue = ResMinimumPrice;
+            ResUpperPriceValue = ResMaximumPrice;
+
             TerraceChecked = false;
             GardenChecked = false;
         }
 
-        void Search()
+        async Task Search()
         {
-            Filter();
+            await Filter();
 
             if (string.IsNullOrWhiteSpace(SearchText))
                 GroupedItems = FilteredResidences.GroupBy(x => x.Residence);
@@ -275,52 +409,77 @@ namespace Mindurry.ViewModels
             Search();
         }
 
-        void Filter()
+        async Task Filter()
         {
             var filter_list = new List<ResidenceModel>();
 
             // Filtered for residence
-            var residences_checked = ResidencesChecks.Where(r => r.IsChecked).ToList();
-            if (residences_checked.Any())
+            if (ResidencesChecks != null)
             {
-                var temp_list = new List<ResidenceModel>();
-
-                foreach (var item in residences_checked)
+                var residences_checked = ResidencesChecks.Where(r => r.IsChecked).ToList();
+                if (residences_checked.Any())
                 {
-                    temp_list.AddRange(AllResidences.Where(r => r.Parent == item.Content));
-                }
+                    var temp_list = new List<ResidenceModel>();
 
-                filter_list = temp_list.Distinct().ToList();             
+                    foreach (var item in residences_checked)
+                    {
+                        temp_list.AddRange(AllResidences.Where(r => r.Parent == item.Content));
+                    }
+
+                    filter_list = temp_list.Distinct().ToList();             
+                }
+                else
+                    filter_list = AllResidences.ToList();
             }
-            else
-                filter_list = AllResidences.ToList();
 
             //Filtered for types
-            var types_checked = TypesChecks.Where(r => r.IsChecked).ToList();
-            if (types_checked.Any())
+            if (TypesChecks != null)
             {
-                var temp_list = new List<ResidenceModel>();
-
-                foreach (var item in types_checked)
+                var types_checked = TypesChecks.Where(r => r.IsChecked).ToList();
+                if (types_checked.Any())
                 {
-                    temp_list.AddRange(filter_list.Where(r => r.Type == item.Content));
-                }
+                    var temp_list = new List<ResidenceModel>();
 
-                filter_list = temp_list;
+                    foreach (var item in types_checked)
+                    {
+                        temp_list.AddRange(filter_list.Where(r => r.Type == item.Content));
+                    }
+
+                    filter_list = temp_list;
+                }
             }
 
             //Filtered for exposure
-            var exposure_checked = ExpositionChecks.Where(r => r.IsChecked).ToList();
-            if (exposure_checked.Any())
+            if (ExpositionChecks != null)
             {
-                var temp_list = new List<ResidenceModel>();
-
-                foreach (var item in exposure_checked)
+                var exposure_checked = ExpositionChecks.Where(r => r.IsChecked).ToList();
+                if (exposure_checked.Any())
                 {
-                    temp_list.AddRange(filter_list.Where(r => r.Exposure == item.Content));
-                }
+                    var temp_list = new List<ResidenceModel>();
 
-                filter_list = temp_list;
+                    foreach (var item in exposure_checked)
+                    {
+                        temp_list.AddRange(filter_list.Where(r => r.Exposure == item.Content));
+                    }
+
+                    filter_list = temp_list;
+                }
+            }
+            //Filtered for State
+            if (CommandStatesChecks != null)
+            {
+                var states_checked = CommandStatesChecks.Where(r => r.IsChecked).ToList();
+                if (states_checked.Any())
+                {
+                    var temp_list = new List<ResidenceModel>();
+
+                    foreach (var item in states_checked)
+                    {
+                        temp_list.AddRange(filter_list.Where(r => r.State == item.Content));
+                    }
+
+                    filter_list = temp_list;
+                }
             }
 
             //Garden switch filter
@@ -331,7 +490,53 @@ namespace Mindurry.ViewModels
             if (TerraceChecked)
                 filter_list = filter_list.Where(r => r.Terace != 0).ToList();
 
+            //Garage switch filter
+            if (GarageChecked)
+            {
+                var temporary_list = new List<ResidenceModel>();
+                // verif si garage dispo ds residence
+                foreach (Residence resi in residences)
+                {
+                    bool isGarage = await StoreManager.GarageStore.IsStillGarageInResidence(resi.Id);
+                    if (isGarage == true)
+                    {
+                       // filter_list = filter_list.Where(r => r.Residence.Id != resi.Id).ToList();
+                        temporary_list.AddRange(filter_list.Where(r => r.Residence.Id == resi.Id));
+                    }
+                    
+                }
+                filter_list = temporary_list;
 
+            }
+                
+
+            //cellar switch filter
+            if (CellarChecked)
+            {
+                var t_list = new List<ResidenceModel>();
+                // verif si garage dispo ds residence
+                foreach (Residence resi in residences)
+                {
+                    bool isCellar = await StoreManager.CellarStore.IsStillCellarInResidence(resi.Id);
+                    if (isCellar == true)
+                    {
+                        // filter_list = filter_list.Where(r => r.Residence.Id != resi.Id).ToList();
+                        t_list.AddRange(filter_list.Where(r => r.Residence.Id == resi.Id));
+                    }
+
+                }
+                filter_list = t_list;
+            }
+                
+
+            if (ResLowerAreaValue != ResUpperAreaValue && ResUpperAreaValue > 0)
+            {
+                filter_list = filter_list.Where(a => (a.Apartment.Area >= ResLowerAreaValue && a.Apartment.Area <= ResUpperAreaValue)).ToList();
+            }
+            if (ResLowerPriceValue != ResUpperPriceValue && ResUpperPriceValue > 0)
+            {
+                filter_list = filter_list.Where(a => (a.Apartment.Price >= ResLowerPriceValue && a.Apartment.Price <= ResUpperPriceValue)).ToList();
+            }
             FilteredResidences = new ObservableCollection<ResidenceModel>(filter_list);
         }
 

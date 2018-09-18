@@ -33,6 +33,7 @@ namespace Mindurry.DataModels
             Price = apartment.Price;
             Client = apartment.ResidenceName;
             Floor = apartment.Floor;
+            State = apartment.CommandState;
 
             Surface = apartment.Area;
             Stadium = apartment.Stage;      
@@ -58,11 +59,14 @@ namespace Mindurry.DataModels
                 ViewModels.StaticViewModel.OnSelectionChanged();
             }
         }
-        
+        public bool isStillGarageInResidence { get; set; }
+        public bool isStillCellarInResidence { get; set; }
+
         public string NoArchi { get; set; }
         public string Type { get; set; }
         public Status Status { get; set; }
         public string Exposure { get; set; }
+        public string State { get; set; }
         public double Surface { get; set; }
         public double Terace { get; set; }
         public double Garden { get; set; }

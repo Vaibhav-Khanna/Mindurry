@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Mindurry.Pages.ResidencesPage"
+             xmlns:forms="clr-namespace:Xamarin.RangeSlider.Forms;assembly=Xamarin.RangeSlider.Forms"
              xmlns:effect="clr-namespace:Mindurry.Effects"
              xmlns:repeater="clr-namespace:Xamarin.CustomControls;assembly=Xamarin.CustomControls.RepeaterView"
              xmlns:converter="clr-namespace:Mindurry.Converters"
@@ -86,8 +87,7 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="60"/>
-                                    </Grid.ColumnDefinitions>
+                                        </Grid.ColumnDefinitions>
                                     <Grid.Resources>
                                         <ResourceDictionary>
                                             <Style TargetType="Label">
@@ -127,7 +127,6 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="60"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.Resources>
                                         <ResourceDictionary>
@@ -151,7 +150,7 @@
                                     <Label Text="{Binding Client}" Grid.Column="7"/>
                                     <Label Text="{Binding Stadium}" Grid.Column="8"/>
                                     <Label Text="{Binding Price, StringFormat='{0:#,##0}€'}" Grid.Column="9"/>
-                                    <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="10"/>
+                                    <!--<Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="10"/> -->
                                 
                                 </Grid>
                             </ViewCell>
@@ -216,7 +215,7 @@
                                         <StackLayout.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding ArrowTwoCommand}"/>
                                         </StackLayout.GestureRecognizers>
-                                        <Label Text="TypesChecks" TextColor="{StaticResource GrayPanelText}"/>
+                                        <Label Text="Types" TextColor="{StaticResource GrayPanelText}"/>
                                         <Label Text="{Binding ArrowTwo}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
                                     </StackLayout>
 
@@ -275,6 +274,52 @@
                                 <StackLayout>
                                     <Label Text="Jardin" TextColor="{StaticResource GrayPanelText}" Grid.ColumnSpan="2"/>
                                     <Switch IsToggled="{Binding GardenChecked}"/>
+                                </StackLayout>
+
+                                <StackLayout>
+                                    <Label Text="Parking" TextColor="{StaticResource GrayPanelText}" Grid.ColumnSpan="2"/>
+                                    <Switch IsToggled="{Binding GarageChecked}"/>
+                                </StackLayout>
+
+                                <StackLayout>
+                                    <Label Text="Cave" TextColor="{StaticResource GrayPanelText}" Grid.ColumnSpan="2"/>
+                                    <Switch IsToggled="{Binding CellarChecked}"/>
+                                </StackLayout>
+
+                                <StackLayout Spacing="5">
+                                    <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding ArrowFourCommand}"/>
+                                        </StackLayout.GestureRecognizers>
+                                        <Label Text="Statuts" TextColor="{StaticResource GrayPanelText}"/>
+                                        <Label Text="{Binding ArrowFour}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
+                                    </StackLayout>
+
+                                    <StackLayout IsVisible="{Binding IsFourListVisible}" Spacing="15">
+                                        <repeater:RepeaterView ItemsSource="{Binding CommandStatesChecks}" VerticalOptions="Start">
+                                            <repeater:RepeaterView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <ViewCell>
+                                                        <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                    </ViewCell>
+                                                </DataTemplate>
+                                            </repeater:RepeaterView.ItemTemplate>
+                                        </repeater:RepeaterView>
+
+                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllExpositionCommand}">
+                                            <Button.Effects>
+                                                <effect:AccentColorEffect/>
+                                            </Button.Effects>
+                                        </Button>
+                                    </StackLayout>
+                                </StackLayout>
+                                <StackLayout HorizontalOptions="FillAndExpand">
+                                    <Label Text="Surface" TextColor="{StaticResource GrayPanelText}" Grid.ColumnSpan="2"/>
+                                    <forms:RangeSlider ShowTextAboveThumbs="True" MinimumValue="{Binding ResMinimumArea}" MaximumValue="{Binding ResMaximumArea}" LowerValue="{Binding ResLowerAreaValue, Mode=TwoWay}" TextColor="Black" UpperValue="{Binding ResUpperAreaValue, Mode=TwoWay}" BarHeight="5"  StepValueContinuously="false"   VerticalOptions="Center" TextSize="10"  />
+                                </StackLayout>
+                                <StackLayout HorizontalOptions="FillAndExpand">
+                                    <Label Text="Prix" TextColor="{StaticResource GrayPanelText}" Grid.ColumnSpan="2"/>
+                                    <forms:RangeSlider ShowTextAboveThumbs="True" MinimumValue="{Binding ResMinimumPrice}" MaximumValue="{Binding ResMaximumPrice}" LowerValue="{Binding ResLowerPriceValue, Mode=TwoWay}" TextColor="Black" UpperValue="{Binding ResUpperPriceValue, Mode=TwoWay}" BarHeight="5"  StepValueContinuously="false"   VerticalOptions="Center" TextSize="10"  />
                                 </StackLayout>
 
                             </StackLayout>

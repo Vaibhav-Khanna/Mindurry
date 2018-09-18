@@ -2,6 +2,7 @@
 using Mindurry.Models.DataObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Mindurry.DataStore.Implementation.Stores
@@ -58,6 +59,35 @@ namespace Mindurry.DataStore.Implementation.Stores
             else
             {
                 return null;
+            }
+        }
+        public async Task<bool> IsStillCellarInResidence(string residenceId)
+        {
+            await InitializeStore().ConfigureAwait(false);
+
+            if (!String.IsNullOrEmpty(residenceId))
+            {
+                IEnumerable<Cellar> cellars = await Table.Where(x => x.ResidenceId == residenceId).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                if (cellars != null && cellars.Any())
+                {
+                    var cellar = cellars.ToList().Where(g => String.IsNullOrEmpty(g.ContactId));
+                    if (cellar != null && cellar.Count() > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
     }

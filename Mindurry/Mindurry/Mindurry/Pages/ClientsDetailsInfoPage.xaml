@@ -193,29 +193,26 @@
                         </Grid.ColumnDefinitions>
                         <StackLayout Orientation="Vertical" Grid.Column="0">
                             <Label Text="&#xE8D7;"  FontSize="16" VerticalOptions="Center" TextColor="{Binding TabThreeColor}" FontFamily="Segoe MDL2 Assets"/>
-                            <Label Text="Logements"  FontSize="16" TextColor="{Binding TabThreeColor}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding TabThreeCommand}"/>
-                                </Label.GestureRecognizers>
-                            </Label>
+                            <Label Text="Logements"  FontSize="16" TextColor="{Binding TabThreeColor}" />
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding TabThreeCommand}"/>
+                            </StackLayout.GestureRecognizers>
                         </StackLayout>
                        
                         <StackLayout Orientation="Vertical" Grid.Column="1">
                             <Label Text="&#xE7C3;"  FontSize="16" VerticalOptions="Center" TextColor="{Binding TabTwoColor}" FontFamily="Segoe MDL2 Assets"/>
-                            <Label Text="Documents" FontSize="16" TextColor="{Binding TabTwoColor}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding TabTwoCommand}"/>
-                                </Label.GestureRecognizers>
-                            </Label>
+                            <Label Text="Documents" FontSize="16" TextColor="{Binding TabTwoColor}" />
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding TabTwoCommand}"/>
+                            </StackLayout.GestureRecognizers>
                         </StackLayout>
 
                         <StackLayout Orientation="Vertical" Grid.Column="2">
                             <Label Text="&#xE779;"  FontSize="16" VerticalOptions="Center" TextColor="{Binding TabOneColor}" FontFamily="Segoe MDL2 Assets"/>
-                            <Label Text="Informations" FontSize="16" TextColor="{Binding TabOneColor}">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding TabOneCommand}"/>
-                                </Label.GestureRecognizers>
-                            </Label>
+                            <Label Text="Informations" FontSize="16" TextColor="{Binding TabOneColor}" />
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding TabOneCommand}"/>
+                            </StackLayout.GestureRecognizers>
                         </StackLayout>
 
                     </Grid>

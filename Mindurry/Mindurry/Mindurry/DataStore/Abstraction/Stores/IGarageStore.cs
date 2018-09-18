@@ -9,5 +9,6 @@ namespace Mindurry.DataStore.Abstraction.Stores
         Task<IEnumerable<Garage>> GetItemsByResidenceId(string residenceId);
         Task<IEnumerable<Garage>> GetItemsByContactId(string contactId);
         Task<Garage> GetItemByRefenceAsync(string reference);
+        Task<bool> IsStillGarageInResidence(string residenceId);
     }
 }
