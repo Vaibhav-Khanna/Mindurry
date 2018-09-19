@@ -27,7 +27,7 @@ namespace Mindurry.ViewModels
         private ObservableCollection<Note> OriginalNotes;
         public Boolean ButtonShowMoreIsDisplayed { get; set; }
         public Boolean ButtonShowLessIsDisplayed { get; set; } = false;
-        public DateTimeOffset? DateReminder { get; set; }
+        public DateTimeOffset? DateRem { get; set; }
         public DateTimeOffset MinDate { get; set; } = new DateTimeOffset(DateTimeOffset.Now.Date);
         public string TextNote { get; set; }
 
@@ -156,8 +156,6 @@ namespace Mindurry.ViewModels
                 IsTextNote = false;
             }
 
-            //Reminder
-            DateReminder = null;
 
             ArrowOneCommand = new Command(ChangeArrowOne);
             ArrowTwoCommand = new Command(ChangeArrowTwo);
@@ -556,10 +554,10 @@ namespace Mindurry.ViewModels
                 };
                 string title;
 
-                if (DateReminder != null)
+                if (DateRem != null)
                 {
 
-                    NoteToInsert.ReminderAt = DateReminder;
+                    NoteToInsert.ReminderAt = DateRem;
                     title = "Ajout du rappel";
                 }
                 else
@@ -570,10 +568,10 @@ namespace Mindurry.ViewModels
                 {
                     await StoreManager.NoteStore.InsertAsync(NoteToInsert);
                     TextNote = null;
-                    if (DateReminder != null)
+                    if (DateRem != null)
                     {
                         await LoadReminders();
-                        DateReminder = null;
+                        DateRem = null;
                     }
                     else
                     {

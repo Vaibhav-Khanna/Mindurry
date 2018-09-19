@@ -35,7 +35,9 @@ namespace Mindurry.ViewModels
         public DateTime DateDebDisplay { get; set; }
         public DateTime DateFinDisplay { get; set; }
         public DateTimeOffset MaxDate { get; set; }
+
         private DateTimeOffset? startDate;
+        [PropertyChanged.DoNotNotify]
         public DateTimeOffset? StartDate
         {
             get => startDate;
@@ -47,12 +49,14 @@ namespace Mindurry.ViewModels
                     DateDebDisplay = dateDeb;
                     startDate = value;
                     LoadCharts();
+                    RaisePropertyChanged();
                 }
 
             }
         }
 
         private DateTimeOffset? endDate;
+        [PropertyChanged.DoNotNotify]
         public DateTimeOffset? EndDate
         {
             get => endDate;
@@ -64,6 +68,7 @@ namespace Mindurry.ViewModels
                     DateFinDisplay = value.Value.UtcDateTime.Date;
                     endDate = value;
                     LoadCharts();
+                    RaisePropertyChanged();
                 }
 
             }

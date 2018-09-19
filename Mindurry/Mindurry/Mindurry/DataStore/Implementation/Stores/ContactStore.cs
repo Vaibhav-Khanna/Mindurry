@@ -37,6 +37,44 @@ namespace Mindurry.DataStore.Implementation.Stores
 
         }
 
+        public async Task<IEnumerable<Contact>> GetItemsFilterAsync(string Filter = null, bool forceRefresh = false)
+        {
+
+            await InitializeStore().ConfigureAwait(false);
+
+            if (forceRefresh) { await PullLatestAsync().ConfigureAwait(false); }
+            if (!String.IsNullOrEmpty(Filter))
+            {
+                return await Table.Where(x => ((x.Firstname.ToLower().Contains(Filter)) || (x.Lastname.ToLower().Contains(Filter)) || (x.Email.ToLower().Contains(Filter)) || (x.Phone.ToLower().Contains(Filter)))).OrderBy(x => x.Lastname).Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+
+            }
+            else
+            {
+                return await Table.OrderByDescending(x => x.Lastname).Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+
+            }
+
+        }
+
+        public async Task<IEnumerable<Contact>> GetNextItemsFilterAsync(int currentitemCount, string Filter = null, bool forceRefresh = false)
+        {
+
+            await InitializeStore().ConfigureAwait(false);
+
+            if (forceRefresh) { await PullLatestAsync().ConfigureAwait(false); }
+            if (!String.IsNullOrEmpty(Filter))
+            {
+                return await Table.Where(x => ((x.Firstname.ToLower().Contains(Filter)) || (x.Lastname.ToLower().Contains(Filter)) || (x.Email.ToLower().Contains(Filter)) || (x.Phone.ToLower().Contains(Filter)))).OrderBy(x => x.Lastname).Skip(currentitemCount).Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+
+            }
+            else
+            {
+                return await Table.OrderByDescending(x => x.Lastname).Skip(currentitemCount).Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+
+            }
+
+        }
+
         public async Task<IEnumerable<Contact>> GetNextItemsByTypeAsync(int currentitemCount, string ContactType, string Filter = null, bool forceRefresh = false)
         {
 

@@ -11,8 +11,10 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:BoolToStringConverter x:Key="BoolToStringConverter"/>
+            <converter:DoubleToBoolConverter x:Key="DoubleToBoolConverter" />
             <converter:StatutToColorConverter x:Key="StatutToColorConverter"/>
             <converter:CommandStateToBgColorConverter x:Key="CommandStateToBgColorConverter"/>
+            <converter:ExposureConverter x:Key="ExposureConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     
@@ -111,10 +113,10 @@
                                     <Label Text="{Binding Apartment.LotNumberArchitect}" Grid.Column="0"/>
                                     <Label Text="{Binding Apartment.Kind}"  Grid.Column="1"/>
                                     <Label Text="{Binding Apartment.Floor}"  Grid.Column="2"/>
-                                    <Label Text="{Binding Apartment.Exposure}" Grid.Column="3"/>
+                                    <Label Text="{Binding Apartment.Exposure,Converter={StaticResource ExposureConverter}}" Grid.Column="3"/>
                                     <Label Text="{Binding Apartment.Area, StringFormat='{0} m2'}" Grid.Column="4"/>
-                                    <Label Text="{Binding TerraceArea, StringFormat='{0} m2'}" Grid.Column="5"/>
-                                    <Label Text="{Binding GardenArea, StringFormat='{0} m2'}" Grid.Column="6"/>
+                                    <Label Text="{Binding TerraceArea, StringFormat='{0} m2'}" Grid.Column="5" IsVisible="{Binding TerraceArea,Converter={StaticResource DoubleToBoolConverter}}"/>
+                                    <Label Text="{Binding GardenArea, StringFormat='{0} m2'}" Grid.Column="6" IsVisible="{Binding GardenArea,Converter={StaticResource DoubleToBoolConverter}}"/>
                                     <Label Text="{Binding Client}" Grid.Column="7"/>
                                     <Label Text="{Binding Apartment.Stage}" Grid.Column="8"/>
                                     <Label Text="{Binding Apartment.Price, StringFormat='{0:#,##0} €'}" Grid.Column="9"/>
@@ -190,7 +192,7 @@
                                             <repeater:RepeaterView.ItemTemplate>
                                                 <DataTemplate>
                                                     <ViewCell>
-                                                        <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                        <win:CheckBox Content="{Binding Content,Converter={StaticResource ExposureConverter}}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
                                                     </ViewCell>
                                                 </DataTemplate>
                                             </repeater:RepeaterView.ItemTemplate>

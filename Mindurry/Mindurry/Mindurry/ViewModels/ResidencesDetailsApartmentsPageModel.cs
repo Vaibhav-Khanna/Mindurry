@@ -180,7 +180,7 @@ namespace Mindurry.ViewModels
                     var gardens = await StoreManager.GardenStore.GetGardensByResidenceId(residenceId,item.Id);
                     if (gardens != null && gardens.Any())
                     {
-                        long gardenArea = 0;
+                        double gardenArea = 0;
                         foreach (var garden in gardens)
                         {
                             gardenArea += garden.Area;
@@ -191,7 +191,7 @@ namespace Mindurry.ViewModels
                     var terraces = await StoreManager.TerraceStore.GetTerracesByResidenceId(residenceId, item.Id);
                     if (terraces != null && terraces.Any())
                     {
-                        long terraceArea = 0;
+                        double terraceArea = 0;
                         foreach (var terrace in terraces)
                         {
                             terraceArea += terrace.Area;

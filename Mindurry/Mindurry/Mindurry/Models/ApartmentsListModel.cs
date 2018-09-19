@@ -9,8 +9,8 @@ namespace Mindurry.Models
     public class ApartmentsListModel
     {
 
-        public long TerraceArea { get; set; }
-        public long GardenArea { get; set; }
+        public double TerraceArea { get; set; }
+        public double GardenArea { get; set; }
         public string Client { get; set; }
 
         public Apartment Apartment { get; set; }

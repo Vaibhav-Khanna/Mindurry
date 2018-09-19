@@ -1,4 +1,5 @@
-﻿using FreshMvvm;
+﻿
+using FreshMvvm;
 using Mindurry.DataModels;
 using System;
 using System.Collections.Generic;
@@ -209,6 +210,12 @@ namespace Mindurry.ViewModels
                             {
                                 _res_model.Garden += g.Area;
                             }
+                        // Client
+                        if (!String.IsNullOrEmpty(_apt.ContactId))
+                        {
+                            var acquereur = await StoreManager.ContactStore.GetItemAsync(_apt.ContactId);
+                            _res_model.Client = acquereur.Name;
+                        }
 
                         AllResidences.Add(_res_model);
                     }
@@ -220,10 +227,10 @@ namespace Mindurry.ViewModels
             ResidencesChecks = new ObservableCollection<CheckBoxItem>();
 
             // Residence checkbox Items
-            foreach (var _res in residences)
+            foreach (var _res in GroupedItems)
             {
                 CheckBoxItem item;
-                ResidencesChecks.Add(item = new CheckBoxItem() { Content = _res.Name, Id = _res.Id, DataType = CheckBoxContainerDataType.Residence });
+                ResidencesChecks.Add(item = new CheckBoxItem() { Content = _res.Key.Name, Id = _res.Key.Id, DataType = CheckBoxContainerDataType.Residence });
                 item.PropertyChanged += ResidenceFilterChanged;
             }
 
@@ -315,7 +322,21 @@ namespace Mindurry.ViewModels
 
         void Share()
         {
-            CoreMethods.PushPageModel<SelectContactPageModel>();
+
+            List<ResidenceModel> apartmentList = new List<ResidenceModel>();
+            foreach (var group in GroupedItems)
+            {
+                
+                foreach (ResidenceModel r in group)
+                {
+                    if (r.IsChecked)
+                    {
+                        apartmentList.Add(r);
+                    }
+                }
+            }
+
+            CoreMethods.PushPageModel<SelectContactPageModel>(apartmentList);
         }
 
         void ChangeArrowOne()
@@ -378,9 +399,9 @@ namespace Mindurry.ViewModels
             GardenChecked = false;
         }
 
-        async Task Search()
+        async void Search()
         {
-            await Filter();
+             await Filter();
 
             if (string.IsNullOrWhiteSpace(SearchText))
                 GroupedItems = FilteredResidences.GroupBy(x => x.Residence);
@@ -392,21 +413,21 @@ namespace Mindurry.ViewModels
         {
             var residence = sender as CheckBoxItem;
 
-            Search();
+             Search();
         }
 
         void TypeFilterChanged(object sender, PropertyChangedEventArgs e)
         {
             var type = sender as CheckBoxItem;
 
-            Search();
+             Search();
         }
 
         void ExposureFilterChanged(object sender, PropertyChangedEventArgs e)
         {
             var exposure = sender as CheckBoxItem;
 
-            Search();
+             Search();
         }
 
         async Task Filter()
@@ -497,7 +518,7 @@ namespace Mindurry.ViewModels
                 // verif si garage dispo ds residence
                 foreach (Residence resi in residences)
                 {
-                    bool isGarage = await StoreManager.GarageStore.IsStillGarageInResidence(resi.Id);
+                    bool isGarage =  await StoreManager.GarageStore.IsStillGarageInResidence(resi.Id);
                     if (isGarage == true)
                     {
                        // filter_list = filter_list.Where(r => r.Residence.Id != resi.Id).ToList();

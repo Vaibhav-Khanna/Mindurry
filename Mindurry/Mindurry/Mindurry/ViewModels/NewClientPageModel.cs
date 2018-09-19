@@ -246,7 +246,7 @@ namespace Mindurry.ViewModels
                 ContactToSave.Longitude = _longitude;
                 ContactToSave.PlaceId = _placeId;
                 ContactToSave.PlaceLocation = _placeLocation;
-                ContactToSave.JobTitle = Contact.JobTitle;
+               // ContactToSave.JobTitle = Contact.JobTitle;
                 ContactToSave.Email = Contact.Email;
                 ContactToSave.Phone = Contact.Phone;
                 ContactToSave.Qualification = Qualification.Client.ToString();

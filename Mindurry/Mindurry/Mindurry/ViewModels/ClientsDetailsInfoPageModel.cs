@@ -39,6 +39,7 @@ namespace Mindurry.ViewModels
         public ObservableCollection<CollectSource> CollectSources { get; set; }
 
         CollectSource selectedSource;
+        [PropertyChanged.DoNotNotify]
         public CollectSource SelectedSource
         {
             get
@@ -52,10 +53,12 @@ namespace Mindurry.ViewModels
                     SaveCollect(value.Id);
                 }
                 selectedSource = value;
+                RaisePropertyChanged();
             }
         }
         public ObservableCollection<string> Qualifications { get; set; }
         private string selectedQualification;
+        [PropertyChanged.DoNotNotify]
         public string SelectedQualification
         {
             get
@@ -69,12 +72,14 @@ namespace Mindurry.ViewModels
                     SaveQualification(value);
                 }
                 selectedQualification = value;
+                RaisePropertyChanged();
             }
         }
 
         public ObservableCollection<ContactCustomFieldSourceEntry> Types { get; set; }
         // public ContactCustomFieldSourceEntry SelectedType { get; set; }
         private ContactCustomFieldSourceEntry selectedType;
+        [PropertyChanged.DoNotNotify]
         public ContactCustomFieldSourceEntry SelectedType
         {
             get

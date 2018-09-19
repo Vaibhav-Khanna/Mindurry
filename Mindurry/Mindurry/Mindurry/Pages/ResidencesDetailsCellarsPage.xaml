@@ -80,7 +80,7 @@
                                     </ResourceDictionary>
                                 </Grid.Resources>
                                 <Label Text="{Binding Cellar.LotNumberArchitect}" Grid.Column="0"/>
-                                <Label Text="{Binding Cellar.Area, StringFormat='{0} m2'}" Grid.Column="1"/>
+                                    <Label Text="{Binding Cellar.Area, StringFormat='{0} m2'}" Grid.Column="1" />
                                 <Label Text="{Binding Client}" Grid.Column="2"/>
                                 <Label Text="{Binding Cellar.Price, StringFormat='{0:#,##0}€'}" Grid.Column="3"/>
                                 <Button Text="" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Center" FontFamily="Segoe MDL2 Assets" Grid.Column="4"/>

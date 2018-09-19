@@ -12,8 +12,10 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:BoolToStringConverter x:Key="BoolToStringConverter"/>
+            <converter:DoubleToBoolConverter x:Key="DoubleToBoolConverter" />
             <converter:StatutToColorConverter x:Key="StatutToColorConverter"/>
             <converter:CommandStateToBgColorConverter x:Key="CommandStateToBgColorConverter"/>
+            <converter:ExposureConverter x:Key="ExposureConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     
@@ -143,10 +145,10 @@
 
                                     <Label Text="{Binding NoArchi}" Grid.Column="1"/>
                                     <Label Text="{Binding Type}"  Grid.Column="2"/>
-                                    <Label Text="{Binding Exposure}" Grid.Column="3"/>
+                                    <Label Text="{Binding Exposure,Converter={StaticResource ExposureConverter}}" Grid.Column="3"/>
                                     <Label Text="{Binding Surface, StringFormat='{0}m2'}" Grid.Column="4"/>
-                                    <Label Text="{Binding Terace, StringFormat='{0}m2'}" Grid.Column="5"/>
-                                    <Label Text="{Binding Garden, StringFormat='{0}m2'}" Grid.Column="6"/>
+                                    <Label Text="{Binding Terace, StringFormat='{0}m2'}" Grid.Column="5" IsVisible="{Binding Terace,Converter={StaticResource DoubleToBoolConverter}}"/>
+                                    <Label Text="{Binding Garden, StringFormat='{0}m2'}" Grid.Column="6" IsVisible="{Binding Garden,Converter={StaticResource DoubleToBoolConverter}}" />
                                     <Label Text="{Binding Client}" Grid.Column="7"/>
                                     <Label Text="{Binding Stadium}" Grid.Column="8"/>
                                     <Label Text="{Binding Price, StringFormat='{0:#,##0}€'}" Grid.Column="9"/>
@@ -252,7 +254,7 @@
                                             <repeater:RepeaterView.ItemTemplate>
                                                 <DataTemplate>
                                                     <ViewCell>
-                                                        <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                        <win:CheckBox Content="{Binding Content,Converter={StaticResource ExposureConverter}}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
                                                     </ViewCell>
                                                 </DataTemplate>
                                             </repeater:RepeaterView.ItemTemplate>

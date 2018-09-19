@@ -9,6 +9,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:StringNullOrEmptyBoolConverter x:Key="StringNullOrEmptyBoolConverter" />
+            <converter:ExposureConverter x:Key="ExposureConverter"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
@@ -105,7 +106,7 @@
                                 <ColumnDefinition Width="70*"/>
                             </Grid.ColumnDefinitions>
                             <Label Text="Exposition" Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center"/>
-                            <Label Text="{Binding Apartment.Exposure}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
+                            <Label Text="{Binding Apartment.Exposure,Converter={StaticResource ExposureConverter}}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center"/>
                         </Grid>
 
                         <Grid  BackgroundColor="#F5F4F3" HorizontalOptions="FillAndExpand"  WidthRequest="450" HeightRequest="50">
@@ -123,13 +124,13 @@
                                 <ColumnDefinition Width="70*"/>
                             </Grid.ColumnDefinitions>
                             <Label Text="Terasse(s)" Grid.Column="0" HorizontalOptions="End" Margin="0,0,50,0" VerticalOptions="Center"/>
-                            <repeater:RepeaterView ItemsSource="{Binding Terasses}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center">
+                            <repeater:RepeaterView ItemsSource="{Binding Terraces}" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center">
                                 <repeater:RepeaterView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
                                             <StackLayout Orientation="Horizontal">
                                                 <Label Text="{Binding Name}" TextColor="{StaticResource GrayPanelText}"/>
-                                                <Label Text="{Binding Exposure, StringFormat=' - {0}'}" TextColor="{StaticResource GrayPanelText}"/>
+                                                <Label Text="{Binding Exposure, StringFormat=' - {0}', Converter={StaticResource ExposureConverter}}" TextColor="{StaticResource GrayPanelText}"/>
                                                 <Label Text="{Binding Area, StringFormat=' - {0} m2'}" TextColor="{StaticResource GrayPanelText}"/>
                                             </StackLayout>
                                         </ViewCell>
@@ -150,7 +151,7 @@
                                         <ViewCell>
                                             <StackLayout Orientation="Horizontal">
                                                 <Label Text="{Binding Name}" TextColor="{StaticResource GrayPanelText}"/>
-                                                <Label Text="{Binding Exposure, StringFormat=' - {0}'}" TextColor="{StaticResource GrayPanelText}"/>
+                                                <Label Text="{Binding Exposure, StringFormat=' - {0}',Converter={StaticResource ExposureConverter}}" TextColor="{StaticResource GrayPanelText}"/>
                                                 <Label Text="{Binding Area, StringFormat=' - {0} m2'}" TextColor="{StaticResource GrayPanelText}"/>
                                             </StackLayout>
                                         </ViewCell>

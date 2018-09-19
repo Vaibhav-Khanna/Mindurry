@@ -48,10 +48,7 @@ namespace Mindurry.ViewModels
             }
         }
 
-
-
         public int Index { get; set; }
-
 
         public bool IsFirstListVisible { get; set; } = true;
         public bool IsSecondListVisible { get; set; } = true;

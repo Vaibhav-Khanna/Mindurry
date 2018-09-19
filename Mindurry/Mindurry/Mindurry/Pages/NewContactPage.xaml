@@ -100,14 +100,14 @@
                         </StackLayout>
                     </StackLayout>
 
-                    <StackLayout Spacing="5">
+                  <!--  <StackLayout Spacing="5">
                         <Label Text="Fonction"/>
                         <Entry WidthRequest="480" HorizontalOptions="Start" Text="{Binding Contact.JobTitle, Mode=TwoWay}">
                             <Entry.Effects>
                                 <effect:LightBorderEffect/>
                             </Entry.Effects>
                         </Entry>
-                    </StackLayout>
+                    </StackLayout> -->
 
                     <StackLayout Spacing="5">
                         <Label Text="Email"/>
