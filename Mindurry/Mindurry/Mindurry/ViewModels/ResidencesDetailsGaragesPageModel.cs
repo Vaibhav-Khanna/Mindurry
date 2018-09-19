@@ -19,6 +19,7 @@ namespace Mindurry.ViewModels
         public ObservableCollection<GaragesListModel> Garages { get; set; }
 
         private GaragesListModel selectedGarage;
+        [PropertyChanged.DoNotNotify]
         public GaragesListModel SelectedGarage
         {
             get => selectedGarage;
@@ -27,6 +28,7 @@ namespace Mindurry.ViewModels
                 if (value != null)
                     CoreMethods.PushPageModel<ViewModels.ResidencesDetailsGaragePageModel>(value);
                 selectedGarage = null;
+                RaisePropertyChanged();
             }
         }
 

@@ -112,16 +112,16 @@
                             <Button Text="Ajouter" IsEnabled="{Binding IsTextNote}" FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="120" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="End" Command="{Binding AddNoteCommand}"/>
 
                         </StackLayout>
+                        <StackLayout IsVisible="{Binding IsActivityFlux}">
+                        <Label Text="Flux d'activité" FontSize="18" Margin="0,20,0,0" />
+                        <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="#CCCCCC" />
 
-                        <Label Text="Flux d'activité" FontSize="18" Margin="0,20,0,0"/>
-                        <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="#CCCCCC"/>
-
-                        <repeater:RepeaterView ItemsSource="{Binding Notes}" IsEnabled="False" >
+                        <repeater:RepeaterView ItemsSource="{Binding Notes}" IsEnabled="False">
                             <repeater:RepeaterView.ItemTemplate>
                                 <DataTemplate>
                                     <StackLayout>
                                         <StackLayout Padding="0,10" HorizontalOptions="FillAndExpand" Orientation="Vertical" IsVisible="{Binding Kind, Converter={StaticResource LeadRepeaterTemplateBoolConverter}}">
-                                            <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
+                                            <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à HH:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
                                                HorizontalOptions="CenterAndExpand"/>
                                             <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
                                                 <Label Text="{Binding Contactname}" HorizontalOptions="StartAndExpand" FontSize="11" TextColor="#4A4A4A"/>
@@ -137,7 +137,7 @@
                                         </StackLayout>
 
                                         <StackLayout Padding="0,10" HorizontalOptions="FillAndExpand" IsVisible="{Binding Kind, Converter={StaticResource NegateLeadRepeaterTemplateBoolConverter}}">
-                                            <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
+                                            <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à HH:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
                                                HorizontalOptions="CenterAndExpand"/>
                                             <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
                                                 <Label Text="{Binding Username}" HorizontalOptions="EndAndExpand" FontSize="11" TextColor="#4A4A4A"/>
@@ -166,7 +166,7 @@
                                 BorderColor="{StaticResource BlueAccent}" BorderWidth="1" HorizontalOptions="Center"
                                 Command="{Binding DisplayLessNotesCommand}" Margin="0,0,0,30"/>
                     </StackLayout>
-
+                    </StackLayout>
                 </StackLayout>
             </ScrollView>
 

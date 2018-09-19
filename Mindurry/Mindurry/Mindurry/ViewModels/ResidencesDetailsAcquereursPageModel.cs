@@ -18,6 +18,7 @@ namespace Mindurry.ViewModels
         public ObservableCollection<AcquereursListModel> Acquereurs { get; set; }
 
         private AcquereursListModel selectedAcquereur;
+        [PropertyChanged.DoNotNotify]
         public AcquereursListModel SelectedAcquereur
         {
             get => selectedAcquereur;
@@ -26,6 +27,7 @@ namespace Mindurry.ViewModels
                 if (value != null)
                     CoreMethods.PushPageModel<ViewModels.ClientsDetailsInfoPageModel>(value.Contact.Id);
                 selectedAcquereur = null;
+                RaisePropertyChanged();
             }
         }
      

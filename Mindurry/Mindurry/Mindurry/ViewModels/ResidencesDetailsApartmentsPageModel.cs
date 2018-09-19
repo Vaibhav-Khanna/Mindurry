@@ -24,6 +24,7 @@ namespace Mindurry.ViewModels
         private List<ApartmentsListModel> OriginalApartments;
 
         private ApartmentsListModel selectedApartment;
+        [PropertyChanged.DoNotNotify]
         public ApartmentsListModel SelectedApartment
         {
             get => selectedApartment;
@@ -33,13 +34,16 @@ namespace Mindurry.ViewModels
 
                     RequestTabbedPage(value.Apartment);
                 selectedApartment = null;
+                RaisePropertyChanged();
             }
         }
         private string residenceId;
         bool _terraceChecked;
+        [PropertyChanged.DoNotNotify]
         public bool TerraceChecked { get { return _terraceChecked; } set { _terraceChecked = value; Filter(); RaisePropertyChanged(); } }
 
         bool _gardenChecked;
+        [PropertyChanged.DoNotNotify]
         public bool GardenChecked { get { return _gardenChecked; } set { _gardenChecked = value; Filter(); RaisePropertyChanged(); } }
 
 
@@ -69,6 +73,7 @@ namespace Mindurry.ViewModels
         public float MinimumArea { get; set; }
 
         float _upperAreaValue;
+        [PropertyChanged.DoNotNotify]
         public float UpperAreaValue
         {
             get
@@ -87,6 +92,7 @@ namespace Mindurry.ViewModels
             }
         }
         float _lowerAreaValue;
+        [PropertyChanged.DoNotNotify]
         public float LowerAreaValue
         {
             get
@@ -105,6 +111,7 @@ namespace Mindurry.ViewModels
         }
 
         float _upperPriceValue;
+        [PropertyChanged.DoNotNotify]
         public float UpperPriceValue
         {
             get
@@ -122,6 +129,7 @@ namespace Mindurry.ViewModels
             }
         }
         float _lowerPriceValue;
+        [PropertyChanged.DoNotNotify]
         public float LowerPriceValue
         {
             get

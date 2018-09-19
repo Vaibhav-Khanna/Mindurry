@@ -53,6 +53,7 @@ namespace Mindurry.ViewModels
         private CancellationTokenSource _cancel;
 
         private ObservableCollection<PlaceLocation> _locations = new ObservableCollection<PlaceLocation>();
+        [PropertyChanged.DoNotNotify]
         public ObservableCollection<PlaceLocation> Locations
         {
             get { return _locations; }
@@ -64,6 +65,7 @@ namespace Mindurry.ViewModels
         }
 
         private bool _isVisibleListView;
+        [PropertyChanged.DoNotNotify]
         public bool IsVisibleListView
         {
 
@@ -75,6 +77,7 @@ namespace Mindurry.ViewModels
             }
         }
         private string searchText;
+        [PropertyChanged.DoNotNotify]
         public string SearchText
         {
             get { return searchText; }

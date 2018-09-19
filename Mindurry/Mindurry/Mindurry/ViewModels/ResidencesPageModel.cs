@@ -30,6 +30,7 @@ namespace Mindurry.ViewModels
         public ObservableCollection<CheckBoxItem> CommandStatesChecks { get; set; }
 
         private ResidenceModel selectedItem;
+        [PropertyChanged.DoNotNotify]
         public ResidenceModel SelectedItem
         {
             get => selectedItem;
@@ -41,6 +42,7 @@ namespace Mindurry.ViewModels
                 }
                
                 selectedItem = null;
+                RaisePropertyChanged();
             }
         }
 
@@ -55,15 +57,19 @@ namespace Mindurry.ViewModels
         public bool IsFilterOn { get; set; } = false;
 
         bool _terraceChecked;
+        [PropertyChanged.DoNotNotify]
         public bool TerraceChecked { get { return _terraceChecked; } set { _terraceChecked = value; Search(); RaisePropertyChanged(); } }
 
         bool _gardenChecked;
+        [PropertyChanged.DoNotNotify]
         public bool GardenChecked { get { return _gardenChecked; } set { _gardenChecked = value; Search(); RaisePropertyChanged(); } }
 
         bool _garageChecked;
+        [PropertyChanged.DoNotNotify]
         public bool GarageChecked { get { return _garageChecked; } set { _garageChecked = value; Search(); RaisePropertyChanged(); } }
 
         bool _cellarChecked;
+        [PropertyChanged.DoNotNotify]
         public bool CellarChecked { get { return _cellarChecked; } set { _cellarChecked = value; Search(); RaisePropertyChanged(); } }
 
 
@@ -94,6 +100,7 @@ namespace Mindurry.ViewModels
         public float ResMinimumArea { get; set; }
 
         float _resUpperAreaValue;
+        [PropertyChanged.DoNotNotify]
         public float ResUpperAreaValue
         {
             get
@@ -112,6 +119,7 @@ namespace Mindurry.ViewModels
             }
         }
         float _resLowerAreaValue;
+        [PropertyChanged.DoNotNotify]
         public float ResLowerAreaValue
         {
             get
@@ -130,6 +138,7 @@ namespace Mindurry.ViewModels
         }
 
         float _resUpperPriceValue;
+        [PropertyChanged.DoNotNotify]
         public float ResUpperPriceValue
         {
             get
@@ -148,6 +157,7 @@ namespace Mindurry.ViewModels
             }
         }
         float _resLowerPriceValue;
+        [PropertyChanged.DoNotNotify]
         public float ResLowerPriceValue
         {
             get

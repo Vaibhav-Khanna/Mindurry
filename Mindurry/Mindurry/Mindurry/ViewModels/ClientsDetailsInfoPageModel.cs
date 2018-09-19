@@ -32,11 +32,27 @@ namespace Mindurry.ViewModels
         private ObservableCollection<Note> OriginalNotes;
         public Boolean ButtonShowMoreIsDisplayed { get; set; }
         public Boolean ButtonShowLessIsDisplayed { get; set; } = false;
-        public DateTimeOffset? DateReminder { get; set; }
+       // public DateTimeOffset? DateReminder { get; set; }
         public DateTimeOffset MinDate { get; set; } = new DateTimeOffset(DateTimeOffset.Now.Date);
         public string TextNote { get; set; }
 
         public ObservableCollection<CollectSource> CollectSources { get; set; }
+
+        DateTimeOffset? dateReminder;
+        [PropertyChanged.DoNotNotify]
+        public DateTimeOffset? DateReminder
+        {
+            get
+            {
+                return dateReminder;
+            }
+            set
+            {
+                dateReminder = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         CollectSource selectedSource;
         [PropertyChanged.DoNotNotify]
@@ -93,12 +109,14 @@ namespace Mindurry.ViewModels
                     SaveTypeContact(value.Id);
                 }
                 selectedType = value;
+                RaisePropertyChanged();
             }
         }
         public ObservableCollection<CheckBoxItem> ResidencesChecks { get; set; }
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
         public ObservableCollection<User> Commercials { get; set; }
         private User selectedCommercial;
+        [PropertyChanged.DoNotNotify]
         public User SelectedCommercial
         {
             get
@@ -112,6 +130,7 @@ namespace Mindurry.ViewModels
                     SaveCommercial(value.Id);
                 }
                 selectedCommercial = value;
+                RaisePropertyChanged();
             }
         }
         public ObservableCollection<Activity> Activities { get; set; }
@@ -119,6 +138,7 @@ namespace Mindurry.ViewModels
         public ObservableCollection<Models.DataObjects.Residence> Residences { get; set; }
         
         private Models.DataObjects.Residence residenceSelected;
+        [PropertyChanged.DoNotNotify]
         public Models.DataObjects.Residence ResidenceSelected
          {
             get
@@ -133,6 +153,7 @@ namespace Mindurry.ViewModels
                     CalculReference(value.Id , TypeBienSelected);
                 }
                 residenceSelected = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -142,6 +163,7 @@ namespace Mindurry.ViewModels
         public ObservableCollection<string> TypeBiens { get; set; }
 
         private string typeBienSelected;
+        [PropertyChanged.DoNotNotify]
         public string TypeBienSelected
         {
             get
@@ -156,11 +178,13 @@ namespace Mindurry.ViewModels
                     CalculReference(ResidenceSelected.Id ,value);
                 }
                 typeBienSelected = value;
+                RaisePropertyChanged();
             }
         }
 
         public ObservableCollection<string> References { get; set; }
         private string referenceSelected;
+        [PropertyChanged.DoNotNotify]
         public string ReferenceSelected
         {
             get
@@ -174,6 +198,7 @@ namespace Mindurry.ViewModels
                     CalculPrice(value);
                 }
                 referenceSelected = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -255,6 +280,7 @@ namespace Mindurry.ViewModels
         public bool IsReminders { get; set; }
         public bool IsSequence { get; set; }
         public bool IsTextNote { get; set; }
+        public bool IsActivityFlux { get; set; } = false;
 
         public override async void Init(object initData)
         {
@@ -390,6 +416,7 @@ namespace Mindurry.ViewModels
                     Notes = new ObservableCollection<Note>(OriginalNotes);
                     ButtonShowMoreIsDisplayed = false;
                 }
+                IsActivityFlux = true;
             }
             else
             {

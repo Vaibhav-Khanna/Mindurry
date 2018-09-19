@@ -37,6 +37,7 @@ namespace Mindurry.ViewModels
         private List<CheckBoxItem> filterCommercial = new List<CheckBoxItem>();
 
         private ContactsListModel selectedItem;
+        [PropertyChanged.DoNotNotify]
         public ContactsListModel SelectedItem
         {
             get => selectedItem;
@@ -46,6 +47,7 @@ namespace Mindurry.ViewModels
                     CoreMethods.PushPageModel<ClientsDetailsInfoPageModel>(value.ContactId);
                     SubUnsubDetail();
                 selectedItem = null;
+                RaisePropertyChanged();
             }
         }
 

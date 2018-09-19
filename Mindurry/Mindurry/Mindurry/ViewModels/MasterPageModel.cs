@@ -21,6 +21,7 @@ namespace Mindurry.ViewModels
         public event EventHandler MenuItemSelected;
 
         private MasterMenuItem lastSelectedItem;
+        [PropertyChanged.DoNotNotify]
         public MasterMenuItem SelectedItem
         {
             get => null;
@@ -40,6 +41,7 @@ namespace Mindurry.ViewModels
         }
 
         ObservableCollection<MasterMenuItem> items;
+        [PropertyChanged.DoNotNotify]
         public ObservableCollection<MasterMenuItem> Items
         {
             get { return items; }

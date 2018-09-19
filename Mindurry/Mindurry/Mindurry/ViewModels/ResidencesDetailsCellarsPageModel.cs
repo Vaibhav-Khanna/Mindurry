@@ -20,6 +20,7 @@ namespace Mindurry.ViewModels
         public ObservableCollection<CellarsListModel> Cellars { get; set; }
 
         private CellarsListModel selectedCellar;
+        [PropertyChanged.DoNotNotify]
         public CellarsListModel SelectedCellar
         {
             get => selectedCellar;
@@ -28,6 +29,7 @@ namespace Mindurry.ViewModels
                 if (value != null)
                     CoreMethods.PushPageModel<ViewModels.ResidencesDetailsCellarPageModel>(value);
                 selectedCellar = null;
+                RaisePropertyChanged();
             }
         }
         public bool IsStateListVisible { get; set; } = true;

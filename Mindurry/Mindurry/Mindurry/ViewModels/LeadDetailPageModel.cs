@@ -27,13 +27,29 @@ namespace Mindurry.ViewModels
         private ObservableCollection<Note> OriginalNotes;
         public Boolean ButtonShowMoreIsDisplayed { get; set; }
         public Boolean ButtonShowLessIsDisplayed { get; set; } = false;
-        public DateTimeOffset? DateRem { get; set; }
+       // public DateTimeOffset? DateRem { get; set; }
         public DateTimeOffset MinDate { get; set; } = new DateTimeOffset(DateTimeOffset.Now.Date);
         public string TextNote { get; set; }
 
         public ObservableCollection<CollectSource> CollectSources { get; set; }
 
+        DateTimeOffset? dateRem;
+        [PropertyChanged.DoNotNotify]
+        public DateTimeOffset? DateRem
+        {
+            get
+            {
+                return dateRem;
+            }
+            set
+            {
+                dateRem = value;
+                RaisePropertyChanged();
+            }
+        }
+
         CollectSource selectedSource;
+        [PropertyChanged.DoNotNotify]
         public CollectSource SelectedSource
         {
             get
@@ -47,10 +63,13 @@ namespace Mindurry.ViewModels
                     SaveCollect(value.Id);
                 }
                 selectedSource = value;
+                RaisePropertyChanged();
             }
         }
+
         public ObservableCollection<string> Qualifications { get; set; }
         private string selectedQualification;
+        [PropertyChanged.DoNotNotify]
         public string SelectedQualification
         {
             get
@@ -64,12 +83,14 @@ namespace Mindurry.ViewModels
                     SaveQualification(value);
                 }
                 selectedQualification = value;
+                RaisePropertyChanged();
             }
         }
 
         public ObservableCollection<ContactCustomFieldSourceEntry> Types { get; set; }
        // public ContactCustomFieldSourceEntry SelectedType { get; set; }
         private ContactCustomFieldSourceEntry selectedType;
+        [PropertyChanged.DoNotNotify]
         public ContactCustomFieldSourceEntry SelectedType
         {
             get
@@ -83,6 +104,7 @@ namespace Mindurry.ViewModels
                     SaveTypeContact(value.Id);
                 }
                 selectedType = value;
+                RaisePropertyChanged();
             }
         }
 
@@ -91,6 +113,7 @@ namespace Mindurry.ViewModels
         public ObservableCollection<CheckBoxItem> TypesChecks { get; set; }
         public ObservableCollection<User> Commercials { get; set; }
         private User selectedCommercial;
+        [PropertyChanged.DoNotNotify]
         public User SelectedCommercial
         {
             get
@@ -104,6 +127,7 @@ namespace Mindurry.ViewModels
                     SaveCommercial(value.Id);
                 }
                 selectedCommercial = value;
+                RaisePropertyChanged();
             }
         }
         public string SequenceTitle { get; set; }
@@ -124,6 +148,8 @@ namespace Mindurry.ViewModels
         public bool IsReminders { get; set; }
         public bool IsSequence { get; set; }
         public bool IsTextNote { get; set; }
+
+        public bool IsActivity { get; set; } = false;
 
         public async override void Init(object initData)
         {
@@ -230,6 +256,7 @@ namespace Mindurry.ViewModels
                     Notes = new ObservableCollection<Note>(OriginalNotes);
                     ButtonShowMoreIsDisplayed = false;
                 }
+                IsActivity = true;
             }
             else
             {

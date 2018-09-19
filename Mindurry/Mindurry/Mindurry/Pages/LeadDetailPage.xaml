@@ -37,7 +37,7 @@
                             </ResourceDictionary>
                         </StackLayout.Resources>
                         <StackLayout HorizontalOptions="FillAndExpand" Margin="0">
-                           
+
                             <StackLayout Orientation="Vertical" HorizontalOptions="Start">
                                 <Label Text="{Binding Contact.PlaceLocation}" />
                                 <Label Text="{Binding Contact.Email}" Style="{StaticResource BlueLabel}"/>
@@ -64,28 +64,28 @@
 
                     </StackLayout>
                     <StackLayout Orientation="Vertical" Padding="30" Spacing="10">
-                      
+
                         <StackLayout IsVisible="{Binding IsReminders}">
                             <Label Text="Rappel à venir" FontSize="18" Margin="0,0,0,0"/>
                             <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="#CCCCCC"/>
                             <repeater:RepeaterView ItemsSource="{Binding Reminders}" x:Name="RemindersList" SelectedItemCommand="{Binding SelectReminderCommand}">
-                            <repeater:RepeaterView.ItemTemplate>
-                                <DataTemplate>
+                                <repeater:RepeaterView.ItemTemplate>
+                                    <DataTemplate>
                                         <ViewCell>
                                             <Grid  x:Name="Item" BackgroundColor="#F9F9F9" Margin="0,0,0,5">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="50"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="50"/>
-                                                <ColumnDefinition Width="50"/>
-                                            </Grid.ColumnDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="50"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="50"/>
+                                                    <ColumnDefinition Width="50"/>
+                                                </Grid.ColumnDefinitions>
 
-                                            <Grid HorizontalOptions="Center" VerticalOptions="Center"  Margin="5,5,0,5" Grid.Column="0">
+                                                <Grid HorizontalOptions="Center" VerticalOptions="Center"  Margin="5,5,0,5" Grid.Column="0">
                                                     <win:CheckBox  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
-                                             </Grid>
+                                                </Grid>
 
                                                 <StackLayout Orientation="Vertical" Spacing="0" Grid.Column="1">
-                                                    
+
                                                     <Label   Text="{Binding Reminder.Content}" FontSize="14" VerticalOptions="Center"/>
                                                     <Grid HorizontalOptions="Start" BackgroundColor="{Binding Reminder.ReminderAt, Converter={StaticResource DateToBgColorConverter}}"  Padding="10,0" VerticalOptions="Center" Margin="0,4,0,0" WidthRequest="80">
                                                         <Label HorizontalOptions="Center" Text="{Binding Reminder.ReminderAt, StringFormat='{0:dd/MM/yyyy}'}"  FontSize="12" TextColor="{Binding  Reminder.ReminderAt, Converter={StaticResource DateToReminderTextColorConverter}}" VerticalOptions="End"/>
@@ -93,11 +93,11 @@
                                                 </StackLayout>
                                                 <Button Text="" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center" Command="{Binding UpdateReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
                                                 <Button Text="" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center" Command="{Binding DeleteReminderCommand}" CommandParameter="{Binding Source={x:Reference Item}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference RemindersList}, Path=BindingContext}"/>
-                                        </Grid>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </repeater:RepeaterView.ItemTemplate>
-                        </repeater:RepeaterView>
+                                            </Grid>
+                                        </ViewCell>
+                                    </DataTemplate>
+                                </repeater:RepeaterView.ItemTemplate>
+                            </repeater:RepeaterView>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal"  Margin="0,20,0,0">
                             <StackLayout Orientation="Horizontal" Spacing="5" WidthRequest="150" HorizontalOptions="Start">
@@ -109,12 +109,12 @@
 
                         <StackLayout HorizontalOptions="End" Orientation="Horizontal">
                             <!-- Date="{Binding DateRem, Mode=TwoWay}"-->
-                            <win:CalendarDatePicker Width="300"  Date="{Binding DateRem, Mode=TwoWay}" PlaceholderText="Ajouter un rappel" />
+                            <win:CalendarDatePicker Width="300"  Date="{Binding DateRem, Mode=TwoWay}" MinDate="{Binding MinDate}" PlaceholderText="Ajouter un rappel" />
                             <Button Text="Ajouter" IsEnabled="{Binding IsTextNote}" FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="120" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="End" Command="{Binding AddNoteCommand}"/>
-                            
+
                         </StackLayout>
-                       
-                        <Label Text="Flux d'activité" FontSize="18" Margin="0,20,0,0"/>
+                        <StackLayout IsVisible="{Binding IsActivity}">
+                        <Label Text="Flux d'activité" FontSize="18" Margin="0,20,0,0" />
                         <BoxView HorizontalOptions="FillAndExpand" HeightRequest="1" BackgroundColor="#CCCCCC"/>
 
 
@@ -123,7 +123,7 @@
                                 <DataTemplate>
                                     <StackLayout>
                                         <StackLayout Padding="0,10" HorizontalOptions="FillAndExpand" Orientation="Vertical" IsVisible="{Binding Kind, Converter={StaticResource LeadRepeaterTemplateBoolConverter}}">
-                                            <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
+                                            <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à HH:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
                                                HorizontalOptions="CenterAndExpand"/>
                                             <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
                                                 <Label Text="{Binding Contactname}" HorizontalOptions="StartAndExpand" FontSize="11" TextColor="#4A4A4A"/>
@@ -139,7 +139,7 @@
                                         </StackLayout>
 
                                         <StackLayout Padding="0,10" HorizontalOptions="FillAndExpand" IsVisible="{Binding Kind, Converter={StaticResource NegateLeadRepeaterTemplateBoolConverter}}">
-                                            <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à hh:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
+                                            <Label Text="{Binding ActivityStreamDate,StringFormat='{0:dddd dd MMMM à HH:mm}'}" FontSize="14" TextColor="{StaticResource BlueAccent}"
                                                HorizontalOptions="CenterAndExpand"/>
                                             <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
                                                 <Label Text="{Binding Username}" HorizontalOptions="EndAndExpand" FontSize="11" TextColor="#4A4A4A"/>
@@ -168,7 +168,7 @@
                                 BorderColor="{StaticResource BlueAccent}" BorderWidth="1" HorizontalOptions="Center"
                                 Command="{Binding DisplayLessNotesCommand}" Margin="0,0,0,30"/>
                     </StackLayout>
-
+                </StackLayout>
                 </StackLayout>
             </ScrollView>
             <ScrollView Grid.Column="1">

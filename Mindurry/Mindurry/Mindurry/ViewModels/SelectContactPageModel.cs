@@ -11,7 +11,7 @@ using Mindurry.Models.DataObjects;
 using Mindurry.Models;
 using Microsoft.WindowsAzure.MobileServices;
 using Xamarin.Forms;
-using Xamarin.Essentials;
+using Plugin.Messaging;
 
 namespace Mindurry.ViewModels
 {
@@ -26,6 +26,7 @@ namespace Mindurry.ViewModels
         private string Filter = null;
 
         private ContactsListModel selectedItem;
+        [PropertyChanged.DoNotNotify]
         public ContactsListModel SelectedItem
         {
             get => selectedItem;
@@ -33,8 +34,9 @@ namespace Mindurry.ViewModels
             {
                 if (value != null)
                     // CoreMethods.PushPageModel<LeadDetailPageModel>(value.ContactId);
-                    SendEmail(value.Email);
+                    SendMailto(value.Email);
                 selectedItem = null;
+                RaisePropertyChanged();
             }
         }
         private List<ResidenceModel> ApartmentListing;
@@ -176,47 +178,63 @@ namespace Mindurry.ViewModels
             await LoadData();
         });
 
-        private async void SendEmail(string contactEmail)
+        private async void SendMailto(string contactEmail)
         {
             List<Models.DataObjects.Apartment> apartmentList = new List<Models.DataObjects.Apartment>();
 
             GroupedItems = ApartmentListing.GroupBy(x => x.Residence);
 
-            string body="";
+            string body= "<p>Bonjour,</p><p>Veuillez trouver ci-joint les informations sur nos appartements.</p>";
 
             foreach (var group in GroupedItems)
             {
-                body += "<h1>Résidence " + group.Key.Name + " </h1>";
-                body += "<a href=\"Link\">Plan</a>";
-
+                body += "<p><b>Résidence " + group.Key.Name + " </b>";
+                body += " (<a href=\"Link\">Plaquette</a>) </p>";
+                body += "<p>";
                 foreach (ResidenceModel r in group)
                 {
-                    body += "<p> <h2>Appartement n° " + r.Apartment.LotNumberArchitect + "</h2>";
-                    body += "<a href=\"Link\">Plan</a></p>";
+                    body += "- <b>Appartement n° " + r.Apartment.LotNumberArchitect + " - "+ r.Apartment.Kind + " > </b><a href=\"Link\"> Plan PDF</a></br> ";
+                    body += "";
                 }
+                body += "</p>";
             }
+            body += "<p>Cordialement,</p>";
 
             try
             {
-                List<string> recipients = new List<string> { contactEmail };
+
+                var builder = new EmailMessageBuilder()
+                 .To(contactEmail)
+                 .Subject("Mindurry Promotion Exemple");
+
+                var emailMessenger = CrossMessaging.Current.EmailMessenger;
+
+                if (emailMessenger.CanSendEmailBodyAsHtml)
+                {
+                    builder.BodyAsHtml(body);
+                    var email = builder.Build();
+                    emailMessenger.SendEmail(email);               
+                }
+              
+                /*
+                 *  List<string> recipients = new List<string> { contactEmail };
                 var message = new EmailMessage
                 {
                     Subject = "[Mindurry Promotion] Proposition d'appartements",
                     Body = body,
                     To = recipients,
-                    // BodyFormat= EmailBodyFormat.Html
+                    BodyFormat= EmailBodyFormat.Html
                     //Cc = ccRecipients,
                     //Bcc = bccRecipients
                 };
-              await Email.ComposeAsync(message);
+              await Email.ComposeAsync(message); 
+            }*/
+
             }
-            catch (FeatureNotSupportedException fbsEx)
-            {
-                // Email is not supported on this device
-            }
+            
             catch (Exception ex)
             {
-                // Some other exception occurred
+                // Some other exception occurred 
             }
 
 
