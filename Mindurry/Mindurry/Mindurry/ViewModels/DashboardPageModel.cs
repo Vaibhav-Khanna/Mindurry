@@ -124,6 +124,7 @@ namespace Mindurry.ViewModels
                 {
 
                     var contactInterested = await StoreManager.ContactCustomFieldStore.GetTotalCountByContactCustomFieldSourceEntryId(itemRes.Id, dateDeb, dateFin);
+
                     entries1.Add(
                         new Microcharts.Entry(contactInterested)
                         {
@@ -133,7 +134,14 @@ namespace Mindurry.ViewModels
                         });
 
                 }
-                Chart1 = new Microcharts.BarChart { Entries = entries1 };
+                    var listt = (entries1.OrderByDescending(x => x.Value)).ToList();
+                    var listEntries = new List<Microcharts.Entry>();
+                    for (var r = 0; r < 5; r++)
+                    {
+                        listEntries.Add(listt[r]);
+                    }
+                   
+                Chart1 = new Microcharts.BarChart { Entries = listEntries };
             }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------Chart Sources d'acquisitions - Chart2---------------------------------------------------------------- 

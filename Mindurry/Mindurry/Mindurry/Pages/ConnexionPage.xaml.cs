@@ -48,16 +48,16 @@ namespace Mindurry.Pages
             {
                 if (ex.ErrorCode == "authentication_canceled")
                 {
-                    await DisplayAlert("Authentication", "Authentication was cancelled by the user.", "OK");
+                    await DisplayAlert("Authentification", "L'authentification a été fermé par l'utilisateur.", "OK");
                 }
                 else
                 {
-                    await DisplayAlert("An error has occurred", "Exception message: " + ex.Message, "OK");
+                    await DisplayAlert("Une erreur est survenur", "Message d'exception: " + ex.Message, "OK");
                 }
             }
             catch (Exception ex)
             {
-                await DisplayAlert("Authentication", "Authentication failed. Exception: " + ex.Message, "OK");
+                await DisplayAlert("Authentification", "L'authentification a échoué. Message d'exception: " + ex.Message, "OK");
             }
         }
 

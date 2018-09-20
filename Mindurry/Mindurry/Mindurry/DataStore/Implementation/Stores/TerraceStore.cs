@@ -15,6 +15,7 @@ namespace Mindurry.DataStore.Implementation.Stores
             try
             {
                 await InitializeStore().ConfigureAwait(false);
+               // await PullLatestAsync().ConfigureAwait(false);
 
                 var items = await Table.Where(t => t.ResidenceId == residenceId && t.ApartmentId == apartmentId).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
 
