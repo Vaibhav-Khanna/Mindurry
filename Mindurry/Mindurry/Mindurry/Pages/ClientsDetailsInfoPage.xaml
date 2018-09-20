@@ -461,15 +461,15 @@
                                 </StackLayout>
                                 <StackLayout Spacing="5" Margin="0,20,0,0">
 
-                                    <Picker WidthRequest="300" Title="Résidences" ItemsSource="{Binding Residences}" SelectedItem="{Binding ResidenceSelected, Mode=TwoWay}" ItemDisplayBinding="{Binding Name}" HorizontalOptions="Start"/>
+                                    <Picker WidthRequest="300" Title="Résidences" IsEnabled="{Binding IsApartmentModify,Converter={converter:NegateBoolConverter}}" ItemsSource="{Binding Residences}" SelectedItem="{Binding ResidenceSelected, Mode=TwoWay}" ItemDisplayBinding="{Binding Name}" HorizontalOptions="Start"/>
                                 </StackLayout>
                                 <StackLayout Spacing="5">
-                                    
-                                    <Picker WidthRequest="300" Title="Type de biens" ItemsSource="{Binding TypeBiens}" SelectedItem="{Binding TypeBienSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
+
+                                    <Picker WidthRequest="300" Title="Type de biens" IsEnabled="{Binding IsApartmentModify,Converter={converter:NegateBoolConverter}}" ItemsSource="{Binding TypeBiens}" SelectedItem="{Binding TypeBienSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
                                 </StackLayout>
                                 <StackLayout Spacing="5">
-                                    
-                                    <Picker WidthRequest="300" Title="Références" ItemsSource="{Binding References}" SelectedItem="{Binding ReferenceSelected}" HorizontalOptions="Start"/>
+
+                                    <Picker WidthRequest="300" Title="Références" IsEnabled="{Binding IsApartmentModify,Converter={converter:NegateBoolConverter}}" ItemsSource="{Binding References}" SelectedItem="{Binding ReferenceSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
                                 </StackLayout>
                                 <StackLayout Spacing="5">
                                     <Label Text="Prix en €"/>
@@ -477,7 +477,7 @@
                                 </StackLayout>
                                 <!--<Button Text="Ajouter" FontSize="20" TextColor="White" BackgroundColor="{StaticResource BlueAccent}" WidthRequest="180" 
                                         Margin="0,20,0,0" HeightRequest="45" HorizontalOptions="Start" Command="{Binding AddPropertyCommand}"/> -->
-                                <Button Text="Ajouter" HorizontalOptions="Start" FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="120" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="Center" Command="{Binding AddPropertyCommand}"/>
+                                <Button Text="{Binding IsApartmentModify,Converter={converter:BoolToStringApartmentConverter}}" HorizontalOptions="Start" FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="120" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="Center" Command="{Binding AddPropertyCommand}"/>
 
                             </StackLayout>
 
@@ -497,6 +497,9 @@
                                                                     <effect:SemiBoldEffect/>
                                                                 </Label.Effects>
                                                             </Label>
+
+                                                            <Button Text="" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource BlueAccent}" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Command="{Binding EditApartmentCommand}"  CommandParameter="{Binding Source={x:Reference ItemProperty}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference PropertiesList}, Path=BindingContext}"  />
+
                                                         </StackLayout> 
                                                       <StackLayout Orientation="Horizontal">
                                                             <Label Text="{Binding PropertyType}" FontSize="16">
