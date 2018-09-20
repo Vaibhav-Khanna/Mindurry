@@ -653,6 +653,59 @@ namespace Mindurry.ViewModels
             ReferenceSelected = sender.PropertyNumber; 
         });
 
+        public Command DeleteApartmentCommand => new Command(async(obj) =>
+        {
+            using (UserDialogs.Instance.Loading("Ajout du bien", null, null, true))
+            {
+                var sender = obj as ClientPropertyModel;
+
+                if (sender == null)
+                    return;
+
+                if (sender.PropertyType == ResidenceType.Appartement.ToString().ToLower())
+                {
+                    var apt = await StoreManager.ApartmentStore.GetItemByRefenceAsync(sender.PropertyNumber);
+                    if (apt != null)
+                    {
+                        //TODO
+                        apt.ContactId = null;
+
+
+                        await StoreManager.ApartmentStore.UpdateAsync(apt);
+                    }
+                }
+                if (sender.PropertyType == ResidenceType.Cave.ToString().ToLower())
+                {
+                    var cellar = await StoreManager.CellarStore.GetItemByRefenceAsync(sender.PropertyNumber);
+                    if (cellar != null)
+                    {
+
+                        //TODO
+                        cellar.ContactId = null;
+
+                        await StoreManager.CellarStore.UpdateAsync(cellar);
+
+                    }
+                }
+                if (sender.PropertyType == ResidenceType.Garage.ToString().ToLower())
+                {
+                    var parking = await StoreManager.GarageStore.GetItemByRefenceAsync(sender.PropertyNumber);
+
+                    if (parking != null)
+                    {
+
+                        //TODO
+                        parking.ContactId = null;
+
+                        await StoreManager.GarageStore.UpdateAsync(parking);
+
+                    }
+                }
+
+                await LoadProperties();
+            }
+        });
+
         public Command SequenceCommand => new Command(async () => {
 
             await CoreMethods.PushPageModel<SequencePageModel>(ContactId, true);
@@ -1134,11 +1187,10 @@ namespace Mindurry.ViewModels
                     if (apt != null)
                     {
                         //TODO
-                        apt.ContactId = IsApartmentModify ? null : ContactId;
+                        apt.ContactId =  ContactId;
                         apt.CommandState = CState;
 
                         await StoreManager.ApartmentStore.UpdateAsync(apt);
-
                     }
                 }
                 if (TypeBienSelected == ResidenceType.Cave.ToString().ToLower())
@@ -1148,7 +1200,7 @@ namespace Mindurry.ViewModels
                     {
 
                         //TODO
-                        cellar.ContactId = IsApartmentModify ? null : ContactId;
+                        cellar.ContactId =  ContactId;
                         cellar.CommandState = CState;
                         await StoreManager.CellarStore.UpdateAsync(cellar);
 
@@ -1162,7 +1214,7 @@ namespace Mindurry.ViewModels
                     {
 
                         //TODO
-                        parking.ContactId = IsApartmentModify ? null : ContactId;
+                        parking.ContactId =  ContactId;
                         parking.CommandState = CState;
                         await StoreManager.GarageStore.UpdateAsync(parking);
 

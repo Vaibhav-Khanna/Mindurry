@@ -500,6 +500,8 @@
 
                                                             <Button Text="" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource BlueAccent}" HorizontalOptions="EndAndExpand" VerticalOptions="Center" Command="{Binding EditApartmentCommand}"  CommandParameter="{Binding Source={x:Reference ItemProperty}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference PropertiesList}, Path=BindingContext}"  />
 
+                                                            <Button Text="" Style="{StaticResource IconButton}" FontSize="18" TextColor="{StaticResource RedAccent}" Grid.Column="3" VerticalOptions="Center" Command="{Binding DeleteApartmentCommand}" CommandParameter="{Binding Source={x:Reference ItemProperty}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference PropertiesList}, Path=BindingContext}" />
+
                                                         </StackLayout> 
                                                       <StackLayout Orientation="Horizontal">
                                                             <Label Text="{Binding PropertyType}" FontSize="16">
