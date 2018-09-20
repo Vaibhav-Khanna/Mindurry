@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Mindurry.DataStore.Implementation.Stores
@@ -23,7 +24,7 @@ namespace Mindurry.DataStore.Implementation.Stores
                 MultipartFormDataContent content = new MultipartFormDataContent();
                 ByteArrayContent baContent = new ByteArrayContent(data);
 
-                client.DefaultRequestHeaders.Add("X-ZUMO-AUTH", StoreManager.MobileService.CurrentUser.MobileServiceAuthenticationToken);
+                client.DefaultRequestHeaders.Add("X-ZUMO-AUTH", StoreManager.MobileService?.CurrentUser?.MobileServiceAuthenticationToken);
                 client.DefaultRequestHeaders.Add("ZUMO-API-VERSION", "2.0.0");
 
                 content.Add(baContent, "uploadedFile", document.Path);
@@ -111,11 +112,12 @@ namespace Mindurry.DataStore.Implementation.Stores
         }
 
         private async Task<Byte[]> DownLoadDocument(string id)
-        {
-            var uri = new Uri($"{Constants.ApplicationURL}/api/documentMindurry/{id}/file?token={StoreManager.MobileService.CurrentUser.MobileServiceAuthenticationToken}");
-
+        {          
             try
             {
+
+                var uri = new Uri($"{Constants.ApplicationURL}/api/documentMindurry/{id}/file?token={StoreManager.MobileService?.CurrentUser?.MobileServiceAuthenticationToken}");
+
                 var _client = new HttpClient();
 
                 var response = await _client.GetAsync(uri);
@@ -124,7 +126,7 @@ namespace Mindurry.DataStore.Implementation.Stores
                 {
                     var stream = await response.Content.ReadAsStreamAsync();
 
-                    if (stream != null)
+                    if (stream != Stream.Null)
                         return StoreManager.ReadFully(stream);
                     else
                         return null;
@@ -146,7 +148,10 @@ namespace Mindurry.DataStore.Implementation.Stores
             await PullLatestAsync().ConfigureAwait(false);
 
             var items = await GetItemsByKindAndReferenceIdAsync(KindId, Kind);
+
             List<bool> returnBool = new List<bool>();
+
+            if(items!=null)
             foreach (var item in items)
             {
                 var fileName = item.InternalName + "." + item.Extension;
@@ -178,6 +183,7 @@ namespace Mindurry.DataStore.Implementation.Stores
                     returnBool.Add(true);
                 }
             }
+
             return returnBool;
         }
 

@@ -27,6 +27,8 @@ namespace Mindurry.ViewModels
         private string ContactId;
         public Contact Contact { get; set; }
 
+        public bool IsApartmentModify { get; set; }
+
         public ObservableCollection<RemindersCheckBoxListModel> Reminders { get; set; }
         public ObservableCollection<Note> Notes { get; set; }
         private ObservableCollection<Note> OriginalNotes;
@@ -340,11 +342,13 @@ namespace Mindurry.ViewModels
                 Residences = new ObservableCollection<Models.DataObjects.Residence>(res);
                 //  ResidenceSelected = Residences[0];
 
-                Statuts = new ObservableCollection<string> { "Option", "Réservation", "Signature" };
+                Statuts = new ObservableCollection<string> { "Libre", "Optionné", "Reservé", "Signé", "Problème" };
                 // StatutSelected = Statuts[0];
-                TypeBiens = new ObservableCollection<string> { "Appartement", "Cave", "Parking" };
+                TypeBiens = new ObservableCollection<string> { ResidenceType.Appartement.ToString().ToLower(), ResidenceType.Cave.ToString().ToLower(), ResidenceType.Garage.ToString().ToLower() };
                 // TypeBienSelected = TypeBiens[0];
+
                 References = new ObservableCollection<string>();
+
                 Price = null;
             }
         }
@@ -622,12 +626,84 @@ namespace Mindurry.ViewModels
         {
             TabThreeLevel--;
             await InitForm();
-
         });
+
         public Command TabThreeForwardCommand => new Command(() =>
         {
+            IsApartmentModify = false;
+            TabThreeLevel++; 
+        });
+
+        public Command EditApartmentCommand => new Command(async(obj) =>
+        {
+            var sender = obj as ClientPropertyModel;
+
+            ResidenceSelected = Residences.Where(a => a.Name == sender.ResidenceName).First();
+            TypeBienSelected = sender.PropertyType;
+            StatutSelected = sender.CommandState;
+
+            Price = sender.ItemPrice;
+
+            IsApartmentModify = true;
+
             TabThreeLevel++;
 
+            await Task.Delay(500);
+
+            ReferenceSelected = sender.PropertyNumber; 
+        });
+
+        public Command DeleteApartmentCommand => new Command(async(obj) =>
+        {
+            using (UserDialogs.Instance.Loading("Ajout du bien", null, null, true))
+            {
+                var sender = obj as ClientPropertyModel;
+
+                if (sender == null)
+                    return;
+
+                if (sender.PropertyType == ResidenceType.Appartement.ToString().ToLower())
+                {
+                    var apt = await StoreManager.ApartmentStore.GetItemByRefenceAsync(sender.PropertyNumber);
+                    if (apt != null)
+                    {
+                        //TODO
+                        apt.ContactId = null;
+
+
+                        await StoreManager.ApartmentStore.UpdateAsync(apt);
+                    }
+                }
+                if (sender.PropertyType == ResidenceType.Cave.ToString().ToLower())
+                {
+                    var cellar = await StoreManager.CellarStore.GetItemByRefenceAsync(sender.PropertyNumber);
+                    if (cellar != null)
+                    {
+
+                        //TODO
+                        cellar.ContactId = null;
+
+                        await StoreManager.CellarStore.UpdateAsync(cellar);
+
+                    }
+                }
+                if (sender.PropertyType == ResidenceType.Garage.ToString().ToLower())
+                {
+                    var parking = await StoreManager.GarageStore.GetItemByRefenceAsync(sender.PropertyNumber);
+
+                    if (parking != null)
+                    {
+
+                        //TODO
+                        parking.ContactId = null;
+
+                        await StoreManager.GarageStore.UpdateAsync(parking);
+
+                    }
+                }
+
+                await LoadProperties();
+            }
         });
 
         public Command SequenceCommand => new Command(async () => {
@@ -934,6 +1010,7 @@ namespace Mindurry.ViewModels
             PropertyList = new ObservableCollection<ClientPropertyModel>();
             // Recherche Appartements
             var apartmentList = await StoreManager.ApartmentStore.GetItemsByContactId(ContactId);
+
             if (apartmentList != null && apartmentList.Any())
             {
                 foreach (var item in apartmentList)
@@ -1001,50 +1078,50 @@ namespace Mindurry.ViewModels
         {
             if ((typeBien == null) || (residenceId == null)) return;
 
-            if (typeBien == "Appartement")
+            if (typeBien == ResidenceType.Appartement.ToString().ToLower())
             {
                 var refs = await StoreManager.ApartmentStore.GetItemsByResidenceId(residenceId);
                 if (refs != null && refs.Any())
                 {
-                    refs = refs.Where(x => string.IsNullOrEmpty(x.ContactId));
+                    refs = refs.Where(x => !string.IsNullOrEmpty(x.ContactId));
                     References = new ObservableCollection<string>();
                      
                     foreach (var item in refs)
                     {
                         References.Add(item.LotNumberArchitect);
                     }
-                   // ReferenceSelected = References[0];
-                   // CalculPrice(ReferenceSelected);
+                    //ReferenceSelected = References[0];
+                    //CalculPrice(ReferenceSelected);
                 }
             }
-            if (typeBien == "Cave")
+            if (typeBien == ResidenceType.Cave.ToString().ToLower())
             {
                 var refs = await StoreManager.CellarStore.GetItemsByResidenceId(residenceId);
                 if (refs != null && refs.Any())
                 {
-                    refs = refs.Where(x => string.IsNullOrEmpty(x.ContactId));
+                    refs = refs.Where(x => !string.IsNullOrEmpty(x.ContactId));
                     References = new ObservableCollection<string>();
                     foreach (var item in refs)
                     {
                         References.Add(item.LotNumberArchitect);
                     }
-                   // ReferenceSelected = References[0];
-                   // CalculPrice(ReferenceSelected);
+                    //ReferenceSelected = References[0];
+                    //CalculPrice(ReferenceSelected);
                 }
             }
-            if (typeBien == "Parking")
+            if (typeBien == ResidenceType.Garage.ToString().ToLower())
             {
                 var refs = await StoreManager.GarageStore.GetItemsByResidenceId(residenceId);
                 if (refs != null && refs.Any())
                 {
-                    refs = refs.Where(x => string.IsNullOrEmpty(x.ContactId));
+                    refs = refs.Where(x => !string.IsNullOrEmpty(x.ContactId));
                     References = new ObservableCollection<string>();
                     foreach (var item in refs)
                     {
                         References.Add(item.LotNumberArchitect);
                     }
-                   // ReferenceSelected = References[0];
-                   // CalculPrice(ReferenceSelected);
+                    //ReferenceSelected = References[0];
+                    //CalculPrice(ReferenceSelected);
                 }
             }
             
@@ -1054,17 +1131,17 @@ namespace Mindurry.ViewModels
         {
             if (!String.IsNullOrEmpty(reference))
             {
-                if (TypeBienSelected == "Appartement")
+                if (TypeBienSelected == ResidenceType.Appartement.ToString().ToLower())
                 {
                     var apt =await StoreManager.ApartmentStore.GetItemByRefenceAsync(reference);
                     Price = apt.Price;
                 }
-                if (TypeBienSelected == "Cave")
+                if (TypeBienSelected == ResidenceType.Cave.ToString().ToLower())
                 {
                     var cellar = await StoreManager.CellarStore.GetItemByRefenceAsync(reference);
                     Price = cellar.Price;
                 }
-                if (TypeBienSelected == "Parking")
+                if (TypeBienSelected == ResidenceType.Garage.ToString().ToLower())
                 {
                     var parking = await StoreManager.GarageStore.GetItemByRefenceAsync(reference);
                     Price = parking.Price;
@@ -1081,15 +1158,16 @@ namespace Mindurry.ViewModels
             {
                
                 string CState = CommandState.Libre.ToString();
-                if (StatutSelected == "Option")
+
+                if (StatutSelected == "Optionné")
                 {
                     CState = CommandState.Optionné.ToString();
                 }
-                if (StatutSelected == "Réservation")
+                if (StatutSelected == "Reservé")
                 {
                     CState = CommandState.Reservé.ToString();
                 }
-                if (StatutSelected == "Signature")
+                if (StatutSelected == "Signé")
                 {
                     CState = CommandState.Signé.ToString();
                 }
@@ -1097,39 +1175,55 @@ namespace Mindurry.ViewModels
                 {
                     CState = CommandState.Optionné.ToString();
                 }
+                if(StatutSelected == "Problème")
+                {
+                    CState = CommandState.Problème.ToString();
+                }
 
-                if (TypeBienSelected == "Appartement")
+
+                if (TypeBienSelected == ResidenceType.Appartement.ToString().ToLower())
                 {
                     var apt = await StoreManager.ApartmentStore.GetItemByRefenceAsync(ReferenceSelected);
                     if (apt != null)
                     {
-                        apt.ContactId = ContactId;
+                        //TODO
+                        apt.ContactId =  ContactId;
                         apt.CommandState = CState;
+
                         await StoreManager.ApartmentStore.UpdateAsync(apt);
                     }
                 }
-                if (TypeBienSelected == "Cave")
+                if (TypeBienSelected == ResidenceType.Cave.ToString().ToLower())
                 {
                     var cellar = await StoreManager.CellarStore.GetItemByRefenceAsync(ReferenceSelected);
                     if (cellar != null)
                     {
-                        cellar.ContactId = ContactId;
+
+                        //TODO
+                        cellar.ContactId =  ContactId;
                         cellar.CommandState = CState;
                         await StoreManager.CellarStore.UpdateAsync(cellar);
+
                     }
                 }
-                if (TypeBienSelected == "Parking")
+                if (TypeBienSelected == ResidenceType.Garage.ToString().ToLower())
                 {
                     var parking = await StoreManager.GarageStore.GetItemByRefenceAsync(ReferenceSelected);
+
                     if (parking != null)
                     {
-                        parking.ContactId = ContactId;
+
+                        //TODO
+                        parking.ContactId =  ContactId;
                         parking.CommandState = CState;
                         await StoreManager.GarageStore.UpdateAsync(parking);
+
                     }
                 }
+
                 await LoadProperties();
             }
+
             TabThreeLevel--;
         });
 
