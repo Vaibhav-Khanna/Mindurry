@@ -459,8 +459,10 @@
                                 <StackLayout Spacing="5" Margin="0,20,0,0">
                                     <Picker WidthRequest="300" Title="Statuts"  ItemsSource="{Binding Statuts}" SelectedItem="{Binding StatutSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
                                 </StackLayout>
+                                <StackLayout Spacing="5" Margin="0,20,0,0" >
+                                    <Picker WidthRequest="300" Title="Stades"  ItemsSource="{Binding Stages}" SelectedItem="{Binding StageSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
+                                </StackLayout>
                                 <StackLayout Spacing="5" Margin="0,20,0,0">
-
                                     <Picker WidthRequest="300" Title="Résidences" IsEnabled="{Binding IsApartmentModify,Converter={converter:NegateBoolConverter}}" ItemsSource="{Binding Residences}" SelectedItem="{Binding ResidenceSelected, Mode=TwoWay}" ItemDisplayBinding="{Binding Name}" HorizontalOptions="Start"/>
                                 </StackLayout>
                                 <StackLayout Spacing="5">

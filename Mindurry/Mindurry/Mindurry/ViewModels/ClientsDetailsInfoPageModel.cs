@@ -162,6 +162,9 @@ namespace Mindurry.ViewModels
         public ObservableCollection<string> Statuts { get; set; }
         public string StatutSelected { get; set; }
 
+        public ObservableCollection<string> Stages { get; set; }
+        public string StageSelected { get; set; }
+
         public ObservableCollection<string> TypeBiens { get; set; }
 
         private string typeBienSelected;
@@ -342,7 +345,10 @@ namespace Mindurry.ViewModels
                 Residences = new ObservableCollection<Models.DataObjects.Residence>(res);
                 //  ResidenceSelected = Residences[0];
 
-                Statuts = new ObservableCollection<string> { "Libre", "Optionné", "Reservé", "Signé", "Problème" };
+                Statuts = new ObservableCollection<string> { CommandState.Libre.ToString(), CommandState.Optionné.ToString(), CommandState.Reservé.ToString(), CommandState.Acté.ToString(), CommandState.Problème.ToString() };
+
+                Stages = new ObservableCollection<string> { Stage.Plan, Stage.Choix, Stage.Remise, Stage.Quitus, CommandState.Problème.ToString() };
+
                 // StatutSelected = Statuts[0];
                 TypeBiens = new ObservableCollection<string> { ResidenceType.Appartement.ToString().ToLower(), ResidenceType.Cave.ToString().ToLower(), ResidenceType.Garage.ToString().ToLower() };
                 // TypeBienSelected = TypeBiens[0];
@@ -641,6 +647,11 @@ namespace Mindurry.ViewModels
             ResidenceSelected = Residences.Where(a => a.Name == sender.ResidenceName).First();
             TypeBienSelected = sender.PropertyType;
             StatutSelected = sender.CommandState;
+            if (String.IsNullOrEmpty(sender.Stage))
+            {
+                StageSelected = sender.Stage;
+            }
+            
 
             Price = sender.ItemPrice;
 
@@ -655,7 +666,7 @@ namespace Mindurry.ViewModels
 
         public Command DeleteApartmentCommand => new Command(async(obj) =>
         {
-            using (UserDialogs.Instance.Loading("Ajout du bien", null, null, true))
+            using (UserDialogs.Instance.Loading("Désattribution du bien", null, null, true))
             {
                 var sender = obj as ClientPropertyModel;
 
@@ -669,7 +680,7 @@ namespace Mindurry.ViewModels
                     {
                         //TODO
                         apt.ContactId = null;
-
+                        apt.CommandState = CommandState.Libre.ToString();
 
                         await StoreManager.ApartmentStore.UpdateAsync(apt);
                     }
@@ -682,6 +693,7 @@ namespace Mindurry.ViewModels
 
                         //TODO
                         cellar.ContactId = null;
+                        cellar.CommandState = CommandState.Libre.ToString();
 
                         await StoreManager.CellarStore.UpdateAsync(cellar);
 
@@ -696,6 +708,7 @@ namespace Mindurry.ViewModels
 
                         //TODO
                         parking.ContactId = null;
+                        parking.CommandState = CommandState.Libre.ToString();
 
                         await StoreManager.GarageStore.UpdateAsync(parking);
 
@@ -1083,7 +1096,7 @@ namespace Mindurry.ViewModels
                 var refs = await StoreManager.ApartmentStore.GetItemsByResidenceId(residenceId);
                 if (refs != null && refs.Any())
                 {
-                    refs = refs.Where(x => !string.IsNullOrEmpty(x.ContactId));
+                    refs = refs.Where(x => string.IsNullOrEmpty(x.ContactId));
                     References = new ObservableCollection<string>();
                      
                     foreach (var item in refs)
@@ -1099,7 +1112,7 @@ namespace Mindurry.ViewModels
                 var refs = await StoreManager.CellarStore.GetItemsByResidenceId(residenceId);
                 if (refs != null && refs.Any())
                 {
-                    refs = refs.Where(x => !string.IsNullOrEmpty(x.ContactId));
+                    refs = refs.Where(x => string.IsNullOrEmpty(x.ContactId));
                     References = new ObservableCollection<string>();
                     foreach (var item in refs)
                     {
@@ -1114,7 +1127,7 @@ namespace Mindurry.ViewModels
                 var refs = await StoreManager.GarageStore.GetItemsByResidenceId(residenceId);
                 if (refs != null && refs.Any())
                 {
-                    refs = refs.Where(x => !string.IsNullOrEmpty(x.ContactId));
+                    refs = refs.Where(x => string.IsNullOrEmpty(x.ContactId));
                     References = new ObservableCollection<string>();
                     foreach (var item in refs)
                     {
@@ -1147,7 +1160,6 @@ namespace Mindurry.ViewModels
                     Price = parking.Price;
                 }
 
-
             }
 
         }
@@ -1156,29 +1168,51 @@ namespace Mindurry.ViewModels
         {
             using (UserDialogs.Instance.Loading("Ajout du bien", null, null, true))
             {
-               
+                //Stage init
+                string CStage="";
+                //CommandState
                 string CState = CommandState.Libre.ToString();
 
-                if (StatutSelected == "Optionné")
+                if (StatutSelected == CommandState.Optionné.ToString())
                 {
                     CState = CommandState.Optionné.ToString();
                 }
-                if (StatutSelected == "Reservé")
+                if (StatutSelected == CommandState.Reservé.ToString())
                 {
                     CState = CommandState.Reservé.ToString();
                 }
-                if (StatutSelected == "Signé")
+                if (StatutSelected == CommandState.Acté.ToString())
                 {
-                    CState = CommandState.Signé.ToString();
+                    CState = CommandState.Acté.ToString();
+                    //Stage
+                    if (StageSelected == Stage.Plan)
+                    {
+                        CStage = Stage.Plan;
+                    }
+                    if (StageSelected == Stage.Choix)
+                    {
+                        CStage = Stage.Choix;
+                    }
+                    if (StageSelected == Stage.Remise)
+                    {
+                        CStage = Stage.Remise;
+                    }
+                    if (StageSelected == Stage.Quitus)
+                    {
+                        CStage = Stage.Quitus;
+                    }
                 }
-                if (StatutSelected == "Option")
+                if (StatutSelected == CommandState.Optionné.ToString())
                 {
                     CState = CommandState.Optionné.ToString();
                 }
-                if(StatutSelected == "Problème")
+                if(StatutSelected == CommandState.Problème.ToString())
                 {
                     CState = CommandState.Problème.ToString();
                 }
+
+                
+
 
 
                 if (TypeBienSelected == ResidenceType.Appartement.ToString().ToLower())
@@ -1189,7 +1223,10 @@ namespace Mindurry.ViewModels
                         //TODO
                         apt.ContactId =  ContactId;
                         apt.CommandState = CState;
-
+                        if (String.IsNullOrEmpty(CStage))
+                        {
+                            apt.Stage = CStage;
+                        }
                         await StoreManager.ApartmentStore.UpdateAsync(apt);
                     }
                 }
@@ -1202,6 +1239,10 @@ namespace Mindurry.ViewModels
                         //TODO
                         cellar.ContactId =  ContactId;
                         cellar.CommandState = CState;
+                        if (String.IsNullOrEmpty(CStage))
+                        {
+                            cellar.Stage = CStage;
+                        }
                         await StoreManager.CellarStore.UpdateAsync(cellar);
 
                     }
@@ -1216,6 +1257,10 @@ namespace Mindurry.ViewModels
                         //TODO
                         parking.ContactId =  ContactId;
                         parking.CommandState = CState;
+                        if (String.IsNullOrEmpty(CStage))
+                        {
+                            parking.Stage = CStage;
+                        }
                         await StoreManager.GarageStore.UpdateAsync(parking);
 
                     }

@@ -183,7 +183,7 @@ namespace Mindurry.ViewModels
             List<Models.DataObjects.Apartment> apartmentList = new List<Models.DataObjects.Apartment>();
 
             GroupedItems = ApartmentListing.GroupBy(x => x.Residence);
-
+            /*
             string body= "<p>Bonjour,</p><p>Veuillez trouver ci-joint les informations sur nos appartements.</p>";
 
             foreach (var group in GroupedItems)
@@ -199,6 +199,21 @@ namespace Mindurry.ViewModels
                 body += "</p>";
             }
             body += "<p>Cordialement,</p>";
+            */
+            string body = "Bonjour,\n\n Veuillez trouver ci-joint les informations sur nos appartements.\n\n";
+
+            foreach (var group in GroupedItems)
+            {
+                body += "Résidence " + group.Key.Name;
+                body += " (http://miragarri.mindurrypromotion.com/media/promoteur/programme/plan/66143f85c86d65c82dd6dd2fc8485d3e-plan-04_1170.jpg)";
+                body += "\n\n\n";
+                foreach (ResidenceModel r in group)
+                {
+                    body += "- Appartement n° " + r.Apartment.LotNumberArchitect + " - " + r.Apartment.Kind + " > http://miragarri.mindurrypromotion.com/media/promoteur/programme/plan/66143f85c86d65c82dd6dd2fc8485d3e-plan-04_1170.jpg \n\n";
+                }
+                body += "\n";
+            }
+            body += "Cordialement,\n\n";
 
             try
             {
@@ -208,13 +223,19 @@ namespace Mindurry.ViewModels
                  .Subject("Mindurry Promotion Exemple");
 
                 var emailMessenger = CrossMessaging.Current.EmailMessenger;
-
+                if (emailMessenger.CanSendEmail)
+                {
+                    builder.Body(body);
+                    var email = builder.Build();
+                    emailMessenger.SendEmail(email);
+                }
+                /*
                 if (emailMessenger.CanSendEmailBodyAsHtml)
                 {
                     builder.BodyAsHtml(body);
                     var email = builder.Build();
                     emailMessenger.SendEmail(email);               
-                }
+                } */
               
                 /*
                  *  List<string> recipients = new List<string> { contactEmail };

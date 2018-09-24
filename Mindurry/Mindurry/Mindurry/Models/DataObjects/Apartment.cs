@@ -44,10 +44,20 @@ namespace Mindurry.Models.DataObjects
 
     }
 
-    public enum CommandState { Libre, Optionné, Reservé, Signé, Problème };
+    public enum CommandState { Libre, Optionné, Reservé, Acté, Problème };
 
+    public static class Stage
+    {
+        public static string Plan = "Plan électrique/plomberie";
+
+        public static string Choix = "Choix Interieur";
+
+        public static string Remise = "Remise des clés";
+
+        public static string Quitus = "Quitus de levé de réserve";
+    }
     public enum Exposure { East, NortWest, North, NorthEast, South, SouthEast, SouthWest, West };
 
-    public enum Kind { T1, T2, T3, T4, T5, T6 };
+    public enum Kind { T1,T1bis, T2, T2bis, T3, T4, T5, T6 };
 
 }

@@ -29,7 +29,7 @@ namespace Mindurry.Converters
                 {
                     return Color.FromHex("F8E4C3");
                 }
-                if (commandState == CommandState.Signé.ToString())
+                if (commandState == CommandState.Acté.ToString())
                 {
                     return Color.FromHex("E4FCCD");
                 }

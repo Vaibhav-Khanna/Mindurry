@@ -45,11 +45,18 @@ namespace Mindurry.ViewModels
             {
                 if (value != null)
                 {
-                    dateDeb = value.Value.UtcDateTime.Date;
-                    DateDebDisplay = dateDeb;
-                    startDate = value;
-                    LoadCharts();
-                    RaisePropertyChanged();
+                    dateDeb = value.Value.UtcDateTime.Date;                 
+                    if (dateFin >= dateDeb)
+                    {
+                        DateDebDisplay = dateDeb;
+                        startDate = value;
+                        LoadCharts();
+                        RaisePropertyChanged();
+                    }
+                    else
+                    {
+                        CoreMethods.DisplayAlert("Erreur", "La date de fin est inférieure à la date de début, Merci de corriger", "Ok");
+                    }
                 }
 
             }
@@ -65,10 +72,18 @@ namespace Mindurry.ViewModels
                 if (value != null)
                 {
                     dateFin = value.Value.UtcDateTime.AddDays(1).Date;
-                    DateFinDisplay = value.Value.UtcDateTime.Date;
-                    endDate = value;
-                    LoadCharts();
-                    RaisePropertyChanged();
+                    if (dateFin >= dateDeb)
+                    {
+                        DateFinDisplay = value.Value.UtcDateTime.Date;
+                        endDate = value;
+                        LoadCharts();
+                        RaisePropertyChanged();
+                    }
+                    else
+                    {
+                        CoreMethods.DisplayAlert("Erreur", "La date de fin est inférieure à la date de début, Merci de corriger", "Ok");
+                    }
+                   
                 }
 
             }
@@ -95,15 +110,6 @@ namespace Mindurry.ViewModels
 
         public async Task LoadCharts()
         {
-            //Verif si 2 dates incoiherente
-            if (dateDeb > dateFin)
-            {
-                await CoreMethods.DisplayAlert("Erreur", "La date de fin est inférieure à la date de début, Merci de corriger", "Ok");
-
-            }
-            else
-            {
-
             
             //init Color charts
             List<SkiaSharp.SKColor> colorTab = new List<SkiaSharp.SKColor>();
@@ -136,7 +142,16 @@ namespace Mindurry.ViewModels
                 }
                     var listt = (entries1.OrderByDescending(x => x.Value)).ToList();
                     var listEntries = new List<Microcharts.Entry>();
-                    for (var r = 0; r < 5; r++)
+
+                    // calcul limite boucle (max 5 elements)
+                    int limitFor;
+                    if (listt.Count < 5)
+                    {
+                         limitFor = listt.Count;
+                    }
+                    else { limitFor = 5; }
+                    
+                    for (var r = 0; r < limitFor; r++)
                     {
                         listEntries.Add(listt[r]);
                     }
@@ -338,8 +353,6 @@ namespace Mindurry.ViewModels
                  CustomBrushes.Add(Color.FromHex("F5CAD0")); */
 
                 //------------------------------------------------------------------------------------------------------------------------
-
-            }
         }
 //--------------------------------------------------------------------------------------
 
