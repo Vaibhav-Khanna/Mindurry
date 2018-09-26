@@ -50,11 +50,11 @@ namespace Mindurry.Models.DataObjects
     {
         public static string Plan = "Plan électrique/plomberie";
 
-        public static string Choix = "Choix Interieur";
+        public static string Choix = "Choix intérieur";
 
         public static string Remise = "Remise des clés";
 
-        public static string Quitus = "Quitus de levé de réserve";
+        public static string Quitus = "Quitus de levée des réserves";
     }
     public enum Exposure { East, NortWest, North, NorthEast, South, SouthEast, SouthWest, West };
 

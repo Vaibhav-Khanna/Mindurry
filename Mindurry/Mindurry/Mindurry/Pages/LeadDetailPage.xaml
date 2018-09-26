@@ -109,7 +109,7 @@
 
                         <StackLayout HorizontalOptions="End" Orientation="Horizontal">
                             <!-- Date="{Binding DateRem, Mode=TwoWay}"-->
-                            <win:CalendarDatePicker Width="300"  Date="{Binding DateRem, Mode=TwoWay}" MinDate="{Binding MinDate}" PlaceholderText="Ajouter un rappel" />
+                            <win:CalendarDatePicker Width="300"  Date="{Binding DateRem, Mode=TwoWay, UpdateSourceEventName=DateChanged}" MinDate="{Binding MinDate}" PlaceholderText="Ajouter un rappel" />
                             <Button Text="Ajouter" IsEnabled="{Binding IsTextNote}" FontSize="14" TextColor="{StaticResource BlueAccent}" BackgroundColor="White" WidthRequest="120" HeightRequest="30" BorderColor="{StaticResource BlueAccent}" BorderWidth="0.5" VerticalOptions="End" Command="{Binding AddNoteCommand}"/>
 
                         </StackLayout>

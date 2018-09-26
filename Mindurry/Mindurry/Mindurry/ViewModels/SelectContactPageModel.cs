@@ -12,6 +12,7 @@ using Mindurry.Models;
 using Microsoft.WindowsAzure.MobileServices;
 using Xamarin.Forms;
 using Plugin.Messaging;
+using Mindurry.Helpers;
 
 namespace Mindurry.ViewModels
 {
@@ -34,7 +35,7 @@ namespace Mindurry.ViewModels
             {
                 if (value != null)
                     // CoreMethods.PushPageModel<LeadDetailPageModel>(value.ContactId);
-                    SendMailto(value.Email);
+                    SendMailto(value);
                 selectedItem = null;
                 RaisePropertyChanged();
             }
@@ -178,7 +179,7 @@ namespace Mindurry.ViewModels
             await LoadData();
         });
 
-        private async void SendMailto(string contactEmail)
+        private async void SendMailto(ContactsListModel contact)
         {
             List<Models.DataObjects.Apartment> apartmentList = new List<Models.DataObjects.Apartment>();
 
@@ -200,26 +201,70 @@ namespace Mindurry.ViewModels
             }
             body += "<p>Cordialement,</p>";
             */
-            string body = "Bonjour,\n\n Veuillez trouver ci-joint les informations sur nos appartements.\n\n";
+            string body = "Re-Bonjour " + contact.Name + ", \n\nVeuillez trouver ci-dessous les informations sur nos résidences et appartements.\n\n";
 
             foreach (var group in GroupedItems)
             {
-                body += "Résidence " + group.Key.Name;
-                body += " (http://miragarri.mindurrypromotion.com/media/promoteur/programme/plan/66143f85c86d65c82dd6dd2fc8485d3e-plan-04_1170.jpg)";
-                body += "\n\n\n";
+
+                
+                body += "Résidence " + group.Key.Name + " sur " + group.Key.Locality+ ":\n\n" ;
+
+                //Plan
+                var residenceDocs = await StoreManager.DocumentMindurryStore.GetItemsByKindAndReferenceIdAsync(group.Key.Id, ReferenceKind.Residence.ToString().ToLower());
+
+                foreach (var item in residenceDocs)
+                {
+                    body += item.Name + " ";
+                    body += new Uri($"{Constants.ApplicationURL}/api/documentMindurry/{item.Id}/plan");
+                    body += "\n";
+
+                }
+               
+                body += "\n\n";
                 foreach (ResidenceModel r in group)
                 {
-                    body += "- Appartement n° " + r.Apartment.LotNumberArchitect + " - " + r.Apartment.Kind + " > http://miragarri.mindurrypromotion.com/media/promoteur/programme/plan/66143f85c86d65c82dd6dd2fc8485d3e-plan-04_1170.jpg \n\n";
+                    // Plan appartement
+                    var apartmentDocs = await StoreManager.DocumentMindurryStore.GetItemsByKindAndReferenceIdAsync(r.Apartment.Id, ReferenceKind.Apartment.ToString().ToLower());
+                    DocumentMindurry validDoc = null;
+                    var finals = apartmentDocs.Where(x => x.DocumentType == DocumentType.Definitif.ToString().ToLower());
+                    if (finals != null && finals.Any())
+                    {
+                        validDoc = finals.First();
+                    }
+                    else
+                    {
+                        var signs = apartmentDocs.Where(x => x.DocumentType == DocumentType.Signe.ToString().ToLower());
+                        if (signs != null && signs.Any())
+                        {
+                            validDoc = signs.First();
+                        }
+                        else
+                        {
+                            var initials = apartmentDocs.Where(x => x.DocumentType == DocumentType.Initial.ToString().ToLower());
+                            if (initials != null && initials.Any())
+                            {
+                                validDoc = initials.First();
+                            }
+                        }
+                    }
+
+
+                        body += "- Appartement n° " + r.Apartment.LotNumberArchitect + " - " + r.Apartment.Kind + "-> " + validDoc.Name + " ";
+                        body += new Uri($"{Constants.ApplicationURL}/api/documentMindurry/{validDoc.Id}/plan");
                 }
-                body += "\n";
+                body += "\n\n\n";
             }
-            body += "Cordialement,\n\n";
+            body += "Nous vous rappelons que ces appartements seront livrés à nos clients pour le  .​​......\n\n";
+            body += "Le bâtiment est conforme à la construction BBC, vous permettant de bénéficier d'une réduction d'impôt (dans le cadre d'un investissement locatif sous la loi PINEL).\n";
+            body += "Attention, les prix indiqués s'entendent hors ........\n\n";
+            body += "Vous souhaitant une bonne réception,\n";
+            body += "Cordialement,";
 
             try
             {
 
                 var builder = new EmailMessageBuilder()
-                 .To(contactEmail)
+                 .To(contact.Email)
                  .Subject("Mindurry Promotion Exemple");
 
                 var emailMessenger = CrossMessaging.Current.EmailMessenger;
@@ -229,6 +274,8 @@ namespace Mindurry.ViewModels
                     var email = builder.Build();
                     emailMessenger.SendEmail(email);
                 }
+                 DependencyService.Get<ISave>().CopyToClipboard(body);
+               
                 /*
                 if (emailMessenger.CanSendEmailBodyAsHtml)
                 {
@@ -236,7 +283,7 @@ namespace Mindurry.ViewModels
                     var email = builder.Build();
                     emailMessenger.SendEmail(email);               
                 } */
-              
+
                 /*
                  *  List<string> recipients = new List<string> { contactEmail };
                 var message = new EmailMessage

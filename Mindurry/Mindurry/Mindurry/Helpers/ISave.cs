@@ -11,5 +11,6 @@ namespace Mindurry.Helpers
     {
         Task<StorageFolder> Save(MemoryStream fileStream, string name);
         Task LaunchFolder(StorageFolder folder);
+        void CopyToClipboard(string text);
     }
 }

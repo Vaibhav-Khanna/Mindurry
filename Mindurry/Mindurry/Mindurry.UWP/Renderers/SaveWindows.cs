@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.System;
@@ -30,6 +31,14 @@ namespace Mindurry.UWP.Renderers
              //await LaunchFolder(folder);
 
 
+        }
+
+        public void CopyToClipboard(string text)
+        {
+            DataPackage dataPackage = new DataPackage();
+            dataPackage.RequestedOperation = DataPackageOperation.Copy;
+            dataPackage.SetText(text);
+            Clipboard.SetContent(dataPackage);
         }
 
         public async Task LaunchFolder(StorageFolder folder)

@@ -17,7 +17,7 @@ namespace Mindurry.ViewModels
             base.Init(initData);
             ContactId = (string)initData;
 
-            Url = "https://crm-sequencemail-dev.azurewebsites.net/web/";
+            Url = "https://ngc-app-dev.azurewebsites.net/crm-sequence?contactId=" + ContactId + "&token=" + Helpers.Settings.AuthToken;
             
         }
 

@@ -291,7 +291,7 @@
                                     </StackLayout>
 
                                     <StackLayout IsVisible="{Binding IsSecondListVisible}" Spacing="15">
-                                        <repeater:RepeaterView ItemsSource="{Binding TypesChecks}" VerticalOptions="Start">
+                                        <repeater:RepeaterView ItemsSource="{Binding TypesChecks}" VerticalOptions="Start" SelectedItemCommand="{Binding SaveChecksCommand}">
                                             <repeater:RepeaterView.ItemTemplate>
                                                 <DataTemplate>
                                                     <ViewCell>
@@ -457,10 +457,15 @@
                                     <Label Text="Ici vous pouvez associer des biens à l'acquéreur" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center"/>
                                 </StackLayout>
                                 <StackLayout Spacing="5" Margin="0,20,0,0">
-                                    <Picker WidthRequest="300" Title="Statuts"  ItemsSource="{Binding Statuts}" SelectedItem="{Binding StatutSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
+                                    <Picker x:Name="statutPicker" WidthRequest="300" Title="Statuts"  ItemsSource="{Binding Statuts}" SelectedItem="{Binding StatutSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
                                 </StackLayout>
-                                <StackLayout Spacing="5" Margin="0,20,0,0" >
+                                <StackLayout Spacing="5" Margin="0,20,0,0" IsVisible="False">
                                     <Picker WidthRequest="300" Title="Stades"  ItemsSource="{Binding Stages}" SelectedItem="{Binding StageSelected, Mode=TwoWay}" HorizontalOptions="Start"/>
+                                    <StackLayout.Triggers>
+                                        <DataTrigger TargetType="StackLayout" Binding="{Binding Source={x:Reference statutPicker}, Path=SelectedItem}" Value="Acté">
+                                            <Setter Property="IsVisible" Value="True" />
+                                        </DataTrigger>
+                                    </StackLayout.Triggers>
                                 </StackLayout>
                                 <StackLayout Spacing="5" Margin="0,20,0,0">
                                     <Picker WidthRequest="300" Title="Résidences" IsEnabled="{Binding IsApartmentModify,Converter={converter:NegateBoolConverter}}" ItemsSource="{Binding Residences}" SelectedItem="{Binding ResidenceSelected, Mode=TwoWay}" ItemDisplayBinding="{Binding Name}" HorizontalOptions="Start"/>
