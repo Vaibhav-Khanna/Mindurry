@@ -1,4 +1,5 @@
 ﻿using Mindurry.Models;
+using Mindurry.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,16 @@ namespace Mindurry.Pages
 		public ClientsDetailsInfoPage ()
 		{
 			InitializeComponent ();
+
+            dtPicker.DateChanged += DtPicker_DateChanged;  
 		}
 
+        private void DtPicker_DateChanged(CalendarDatePicker sender, CalendarDatePickerDateChangedEventArgs args)
+        {
+            if (args.NewDate != null)
+            {
+                (BindingContext as ClientsDetailsInfoPageModel).DateReminder = args.NewDate.Value.Date;
+            }
+        }
     }
 }
