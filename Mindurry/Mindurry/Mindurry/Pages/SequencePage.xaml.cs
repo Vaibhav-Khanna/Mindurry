@@ -15,13 +15,13 @@ namespace Mindurry.Pages
 		public SequencePage ()
 		{
 			InitializeComponent ();
-
+            /*
             if (!FormsWebView.GlobalRegisteredHeaders.ContainsKey("ZUMO-API-VERSION"))
                 FormsWebView.GlobalRegisteredHeaders.Add("ZUMO-API-VERSION", "2.0.0");
 
             if (!FormsWebView.GlobalRegisteredHeaders.ContainsKey("X-ZUMO-AUTH"))
                 FormsWebView.GlobalRegisteredHeaders.Add("X-ZUMO-AUTH", Settings.AuthToken);
-
+                */
         }
         
     }

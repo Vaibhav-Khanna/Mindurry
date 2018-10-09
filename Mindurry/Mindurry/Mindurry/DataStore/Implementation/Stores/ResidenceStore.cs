@@ -15,6 +15,7 @@ namespace Mindurry.DataStore.Implementation.Stores
         public async Task<IEnumerable<Residence>> GetAllActiveResidences()
         {
             await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
 
             List<Residence> residences = new List<Residence>();
 
@@ -46,7 +47,7 @@ namespace Mindurry.DataStore.Implementation.Stores
             catch (Exception)
             {
             }
-
+            residences = residences.Where(r => !r.Archived).ToList();
             return residences;
         }
     }

@@ -15,6 +15,7 @@ namespace Mindurry.DataStore.Implementation.Stores
         {
 
             await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
 
 
             if (!String.IsNullOrEmpty(residenceId))
@@ -29,6 +30,7 @@ namespace Mindurry.DataStore.Implementation.Stores
         public async Task<bool> IsStillGarageInResidence(string residenceId)
         {
             await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
 
             if (!String.IsNullOrEmpty(residenceId))
             {
@@ -60,6 +62,7 @@ namespace Mindurry.DataStore.Implementation.Stores
         {
 
             await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
 
 
             if (!String.IsNullOrEmpty(contactId))
@@ -74,6 +77,7 @@ namespace Mindurry.DataStore.Implementation.Stores
         public async Task<Garage> GetItemByRefenceAsync(string reference)
         {
             await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
 
 
             if (!String.IsNullOrEmpty(reference))

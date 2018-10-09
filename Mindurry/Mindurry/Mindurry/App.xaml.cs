@@ -30,7 +30,7 @@ namespace Mindurry
 
             BasePageModel.Init();
 
-            Init();
+           // Init();
 
             MainPage = new Pages.ConnexionPage();
         }
@@ -41,7 +41,7 @@ namespace Mindurry
             {
                 storeManager = FreshIOC.Container.Resolve<IStoreManager>() as StoreManager;
 
-                //bool authenticated = await storeManager.LoginAsync(true);
+              //  bool authenticated = await storeManager.LoginAsync(true);
  
                 if (!string.IsNullOrWhiteSpace(Settings.AuthToken))
                 {

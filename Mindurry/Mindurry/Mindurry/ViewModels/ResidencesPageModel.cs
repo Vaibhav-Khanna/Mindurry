@@ -47,7 +47,7 @@ namespace Mindurry.ViewModels
         }
 
         private string _searchText;
-        public string SearchText { get { return _searchText; } set { _searchText = value; Search(); RaisePropertyChanged(); } }
+        public string SearchText { get { return _searchText; } set { _searchText = value; if (!resetAll) { Search(); }; RaisePropertyChanged(); } }
 
         public bool IsShareButtonVisible { get; set; } = false;
         public bool IsFirstListVisible { get; set; } = true;
@@ -58,19 +58,19 @@ namespace Mindurry.ViewModels
 
         bool _terraceChecked;
         [PropertyChanged.DoNotNotify]
-        public bool TerraceChecked { get { return _terraceChecked; } set { _terraceChecked = value; Search(); RaisePropertyChanged(); } }
+        public bool TerraceChecked {get {return _terraceChecked; }set{_terraceChecked = value;if (!resetAll) { Search(); }; RaisePropertyChanged();} }
 
         bool _gardenChecked;
         [PropertyChanged.DoNotNotify]
-        public bool GardenChecked { get { return _gardenChecked; } set { _gardenChecked = value; Search(); RaisePropertyChanged(); } }
+        public bool GardenChecked {get { return _gardenChecked; }set {_gardenChecked = value; if (!resetAll) { Search(); }; RaisePropertyChanged();} }
 
         bool _garageChecked;
         [PropertyChanged.DoNotNotify]
-        public bool GarageChecked { get { return _garageChecked; } set { _garageChecked = value; Search(); RaisePropertyChanged(); } }
+        public bool GarageChecked {get { return _garageChecked; }set { _garageChecked = value; if (!resetAll) { Search(); }; RaisePropertyChanged();} }
 
         bool _cellarChecked;
         [PropertyChanged.DoNotNotify]
-        public bool CellarChecked { get { return _cellarChecked; } set { _cellarChecked = value; Search(); RaisePropertyChanged(); } }
+        public bool CellarChecked {get { return _cellarChecked; }set { _cellarChecked = value; if (!resetAll) { Search(); }; RaisePropertyChanged(); } }
 
 
         public string ArrowOne
@@ -110,7 +110,7 @@ namespace Mindurry.ViewModels
             set
             {
                 _resUpperAreaValue = value;
-                if (_resUpperAreaValue <= ResMaximumArea && _resUpperAreaValue > 0)
+                if (_resUpperAreaValue <= ResMaximumArea && _resUpperAreaValue > 0 && resetAll==false)
                 {
                     Search();
                 }
@@ -129,7 +129,7 @@ namespace Mindurry.ViewModels
             set
             {
                 _resLowerAreaValue = value;
-                if (_resLowerAreaValue >= ResMinimumArea)
+                if (_resLowerAreaValue >= ResMinimumArea && resetAll == false)
                 {
                     Search();
                 }
@@ -148,7 +148,7 @@ namespace Mindurry.ViewModels
             set
             {
                 _resUpperPriceValue = value;
-                if (_resUpperPriceValue <= ResMaximumPrice && _resUpperPriceValue > 0)
+                if (_resUpperPriceValue <= ResMaximumPrice && _resUpperPriceValue > 0 && resetAll == false)
                 {
                     Search();
                 }
@@ -167,7 +167,7 @@ namespace Mindurry.ViewModels
             set
             {
                 _resLowerPriceValue = value;
-                if (_resLowerPriceValue >= ResMinimumPrice)
+                if (_resLowerPriceValue >= ResMinimumPrice && resetAll == false)
                 {
                     Search();
                 }
@@ -188,6 +188,7 @@ namespace Mindurry.ViewModels
         public ICommand ClearAllFilterCommand { get; set; }
 
         IEnumerable<Residence> residences;
+        private bool resetAll { get; set; } = false;
 
         public async override void Init(object initData)
         {
@@ -233,6 +234,7 @@ namespace Mindurry.ViewModels
             }
            
             GroupedItems = AllResidences.GroupBy(x => x.Residence);
+           
 
             ResidencesChecks = new ObservableCollection<CheckBoxItem>();
 
@@ -261,7 +263,7 @@ namespace Mindurry.ViewModels
             {
                 CheckBoxItem check;
                 ExpositionChecks.Add(check = new CheckBoxItem() { Content = item.Exposure, DataType = CheckBoxContainerDataType.Exposure });
-                check.PropertyChanged += TypeFilterChanged;
+                check.PropertyChanged += ExposureFilterChanged;
             }
 
             // CommandState Checkbox Items
@@ -269,7 +271,7 @@ namespace Mindurry.ViewModels
             {
                 CheckBoxItem check;
                 CommandStatesChecks.Add(check = new CheckBoxItem() { Content = item.State, DataType = CheckBoxContainerDataType.CommandState });
-                check.PropertyChanged += TypeFilterChanged;
+                check.PropertyChanged += CommandStatesFilterChanged;
             }
 
             if (AllResidences != null && AllResidences.Any())
@@ -393,51 +395,97 @@ namespace Mindurry.ViewModels
             }
         }
 
+        void ClearCommandStatesChecks()
+        {
+            foreach (var item in CommandStatesChecks)
+            {
+                item.IsChecked = false;
+            }
+        }
+
         void ClearAllFilters()
         {
+            resetAll = true;
+
+            // nettoyage des checksBox
             ClearResidenceChecks();
             ClearTypeChecks();
             ClearExposureChecks();
+            ClearCommandStatesChecks();
 
+            // remise à niveau des prix 
             ResLowerAreaValue = ResMinimumArea;
             ResUpperAreaValue = ResMaximumArea;
-
+            //remise à niveau des area
             ResLowerPriceValue = ResMinimumPrice;
             ResUpperPriceValue = ResMaximumPrice;
 
-            TerraceChecked = false;
-            GardenChecked = false;
+            
+            // remise à false pour les swtich choisi
+            if (TerraceChecked == true) { TerraceChecked = false; }
+            if (GardenChecked == true) { GardenChecked = false; }
+            if (GarageChecked == true){ GarageChecked = false; }
+            if (CellarChecked == true){ CellarChecked = false; }
+
+            //remise à jour de la liste
+            Search();
+
+            resetAll = false;
         }
 
         async void Search()
-        {
-             await Filter();
 
-            if (string.IsNullOrWhiteSpace(SearchText))
-                GroupedItems = FilteredResidences.GroupBy(x => x.Residence);
+        {
+            if (resetAll) {
+                GroupedItems = AllResidences.GroupBy(x => x.Residence);
+            }
             else
-                GroupedItems = FilteredResidences.Where(x => x.Parent.ToLower().Contains(SearchText.ToLower())).GroupBy(x => x.Residence);
+            {
+                await Filter();
+
+                if (string.IsNullOrWhiteSpace(SearchText))
+                    GroupedItems = FilteredResidences.GroupBy(x => x.Residence);
+                else
+                    GroupedItems = FilteredResidences.Where(x => x.Parent.ToLower().Contains(SearchText.ToLower())).GroupBy(x => x.Residence);
+            }
+            
         }
 
         void ResidenceFilterChanged(object sender, PropertyChangedEventArgs e)
         {
             var residence = sender as CheckBoxItem;
-
-             Search();
+            if (!resetAll)
+            {
+                Search();
+            }
+           
         }
 
         void TypeFilterChanged(object sender, PropertyChangedEventArgs e)
         {
             var type = sender as CheckBoxItem;
-
-             Search();
+            if (!resetAll)
+            {
+                Search();
+            }
         }
 
         void ExposureFilterChanged(object sender, PropertyChangedEventArgs e)
         {
             var exposure = sender as CheckBoxItem;
+            if (!resetAll)
+            {
+                Search();
+            }
+        }
 
-             Search();
+        void CommandStatesFilterChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var commandState = sender as CheckBoxItem;
+            if (!resetAll)
+            {
+                Search();
+            }
         }
 
         async Task Filter()

@@ -95,6 +95,7 @@ namespace Mindurry.DataStore.Implementation.Stores
         public async Task<bool> IsValidDocumentName(string DocumentName)
         {
             await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
             try
             {
                 var items = await Table.Where(x => x.Name == DocumentName).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
@@ -144,6 +145,7 @@ namespace Mindurry.DataStore.Implementation.Stores
         public async Task<IEnumerable<bool>> PullLatest(string KindId, string Kind)
         {
             await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
 
             var items = await GetItemsByKindAndReferenceIdAsync(KindId, Kind);
 

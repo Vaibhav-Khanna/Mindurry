@@ -13,7 +13,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <StackLayout Margin="50,0" Orientation="Horizontal" VerticalOptions="Center" BackgroundColor="Transparent"  HorizontalOptions="StartAndExpand" HeightRequest="100">
+            <StackLayout Margin="50,0" Orientation="Horizontal" VerticalOptions="Center" BackgroundColor="Transparent"  HorizontalOptions="Start" HeightRequest="50">
                 <Label Text="&#xE72B;" FontFamily="Segoe MDL2 Assets" FontSize="15" VerticalOptions="Center" >
                     <Label.Effects>
                         <effect:AccentColorEffect/>

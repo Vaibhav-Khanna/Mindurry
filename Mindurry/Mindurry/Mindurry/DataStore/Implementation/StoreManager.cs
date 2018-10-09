@@ -316,7 +316,7 @@ namespace Mindurry.DataStore.Implementation
 
             Device.BeginInvokeOnMainThread(async () =>
             {
-                Acr.UserDialogs.UserDialogs.Instance.Toast(new Acr.UserDialogs.ToastConfig("L'application est en cours de synchronisation...Ceci pourrait prendre quelques minutes")
+                Acr.UserDialogs.UserDialogs.Instance.Toast(new Acr.UserDialogs.ToastConfig("L'application est en cours de synchronisation...")
                 {
                     BackgroundColor = System.Drawing.Color.Maroon,
                     MessageTextColor = System.Drawing.Color.White,

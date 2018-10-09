@@ -16,6 +16,8 @@ namespace Mindurry.DataStore.Implementation.Stores
             try
             {
                 await InitializeStore().ConfigureAwait(false);
+                await PullLatestAsync().ConfigureAwait(false);
+
 
                 var items = await Table.Where( a=> a.ResidenceId == residenceId).OrderBy(a => a.LotNumberArchitect).ToEnumerableAsync().ConfigureAwait(false);
 
@@ -31,8 +33,8 @@ namespace Mindurry.DataStore.Implementation.Stores
         public async  Task<IEnumerable<Apartment>> GetItemsByResidenceId(string residenceId) {
 
             await InitializeStore().ConfigureAwait(false);
+            await PullLatestAsync().ConfigureAwait(false);
 
-            
             if (!String.IsNullOrEmpty(residenceId))
             {
                 return await Table.Where(x => x.ResidenceId == residenceId).OrderBy(x => x.LotNumberArchitect).Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false); 
@@ -46,7 +48,7 @@ namespace Mindurry.DataStore.Implementation.Stores
         {
 
             await InitializeStore().ConfigureAwait(false);
-
+            await PullLatestAsync().ConfigureAwait(false);
 
             if (!String.IsNullOrEmpty(contactId))
             {
@@ -61,7 +63,7 @@ namespace Mindurry.DataStore.Implementation.Stores
         public async Task<Apartment> GetItemByRefenceAsync(string reference)
         {
             await InitializeStore().ConfigureAwait(false);
-
+            await PullLatestAsync().ConfigureAwait(false);
 
             if (!String.IsNullOrEmpty(reference))
             {
