@@ -21,9 +21,11 @@ namespace Mindurry.DataStore.Abstraction
         IGardenStore GardenStore { get; }
         INoteStore NoteStore { get; }
         IResidenceStore ResidenceStore { get; }
+        ISalesTeamStore SalesTeamStore { get; }
         ITerraceStore TerraceStore { get; }
         IUserFavoriteStore UserFavoriteStore { get; }
         IUserStore UserStore { get; }
+        IUserSalesTeamStore UserSalesTeamStore { get; }
 
         Task<bool> SyncAllAsync(bool syncUserSpecific);
         Task DropEverythingAsync();

@@ -74,12 +74,12 @@ namespace Mindurry.DataStore.Implementation.Stores
                 return null;
             }
         }
-        public async Task<IEnumerable<Note>> GetRemindersToDoAsync()
+        public async Task<IEnumerable<Note>> GetRemindersToDoAsync(string userId)
         {
             await InitializeStore().ConfigureAwait(false);
             try
             {
-                var collection = await Table.Where(x => (x.ReminderAt != null && x.DoneAt == null)).OrderBy(x => x.ReminderAt).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                var collection = await Table.Where(x => (x.ReminderAt != null && x.DoneAt == null && x.UserId==userId)).OrderBy(x => x.ReminderAt).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
                 if (collection != null && collection.Any())
                 {
                     return collection;
@@ -95,12 +95,12 @@ namespace Mindurry.DataStore.Implementation.Stores
             }
         }
 
-        public async Task<IEnumerable<Note>> GetRemindersDoneAsync()
+        public async Task<IEnumerable<Note>> GetRemindersDoneAsync(string userId)
         {
             await InitializeStore().ConfigureAwait(false);
             try
             {
-                var collection = await Table.Where(x => (x.ReminderAt != null && x.DoneAt != null)).OrderBy(x => x.ReminderAt).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                var collection = await Table.Where(x => (x.ReminderAt != null && x.DoneAt != null && x.UserId == userId)).OrderBy(x => x.ReminderAt).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
                 if (collection != null && collection.Any())
                 {
                     return collection;

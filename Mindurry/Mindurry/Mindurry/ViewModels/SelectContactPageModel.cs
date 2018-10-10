@@ -201,7 +201,7 @@ namespace Mindurry.ViewModels
             }
             body += "<p>Cordialement,</p>";
             */
-            string body = "Re-Bonjour " + contact.Name + ", \n\nVeuillez trouver ci-dessous les informations sur nos résidences et appartements.\n\n";
+            string body = "<b>Re-Bonjour</b> " + contact.Name + ", \n\nVeuillez trouver ci-dessous les informations sur nos résidences et appartements.\n\n";
 
             foreach (var group in GroupedItems)
             {

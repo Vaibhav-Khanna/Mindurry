@@ -13,7 +13,7 @@ namespace Mindurry
 #elif UAT
         public static string ApplicationURL = @"https://mindurry-uat.azurewebsites.net/api";
 
-#elif PROD
+#elif Release
         public static string ApplicationURL = @"https://mindurry.azurewebsites.net/api";
 
 #else

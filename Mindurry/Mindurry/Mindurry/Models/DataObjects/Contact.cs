@@ -5,6 +5,12 @@ namespace Mindurry.Models.DataObjects
 {
     public class Contact : BaseDataObject
     {
+        [JsonProperty("contactCreatedAt")]
+        public DateTimeOffset ContactCreatedAt { get; set; }
+
+        [JsonProperty("contactLastUpdateAt")]
+        public DateTimeOffset ContactLastUpdateAt { get; set; }
+
         [JsonProperty("firstname")]
         public string Firstname { get; set; }
 
@@ -59,7 +65,6 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("collectSourceName")]
         public string CollectSourceName { get; set; }
         
-
         [JsonProperty("userId")]
         public string UserId { get; set; }
 
@@ -69,17 +74,38 @@ namespace Mindurry.Models.DataObjects
         [JsonProperty("userLastname")]
         public string UserLastname { get; set; }
 
-        [JsonProperty("contactCreatedAt")]
-        public DateTimeOffset ContactCreatedAt { get; set; }
-
         [JsonProperty("customFields")]
         public string CustomFields { get; set; }
-        
+
+        [JsonProperty("civility")]
+        public string Civility { get; set; }
+
+        [JsonProperty("creatorUserId")]
+        public string CreatorUserId { get; set; }
+
+        [JsonProperty("salesTeamId")]
+        public string SalesTeamId { get; set; }
+
         [JsonIgnore]
         public string Name => $"{Firstname} {Lastname}";
 
     }
     public enum Qualification { Contact, Client, Lead };
+
+    public static class Civility
+    {
+        public static string M = "M.";
+
+        public static string Mme = "Mme";
+
+        public static string MM = "MM.";
+
+        public static string Mmes = "Mmes";
+
+        public static string Mlle = "Mlle";
+
+        public static string Mlles = "Mlles";
+    }
 
     public enum Profil { Investisseur, RésidencePrincipale, RésidenceSecondaire };
 }

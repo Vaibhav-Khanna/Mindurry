@@ -31,9 +31,8 @@ namespace Mindurry.DataStore.Implementation.Stores
             }
             else
             {
-                return await Table.Where(x => (x.Qualification == ContactType)).OrderByDescending(x => x.ContactCreatedAt).Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
-
-            }
+               return await Table.Where(x => (x.Qualification == ContactType)).OrderByDescending(x => x.ContactCreatedAt).Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+              }
 
         }
 

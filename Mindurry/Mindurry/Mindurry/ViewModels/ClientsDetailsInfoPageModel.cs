@@ -782,7 +782,7 @@ namespace Mindurry.ViewModels
 
         public Command UpdateContactCommand => new Command(async (obj) =>
         {
-            await CoreMethods.PushPageModel<NewClientPageModel>(Contact.Id);
+            await CoreMethods.PushPageModel<NewContactPageModel>(Contact.Id);
             SubUnsub();
 
         });

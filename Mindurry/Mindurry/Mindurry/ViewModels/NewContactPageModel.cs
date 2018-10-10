@@ -37,9 +37,12 @@ namespace Mindurry.ViewModels
 
         public string Title { get; set; }
 
-        public List<CollectSource> CollectSources { get; set; }
+        public ObservableCollection<CollectSource> CollectSources { get; set; }
 
         public CollectSource CollectSourcesSelected { get; set; }
+
+        public ObservableCollection<string> Civilities { get; set; }
+        public string CivilitySelected { get; set; }
 
         public List<ContactCustomFieldSourceEntry> CustomFields { get; set; }
 
@@ -230,6 +233,7 @@ namespace Mindurry.ViewModels
 
             IsVisibleListView = false;
 
+            FetchCivilities();
             await FetchCollectSources();
             await FetchType();
         }
@@ -247,12 +251,19 @@ namespace Mindurry.ViewModels
                 if (String.IsNullOrEmpty(ContactId))
                 {
                     ContactToSave = new Contact();
+                    // salesteam
+
+                    var salesTeam1 = await StoreManager.UserSalesTeamStore.GetItemsAsync();
+                    string salesTeamId = await StoreManager.UserSalesTeamStore.GetSalesTeamIdAsync(Helpers.Settings.UserId);
+                    ContactToSave.SalesTeamId = salesTeamId;
+                    ContactToSave.CreatorUserId = Helpers.Settings.UserId;
                 }
                 else
                 {
                     ContactToSave = Contact;
                 }
 
+                ContactToSave.Civility = CivilitySelected;
                 ContactToSave.Firstname = Contact.Firstname;
                 ContactToSave.Lastname = Contact.Lastname;
                 ContactToSave.Street1 = _streetNumber + " " + _street;
@@ -270,7 +281,6 @@ namespace Mindurry.ViewModels
                 ContactToSave.Qualification = contactType;
 
                 ContactToSave.CollectSourceId = CollectSourcesSelected.Id;
-                
 
                 //Save contact 
                 //Insert if new Contact
@@ -329,15 +339,49 @@ namespace Mindurry.ViewModels
 
         });
 
+         void FetchCivilities()
+        {
+            Civilities = new ObservableCollection<string>();
+            Civilities.Add(Civility.M);
+            Civilities.Add(Civility.Mme);
+            Civilities.Add(Civility.MM);
+            Civilities.Add(Civility.Mmes);
+            Civilities.Add(Civility.Mlle);
+            Civilities.Add(Civility.Mlles);
+
+            CivilitySelected = Civilities[0];
+
+                foreach (var item in Civilities)
+                {
+                    if (item == Contact.Civility)
+                    {
+                        CivilitySelected = item;
+                    break;
+                    }
+                }
+
+        }
         async Task FetchCollectSources()
         {
             var collectSource = await StoreManager.CollectSourceStore.GetItemsAsync();
-            CollectSources = new List<CollectSource>();
-
+            
             if (collectSource.Any())
             {
-                CollectSources = collectSource.ToList();
+                CollectSources = new ObservableCollection<CollectSource>(collectSource);         
                 CollectSourcesSelected = CollectSources[0];
+
+                foreach (var item in CollectSources)
+                {
+                    if (item.Id == Contact.CollectSourceId)
+                    {
+                        CollectSourcesSelected = item;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                CollectSources = new ObservableCollection<CollectSource>();
             }
 
         }

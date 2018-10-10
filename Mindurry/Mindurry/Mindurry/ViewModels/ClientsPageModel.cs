@@ -135,6 +135,7 @@ namespace Mindurry.ViewModels
             if (!filterCommercial.Any() && !filterRes.Any())
             {
                 _contacts = await StoreManager.ContactStore.GetItemsByTypeAsync("Client", Filter);
+                // var _allcontacts = await StoreManager.ContactStore.GetItemsAsync();
                 totalCount = (_contacts as IQueryResultEnumerable<Contact>).TotalCount;
             }
             else

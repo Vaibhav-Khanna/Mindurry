@@ -55,12 +55,13 @@ namespace Mindurry.ViewModels
 
         private async Task LoadReminders(string action)
         {
+           
             Reminders = new ObservableCollection<RemindersCheckBoxListModel>();
             IEnumerable<Note> reminders = null;
             IEnumerable<Note> remindersToDo;
             IEnumerable<Note> remindersDone;
             // ToDO
-            remindersToDo = await StoreManager.NoteStore.GetRemindersToDoAsync();
+            remindersToDo = await StoreManager.NoteStore.GetRemindersToDoAsync(Helpers.Settings.UserId);
             if (remindersToDo != null)
             {
                 RemindersToDoCount = remindersToDo.Count();
@@ -70,7 +71,7 @@ namespace Mindurry.ViewModels
                 RemindersToDoCount = 0;
             }
             // Done
-            remindersDone = await StoreManager.NoteStore.GetRemindersDoneAsync();
+            remindersDone = await StoreManager.NoteStore.GetRemindersDoneAsync(Helpers.Settings.UserId);
             if (remindersDone != null)
             {
                 RemindersDoneCount = remindersDone.Count();

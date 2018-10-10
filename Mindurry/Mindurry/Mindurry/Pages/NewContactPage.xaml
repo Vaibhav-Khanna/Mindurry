@@ -49,6 +49,10 @@
                     <StackLayout Spacing="5">
                         <Label Text="Identité"/>
                         <StackLayout Orientation="Horizontal" Spacing="30">
+                            
+                                <Picker WidthRequest="100" HorizontalOptions="Start" ItemsSource="{Binding Civilities}" SelectedItem="{Binding CivilitySelected, Mode=TwoWay}">
+                                </Picker>
+
                             <Entry Placeholder="Nom" WidthRequest="300" Text="{Binding Contact.Lastname, Mode=TwoWay}">
                                 <Entry.Effects>
                                     <effect:LightBorderEffect/>

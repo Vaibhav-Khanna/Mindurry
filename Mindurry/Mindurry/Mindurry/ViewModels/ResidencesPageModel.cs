@@ -225,7 +225,9 @@ namespace Mindurry.ViewModels
                         if (!String.IsNullOrEmpty(_apt.ContactId))
                         {
                             var acquereur = await StoreManager.ContactStore.GetItemAsync(_apt.ContactId);
-                            _res_model.Client = acquereur.Name;
+                            if (acquereur != null) { 
+                                _res_model.Client = acquereur.Name;
+                            }
                         }
 
                         AllResidences.Add(_res_model);

@@ -12,8 +12,8 @@ namespace Mindurry.DataStore.Abstraction.Stores
         Task<DateTimeOffset?> GetNextNoteReminderDateAsync(string contactId);
         Task<IEnumerable<Note>> GetNextRemindersByContactIdAsync(string contactId);
         Task<IEnumerable<Note>> GetNotesByContactIdAsync(string contactId);
-        Task<IEnumerable<Note>> GetRemindersToDoAsync();
-        Task<IEnumerable<Note>> GetRemindersDoneAsync();
+        Task<IEnumerable<Note>> GetRemindersToDoAsync(string userId);
+        Task<IEnumerable<Note>> GetRemindersDoneAsync(string userId);
         Task<IEnumerable<PicsStats>> GetContactStat(Qualification typeContact, DateTime dateDeb, DateTime dateFin);
         Task<IEnumerable<SourcesStats>> GetSourcesStat(Qualification typeContact, DateTime dateDeb, DateTime dateFin);
     }

@@ -67,8 +67,14 @@ namespace Mindurry.DataStore.Implementation
         IResidenceStore residenceStore;
         public IResidenceStore ResidenceStore => residenceStore ?? (residenceStore = FreshIOC.Container.Resolve<IResidenceStore>());
 
+        ISalesTeamStore salesTeamStore;
+        public ISalesTeamStore SalesTeamStore => salesTeamStore ?? (salesTeamStore = FreshIOC.Container.Resolve<ISalesTeamStore>());
+
         ITerraceStore terraceStore;
         public ITerraceStore TerraceStore => terraceStore ?? (terraceStore = FreshIOC.Container.Resolve<ITerraceStore>());
+
+        IUserSalesTeamStore userSalesTeamStore;
+        public IUserSalesTeamStore UserSalesTeamStore => userSalesTeamStore ?? (userSalesTeamStore = FreshIOC.Container.Resolve<IUserSalesTeamStore>());
 
         IUserStore userStore;
         public IUserStore UserStore => userStore ?? (userStore = FreshIOC.Container.Resolve<IUserStore>());
@@ -132,7 +138,7 @@ namespace Mindurry.DataStore.Implementation
                         var profileUser = await UserStore.GetProfileAsync(authenticationResult.IdToken);
 
                         // CacheToken
-                        CacheToken(user, profileUser.Role.ToString());
+                        CacheToken(user, profileUser);
 
                         success = true;
 
@@ -147,12 +153,12 @@ namespace Mindurry.DataStore.Implementation
             return success;
         }
 
-        void CacheToken(MobileServiceUser user, string Role)
+        void CacheToken(MobileServiceUser user, User UserProfile)
         {
 
             Settings.AuthToken = user.MobileServiceAuthenticationToken;
-            Settings.UserId = user.UserId;
-            Settings.Role = Role;
+            Settings.UserId = UserProfile.Id;
+            Settings.Role = UserProfile.Role.ToLower();
         }
 
         public async Task<bool> LogoutAsync()
@@ -227,7 +233,9 @@ namespace Mindurry.DataStore.Implementation
             await GardenStore.DropTable();
             await NoteStore.DropTable();
             await ResidenceStore.DropTable();
+            await SalesTeamStore.DropTable();
             await TerraceStore.DropTable();
+            await UserSalesTeamStore.DropTable();
             await UserStore.DropTable();
             await UserFavoriteStore.DropTable();
 
@@ -277,8 +285,10 @@ namespace Mindurry.DataStore.Implementation
                 store.DefineTable<Garden>();
                 store.DefineTable<Note>();
                 store.DefineTable<Residence>();
+                store.DefineTable<SalesTeam>();
                 store.DefineTable<Terrace>();
                 store.DefineTable<UserFavorite>();
+                store.DefineTable<UserSalesTeam>();
                 store.DefineTable<User>();
 
                 //TODO Add rest of the tables
@@ -310,7 +320,9 @@ namespace Mindurry.DataStore.Implementation
             taskList.Add(GardenStore.SyncAsync());
             taskList.Add(NoteStore.SyncAsync());
             taskList.Add(ResidenceStore.SyncAsync());
+            taskList.Add(SalesTeamStore.SyncAsync());
             taskList.Add(TerraceStore.SyncAsync());
+            taskList.Add(UserSalesTeamStore.SyncAsync());
             taskList.Add(UserStore.SyncAsync());
             taskList.Add(UserFavoriteStore.SyncAsync());
 
