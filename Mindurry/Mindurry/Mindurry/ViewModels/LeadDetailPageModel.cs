@@ -1,6 +1,7 @@
 ﻿using Acr.UserDialogs;
 using FreshMvvm;
 using Mindurry.DataModels;
+using Mindurry.Helpers;
 using Mindurry.Models;
 using Mindurry.Models.DataObjects;
 using Mindurry.Pages;
@@ -8,9 +9,11 @@ using Mindurry.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -244,9 +247,22 @@ namespace Mindurry.ViewModels
         private async Task LoadNotes()
         {
             var notes = await StoreManager.NoteStore.GetNotesByContactIdAsync(ContactId);
-            if (notes != null && notes.Any())
+            List<Note> notesFormat = new List<Note>();
+            if (notes != null)
             {
-                OriginalNotes = new ObservableCollection<Note>(notes);
+                foreach (var item in notes)
+                {
+
+                    var textToTransform = item.Content;
+
+                    item.Content = HtmlConvert.ConvertToPlainText(textToTransform);
+                    notesFormat.Add(item);
+                }
+            }
+           
+            if (notesFormat != null && notesFormat.Any())
+            {
+                OriginalNotes = new ObservableCollection<Note>(notesFormat);
                 if (OriginalNotes.Count > 3) { 
                 Notes = new ObservableCollection<Note>(OriginalNotes.Take(3));
                     ButtonShowMoreIsDisplayed = true;
@@ -438,7 +454,25 @@ namespace Mindurry.ViewModels
            await CoreMethods.PushPageModel<SequencePageModel>(ContactId, true);
 
         });
-        
+
+        public Command StopSequenceCommand => new Command(async () => {
+
+            var sequence = await StoreManager.ContactSequenceStore.SequenceInProgress(ContactId);
+            if (sequence != null)
+            {
+                sequence.EndAt = DateTimeOffset.Now;
+                sequence.EndReason = "manualStop";
+                sequence.ManualEndingUserId = Helpers.Settings.UserId;
+
+                var result = await StoreManager.ContactSequenceStore.UpdateAsync(sequence);
+                if (result)
+                {
+                    IsSequence = false;
+                }
+            }
+            
+        });
+
 
         public Command SaveChecksCommand => new Command<CheckBoxItem>(async (obj) =>
         {

@@ -16,7 +16,7 @@ namespace Mindurry.Pages
 
         public MasterDetailNavigationPage()
         {
-            var detailpage = FreshPageModelResolver.ResolvePageModel<ViewModels.DashboardPageModel>();
+            var detailpage = FreshPageModelResolver.ResolvePageModel<ViewModels.LeadsPageModel>();
 
             var masterpage = FreshPageModelResolver.ResolvePageModel<ViewModels.MasterPageModel>();
 
@@ -97,6 +97,12 @@ namespace Mindurry.Pages
                 case "RemindersPage":
                     {
                         Detail_navigation = new FreshNavigationContainer(FreshPageModelResolver.ResolvePageModel<ViewModels.RemindersPageModel>()) { BarTextColor = Color.Black, BarBackgroundColor = Color.White };
+                        Detail = Detail_navigation;
+                        break;
+                    }
+                case "NgcPage":
+                    {
+                        Detail_navigation = new FreshNavigationContainer(FreshPageModelResolver.ResolvePageModel<ViewModels.NgcPageModel>()) { BarTextColor = Color.Black, BarBackgroundColor = Color.White };
                         Detail = Detail_navigation;
                         break;
                     }

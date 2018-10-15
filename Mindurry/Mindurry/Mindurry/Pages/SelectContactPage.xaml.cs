@@ -33,7 +33,7 @@ namespace Mindurry.Pages
 
         private void ListView_ItemAppearing(object sender, ItemVisibilityEventArgs e)
         {
-            if ((e.Item as ContactsListModel) == context.Contacts.LastOrDefault())
+            if ((e.Item as ContactsListModel) == context.Contacts?.LastOrDefault())
             {
                 context.LoadMore.Execute(null);
             }

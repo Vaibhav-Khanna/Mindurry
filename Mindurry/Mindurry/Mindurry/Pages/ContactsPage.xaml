@@ -189,57 +189,43 @@
                                 <StackLayout Spacing="5">
                                 <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
                                     <StackLayout.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ArrowOneCommand}"/>
+                                        <TapGestureRecognizer Command="{Binding ArrowTwoCommand}"/>
                                     </StackLayout.GestureRecognizers>
-                                    <Label Text="Résidences" TextColor="{StaticResource GrayPanelText}"/>
-                                    <Label Text="{Binding ArrowOne}"  FontSize="10" VerticalOptions="Center" TextColor="{StaticResource GrayPanelText}" FontFamily="Segoe MDL2 Assets"/>
+                                    <Label Text="Commercial en charge" TextColor="{StaticResource GrayPanelText}"/>
+                                    <Label Text="{Binding ArrowTwo}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
                                 </StackLayout>
 
-                                <StackLayout IsVisible="{Binding IsFirstListVisible}">
-                                    <repeater:RepeaterView ItemsSource="{Binding ResidencesChecks}" VerticalOptions="Start" SelectedItemCommand="{Binding SelectResidenceCommand}">
+                                <StackLayout IsVisible="{Binding IsSecondListVisible}" Spacing="15">
+                                    <repeater:RepeaterView ItemsSource="{Binding CommercialChecks}" VerticalOptions="Start" SelectedItemCommand="{Binding SelectCommercialCommand}">
                                         <repeater:RepeaterView.ItemTemplate>
                                             <DataTemplate>
                                                 <ViewCell>
-                                                    <win:CheckBox  Content="{Binding Content}"  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                    <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
                                                 </ViewCell>
                                             </DataTemplate>
                                         </repeater:RepeaterView.ItemTemplate>
                                     </repeater:RepeaterView>
-
-                                    <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllResidencesCommand}">
-                                        <Button.Effects>
-                                            <effect:AccentColorEffect/>
-                                        </Button.Effects>
-                                    </Button>
                                 </StackLayout>
-
                             </StackLayout>
 
                                 <StackLayout Spacing="5">
                                     <StackLayout Orientation="Horizontal" Spacing="20" BackgroundColor="Transparent">
                                         <StackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer Command="{Binding ArrowTwoCommand}"/>
+                                            <TapGestureRecognizer Command="{Binding ArrowOneCommand}"/>
                                         </StackLayout.GestureRecognizers>
-                                        <Label Text="Commercial en charge" TextColor="{StaticResource GrayPanelText}"/>
-                                        <Label Text="{Binding ArrowTwo}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
+                                        <Label Text="Résidences" TextColor="{StaticResource GrayPanelText}"/>
+                                        <Label Text="{Binding ArrowOne}"  FontSize="10" VerticalOptions="Center" TextColor="{StaticResource GrayPanelText}" FontFamily="Segoe MDL2 Assets"/>
                                     </StackLayout>
-
-                                    <StackLayout IsVisible="{Binding IsSecondListVisible}" Spacing="15">
-                                        <repeater:RepeaterView ItemsSource="{Binding CommercialChecks}" VerticalOptions="Start" SelectedItemCommand="{Binding SelectCommercialCommand}">
+                                    <StackLayout IsVisible="{Binding IsFirstListVisible}">
+                                        <repeater:RepeaterView ItemsSource="{Binding ResidencesChecks}" VerticalOptions="Start" SelectedItemCommand="{Binding SelectResidenceCommand}">
                                             <repeater:RepeaterView.ItemTemplate>
                                                 <DataTemplate>
                                                     <ViewCell>
-                                                        <win:CheckBox Content="{Binding Content}" IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
+                                                        <win:CheckBox  Content="{Binding Content}"  IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceEventName=Click}"/>
                                                     </ViewCell>
                                                 </DataTemplate>
                                             </repeater:RepeaterView.ItemTemplate>
                                         </repeater:RepeaterView>
-
-                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllTypesCommand}">
-                                            <Button.Effects>
-                                                <effect:AccentColorEffect/>
-                                            </Button.Effects>
-                                        </Button>
                                     </StackLayout>
                                 </StackLayout>
                             </StackLayout>

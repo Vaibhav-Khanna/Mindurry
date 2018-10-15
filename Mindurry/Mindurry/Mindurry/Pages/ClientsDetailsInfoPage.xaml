@@ -44,7 +44,13 @@
                                 <Label Text="{Binding Contact.Phone}" />
                             </StackLayout>
                             <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand" Spacing="20">
-                                <Button Text="Arrêter la séquence" IsVisible="{Binding IsSequence}" FontSize="16" TextColor="White" BackgroundColor="Red" WidthRequest="220" HeightRequest="30" BorderWidth="0" HorizontalOptions="EndAndExpand" />
+                                <StackLayout IsVisible="{Binding IsSequence}" Orientation="Horizontal" Spacing="5" HorizontalOptions="EndAndExpand" VerticalOptions="Start">
+                                    <Label Text="&#xE724;" TextColor="Red" FontFamily="Segoe MDL2 Assets" FontSize="16"  Margin="0,0,0,0" HorizontalOptions="EndAndExpand" />
+                                    <Label Text="Arrêter la séquence" TextColor="Red" FontSize="16" Margin="0,0,0,0" HorizontalOptions="EndAndExpand" VerticalOptions="Center" />
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding StopSequenceCommand}"/>
+                                    </StackLayout.GestureRecognizers>
+                                </StackLayout>
                                 <StackLayout IsVisible="{Binding IsSequence, Converter={StaticResource NegateBoolConverter}}" Orientation="Horizontal" Spacing="5" HorizontalOptions="EndAndExpand" VerticalOptions="Start">
                                     <Label Text="&#xE724;" FontFamily="Segoe MDL2 Assets" FontSize="16" TextColor="{StaticResource GrayPanelEdge}" Margin="0,0,0,0" HorizontalOptions="EndAndExpand" />
                                     <Label Text="Séquence" FontSize="16" Margin="0,0,0,0" HorizontalOptions="EndAndExpand" VerticalOptions="Center" />
@@ -226,8 +232,14 @@
                         <StackLayout Spacing="20" IsVisible="{Binding IsTabOneVisible}" Padding="0,0,0,20">
 
                             <StackLayout BackgroundColor="{StaticResource GrayPanel}" Padding="20,30" Spacing="20">
+                              <Label Text="Commercial en Charge">
+                                <Label.Effects>
+                                  <effect:SemiBoldEffect/>
+                                </Label.Effects>
+                              </Label>
+                              <Picker WidthRequest="300" ItemsSource="{Binding Commercials}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedCommercial, Mode=TwoWay}" HorizontalOptions="Start"/>
 
-                                <Label Text="Source">
+                              <Label Text="Source">
                                     <Label.Effects>
                                         <effect:SemiBoldEffect/>
                                     </Label.Effects>
@@ -271,12 +283,6 @@
                                                 </DataTemplate>
                                             </repeater:RepeaterView.ItemTemplate>
                                         </repeater:RepeaterView>
-
-                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllResidencesCommand}">
-                                            <Button.Effects>
-                                                <effect:AccentColorEffect/>
-                                            </Button.Effects>
-                                        </Button>
                                     </StackLayout>
 
                                 </StackLayout>
@@ -300,30 +306,7 @@
                                                 </DataTemplate>
                                             </repeater:RepeaterView.ItemTemplate>
                                         </repeater:RepeaterView>
-
-                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllTypesCommand}">
-                                            <Button.Effects>
-                                                <effect:AccentColorEffect/>
-                                            </Button.Effects>
-                                        </Button>
                                     </StackLayout>
-
-                                    <Label Text="Commercial en Charge">
-                                        <Label.Effects>
-                                            <effect:SemiBoldEffect/>
-                                        </Label.Effects>
-                                    </Label>
-                                    <Picker WidthRequest="300" ItemsSource="{Binding Commercials}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedCommercial, Mode=TwoWay}" HorizontalOptions="Start"/>
-                                    <!-- <StackLayout Orientation="Horizontal" Spacing="20" HeightRequest="100" WidthRequest="300" BackgroundColor="#e9e9e9" HorizontalOptions="Start">
-                                        <Label Text="Archiver ce lead" FontSize='16' FontAttributes="Bold" VerticalOptions="Center" Margin="10,0,0,0" WidthRequest="200" >
-                                            <Label.Effects>
-                                                <effect:SemiBoldEffect/>
-                                            </Label.Effects>
-                                        </Label>
-                                        <Switch IsToggled="{Binding IsSwitchToggled}" VerticalOptions="Center"/>
-                                    </StackLayout>
-                                </StackLayout> -->
-
                                 </StackLayout>
 
                             </StackLayout>

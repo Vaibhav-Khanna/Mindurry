@@ -7,32 +7,30 @@
              xmlns:win="clr-namespace:Windows.UI.Xaml.Controls;assembly=Windows, Version=255.255.255.255,
 			Culture=neutral, PublicKeyToken=null, ContentType=WindowsRuntime;targetPlatform=Windows">
     <ContentPage.Content>
-        <Grid RowSpacing="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+        <ScrollView>
+            <Grid RowSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-            <Grid BackgroundColor="{StaticResource SubheaderPanel}" Padding="30,5" ColumnSpacing="40" Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <Grid BackgroundColor="{StaticResource SubheaderPanel}" Padding="30,5" ColumnSpacing="40" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <SearchBar Placeholder="Rechercher nom, prénom, email, téléphone" WidthRequest="450" HorizontalOptions="Start" Text="{Binding SearchText, Mode=TwoWay}" TextChanged="SearchPlace_OnTextChanged"/>
+                    <SearchBar Placeholder="Rechercher nom, prénom, email, téléphone" WidthRequest="450" HorizontalOptions="Start" Text="{Binding SearchText, Mode=TwoWay}" TextChanged="SearchPlace_OnTextChanged"/>
 
-                <!--
-                <StackLayout Orientation="Horizontal" Grid.Column="1" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsSelectionOn}">
-                    <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="18" VerticalOptions="Center">
-                        <Label.Effects>
-                            <effect:AccentColorEffect/>
-                        </Label.Effects>
-                    </Label>
-                    <Label Text="Ajouter" FontSize="18" VerticalOptions="Center"/>
-                </StackLayout>
 
+                    <StackLayout Orientation="Horizontal" Grid.Column="1" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsSelectionOn}">
+                        <Label Text="&#xE715;" FontFamily="Segoe MDL2 Assets" FontSize="18" VerticalOptions="Center"/>
+                        <Label Text="Envoyer à un autre contact" FontSize="18" VerticalOptions="Center"/>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding WithoutContactCommand}"  />
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+                    <!-- 
                 <StackLayout Orientation="Horizontal" Grid.Column="2" VerticalOptions="CenterAndExpand" IsVisible="{Binding IsSelectionOn}">
                     <Label Text="" FontFamily="Segoe MDL2 Assets" FontSize="18" TextColor="#417505" VerticalOptions="Center">
                         <Label.Effects>
@@ -41,49 +39,50 @@
                     </Label>
                     <Label Text="Annuler" FontSize="18" TextColor="#417505" VerticalOptions="Center"/>
                 </StackLayout> -->
-            </Grid>
+                </Grid>
 
-            <ListView Grid.Row="1" ItemsSource="{Binding Contacts}" IsPullToRefreshEnabled="true" 
+                <ListView Grid.Row="1" ItemsSource="{Binding Contacts}" IsPullToRefreshEnabled="true" 
                 RefreshCommand="{Binding RefreshList}"  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"   ItemAppearing="ListView_ItemAppearing"  Margin="40">
-                <ListView.Header>
-                    <Grid Padding="30,10,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                    <ListView.Header>
+                        <Grid Padding="30,10,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
 
-                        <Label Text="Nom" FontSize="18" FontAttributes="Bold" Grid.Column="0"/>
-                        <Label Text="Email" FontSize="18" FontAttributes="Bold" Grid.Column="1"/>
-                        <Label Text="Téléphone" FontSize="18" FontAttributes="Bold" Grid.Column="2"/>
-                    </Grid>
-                </ListView.Header>
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid Padding="30,10,0,10">
-                                <Grid.Resources>
-                                    <ResourceDictionary>
-                                        <Style TargetType ="Label">
-                                            <Setter Property="VerticalOptions" Value="Center"/>
-                                        </Style>
-                                    </ResourceDictionary>
-                                </Grid.Resources>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
+                            <Label Text="Nom" FontSize="18" FontAttributes="Bold" Grid.Column="0"/>
+                            <Label Text="Email" FontSize="18" FontAttributes="Bold" Grid.Column="1"/>
+                            <Label Text="Téléphone" FontSize="18" FontAttributes="Bold" Grid.Column="2"/>
+                        </Grid>
+                    </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid Padding="30,10,0,10">
+                                    <Grid.Resources>
+                                        <ResourceDictionary>
+                                            <Style TargetType ="Label">
+                                                <Setter Property="VerticalOptions" Value="Center"/>
+                                            </Style>
+                                        </ResourceDictionary>
+                                    </Grid.Resources>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                               
-                                <Label Text="{Binding Name}" Grid.Column="0"/>
-                                <Label Text="{Binding Email}" Grid.Column="1"/>
-                                <Label Text="{Binding Telephone}" Grid.Column="2"/>
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </Grid>
+
+                                    <Label Text="{Binding Name}" Grid.Column="0"/>
+                                    <Label Text="{Binding Email}" Grid.Column="1"/>
+                                    <Label Text="{Binding Telephone}" Grid.Column="2"/>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

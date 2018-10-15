@@ -194,11 +194,11 @@ namespace Mindurry.Helpers
             {
                 IFolder rootFolder = FileSystem.Current.LocalStorage;
 
-                await rootFolder.CreateFolderAsync(ReferenceKind.Apartment.ToString().ToLower(), CreationCollisionOption.OpenIfExists);
-                await rootFolder.CreateFolderAsync(ReferenceKind.Cellar.ToString().ToLower(), CreationCollisionOption.OpenIfExists);
-                await rootFolder.CreateFolderAsync(ReferenceKind.Customer.ToString().ToLower(), CreationCollisionOption.OpenIfExists);
-                await rootFolder.CreateFolderAsync(ReferenceKind.Garage.ToString().ToLower(), CreationCollisionOption.OpenIfExists);
-                await rootFolder.CreateFolderAsync(ReferenceKind.Residence.ToString().ToLower(), CreationCollisionOption.OpenIfExists);
+                await rootFolder.CreateFolderAsync(ReferenceKind.Apartment.ToString().ToLower(), CreationCollisionOption.OpenIfExists).ConfigureAwait(false);
+                await rootFolder.CreateFolderAsync(ReferenceKind.Cellar.ToString().ToLower(), CreationCollisionOption.OpenIfExists).ConfigureAwait(false);
+                await rootFolder.CreateFolderAsync(ReferenceKind.Customer.ToString().ToLower(), CreationCollisionOption.OpenIfExists).ConfigureAwait(false);
+                await rootFolder.CreateFolderAsync(ReferenceKind.Garage.ToString().ToLower(), CreationCollisionOption.OpenIfExists).ConfigureAwait(false);
+                await rootFolder.CreateFolderAsync(ReferenceKind.Residence.ToString().ToLower(), CreationCollisionOption.OpenIfExists).ConfigureAwait(false);
 
                 //await rootFolder.CreateFolderAsync(quotations, CreationCollisionOption.OpenIfExists);
             }

@@ -14,6 +14,8 @@ namespace Mindurry.DataStore.Implementation.Stores
     {
         public override string Identifier => "Note";
 
+        IStoreManager storeManager = FreshIOC.Container.Resolve<IStoreManager>();
+
         public async Task<DateTimeOffset?> GetLastNoteDateAsync(string contactId)
         {
             await InitializeStore().ConfigureAwait(false);
@@ -169,22 +171,25 @@ namespace Mindurry.DataStore.Implementation.Stores
             }
         }
 
-        public async Task<IEnumerable<SourcesStats>> GetSourcesStat(Qualification typeContact, DateTime dateDeb, DateTime dateFin)
+        public async Task<IEnumerable<Note>> GetSourcesStat(Qualification typeContact, DateTime dateDeb, DateTime dateFin)
         {
             await InitializeStore().ConfigureAwait(false);
             try
-            {
-
-                var collection = await Table.Where(x => ((x.Extra1 == typeContact.ToString()) && (x.DatabaseInsertAt >= dateDeb) && (x.DatabaseInsertAt < dateFin))).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
-                if (collection != null && collection.Any())
+            {               
+                return await Table.Where(x => ((x.Extra1 == typeContact.ToString()) && (x.DatabaseInsertAt >= dateDeb) && (x.DatabaseInsertAt < dateFin))).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                /*if (collectionSource != null && collectionSource.Any())
                 {
                     //List de contact
                     List<Contact> contactList = new List<Contact>();
-                    var storeManager = FreshIOC.Container.Resolve<IStoreManager>();
-                    foreach (var item in collection)
+                   
+                    foreach (var itemS in collectionSource)
                     {
-                        var contact = await storeManager.ContactStore.GetItemAsync(item.ContactId);
-                        contactList.Add(contact);
+                        var contact = await storeManager.ContactStore.GetItemAsync(itemS.ContactId).ConfigureAwait(false);
+                        if (contact != null)
+                        {
+                            contactList.Add(contact);
+                        }
+                        
                     }
                     long totalContact = contactList.Count();
                     var tri = contactList.GroupBy(x => x.CollectSourceName)
@@ -195,13 +200,14 @@ namespace Mindurry.DataStore.Implementation.Stores
                         })
                         .OrderBy(g => g.SourceName);
 
-                    return tri;
+                    return tri; 
+                  
 
                 }
                 else
                 {
                     return null;
-                }
+                }*/
             }
             catch (Exception)
             {

@@ -202,12 +202,6 @@
                                                 </DataTemplate>
                                             </repeater:RepeaterView.ItemTemplate>
                                         </repeater:RepeaterView>
-
-                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllResidencesCommand}">
-                                            <Button.Effects>
-                                                <effect:AccentColorEffect/>
-                                            </Button.Effects>
-                                        </Button>
                                     </StackLayout>
                                     
                                 </StackLayout>
@@ -231,12 +225,6 @@
                                                 </DataTemplate>
                                             </repeater:RepeaterView.ItemTemplate>
                                         </repeater:RepeaterView>
-
-                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllTypesCommand}">
-                                            <Button.Effects>
-                                                <effect:AccentColorEffect/>
-                                            </Button.Effects>
-                                        </Button>
                                     </StackLayout>
                                 </StackLayout>
 
@@ -259,12 +247,6 @@
                                                 </DataTemplate>
                                             </repeater:RepeaterView.ItemTemplate>
                                         </repeater:RepeaterView>
-
-                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllExpositionCommand}">
-                                            <Button.Effects>
-                                                <effect:AccentColorEffect/>
-                                            </Button.Effects>
-                                        </Button>
                                     </StackLayout>
                                 </StackLayout>
 
@@ -307,12 +289,6 @@
                                                 </DataTemplate>
                                             </repeater:RepeaterView.ItemTemplate>
                                         </repeater:RepeaterView>
-
-                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllExpositionCommand}">
-                                            <Button.Effects>
-                                                <effect:AccentColorEffect/>
-                                            </Button.Effects>
-                                        </Button>
                                     </StackLayout>
                                 </StackLayout>
                                 <StackLayout HorizontalOptions="FillAndExpand">

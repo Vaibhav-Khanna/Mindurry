@@ -29,8 +29,7 @@ namespace Mindurry
 			InitializeComponent();
 
             BasePageModel.Init();
-
-           // Init();
+            // Init();
 
             MainPage = new Pages.ConnexionPage();
         }
@@ -39,7 +38,7 @@ namespace Mindurry
         {
             try
             {
-                storeManager = FreshIOC.Container.Resolve<IStoreManager>() as StoreManager;
+                
 
               //  bool authenticated = await storeManager.LoginAsync(true);
  
@@ -70,9 +69,15 @@ namespace Mindurry
 			// Handle when your app sleeps
 		}
 
-		protected override void OnResume ()
+		protected async override void OnResume ()
 		{
-			// Handle when your app resumes
-		}
+            storeManager = FreshIOC.Container.Resolve<IStoreManager>() as StoreManager;
+            // Handle when your app resumes
+            if (StoreManager.MobileService.CurrentUser != null)
+            {
+                await storeManager.SyncAllAsync(false);
+               
+            }
+        }
     }
 }

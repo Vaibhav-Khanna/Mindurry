@@ -58,6 +58,6 @@ namespace Mindurry.Models.DataObjects
     }
     public enum Exposure { East, NortWest, North, NorthEast, South, SouthEast, SouthWest, West };
 
-    public enum Kind { T1,T1bis, T2, T2bis, T3, T4, T5, T6 };
+    public enum Kind { T1,T1bis, T2, T2bis, T3, T4, T5, T6, Local };
 
 }

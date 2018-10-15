@@ -25,9 +25,9 @@
 
                 <StackLayout Style="{StaticResource SubheaderStackStyle}" Orientation="Horizontal" Grid.Row="0">
                 <Label Text="Date de début" Style="{StaticResource SubHeaderLabelStyle}"/>
-                    <win:CalendarDatePicker Width="200" Date="{Binding StartDate, Mode=TwoWay}" IsOutOfScopeEnabled="true"/>
+                    <win:CalendarDatePicker x:Name="start_dtpicker"  Width="200" Date="{Binding StartDate}" IsOutOfScopeEnabled="true"/>
                 <Label Text="Date de fin" Margin="20,0,0,0" Style="{StaticResource SubHeaderLabelStyle}"/>
-                    <win:CalendarDatePicker Width="200" Date="{Binding EndDate, Mode=TwoWay}" MaxDate="{Binding MaxDate}" IsOutOfScopeEnabled="true"/>
+                    <win:CalendarDatePicker x:Name="end_dtpicker" Width="200" Date="{Binding EndDate}" MaxDate="{Binding MaxDate}" IsOutOfScopeEnabled="true"/>
             </StackLayout>
             
                 <StackLayout Orientation="Horizontal" Spacing="10"  Grid.Row="1" HorizontalOptions="FillAndExpand" Padding="5" >

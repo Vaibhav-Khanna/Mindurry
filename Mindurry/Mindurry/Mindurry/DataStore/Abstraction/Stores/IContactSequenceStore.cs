@@ -9,5 +9,6 @@ namespace Mindurry.DataStore.Abstraction.Stores
     public interface IContactSequenceStore : IBaseStore<ContactSequence>
     {
         Task<bool> IsContactSequence(string contactId);
+        Task<ContactSequence> SequenceInProgress(string contactId);
     }
 }

@@ -182,12 +182,6 @@
                                                 </DataTemplate>
                                             </repeater:RepeaterView.ItemTemplate>
                                         </repeater:RepeaterView>
-
-                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllResidencesCommand}">
-                                            <Button.Effects>
-                                                <effect:AccentColorEffect/>
-                                            </Button.Effects>
-                                        </Button>
                                     </StackLayout>
                                 </StackLayout>
 
@@ -201,7 +195,7 @@
                                     </StackLayout>
                                     
                                     <StackLayout IsVisible="{Binding IsSecondListVisible}" Spacing="15">
-                                    
+
                                         <repeater:RepeaterView ItemsSource="{Binding TypeChecks}" VerticalOptions="Start" SelectedItemCommand="{Binding SelectTypeCommand}">
                                             <repeater:RepeaterView.ItemTemplate>
                                                 <DataTemplate>
@@ -211,12 +205,6 @@
                                                 </DataTemplate>
                                             </repeater:RepeaterView.ItemTemplate>
                                         </repeater:RepeaterView>
-                                       
-                                        <Button Text="Afficher tout" BackgroundColor="Transparent" BorderWidth="0" HorizontalOptions="Start" Command="{Binding ClearAllTypesCommand}">
-                                            <Button.Effects>
-                                                <effect:AccentColorEffect/>
-                                            </Button.Effects>
-                                        </Button>
                                     </StackLayout> 
                                 </StackLayout>
                             </StackLayout>

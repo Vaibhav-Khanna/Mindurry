@@ -61,12 +61,15 @@ namespace Mindurry.ViewModels
 
             Items = new ObservableCollection<MasterMenuItem>();
 
-            Items.Add(new MasterMenuItem() { Title = "Tableau de board", TagetType = typeof(Pages.DashboardPage), Icon = "\uF0E2" });
+            
             Items.Add(new MasterMenuItem() { Title = "Leads", TagetType = typeof(Pages.LeadsPage), Icon = "" });
             Items.Add(new MasterMenuItem() { Title = "Contacts", TagetType = typeof(Pages.ContactsPage), Icon = "" });
-            Items.Add(new MasterMenuItem() { Title = "Résidences", TagetType = typeof(Pages.ResidencesPage), Icon = "" });
             Items.Add(new MasterMenuItem() { Title = "Clients", TagetType = typeof(Pages.ClientsPage), Icon = "" });
+            Items.Add(new MasterMenuItem() { Title = "Résidences", TagetType = typeof(Pages.ResidencesPage), Icon = "" });
             Items.Add(new MasterMenuItem() { Title = "Rappels", TagetType = typeof(Pages.RemindersPage), Icon = "\uEA8F" });
+            Items.Add(new MasterMenuItem() { Title = "Ngc", TagetType = typeof(Pages.NgcPage), Icon = "\uE724" });
+            Items.Add(new MasterMenuItem() { Title = "Tableau de bord", TagetType = typeof(Pages.DashboardPage), Icon = "\uF0E2" });
+
             SelectedItem = items[0];
             #endregion
         }

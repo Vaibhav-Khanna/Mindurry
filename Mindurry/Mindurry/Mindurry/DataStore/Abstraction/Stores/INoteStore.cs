@@ -15,6 +15,6 @@ namespace Mindurry.DataStore.Abstraction.Stores
         Task<IEnumerable<Note>> GetRemindersToDoAsync(string userId);
         Task<IEnumerable<Note>> GetRemindersDoneAsync(string userId);
         Task<IEnumerable<PicsStats>> GetContactStat(Qualification typeContact, DateTime dateDeb, DateTime dateFin);
-        Task<IEnumerable<SourcesStats>> GetSourcesStat(Qualification typeContact, DateTime dateDeb, DateTime dateFin);
+        Task<IEnumerable<Note>> GetSourcesStat(Qualification typeContact, DateTime dateDeb, DateTime dateFin);
     }
 }

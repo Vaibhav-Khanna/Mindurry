@@ -178,30 +178,45 @@ namespace Mindurry.ViewModels
             }
             await LoadData();
         });
+        public Command WithoutContactCommand => new Command( () =>
+        {
 
-        private async void SendMailto(ContactsListModel contact)
+            SendMailto();
+        });
+            
+
+        private async void SendMailto(ContactsListModel contact = null)
         {
             List<Models.DataObjects.Apartment> apartmentList = new List<Models.DataObjects.Apartment>();
 
             GroupedItems = ApartmentListing.GroupBy(x => x.Residence);
-            /*
-            string body= "<p>Bonjour,</p><p>Veuillez trouver ci-joint les informations sur nos appartements.</p>";
+            
+            string bodyHTML= "<p>Bonjour,</p><p>Veuillez trouver ci-joint les informations sur nos appartements.</p>";
 
             foreach (var group in GroupedItems)
             {
-                body += "<p><b>Résidence " + group.Key.Name + " </b>";
-                body += " (<a href=\"Link\">Plaquette</a>) </p>";
-                body += "<p>";
+                bodyHTML += "<p><b>Résidence " + group.Key.Name + " </b>";
+                bodyHTML += " (<a href=\"Link\">Plaquette</a>) </p>";
+                bodyHTML += "<p>";
                 foreach (ResidenceModel r in group)
                 {
-                    body += "- <b>Appartement n° " + r.Apartment.LotNumberArchitect + " - "+ r.Apartment.Kind + " > </b><a href=\"Link\"> Plan PDF</a></br> ";
-                    body += "";
+                    bodyHTML += "- <b>Appartement n° " + r.Apartment.LotNumberArchitect + " - "+ r.Apartment.Kind + " > </b><a href=\"Link\"> Plan PDF</a></br> ";
+                    bodyHTML += "";
                 }
-                body += "</p>";
+                bodyHTML += "</p>";
             }
-            body += "<p>Cordialement,</p>";
-            */
-            string body = "<b>Re-Bonjour</b> " + contact.Name + ", \n\nVeuillez trouver ci-dessous les informations sur nos résidences et appartements.\n\n";
+            bodyHTML += "<p>Cordialement,</p>";
+            
+            string body;
+            if (contact != null)
+            {
+                 body = "Re-Bonjour" + contact.Name + ", \n\nVeuillez trouver ci-dessous les informations sur nos résidences et appartements.\n\n";
+            }
+            else
+            {
+                 body = "Re-Bonjour, \n\nVeuillez trouver ci-dessous les informations sur nos résidences et appartements.\n\n";
+
+            }
 
             foreach (var group in GroupedItems)
             {
@@ -262,11 +277,18 @@ namespace Mindurry.ViewModels
 
             try
             {
-
-                var builder = new EmailMessageBuilder()
+                EmailMessageBuilder builder;
+                if (contact != null)
+                {
+                   builder = new EmailMessageBuilder()
                  .To(contact.Email)
                  .Subject("Mindurry Promotion Exemple");
-
+                }
+                else
+                {
+                  builder = new EmailMessageBuilder()
+                .Subject("Mindurry Promotion Exemple");
+                }
                 var emailMessenger = CrossMessaging.Current.EmailMessenger;
                 if (emailMessenger.CanSendEmail)
                 {
@@ -274,7 +296,7 @@ namespace Mindurry.ViewModels
                     var email = builder.Build();
                     emailMessenger.SendEmail(email);
                 }
-                 DependencyService.Get<ISave>().CopyToClipboard(body);
+                 DependencyService.Get<ISave>().CopyToClipboard(bodyHTML);
                
                 /*
                 if (emailMessenger.CanSendEmailBodyAsHtml)

@@ -13,6 +13,7 @@ using Mindurry.ViewModels.Base;
 using Mindurry.Models.DataObjects;
 using System.Diagnostics;
 using System.ComponentModel;
+using Acr.UserDialogs;
 
 namespace Mindurry.ViewModels
 {
@@ -192,118 +193,123 @@ namespace Mindurry.ViewModels
 
         public async override void Init(object initData)
         {
-            base.Init(initData);
-
-            AllResidences = new ObservableCollection<ResidenceModel>();
-
-             residences = await StoreManager.ResidenceStore.GetAllActiveResidences();
-
-            foreach (var _res in residences)
+            using (UserDialogs.Instance.Loading("Chargement des résidences", null, null, true))
             {
-                var _apartments = await StoreManager.ApartmentStore.GetApartmentsByResidenceId(_res.Id);
-                
-                if (_apartments != null) { 
-                    foreach (var _apt in _apartments)
+                base.Init(initData);
+
+                AllResidences = new ObservableCollection<ResidenceModel>();
+
+                residences = await StoreManager.ResidenceStore.GetAllActiveResidences();
+
+                foreach (var _res in residences)
+                {
+                    var _apartments = await StoreManager.ApartmentStore.GetApartmentsByResidenceId(_res.Id);
+
+                    if (_apartments != null)
                     {
-                        var _terraces = await StoreManager.TerraceStore.GetTerracesByResidenceId(_res.Id, _apt.Id);
-                        var _gardens = await StoreManager.GardenStore.GetGardensByResidenceId(_res.Id, _apt.Id);
-
-                        var _res_model = new ResidenceModel(_apt, _res);
-
-                        if (_terraces != null && _terraces.Any())
-                            foreach (var t in _terraces)
-                            {
-                                _res_model.Terace += t.Area;
-                            }
-
-                        if (_gardens != null && _gardens.Any())
-                            foreach (var g in _gardens)
-                            {
-                                _res_model.Garden += g.Area;
-                            }
-                        // Client
-                        if (!String.IsNullOrEmpty(_apt.ContactId))
+                        foreach (var _apt in _apartments)
                         {
-                            var acquereur = await StoreManager.ContactStore.GetItemAsync(_apt.ContactId);
-                            if (acquereur != null) { 
-                                _res_model.Client = acquereur.Name;
-                            }
-                        }
+                            var _terraces = await StoreManager.TerraceStore.GetTerracesByResidenceId(_res.Id, _apt.Id);
+                            var _gardens = await StoreManager.GardenStore.GetGardensByResidenceId(_res.Id, _apt.Id);
 
-                        AllResidences.Add(_res_model);
+                            var _res_model = new ResidenceModel(_apt, _res);
+
+                            if (_terraces != null && _terraces.Any())
+                                foreach (var t in _terraces)
+                                {
+                                    _res_model.Terace += t.Area;
+                                }
+
+                            if (_gardens != null && _gardens.Any())
+                                foreach (var g in _gardens)
+                                {
+                                    _res_model.Garden += g.Area;
+                                }
+                            // Client
+                            if (!String.IsNullOrEmpty(_apt.ContactId))
+                            {
+                                var acquereur = await StoreManager.ContactStore.GetItemAsync(_apt.ContactId);
+                                if (acquereur != null)
+                                {
+                                    _res_model.Client = acquereur.Name;
+                                }
+                            }
+
+                            AllResidences.Add(_res_model);
+                        }
                     }
                 }
+
+                GroupedItems = AllResidences.GroupBy(x => x.Residence);
+
+
+                ResidencesChecks = new ObservableCollection<CheckBoxItem>();
+
+                // Residence checkbox Items
+                foreach (var _res in GroupedItems)
+                {
+                    CheckBoxItem item;
+                    ResidencesChecks.Add(item = new CheckBoxItem() { Content = _res.Key.Name, Id = _res.Key.Id, DataType = CheckBoxContainerDataType.Residence });
+                    item.PropertyChanged += ResidenceFilterChanged;
+                }
+
+                TypesChecks = new ObservableCollection<CheckBoxItem>();
+                ExpositionChecks = new ObservableCollection<CheckBoxItem>();
+                CommandStatesChecks = new ObservableCollection<CheckBoxItem>();
+
+                // Type Checkbox Items
+                foreach (var item in AllResidences.DistinctBy(s => s.Type).OrderBy(s => s.Type).ToList())
+                {
+                    CheckBoxItem check;
+                    TypesChecks.Add(check = new CheckBoxItem() { Content = item.Type, DataType = CheckBoxContainerDataType.Type });
+                    check.PropertyChanged += TypeFilterChanged;
+                }
+
+                // Exposure Checkbox Items
+                foreach (var item in AllResidences.DistinctBy(s => s.Exposure).OrderBy(s => s.Exposure).ToList())
+                {
+                    CheckBoxItem check;
+                    ExpositionChecks.Add(check = new CheckBoxItem() { Content = item.Exposure, DataType = CheckBoxContainerDataType.Exposure });
+                    check.PropertyChanged += ExposureFilterChanged;
+                }
+
+                // CommandState Checkbox Items
+                foreach (var item in AllResidences.DistinctBy(s => s.State).OrderBy(s => s.State).ToList())
+                {
+                    CheckBoxItem check;
+                    CommandStatesChecks.Add(check = new CheckBoxItem() { Content = item.State, DataType = CheckBoxContainerDataType.CommandState });
+                    check.PropertyChanged += CommandStatesFilterChanged;
+                }
+
+                if (AllResidences != null && AllResidences.Any())
+                {
+                    //Price Filter
+                    ResMaximumPrice = AllResidences.OrderByDescending(a => a.Apartment.Price).First().Apartment.Price;
+                    ResUpperPriceValue = ResMaximumPrice;
+                    ResMinimumPrice = AllResidences.OrderBy(a => a.Apartment.Price).First().Apartment.Price;
+                    ResLowerPriceValue = ResMinimumPrice;
+
+                    //Area Filter
+                    ResMaximumArea = AllResidences.OrderByDescending(b => b.Apartment.Area).First().Apartment.Area;
+                    ResUpperAreaValue = ResMaximumArea;
+                    ResMinimumArea = AllResidences.OrderBy(b => b.Apartment.Area).First().Apartment.Area;
+                    ResLowerAreaValue = ResMinimumArea;
+
+                }
+
+                ShowFilterCommand = new Command(ShowFilter);
+                ShareCommand = new Command(Share);
+                ArrowOneCommand = new Command(ChangeArrowOne);
+                ArrowTwoCommand = new Command(ChangeArrowTwo);
+                ArrowThreeCommand = new Command(ChangeArrowThree);
+                ArrowFourCommand = new Command(ChangeArrowFour);
+                ClearAllResidencesCommand = new Command(ClearResidenceChecks);
+                ClearAllTypesCommand = new Command(ClearTypeChecks);
+                ClearAllExpositionCommand = new Command(ClearExposureChecks);
+                ClearAllFilterCommand = new Command(ClearAllFilters);
+
+                ViewModels.StaticViewModel.SelectionChanged += StaticViewModel_SelectionChanged;
             }
-           
-            GroupedItems = AllResidences.GroupBy(x => x.Residence);
-           
-
-            ResidencesChecks = new ObservableCollection<CheckBoxItem>();
-
-            // Residence checkbox Items
-            foreach (var _res in GroupedItems)
-            {
-                CheckBoxItem item;
-                ResidencesChecks.Add(item = new CheckBoxItem() { Content = _res.Key.Name, Id = _res.Key.Id, DataType = CheckBoxContainerDataType.Residence });
-                item.PropertyChanged += ResidenceFilterChanged;
-            }
-
-            TypesChecks = new ObservableCollection<CheckBoxItem>();
-            ExpositionChecks = new ObservableCollection<CheckBoxItem>();
-            CommandStatesChecks = new ObservableCollection<CheckBoxItem>();
-
-            // Type Checkbox Items
-            foreach (var item in AllResidences.DistinctBy(s=> s.Type).OrderBy(s=>s.Type).ToList())
-            {
-                CheckBoxItem check;
-                TypesChecks.Add(check = new CheckBoxItem() { Content = item.Type, DataType = CheckBoxContainerDataType.Type });
-                check.PropertyChanged += TypeFilterChanged;
-            }
-
-            // Exposure Checkbox Items
-            foreach (var item in AllResidences.DistinctBy(s=>s.Exposure).OrderBy(s=>s.Exposure).ToList())
-            {
-                CheckBoxItem check;
-                ExpositionChecks.Add(check = new CheckBoxItem() { Content = item.Exposure, DataType = CheckBoxContainerDataType.Exposure });
-                check.PropertyChanged += ExposureFilterChanged;
-            }
-
-            // CommandState Checkbox Items
-            foreach (var item in AllResidences.DistinctBy(s => s.State).OrderBy(s => s.State).ToList())
-            {
-                CheckBoxItem check;
-                CommandStatesChecks.Add(check = new CheckBoxItem() { Content = item.State, DataType = CheckBoxContainerDataType.CommandState });
-                check.PropertyChanged += CommandStatesFilterChanged;
-            }
-
-            if (AllResidences != null && AllResidences.Any())
-            {
-                //Price Filter
-                ResMaximumPrice = AllResidences.OrderByDescending(a => a.Apartment.Price).First().Apartment.Price;
-                ResUpperPriceValue = ResMaximumPrice;
-                ResMinimumPrice = AllResidences.OrderBy(a => a.Apartment.Price).First().Apartment.Price;
-                ResLowerPriceValue = ResMinimumPrice;            
-
-                //Area Filter
-                ResMaximumArea = AllResidences.OrderByDescending(b => b.Apartment.Area).First().Apartment.Area;
-                ResUpperAreaValue = ResMaximumArea;
-                ResMinimumArea = AllResidences.OrderBy(b => b.Apartment.Area).First().Apartment.Area;
-                ResLowerAreaValue = ResMinimumArea;
-                
-            }
-
-            ShowFilterCommand = new Command(ShowFilter);
-            ShareCommand = new Command(Share);
-            ArrowOneCommand = new Command(ChangeArrowOne);
-            ArrowTwoCommand = new Command(ChangeArrowTwo);
-            ArrowThreeCommand = new Command(ChangeArrowThree);
-            ArrowFourCommand = new Command(ChangeArrowFour);
-            ClearAllResidencesCommand = new Command(ClearResidenceChecks);
-            ClearAllTypesCommand = new Command(ClearTypeChecks);
-            ClearAllExpositionCommand = new Command(ClearExposureChecks);
-            ClearAllFilterCommand = new Command(ClearAllFilters);
-
-            ViewModels.StaticViewModel.SelectionChanged += StaticViewModel_SelectionChanged;
         }       
 
         public override void ReverseInit(object returnedData)

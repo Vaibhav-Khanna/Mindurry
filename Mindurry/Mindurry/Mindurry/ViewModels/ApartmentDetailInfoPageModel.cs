@@ -31,7 +31,11 @@ namespace Mindurry.ViewModels
             if (!string.IsNullOrEmpty(Apartment.ContactId))
             {
                 Contact Contact = await StoreManager.ContactStore.GetItemAsync(Apartment.ContactId);
-                ContactName = Contact.Name;
+                if (Contact != null)
+                {
+                    ContactName = Contact.Name;
+                }
+                
             }
 
             // terraces list
@@ -52,7 +56,6 @@ namespace Mindurry.ViewModels
             {
                 var resultPull = await StoreManager.DocumentMindurryStore.PullLatest(Apartment.Id, ReferenceKind.Apartment.ToString().ToLower());
 
-               // var str = await PclStorage.ReturnFolderPath(ReferenceKind.Apartment.ToString().ToLower());
             }
             //Documents
             var docs = await StoreManager.DocumentMindurryStore.GetItemsByKindAndReferenceIdAsync(Apartment.Id, ReferenceKind.Apartment.ToString().ToLower());

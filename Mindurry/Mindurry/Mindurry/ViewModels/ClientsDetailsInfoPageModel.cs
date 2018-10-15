@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Input;
 using Windows.Storage;
 using Xamarin.Essentials;
@@ -424,9 +425,18 @@ namespace Mindurry.ViewModels
         private async Task LoadNotes()
         {
             var notes = await StoreManager.NoteStore.GetNotesByContactIdAsync(ContactId);
-            if (notes != null && notes.Any())
+            List<Note> notesFormat = new List<Note>();
+            foreach (var item in notes)
             {
-                OriginalNotes = new ObservableCollection<Note>(notes);
+
+                var textToTransform = item.Content;
+
+                item.Content = HtmlConvert.ConvertToPlainText(textToTransform);
+                notesFormat.Add(item);
+            }
+            if (notesFormat != null && notesFormat.Any())
+            {
+                OriginalNotes = new ObservableCollection<Note>(notesFormat);
                 if (OriginalNotes.Count > 3)
                 {
                     Notes = new ObservableCollection<Note>(OriginalNotes.Take(3));
@@ -748,6 +758,24 @@ namespace Mindurry.ViewModels
         public Command SequenceCommand => new Command(async () => {
 
             await CoreMethods.PushPageModel<SequencePageModel>(ContactId, true);
+
+        });
+
+        public Command StopSequenceCommand => new Command(async () => {
+
+            var sequence = await StoreManager.ContactSequenceStore.SequenceInProgress(ContactId);
+            if (sequence != null)
+            {
+                sequence.EndAt = DateTimeOffset.Now;
+                sequence.EndReason = "manualStop";
+                sequence.ManualEndingUserId = Helpers.Settings.UserId;
+
+                var result = await StoreManager.ContactSequenceStore.UpdateAsync(sequence);
+                if (result)
+                {
+                    IsSequence = false;
+                }
+            }
 
         });
 

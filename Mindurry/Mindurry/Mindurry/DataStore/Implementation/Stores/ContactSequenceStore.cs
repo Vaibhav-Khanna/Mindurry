@@ -16,7 +16,7 @@ namespace Mindurry.DataStore.Implementation.Stores
         {
             try
             { 
-                 var result = await Table.Where(x => (x.ContactId == contactId) && (x.Deleted==false) && (x.EndReason==null)).ToEnumerableAsync().ConfigureAwait(false);
+                 var result = await Table.Where(x => (x.ContactId == contactId) && (x.EndAt == null)).ToEnumerableAsync().ConfigureAwait(false);
                  if (result != null && result.Any())
                  {
                      return true;
@@ -29,6 +29,27 @@ namespace Mindurry.DataStore.Implementation.Stores
             catch(Exception e)
             {
                 return false;
+            }
+
+        }
+
+        public async Task<ContactSequence> SequenceInProgress(string contactId)
+        {
+            try
+            {
+                var result = await Table.Where(x => (x.ContactId == contactId) && (x.EndAt == null)).ToEnumerableAsync().ConfigureAwait(false);
+                if (result != null && result.Any())
+                {
+                    return result.First();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception e)
+            {
+                return null;
             }
 
         }

@@ -27,7 +27,12 @@ namespace Mindurry.ViewModels
         public DonutChart Chart5 { get; set; }
         public DonutChart Chart6 { get; set; }
 
-
+        public bool Chart1Visible { get; set; } = false;
+        public bool Chart2Visible { get; set; } = false;
+        public bool Chart3Visible { get; set; } = false;
+        public bool Chart4Visible { get; set; } = false;
+        public bool Chart5Visible { get; set; } = false;
+        public bool Chart6Visible { get; set; } = false;
 
         private DateTime dateDeb { get; set; }
         private DateTime dateFin { get; set; }
@@ -36,36 +41,36 @@ namespace Mindurry.ViewModels
         public DateTime DateFinDisplay { get; set; }
         public DateTimeOffset MaxDate { get; set; }
 
-        private DateTimeOffset? startDate;
-        [PropertyChanged.DoNotNotify]
-        public DateTimeOffset? StartDate
-        {
-            get => startDate;
-            set
-            {
-                if (value != null)
-                {
-                    dateDeb = value.Value.UtcDateTime.Date;                 
-                    if (dateFin >= dateDeb)
-                    {
-                        DateDebDisplay = dateDeb;
-                        startDate = value;
-                        LoadCharts();
-                        RaisePropertyChanged();
-                    }
-                    else
-                    {
-                        CoreMethods.DisplayAlert("Erreur", "La date de fin est inférieure à la date de début, Merci de corriger", "Ok");
-                    }
-                }
+       /* private DateTimeOffset? startDate;
+        [PropertyChanged.DoNotNotify] */
+        public DateTimeOffset? StartDate { get; set; }
+        /* {
+             get => startDate;
+             set
+             {
+                 if (value != null)
+                 {
+                     dateDeb = value.Value.UtcDateTime.Date;                 
+                     if (dateFin >= dateDeb)
+                     {
+                         DateDebDisplay = dateDeb;
+                         startDate = value;
+                         LoadCharts();
+                         RaisePropertyChanged();
+                     }
+                     else
+                     {
+                         CoreMethods.DisplayAlert("Erreur", "La date de fin est inférieure à la date de début, Merci de corriger", "Ok");
+                     }
+                 }
 
-            }
-        }
+             }
+         } */
 
-        private DateTimeOffset? endDate;
-        [PropertyChanged.DoNotNotify]
-        public DateTimeOffset? EndDate
-        {
+        /*  private DateTimeOffset? endDate;
+        [PropertyChanged.DoNotNotify] */
+        public DateTimeOffset? EndDate { get; set; }
+       /* {
             get => endDate;
             set
             {
@@ -77,6 +82,7 @@ namespace Mindurry.ViewModels
                         DateFinDisplay = value.Value.UtcDateTime.Date;
                         endDate = value;
                         LoadCharts();
+
                         RaisePropertyChanged();
                     }
                     else
@@ -87,30 +93,30 @@ namespace Mindurry.ViewModels
                 }
 
             }
-        }
+        }  */
 
         public DateTimeIntervalType IntervalType { get; set; }
         public double Interval { get; set; }
 
-        public override void Init(object initData)
+        public async override void Init(object initData)
         {
             base.Init(initData);
             MaxDate = DateTimeOffset.Now;
             EndDate = DateTimeOffset.Now;
             StartDate = DateTimeOffset.Now.AddMonths(-1);
-         
+
+            
+
+            dateDeb = StartDate.Value.Date;
+            dateFin = EndDate.Value.AddDays(1).Date;
+
+
+            //await LoadCharts();
+
         }
 
-        public bool Chart1Visible { get; set; } = false;
-        public bool Chart2Visible { get; set; } = false;
-        public bool Chart3Visible { get; set; } = false;
-        public bool Chart4Visible { get; set; } = false;
-        public bool Chart5Visible { get; set; } = false;
-        public bool Chart6Visible { get; set; } = false;
-
-        public async Task LoadCharts()
+        async Task LoadCharts()
         {
-            
             //init Color charts
             List<SkiaSharp.SKColor> colorTab = new List<SkiaSharp.SKColor>();
             colorTab.Add(new SkiaSharp.SKColor(108, 8, 23));
@@ -118,6 +124,71 @@ namespace Mindurry.ViewModels
             colorTab.Add(new SkiaSharp.SKColor(204, 50, 73));
             colorTab.Add(new SkiaSharp.SKColor(245, 123, 141));
             colorTab.Add(new SkiaSharp.SKColor(245, 202, 208));
+            colorTab.Add(new SkiaSharp.SKColor(235, 202, 208));
+
+            await Chart1Calcul();
+
+            await Chart2Calcul(colorTab);
+
+            await Chart3Calcul();
+
+            await Chart4Calcul();
+
+            await Chart5Calcul(colorTab);
+
+            await Chart6Calcul(colorTab);
+
+                //----------------------------------------------------------------------------------------------------
+                /* CustomBrushes = new List<Color>();
+                 CustomBrushes.Add(Color.FromHex("6C0817"));
+                 CustomBrushes.Add(Color.FromHex("9F1818"));
+                 CustomBrushes.Add(Color.FromHex("CC3249"));
+                 CustomBrushes.Add(Color.FromHex("F57B8D"));
+                 CustomBrushes.Add(Color.FromHex("F5CAD0")); */
+
+                //------------------------------------------------------------------------------------------------------------------------
+        }
+        //--------------------------------------------------------------------------------------
+
+        
+            public Command StartDateChangedCommand => new Command<DateTime>(async (startDate) =>
+            {
+                dateDeb = startDate.Date;
+                if (dateFin >= dateDeb)
+                {
+
+                   // StartDate = startDate;
+                    DateDebDisplay = startDate.Date;
+
+                    await LoadCharts();
+                }
+                else
+                {
+                    await CoreMethods.DisplayAlert("Erreur", "La date de fin est inférieure à la date de début, Merci de corriger", "Ok");
+                }
+
+            });
+
+            public Command EndDateChangedCommand => new Command<DateTime>(async (endDate) =>
+            {
+                dateFin = endDate.AddDays(1).Date;
+                if (dateFin >= dateDeb)
+                {
+                   // EndDate = endDate.AddDays(1);
+                    DateFinDisplay = endDate.Date;
+
+                    await LoadCharts();
+                }
+                else
+                {
+                    await CoreMethods.DisplayAlert("Erreur", "La date de fin est inférieure à la date de début, Merci de corriger", "Ok");
+                }
+
+            });
+
+        async Task Chart1Calcul()
+        {
+            
             //---------------------------------------------------------------------------------------------------------------------------------------------------
             //-------------------------------------------------chart Interest By residence - Chart1----------------------------------------
             var residenceInterest = await StoreManager.ContactCustomFieldSourceEntryStore.GetItemsByContactCustomFieldSourceName("Résidences");
@@ -140,28 +211,32 @@ namespace Mindurry.ViewModels
                         });
 
                 }
-                    var listt = (entries1.OrderByDescending(x => x.Value)).ToList();
-                    var listEntries = new List<Microcharts.Entry>();
+                var listt = (entries1.OrderByDescending(x => x.Value)).ToList();
+                var listEntries = new List<Microcharts.Entry>();
 
-                    // calcul limite boucle (max 5 elements)
-                    int limitFor;
-                    if (listt.Count < 5)
-                    {
-                         limitFor = listt.Count;
-                    }
-                    else { limitFor = 5; }
-                    
-                    for (var r = 0; r < limitFor; r++)
-                    {
-                        listEntries.Add(listt[r]);
-                    }
-                   
+                // calcul limite boucle (max 5 elements)
+                int limitFor;
+                if (listt.Count < 5)
+                {
+                    limitFor = listt.Count;
+                }
+                else { limitFor = 5; }
+
+                for (var r = 0; r < limitFor; r++)
+                {
+                    listEntries.Add(listt[r]);
+                }
+
                 Chart1 = new Microcharts.BarChart { Entries = listEntries };
             }
-//----------------------------------------------------------------------------------------------------------------------
-//--------------------------Chart Sources d'acquisitions - Chart2---------------------------------------------------------------- 
+        }
 
-            
+        async Task Chart2Calcul(List<SkiaSharp.SKColor> colorTab)
+        {
+            //----------------------------------------------------------------------------------------------------------------------
+            //--------------------------Chart Sources d'acquisitions - Chart2---------------------------------------------------------------- 
+
+
             //liste des collectSource
             var collectSources = await StoreManager.CollectSourceStore.GetItemsAsync();
             if (collectSources != null && collectSources.Any())
@@ -173,7 +248,7 @@ namespace Mindurry.ViewModels
                 //nbre total de contact
                 var contacts = await StoreManager.ContactStore.GetItemsAsync();
                 long totalContacts = (contacts as IQueryResultEnumerable<Contact>).TotalCount;
-                
+
                 var i = 0;
                 float percentAutre = 0;
                 foreach (var cs in collectSources)
@@ -212,9 +287,12 @@ namespace Mindurry.ViewModels
                 }
                 Chart2 = new Microcharts.DonutChart { Entries = entriesCollect, HoleRadius = 0.50f };
             }
+        }
 
-//---------------------------------------------------------------------------------------------------------------
-//------------------------------------------------------------Chart 3 Leads Pics------------------------------------------------------
+        async Task Chart3Calcul()
+        {
+            //---------------------------------------------------------------------------------------------------------------
+            //------------------------------------------------------------Chart 3 Leads Pics------------------------------------------------------
 
             var leadPics = await StoreManager.NoteStore.GetContactStat(Qualification.Lead, dateDeb, dateFin);
             if (leadPics != null && leadPics.Any())
@@ -225,16 +303,19 @@ namespace Mindurry.ViewModels
                 Chart3Visible = true;
                 Chart3 = new ObservableCollection<PicsStats>(leadPics);
 
-                
-            }
-           
 
-//------------------------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------Chart 4 Acquereurs Pics---------------------------
+            }
+
+        }
+
+        async Task Chart4Calcul()
+        {
+            //------------------------------------------------------------------------------------------------------------------
+            //---------------------------------------------------------------Chart 4 Acquereurs Pics---------------------------
 
 
             var clientPics = await StoreManager.NoteStore.GetContactStat(Qualification.Client, dateDeb, dateFin);
-            if (clientPics != null && leadPics.Any())
+            if (clientPics != null && clientPics.Any())
             {
                 //Parametrage de sfChart pour l'UI (interval type ...)
                 UISfChartSettings();
@@ -242,71 +323,131 @@ namespace Mindurry.ViewModels
 
                 Chart4 = new ObservableCollection<PicsStats>(clientPics);
 
-                
-            }
-           
 
-            
+            }
+        }
+
+        async Task Chart5Calcul(List<SkiaSharp.SKColor> colorTab)
+        {
+
             //-----------------------------------------------------------------------------------------------------------------
             //---------------------------------------------------------------Chart 5 Leads Sources---------------------------
-           
+
             var leadsSources = await StoreManager.NoteStore.GetSourcesStat(Qualification.Lead, dateDeb, dateFin);
+
             if (leadsSources != null && leadsSources.Any())
             {
-                Chart5Visible = true;
+                //List de contact
+                List<Contact> contactList = new List<Contact>();
 
-                var entriesLead = new List<Microcharts.Entry>();
-
-                var j = 0;
-                float percentLeadAutre = 0;
-                foreach (var item in leadsSources)
+                foreach (var itemS in leadsSources)
                 {
+                    var contact = await StoreManager.ContactStore.GetItemAsync(itemS.ContactId);
+                    if (contact != null)
+                    {
+                        contactList.Add(contact);
+                    }
 
-                    if (item.Total > 0)
+                }
+                long totalContact = contactList.Count();
+                var tri = contactList.GroupBy(x => x.CollectSourceName)
+                    .Select(g => new SourcesStats
+                    {
+                        Total = (g.Count() * 100) / totalContact,
+                        SourceName = g.Key
+                    })
+                    .OrderBy(g => g.SourceName);
+
+
+
+
+                if (tri != null && tri.Any())
+                {
+                    Chart5Visible = true;
+
+                    var entriesLead = new List<Microcharts.Entry>();
+
+                    var j = 0;
+                    float percentLeadAutre = 0;
+                    foreach (var item in tri)
                     {
 
-                        if (item.Total < 5)
+                        if (item.Total > 0)
                         {
-                            percentLeadAutre += item.Total;
-                        }
-                        else
-                        {
-                            entriesLead.Add(
-                                new Microcharts.Entry(item.Total)
-                                {
-                                    Label = item.SourceName,
-                                    ValueLabel = item.Total + "%",
-                                    Color = colorTab[j],
-                                });
-                            j++;
+
+                            if (item.Total < 5)
+                            {
+                                percentLeadAutre += item.Total;
+                            }
+                            else
+                            {
+                                entriesLead.Add(
+                                    new Microcharts.Entry(item.Total)
+                                    {
+                                        Label = item.SourceName,
+                                        ValueLabel = item.Total + "%",
+                                        Color = colorTab[j],
+                                    });
+                                j++;
+                            }
                         }
                     }
+                    if (percentLeadAutre > 0)
+                    {
+                        entriesLead.Add(
+                                new Microcharts.Entry(percentLeadAutre)
+                                {
+                                    Label = "Autres",
+                                    ValueLabel = percentLeadAutre + "%",
+                                    Color = new SkiaSharp.SKColor(204, 202, 208)
+                                });
+                    }
+                    Chart5 = new Microcharts.DonutChart { Entries = entriesLead, HoleRadius = 0.50f };
                 }
-                if (percentLeadAutre > 0)
-                {
-                    entriesLead.Add(
-                            new Microcharts.Entry(percentLeadAutre)
-                            {
-                                Label = "Autres",
-                                ValueLabel = percentLeadAutre + "%",
-                                Color = new SkiaSharp.SKColor(204, 202, 208)
-                            });
-                }
-                Chart5 = new Microcharts.DonutChart { Entries = entriesLead, HoleRadius = 0.50f };
             }
-                //-------------------------------------------------------------------------------------------------------------------------------------------
-                //---------------------------------------------Chart 6 Acquereurs sources
-                //---------------------------------------------------------------Chart 5 Leads Sources---------------------------
-                
-                var clientsSources = await StoreManager.NoteStore.GetSourcesStat(Qualification.Client, dateDeb, dateFin);
-                if (clientsSources != null && clientsSources.Any())
-                {
-                Chart6Visible = true;
-                var entriesClient = new List<Microcharts.Entry>();
+        }
+        
+        async Task Chart6Calcul(List<SkiaSharp.SKColor> colorTab)
+        {
+            //-------------------------------------------------------------------------------------------------------------------------------------------
+            //---------------------------------------------Chart 5 Acquereurs sources
+            //---------------------------------------------------------------Chart 5 Leads Sources---------------------------
 
-                var k = 0;
+            var clientsSources = await StoreManager.NoteStore.GetSourcesStat(Qualification.Client, dateDeb, dateFin);
+
+            if (clientsSources != null && clientsSources.Any())
+            {
+                //List de contact
+                List<Contact> contactList = new List<Contact>();
+
+                foreach (var itemS in clientsSources)
+                {
+                    var contact = await StoreManager.ContactStore.GetItemAsync(itemS.ContactId);
+                    if (contact != null)
+                    {
+                        contactList.Add(contact);
+                    }
+
+                }
+                long totalContact = contactList.Count();
+                var tri = contactList.GroupBy(x => x.CollectSourceName)
+                    .Select(g => new SourcesStats
+                    {
+                        Total = (g.Count() * 100) / totalContact,
+                        SourceName = g.Key
+                    })
+                    .OrderBy(g => g.SourceName);
+
+
+
+                if (tri != null && tri.Any())
+                {
+                    Chart6Visible = true;
+                    var entriesClient = new List<Microcharts.Entry>();
+
+                    var k = 0;
                     float percentClientAutre = 0;
-                    foreach (var item in clientsSources)
+                    foreach (var item in tri)
                     {
 
                         if (item.Total > 0)
@@ -341,25 +482,8 @@ namespace Mindurry.ViewModels
                     }
                     Chart6 = new Microcharts.DonutChart { Entries = entriesClient, HoleRadius = 0.50f };
                 }
-
-
-
-                //----------------------------------------------------------------------------------------------------
-                /* CustomBrushes = new List<Color>();
-                 CustomBrushes.Add(Color.FromHex("6C0817"));
-                 CustomBrushes.Add(Color.FromHex("9F1818"));
-                 CustomBrushes.Add(Color.FromHex("CC3249"));
-                 CustomBrushes.Add(Color.FromHex("F57B8D"));
-                 CustomBrushes.Add(Color.FromHex("F5CAD0")); */
-
-                //------------------------------------------------------------------------------------------------------------------------
-        }
-//--------------------------------------------------------------------------------------
-
-
-
-
-
+            }
+        } 
 
         private void UISfChartSettings()
         {
