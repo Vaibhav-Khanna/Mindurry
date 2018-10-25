@@ -1,9 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converter="clr-namespace:Mindurry.Converters"
              xmlns:effect="clr-namespace:Mindurry.Effects"
              BackgroundColor="#4c4c4c"
              x:Class="Mindurry.Pages.MasterPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:MasterMenuIsSelectedColorConverter x:Key="MasterMenuIsSelectedColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <Grid BackgroundColor="#4c4c4c">
             <ListView ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
@@ -19,9 +25,9 @@
                                     <Button VerticalOptions="Fill" BackgroundColor="Maroon" HorizontalOptions="Start" WidthRequest="4" IsVisible="{Binding IsSelected}" BorderWidth="0" InputTransparent="True">
                                       
                                     </Button>
-                                    <Label Text="{Binding Icon}" FontSize="22" TextColor="White" FontFamily="Segoe MDL2 Assets" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Icon}" FontSize="22" TextColor="{Binding IsSelected, Converter={StaticResource MasterMenuIsSelectedColorConverter}}" FontFamily="Segoe MDL2 Assets" HorizontalOptions="Center"/>
                                 </Grid>
-                                <Label Text="{Binding Title}" FontSize="20" TextColor="White" Grid.Column="1" VerticalOptions="Center" Margin="20,0,5,0"/>
+                                <Label Text="{Binding Title}" FontSize="20" TextColor="{Binding IsSelected, Converter={StaticResource MasterMenuIsSelectedColorConverter}}" Grid.Column="1" VerticalOptions="Center" Margin="20,0,5,0"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

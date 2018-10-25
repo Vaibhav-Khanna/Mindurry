@@ -16,7 +16,7 @@ namespace Mindurry.Pages
 
         public MasterDetailNavigationPage()
         {
-            var detailpage = FreshPageModelResolver.ResolvePageModel<ViewModels.LeadsPageModel>();
+            var detailpage = FreshPageModelResolver.ResolvePageModel<ViewModels.ResidencesPageModel>();
 
             var masterpage = FreshPageModelResolver.ResolvePageModel<ViewModels.MasterPageModel>();
 

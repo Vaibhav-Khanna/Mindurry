@@ -190,7 +190,7 @@
                                         <StackLayout.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding ArrowTwoCommand}"/>
                                         </StackLayout.GestureRecognizers>
-                                        <Label Text="Types d'appartement" TextColor="{StaticResource GrayPanelText}"/>
+                                        <Label Text="Types de logements souhaités" TextColor="{StaticResource GrayPanelText}"/>
                                         <Label Text="{Binding ArrowTwo}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
                                     </StackLayout>
                                     

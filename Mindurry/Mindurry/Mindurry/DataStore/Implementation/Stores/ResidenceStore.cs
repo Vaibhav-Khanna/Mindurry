@@ -21,7 +21,7 @@ namespace Mindurry.DataStore.Implementation.Stores
 
             try
             {
-                var items = await Table.Take(50).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
+                var items = await Table.Take(50).OrderBy(x => x.Name).IncludeTotalCount().ToEnumerableAsync().ConfigureAwait(false);
 
                 if (items != null && items.Any())
                 {

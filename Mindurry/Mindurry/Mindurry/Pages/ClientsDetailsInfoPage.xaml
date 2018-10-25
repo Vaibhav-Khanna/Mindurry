@@ -78,7 +78,8 @@
                                 <repeater:RepeaterView.ItemTemplate>
                                     <DataTemplate>
                                         <ViewCell>
-                                            <Grid  x:Name="Item" BackgroundColor="#F9F9F9" Margin="0,0,0,5">
+                                         <!--   <Grid  x:Name="Item" BackgroundColor="#F9F9F9" Margin="0,0,0,5"> -->
+                                            <Grid  x:Name="Item" BackgroundColor="#d8b2b2" Margin="0,0,0,5">  
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="50"/>
                                                     <ColumnDefinition Width="*"/>
@@ -251,7 +252,7 @@
                                     </Label.Effects>
                                 </Label>
                                 <Picker WidthRequest="300" ItemsSource="{Binding Qualifications}" SelectedItem="{Binding SelectedQualification, , Mode=TwoWay}" HorizontalOptions="Start"/>
-                                <Label Text="Type">
+                                <Label Text="Types de logements souhaités">
                                     <Label.Effects>
                                         <effect:SemiBoldEffect/>
                                     </Label.Effects>
@@ -292,7 +293,7 @@
                                         <StackLayout.GestureRecognizers>
                                             <TapGestureRecognizer Command="{Binding ArrowTwoCommand}"/>
                                         </StackLayout.GestureRecognizers>
-                                        <Label Text="Types" TextColor="{StaticResource GrayPanelText}"/>
+                                        <Label Text="Types de logements souhaités" TextColor="{StaticResource GrayPanelText}"/>
                                         <Label Text="{Binding ArrowTwo}" TextColor="{StaticResource GrayPanelText}" VerticalOptions="Center" FontSize="10" FontFamily="Segoe MDL2 Assets"/>
                                     </StackLayout>
 
@@ -348,7 +349,7 @@
                                                     <Label Text="{Binding DocumentDate, StringFormat='{0:dd/MM/yyyy}'}" />
                                                     <Label Text="{Binding Name}" FontSize="14" TextColor="{StaticResource BlueText}" Grid.Column="1" >
                                                         <Label.GestureRecognizers>
-                                                            <TapGestureRecognizer Command="{Binding DownloadDocumentCommand}" CommandParameter="{Binding Source={x:Reference ItemDocument}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference DocumentsList}, Path=BindingContext}"/>
+                                                            <TapGestureRecognizer Command="{Binding OpenDocumentCommand}" CommandParameter="{Binding Source={x:Reference ItemDocument}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference DocumentsList}, Path=BindingContext}"/>
                                                         </Label.GestureRecognizers>
                                                     </Label>
                                                     <!--  <Button Text="" Style="{StaticResource IconButton}" TextColor="{StaticResource BlueAccent}" Grid.Column="2" VerticalOptions="Center" Command="{Binding UpdateDocumentCommand}" CommandParameter="{Binding Source={x:Reference ItemDocument}, Path=BindingContext}" BindingContext="{Binding Source={x:Reference DocumentsList}, Path=BindingContext}"/> -->

@@ -29,9 +29,11 @@ namespace Mindurry.Pages
             try
             {
                 var storeManager = FreshIOC.Container.Resolve<IStoreManager>() as StoreManager;
+                bool authenticated;
                 using (UserDialogs.Instance.Loading("Chargement", null, null, true))
                 {
-                    bool authenticated = await storeManager.LoginAsync();
+                     authenticated = await storeManager.LoginAsync();
+                }
                     if (authenticated)
                     {
                         var page = new Pages.MasterDetailNavigationPage();
@@ -42,7 +44,7 @@ namespace Mindurry.Pages
                     {
                         await DisplayAlert("Erreur", "Erreur d'authentification, veuillez recommencer s'il vous plaît", "OK");
                     }
-                }
+                
             }
             catch (MsalException ex)
             {

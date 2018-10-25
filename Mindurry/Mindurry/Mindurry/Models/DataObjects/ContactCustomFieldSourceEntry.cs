@@ -14,7 +14,7 @@ namespace Mindurry.Models.DataObjects
         public string Value { get; set; }
 
         [JsonProperty("displayOrder")]
-        public string DisplayOrder { get; set; }
+        public int DisplayOrder { get; set; }
 
         [JsonProperty("externalId")]
         public string ExternalId { get; set; }

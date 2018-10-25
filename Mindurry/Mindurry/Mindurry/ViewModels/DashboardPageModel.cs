@@ -119,14 +119,30 @@ namespace Mindurry.ViewModels
         {
             //init Color charts
             List<SkiaSharp.SKColor> colorTab = new List<SkiaSharp.SKColor>();
-            colorTab.Add(new SkiaSharp.SKColor(108, 8, 23));
-            colorTab.Add(new SkiaSharp.SKColor(159, 24, 44));
-            colorTab.Add(new SkiaSharp.SKColor(204, 50, 73));
-            colorTab.Add(new SkiaSharp.SKColor(245, 123, 141));
-            colorTab.Add(new SkiaSharp.SKColor(245, 202, 208));
-            colorTab.Add(new SkiaSharp.SKColor(235, 202, 208));
+            colorTab.Add(new SkiaSharp.SKColor(76, 175, 80));
+            colorTab.Add(new SkiaSharp.SKColor(33, 150, 243));
+            colorTab.Add(new SkiaSharp.SKColor(255, 235, 59));
+            colorTab.Add(new SkiaSharp.SKColor(121, 85, 72));
+            colorTab.Add(new SkiaSharp.SKColor(156, 39, 176));
+            colorTab.Add(new SkiaSharp.SKColor(244, 67, 54));
+            colorTab.Add(new SkiaSharp.SKColor(139, 195, 74));
+            colorTab.Add(new SkiaSharp.SKColor(255, 152, 0));
+            colorTab.Add(new SkiaSharp.SKColor(233, 30, 99));
+            colorTab.Add(new SkiaSharp.SKColor(205, 220, 57));
+            colorTab.Add(new SkiaSharp.SKColor(103, 58, 183));
+            colorTab.Add(new SkiaSharp.SKColor(63, 81, 181));
+            colorTab.Add(new SkiaSharp.SKColor(0, 150, 136));
+            colorTab.Add(new SkiaSharp.SKColor(158, 158, 158));
+            colorTab.Add(new SkiaSharp.SKColor(3, 169, 244));
+            colorTab.Add(new SkiaSharp.SKColor(0, 188, 212));                 
+            colorTab.Add(new SkiaSharp.SKColor(139, 195, 74)); 
+            colorTab.Add(new SkiaSharp.SKColor(255, 193, 7));           
+            colorTab.Add(new SkiaSharp.SKColor(255, 87, 34));           
+            colorTab.Add(new SkiaSharp.SKColor(96, 125, 139));
 
-            await Chart1Calcul();
+
+
+            await Chart1Calcul(colorTab);
 
             await Chart2Calcul(colorTab);
 
@@ -169,6 +185,16 @@ namespace Mindurry.ViewModels
 
             });
 
+        private  SkiaSharp.SKColor getRandomColor() {
+
+            Random random = new Random();
+            var redColor = (byte)random.Next(255);
+            var greenColor = (byte)random.Next(255);
+            var blueColor = (byte)random.Next(255);
+            
+            return new SkiaSharp.SKColor(redColor, greenColor, blueColor);
+            }
+
             public Command EndDateChangedCommand => new Command<DateTime>(async (endDate) =>
             {
                 dateFin = endDate.AddDays(1).Date;
@@ -186,7 +212,7 @@ namespace Mindurry.ViewModels
 
             });
 
-        async Task Chart1Calcul()
+        async Task Chart1Calcul(List<SkiaSharp.SKColor> colorTab)
         {
             
             //---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -196,7 +222,7 @@ namespace Mindurry.ViewModels
             {
                 Chart1Visible = true;
                 var entries1 = new List<Microcharts.Entry>();
-
+                var i = 0;
                 foreach (var itemRes in residenceInterest)
                 {
 
@@ -207,9 +233,10 @@ namespace Mindurry.ViewModels
                         {
                             Label = itemRes.Value,
                             ValueLabel = contactInterested.ToString(),
-                            Color = new SkiaSharp.SKColor(108, 8, 23),
+                            //  Color = new SkiaSharp.SKColor(108, 8, 23),
+                            Color = colorTab[i]
                         });
-
+                    i++;
                 }
                 var listt = (entries1.OrderByDescending(x => x.Value)).ToList();
                 var listEntries = new List<Microcharts.Entry>();
@@ -269,6 +296,7 @@ namespace Mindurry.ViewModels
                                     Label = cs.Name,
                                     ValueLabel = percent + "%",
                                     Color = colorTab[i],
+                                   
                                 });
                             i++;
                         }
@@ -282,7 +310,8 @@ namespace Mindurry.ViewModels
                             {
                                 Label = "Autres",
                                 ValueLabel = percentAutre + "%",
-                                Color = new SkiaSharp.SKColor(204, 202, 208)
+                                Color = colorTab[i],
+                                
                             });
                 }
                 Chart2 = new Microcharts.DonutChart { Entries = entriesCollect, HoleRadius = 0.50f };
@@ -387,6 +416,7 @@ namespace Mindurry.ViewModels
                                         Label = item.SourceName,
                                         ValueLabel = item.Total + "%",
                                         Color = colorTab[j],
+                                       
                                     });
                                 j++;
                             }
@@ -399,7 +429,8 @@ namespace Mindurry.ViewModels
                                 {
                                     Label = "Autres",
                                     ValueLabel = percentLeadAutre + "%",
-                                    Color = new SkiaSharp.SKColor(204, 202, 208)
+                                    Color = colorTab[j],
+                                    
                                 });
                     }
                     Chart5 = new Microcharts.DonutChart { Entries = entriesLead, HoleRadius = 0.50f };
@@ -465,6 +496,7 @@ namespace Mindurry.ViewModels
                                         Label = item.SourceName,
                                         ValueLabel = item.Total + "%",
                                         Color = colorTab[k],
+                                       
                                     });
                                 k++;
                             }
@@ -477,7 +509,8 @@ namespace Mindurry.ViewModels
                                 {
                                     Label = "Autres",
                                     ValueLabel = percentClientAutre + "%",
-                                    Color = new SkiaSharp.SKColor(204, 202, 208)
+                                    Color = colorTab[k],
+                                   
                                 });
                     }
                     Chart6 = new Microcharts.DonutChart { Entries = entriesClient, HoleRadius = 0.50f };
